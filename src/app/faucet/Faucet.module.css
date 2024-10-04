@@ -1,0 +1,131 @@
+.mainContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  padding: 0 2rem;
+  height: 89vh;
+  gap: 120px;
+}
+
+.connectWalletReminder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.connectWalletReminder p {
+  color: #7b7b7b;
+  font-size: 1rem;
+}
+
+.faucetContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: #f0f0fb;
+  border-radius: 8px;
+  gap: 1rem;
+}
+
+.greyContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #f8f8f8;
+  border-radius: 8px;
+  padding: 1rem;
+  padding-left: 0;
+  padding-right: 0;
+  width: 250px;
+}
+
+.toggleToken {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+}
+
+.toggleTokenIcon {
+  height: 20px;
+  border-radius: 50%;
+}
+
+.selectBox {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: transparent;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  margin-left: 8px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.balanceContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem;
+}
+
+.balanceContainer img {
+  height: 12px;
+}
+
+.balanceContainer p {
+  font-size: 12px;
+  color: #717171;
+  margin: 0;
+}
+
+.claimButton {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  padding: 10px 8px;
+  background-color: #d5efb5;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #d5efb5;
+  font-size: 15px;
+  width: 250px;
+  transition: all 0.17s ease;
+}
+
+.claimButton:hover {
+  background: transparent;
+}
+
+.connectButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.loadingState {
+  height: 75vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingState img {
+  height: 100px;
+  width: 100px;
+}

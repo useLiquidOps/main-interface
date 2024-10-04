@@ -1,0 +1,256 @@
+.landingPageContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 90vh;
+  position: relative;
+  width: 100%;
+}
+
+.topContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 7rem;
+}
+
+.previousFounders {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9a9a9a;
+  font-weight: 500;
+}
+
+.previousFounders img {
+  margin: 0 5px;
+  height: 30px;
+}
+
+.previousFounders p {
+  margin: 0 5px;
+}
+
+.landingPageTitle {
+  font-weight: 700;
+  font-size: 60px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.lendAR {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4844ec;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 10px;
+  border: 2px solid #4844ec;
+}
+
+.lendAR:hover {
+  background-color: white;
+  color: #4844ec;
+}
+
+.borrowAR {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid black;
+}
+
+.borrowAR:hover {
+  background-color: white;
+  color: black;
+}
+
+.bottomContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+.poolsContainer {
+  background-color: #4844ec;
+  padding: 1.5rem;
+  padding-bottom: 0;
+  border-radius: 8px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  width: 70%;
+  transition: width 0.5s ease-in-out;
+}
+
+.poolHeader {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  margin-bottom: 10px;
+  margin: 0;
+}
+
+.poolTitle,
+.apyTitle,
+.liquidityTitle {
+  flex: 1;
+  text-align: center;
+}
+
+.poolHeader p {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-size: 13px;
+}
+
+.poolRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 13px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  height: 40px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.poolInfo {
+  display: flex;
+  align-items: center;
+}
+
+.poolInfo p {
+  margin: 0;
+}
+
+.poolInfo img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.apy {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #5b9e4a;
+}
+
+.assetTicker {
+  font-size: 15px;
+}
+
+.assetName {
+  font-size: 10px;
+  color: #7b7b7b;
+}
+
+.depositButton {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  padding: 8px 16px;
+  font-size: 0.7rem;
+  background-color: #4844ec;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border: 2px solid #4844ec;
+  border-radius: 8px;
+}
+
+.depositButton:hover {
+  background-color: white;
+  color: #4844ec;
+}
+
+.testnet {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+
+.testnet p {
+  margin: 0;
+}
+
+.flashingIcon {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #10c600;
+  animation: flashing 1.5s infinite;
+  margin-right: 5px;
+}
+
+.innerCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: green;
+}
+
+@keyframes flashing {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.ao {
+  display: flex;
+  justify-content: center;
+  align-items: right;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+
+.ao p {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.ao a {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.ao img {
+  height: 20px;
+}

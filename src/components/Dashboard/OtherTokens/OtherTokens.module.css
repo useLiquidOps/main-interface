@@ -1,0 +1,102 @@
+.otherTokens {
+  padding: 1.5rem;
+  background-color: #f0f0fb;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.titleContainer {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  color: #4844ec;
+  margin-bottom: 1rem;
+}
+
+.poolTitle,
+.apyTitle,
+.liquidityTitle {
+  font-size: 0.6rem;
+  text-align: center;
+}
+
+.tokenPools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tokenPool {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 0.8rem;
+}
+
+.tokenInfoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.apyContainer,
+.liquidityContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.liquidity {
+  font-size: 0.6rem;
+}
+
+.tokenIcon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.circularIcon {
+  border-radius: 50%;
+}
+
+.tokenInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tokenInfo p {
+  margin: 0;
+}
+
+.tokenName {
+  color: #7b7b7b;
+  font-size: 0.5rem;
+}
+
+.apy {
+  color: #5b9e4a;
+  font-size: 0.6rem;
+}
+
+.depositButton {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 8px;
+  background: #d5efb5;
+  color: #000;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.5rem;
+  border: 1px solid #d5efb5;
+  transition: all 0.17s ease;
+}
+
+.depositButton:hover {
+  background-color: transparent;
+}

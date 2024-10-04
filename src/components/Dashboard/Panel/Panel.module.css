@@ -1,0 +1,315 @@
+.panelContainer {
+  background-color: #f0f0fb;
+  border-radius: 8px;
+  width: 350px;
+  font-weight: 700;
+  padding: 1.5rem;
+}
+
+.panelTop {
+  margin-bottom: 20px;
+}
+
+.panelToggle {
+  display: flex;
+  margin-bottom: 0;
+}
+
+.panelButton {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  flex: 1;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #4844ec;
+  border: 2px solid #4844ec;
+  font-size: 15px;
+}
+
+.panelButtonActive {
+  background-color: #4844ec;
+  color: white;
+}
+
+.panelButtonLeft {
+  border-top-left-radius: 8px;
+}
+
+.panelButtonMiddle {
+  border-left: none;
+  border-right: none;
+}
+
+.panelButtonRight {
+  border-top-right-radius: 8px;
+}
+
+.panelForm {
+  margin-bottom: 20px;
+}
+
+.greyContainer {
+  background: #f8f8f8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  padding-top: 1rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.greyContainerDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.USDBalance {
+  margin: 0;
+  font-size: 10px;
+  color: #717171;
+}
+
+.greyContainerP {
+  margin: 0;
+  font-size: 10px;
+  color: #717171;
+  margin: 0.7rem;
+  margin-left: 0;
+}
+
+.panelInput {
+  outline: none;
+  border: 0;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  background: transparent;
+  font-size: 30px;
+  width: 150px;
+  margin: 0;
+  padding: 0;
+}
+
+.panelInput::-webkit-outer-spin-button,
+.panelInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.panelInput[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.toggleToken {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  padding: 0.5rem;
+  width: 90px;
+  border-radius: 8px;
+}
+
+.toggleTokenIcon {
+  height: 20px;
+  border-radius: 50%;
+}
+
+.selectBox {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: transparent;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  margin-left: 8px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 30px;
+}
+
+.balanceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 5px;
+}
+
+.balanceContainerImg {
+  height: 10px;
+  color: #717171;
+}
+
+.balanceContainerDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.balanceContainerSpan {
+  font-size: 10px;
+  color: #717171;
+}
+
+.balanceContainerButtonMax {
+  font-size: 10px;
+  outline: none;
+  color: #4844ec;
+  background: transparent;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.confirmationDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+.settings {
+  margin-top: 1.4rem;
+  height: 15px;
+  cursor: not-allowed;
+}
+
+.panelSubmitButton {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  width: 100%;
+  padding: 10px 8px;
+  background-color: #4844ec;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 2px solid #4844ec;
+  font-size: 15px;
+}
+
+.panelSubmitButton:hover {
+  background: white;
+  color: #4844ec;
+}
+
+.transactionContainer {
+  margin: 0;
+}
+
+.transactionsSection {
+  max-height: 80px;
+  overflow-y: auto;
+  min-height: 80px;
+}
+
+.transactionsList {
+  list-style: none;
+  padding: 0;
+}
+
+.transactionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 10px;
+}
+
+.transactionItem:hover {
+  background-color: #e9ecef;
+}
+
+.transactionsTitle {
+  font-size: 13px;
+  margin: 0;
+}
+
+.transactionItemSpan {
+  font-size: 8px;
+  color: #717171;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  margin-right: 10px;
+  text-align: center;
+}
+
+.transactionItemAction {
+  background: #4844ec;
+  color: white;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 8px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+.transactionItemStatusContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.statusCircleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.statusCircle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.statusCircleGreen {
+  background-color: #10c600;
+}
+
+.statusCircleAmber {
+  background-color: orange;
+}
+
+.statusCircleRed {
+  background-color: #ff0000;
+}
+
+.noTransactions {
+  font-size: 10px;
+  color: #717171;
+  text-align: center;
+  margin: 0;
+  margin-top: 2rem;
+}
+
+.borrowIDInput {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700;
+  width: 300px;
+  font-size: 10px;
+  border: 0;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 1rem;
+  color: black;
+}

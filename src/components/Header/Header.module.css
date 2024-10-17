@@ -7,6 +7,8 @@
   padding: 2rem 3rem;
   box-sizing: border-box;
   width: 100%;
+  padding-bottom: 1rem;
+  background-color: white;
 }
 
 .leftSection {

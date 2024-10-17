@@ -15,14 +15,14 @@ const Connect: React.FC = () => {
         const account = new Account({
           cacheIsActivated: true,
           cacheSize: 100,
-          cacheTime: 60
+          cacheTime: 60,
         });
         try {
           const profileData = await account.get(address);
-          console.log(profileData)
+          console.log(profileData);
           setProfile(profileData);
         } catch (error) {
-        //   console.error("Error fetching profile:", error); TODO uncomment when bazar profile ready
+          //   console.error("Error fetching profile:", error); TODO uncomment when bazar profile ready
         }
       }
     };
@@ -70,7 +70,11 @@ const Connect: React.FC = () => {
       {connected && address ? (
         <div className={styles.profileContainer}>
           <button className={styles.dropdownButton} onClick={toggleDropdown}>
-            <img src="/icons/dropdown.svg" alt="Dropdown" className={styles.dropdownIcon} />
+            <img
+              src="/icons/dropdown.svg"
+              alt="Dropdown"
+              className={styles.dropdownIcon}
+            />
           </button>
           <img
             src={profile?.profile?.avatarURL || "/icons/user.png"}

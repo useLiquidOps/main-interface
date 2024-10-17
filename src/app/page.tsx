@@ -6,9 +6,7 @@ const Home = () => {
   return (
     <div className={styles.page}>
       <Header />
-      <div className={styles.body}>
-        lol
-      </div>
+      <div className={styles.body}>home</div>
     </div>
   );
 };

@@ -1,0 +1,79 @@
+.connectContainer {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .connectButton {
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    padding: 7px 10px;
+    font-size: 13px;
+    background: var(--primary-palatinate-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1.5px solid var(--primary-palatinate-blue);
+  }
+  
+  .connectButton:hover {
+    background-color: white;
+    color: var(--primary-palatinate-blue);
+  }
+  
+  .profileContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .connectImage {
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 4px;
+  }
+  
+  .dropdownButton {
+    background: var(--primary-ghost-white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+  }
+  
+  .dropdownIcon {
+    height: 5px;
+  }
+  
+  .tooltip {
+    position: absolute;
+    top: calc(100% + 15px);
+    left: 0;
+    background-color: white;
+    border: 1px solid var(--primary-ghost-white);
+    border-radius: 4px;
+    padding: 5px;
+    z-index: 1000;
+  }
+  
+  .tooltip button {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--primary-palatinate-blue);
+    width: 100%;
+    text-align: left;
+  }
+  
+  .tooltip button:hover {
+    background-color: var(--primary-ghost-white);
+    border-radius: 4px;
+  }

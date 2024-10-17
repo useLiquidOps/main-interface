@@ -1,10 +1,15 @@
+"use client";
 import styles from "./page.module.css";
+import Header from "../components/Header/Header";
+// import HomeBody from "./Home/HomeBody";
 
-export default function Home() {
+const Home = () => {
   return (
     <div className={styles.page}>
-      <main className={styles.main}>hey</main>
-      <footer className={styles.footer}>lol</footer>
+      <Header />
+      {/* <HomeBody /> */}
     </div>
   );
-}
+};
+
+export default Home;

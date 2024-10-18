@@ -4,7 +4,7 @@ import styles from "./Header.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import Connect from "../Dashboard/Connect/Connect";
+import Connect from "../Connect/Connect";
 
 const titleClick = () => {
   window.location.reload();

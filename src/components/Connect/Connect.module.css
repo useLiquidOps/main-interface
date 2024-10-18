@@ -56,7 +56,7 @@
   right: 0;
   background-color: white;
   border-radius: 12px;
-  padding: 24px;
+  padding: 15px;
   z-index: 1000;
   width: 150px;
 }
@@ -65,7 +65,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 10px;
 }
 
 .addressContainer span {
@@ -87,7 +87,7 @@
 }
 
 .balanceContainer {
-  margin-bottom: 20px;
+  padding: 10px;
 }
 
 .balance {

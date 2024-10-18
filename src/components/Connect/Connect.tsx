@@ -122,7 +122,7 @@ const Connect: React.FC = () => {
                   <img src="/icons/copy.svg" alt="Copy" />
                 </button>
               </div>
-              <div className={styles.balanceContainer}>
+
                 {tokens.map((token, index) => (
                   <div key={index} className={styles.balance}>
                     <img src={token.icon} alt={token.symbol} />
@@ -131,7 +131,7 @@ const Connect: React.FC = () => {
                     </span>
                   </div>
                 ))}
-              </div>
+
               <div className={styles.logoutButtonContainer}>
                 <button className={styles.logoutButton} onClick={handleLogout}>
                   Logout

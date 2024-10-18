@@ -86,15 +86,11 @@
   height: 14px;
 }
 
-.balanceContainer {
-  padding: 10px;
-}
-
 .balance {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 12px;
+  padding: 10px;
 }
 
 .balance img {

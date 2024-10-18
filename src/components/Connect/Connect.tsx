@@ -123,14 +123,14 @@ const Connect: React.FC = () => {
                 </button>
               </div>
 
-                {tokens.map((token, index) => (
-                  <div key={index} className={styles.balance}>
-                    <img src={token.icon} alt={token.symbol} />
-                    <span>
-                      {formatBalance(token.balance)} {token.symbol}
-                    </span>
-                  </div>
-                ))}
+              {tokens.map((token, index) => (
+                <div key={index} className={styles.balance}>
+                  <img src={token.icon} alt={token.symbol} />
+                  <span>
+                    {formatBalance(token.balance)} {token.symbol}
+                  </span>
+                </div>
+              ))}
 
               <div className={styles.logoutButtonContainer}>
                 <button className={styles.logoutButton} onClick={handleLogout}>

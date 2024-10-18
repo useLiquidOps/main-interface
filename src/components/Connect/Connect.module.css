@@ -49,31 +49,76 @@
   height: 5px;
 }
 
-.tooltip {
+.dropdown {
   position: absolute;
   top: calc(100% + 15px);
-  left: 0;
+  right: 0;
   background-color: white;
-  border: 1px solid var(--primary-ghost-white);
-  border-radius: 4px;
-  padding: 5px;
+  border-radius: 12px;
+  padding: 24px;
   z-index: 1000;
+  width: 150px;
 }
 
-.tooltip button {
+.addressContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.addressContainer span {
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  color: var(--primary-palatinate-blue);
+  font-weight: 700;
+}
+
+.copyButton {
   background: none;
   border: none;
-  padding: 5px 10px;
   cursor: pointer;
-  font-family: "DM Sans", sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--primary-palatinate-blue);
-  width: 100%;
-  text-align: left;
+  padding: 4px;
 }
 
-.tooltip button:hover {
-  background-color: var(--primary-ghost-white);
-  border-radius: 4px;
+.copyButton img {
+  height: 14px;
+}
+
+.balanceContainer {
+  margin-bottom: 20px;
+}
+
+.balance {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 12px;
+}
+
+.balance img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.balance span {
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  color: var(--primary-ultramarine);
+  font-weight: 600;
+}
+
+.logoutButton {
+  width: 100%;
+  background: var(--primary-ghost-white);
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  color: var(--primary-palatinate-blue);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 600;
 }

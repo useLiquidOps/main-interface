@@ -26,7 +26,9 @@ export default function Input({
   const hasContent = typeof val !== "undefined" && val !== "";
 
   return (
-    <div className={`${styles.wrapper} ${status === "error" ? styles.error : ""}`}>
+    <div
+      className={`${styles.wrapper} ${status === "error" ? styles.error : ""}`}
+    >
       <div className={styles.content}>
         <p className={`${styles.label} ${hasContent ? styles.hasContent : ""}`}>
           {labelText}

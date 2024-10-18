@@ -2,12 +2,42 @@ import React, { useState, useRef, useEffect } from "react";
 import styles from "./Connect.module.css";
 import Account from "arweave-account";
 
+interface TokenInfo {
+  symbol: string;
+  balance: number;
+  icon: string;
+}
+
 const Connect: React.FC = () => {
   const connected = true; // TODO remove when arwkit fixed
   const address = "psh5nUh3VF22Pr8LoV1K2blRNOOnoVH0BbZ85yRick"; // TODO replace with actual address when arwkit fixed
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [profile, setProfile] = useState<any>(null);
+
+  const tokens: TokenInfo[] = [
+    { symbol: "AO", balance: 1736.55, icon: "/tokens/ao.svg" }, // TODO: render from somewhere
+    { symbol: "qAR", balance: 3745.62, icon: "/tokens/qAR.svg" }, // TODO: render from somewhere
+  ];
+
+  const shortenAddress = (addr: string): string => {
+    return `${addr.slice(0, 3)}...${addr.slice(-3)}`;
+  };
+
+  const formatBalance = (balance: number): string => {
+    return balance.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      console.error("Failed to copy address: ", err);
+    }
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -57,7 +87,7 @@ const Connect: React.FC = () => {
       console.log("logout");
       setIsOpen(false);
     } catch (error) {
-      console.error("Error disconnecting wallet:", error);
+      console.error("Error logging out:", error);
     }
   };
 
@@ -78,12 +108,35 @@ const Connect: React.FC = () => {
           </button>
           <img
             src={profile?.profile?.avatarURL || "/icons/user.png"}
-            alt="Connected"
+            alt="Profile image"
             className={styles.connectImage}
           />
           {isOpen && (
-            <div className={styles.tooltip}>
-              <button onClick={handleLogout}>Logout</button>
+            <div className={styles.dropdown}>
+              <div className={styles.addressContainer}>
+                <span>{shortenAddress(address)}</span>
+                <button
+                  className={styles.copyButton}
+                  onClick={() => copyToClipboard(address)}
+                >
+                  <img src="/icons/copy.svg" alt="Copy" />
+                </button>
+              </div>
+              <div className={styles.balanceContainer}>
+                {tokens.map((token, index) => (
+                  <div key={index} className={styles.balance}>
+                    <img src={token.icon} alt={token.symbol} />
+                    <span>
+                      {formatBalance(token.balance)} {token.symbol}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.logoutButtonContainer}>
+                <button className={styles.logoutButton} onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
             </div>
           )}
         </div>

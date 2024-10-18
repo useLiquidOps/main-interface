@@ -3,13 +3,14 @@ import React, { useState, useEffect } from "react";
 import styles from "./Header.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Connect from "../Connect/Connect";
 import Input from "../Input/Input";
 import { useClickOutside } from "../utils/utils";
 
 interface HeaderProps {
   home?: boolean;
+  currentToken?: string;
 }
 
 interface TokenData {
@@ -22,10 +23,10 @@ interface TokenData {
   };
 }
 
-const Header: React.FC<HeaderProps> = ({ home = false }) => {
+const Header: React.FC<HeaderProps> = ({ home = false, currentToken }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [activeLink, setActiveLink] = useState<string | null>(null);
-  const [selectedToken, setSelectedToken] = useState("qAR");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -69,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({ home = false }) => {
   const filteredTokens = sortedTokens.filter(
     (token) =>
       token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      token.ticker.toLowerCase().includes(searchTerm.toLowerCase()),
+      token.ticker.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
@@ -83,7 +84,9 @@ const Header: React.FC<HeaderProps> = ({ home = false }) => {
   };
 
   const selectToken = (token: string) => {
-    setSelectedToken(token);
+    if (home) {
+      router.push(`/${token.toLowerCase()}`);
+    }
     setIsDropdownOpen(false);
   };
 
@@ -95,14 +98,15 @@ const Header: React.FC<HeaderProps> = ({ home = false }) => {
     return null;
   }
 
+  const currentTokenData = home && currentToken
+    ? tokens.find(token => token.ticker.toLowerCase() === currentToken.toLowerCase())
+    : null;
+
   return (
     <header className={styles.header}>
       <div className={styles.leftSection}>
         <div className={styles.titleAndDropdown}>
-          <button
-            className={styles.pageTitleContainer}
-            onClick={() => window.location.reload()}
-          >
+          <Link href="/" className={styles.pageTitleContainer}>
             <Image
               src="/favicon.svg"
               alt="LiquidOps Logo"
@@ -111,18 +115,18 @@ const Header: React.FC<HeaderProps> = ({ home = false }) => {
               className={styles.favicon}
             />
             <h2 className={styles.pageTitle}>LiquidOps</h2>
-          </button>
-          {home && (
+          </Link>
+          {home && currentToken && (
             <div className={styles.tokenDropdown} ref={dropdownRef}>
               <div className={styles.selectedToken}>
                 /{" "}
                 <Image
-                  src={`/tokens/${selectedToken.toLowerCase()}.svg`}
-                  alt={selectedToken}
+                  src={`/tokens/${currentToken.toLowerCase()}.svg`}
+                  alt={currentTokenData?.ticker || currentToken}
                   width={24}
                   height={24}
                 />{" "}
-                {selectedToken}
+                {currentTokenData?.ticker || currentToken}
               </div>
               <button
                 className={styles.dropdownButton}

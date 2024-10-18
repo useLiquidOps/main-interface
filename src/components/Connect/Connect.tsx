@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Connect.module.css";
 import Account from "arweave-account";
+import { useClickOutside } from "../utils/utils";
 
 interface TokenInfo {
   symbol: string;
@@ -12,12 +13,16 @@ const Connect: React.FC = () => {
   const connected = true; // TODO remove when arwkit fixed
   const address = "psh5nUh3VF22Pr8LoV1K2blRNOOnoVH0BbZ85yRick"; // TODO replace with actual address when arwkit fixed
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const [profile, setProfile] = useState<any>(null);
 
+  const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() => {
+    setIsOpen(false);
+  });
+
   const tokens: TokenInfo[] = [
-    { symbol: "AO", balance: 1736.55, icon: "/tokens/ao.svg" }, // TODO: render from somewhere
+    { symbol: "DAI", balance: 1736.55, icon: "/tokens/DAI.svg" }, // TODO: render from somewhere
     { symbol: "qAR", balance: 3745.62, icon: "/tokens/qAR.svg" }, // TODO: render from somewhere
+    { symbol: "stETH", balance: 394.11, icon: "/tokens/stETH.svg" }, // TODO: render from somewhere
   ];
 
   const shortenAddress = (addr: string): string => {
@@ -58,20 +63,6 @@ const Connect: React.FC = () => {
     };
 
     fetchProfile();
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, [address]);
 
   const handleConnectClick = async () => {

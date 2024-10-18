@@ -5,7 +5,7 @@ import Header from "../components/Header/Header";
 const Home = () => {
   return (
     <div className={styles.page}>
-      <Header />
+      <Header home={true} />
       <div className={styles.body}>home</div>
     </div>
   );

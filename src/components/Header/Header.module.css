@@ -18,6 +18,11 @@
   gap: 30px;
 }
 
+.titleAndDropdown {
+  display: flex;
+  align-items: center;
+}
+
 .pageTitleContainer {
   background: transparent;
   display: flex;
@@ -67,4 +72,112 @@
 
 .navLinks a:hover {
   background-color: var(--primary-ghost-white);
+}
+
+.tokenDropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.selectedToken {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  color: var(--secondary-slate-blue);
+  font-weight: 700;
+  margin-right: 5px;
+}
+
+.selectedToken img {
+  margin: 0 5px 0 5px;
+  height: 25px;
+}
+
+.dropdownButton {
+  background: var(--primary-ghost-white);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+}
+
+.dropdownIcon {
+  height: 5px;
+}
+
+.tokenDropdownContent {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  width: 275px;
+  z-index: 1000;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.tokenDropdownItem {
+  color: black;
+  padding: 10px;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.tokenInfo {
+  display: flex;
+  align-items: center;
+}
+
+.tokenNameTicker {
+  margin-left: 10px;
+}
+
+.tokenName {
+  font-weight: 600;
+  color: var(--primary-ultramarine);
+  margin: 0;
+}
+
+.tokenTicker {
+  color: var(--secondary-periwinkle);
+  margin: 0;
+  font-weight: 600;
+}
+
+.tokenMetrics {
+  text-align: right;
+}
+
+.tokenAPR {
+  font-weight: 600;
+  color: var(--primary-ultramarine);
+  margin: 0;
+}
+
+.percentChangeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.percentChange {
+  margin: 0 0 0 5px;
+  font-weight: 600;
+  color: var(--secondary-periwinkle);
 }

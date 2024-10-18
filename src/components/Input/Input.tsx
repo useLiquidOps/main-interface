@@ -1,6 +1,6 @@
 import React, { HTMLProps, useEffect, useState } from "react";
-import { Mail01 } from "@untitled-ui/icons-react";
 import styles from "./Input.module.css";
+import Image from "next/image";
 
 interface Props {
   status?: "error";
@@ -33,7 +33,13 @@ export default function Input({
         <p className={`${styles.label} ${hasContent ? styles.hasContent : ""}`}>
           {labelText}
         </p>
-        <Mail01 className={styles.icon} />
+        <Image
+          src="/icons/search.svg"
+          alt="Search"
+          width={5} // TODO: fix
+          height={5}
+          className={styles.icon}
+        />
       </div>
       <input
         type="email"

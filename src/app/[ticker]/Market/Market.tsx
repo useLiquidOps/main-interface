@@ -1,8 +1,72 @@
 import React from "react";
 import styles from "./Market.module.css";
+import { formatTMB } from "../../../components/utils/utils";
+
+interface MarketData {
+  totalSupply: number;
+  availableCollateral: number;
+  totalBorrow: number;
+}
 
 const Market: React.FC = () => {
-  return <div className={styles.body}>lol</div>;
+  const marketData: MarketData = {
+    totalSupply: 676500000,
+    availableCollateral: 507370000,
+    totalBorrow: 169120000,
+  };
+  const getProgressWidth = (value: number): string => {
+    return `${(value / marketData.totalSupply) * 100}%`;
+  };
+
+  return (
+    <div className={styles.body}>
+      <div className={styles.container}>
+        <h2 className={styles.title}>Wrapped AR Market</h2>
+
+        <div className={styles.metricsContainer}>
+          <div className={styles.metric}>
+            <p className={styles.label}>Total Supply</p>
+            <p
+              className={styles.value}
+            >{`${formatTMB(marketData.totalSupply)} qAR`}</p>
+          </div>
+
+          <div className={styles.metric}>
+            <p className={styles.label}>Available Collateral</p>
+            <div className={styles.valueWithIndicator}>
+              <p
+                className={styles.value}
+              >{`${formatTMB(marketData.availableCollateral)} qAR`}</p>
+              <div className={styles.indicatorGreen}></div>
+            </div>
+          </div>
+
+          <div className={styles.metric}>
+            <p className={styles.label}>Total Borrow</p>
+            <div className={styles.valueWithIndicator}>
+              <p
+                className={styles.value}
+              >{`${formatTMB(marketData.totalBorrow)} qAR`}</p>
+              <div className={styles.indicatorBlue}></div>
+            </div>
+          </div>
+
+          <div className={styles.progressBar}>
+            <div
+              className={styles.progressGreen}
+              style={{
+                width: getProgressWidth(marketData.availableCollateral),
+              }}
+            />
+            <div
+              className={styles.progressBlue}
+              style={{ width: getProgressWidth(marketData.totalBorrow) }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Market;

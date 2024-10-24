@@ -11,7 +11,12 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
     <div className={styles.page}>
       <Header home={true} currentToken={currentToken} />
       <div className={styles.body}>
+        <div className={styles.bodyContainer}>
+
         <ProtocolBalance />
+
+        </div>
+        
       </div>
     </div>
   );

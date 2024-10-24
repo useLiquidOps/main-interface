@@ -5,6 +5,7 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
+  YAxis,
   TooltipProps,
 } from "recharts";
 import styles from "./ProtocolBalance.module.css";
@@ -16,13 +17,17 @@ interface DataPoint {
 }
 
 const dummyData: DataPoint[] = [
-  { date: "2023-10-01", value: 4.2 },
-  { date: "2023-10-02", value: 4.0 },
-  { date: "2023-10-03", value: 1.8 },
+  { date: "2023-10-01", value: 4 },
+  { date: "2023-10-02", value: 3.9 },
+  { date: "2023-10-02", value: 3.9 },
+  { date: "2023-10-02", value: 3.8 },
+  { date: "2023-10-03", value: 3 },
   { date: "2023-10-04", value: 2.0 },
   { date: "2023-10-05", value: 2.5 },
+  { date: "2023-10-05", value: 2.5 },
   { date: "2023-10-06", value: 3.0 },
-  { date: "2023-10-07", value: 3.2 },
+  { date: "2023-10-07", value: 3.5 },
+  { date: "2023-10-07", value: 3.5 },
   { date: "2023-10-08", value: 4.2 },
   { date: "2023-10-09", value: 3.8 },
   { date: "2023-10-10", value: 4.2 },
@@ -89,8 +94,12 @@ const ProtocolBalance: React.FC = () => {
           </div>
         </div>
         <div className={styles.graph}>
-          <ResponsiveContainer width="100%">
-            <LineChart data={dummyData}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={dummyData}
+              margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+            >
+              <YAxis domain={["dataMin - 0.5", "dataMax + 0.5"]} hide={true} />
               <XAxis dataKey="date" hide />
               <Line
                 type="linear"

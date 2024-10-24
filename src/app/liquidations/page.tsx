@@ -1,14 +1,17 @@
-"use client";
-import styles from "./liquidations.module.css";
-import Header from "../../components/Header/Header";
+import Liquidations from "./liquidations";
+import { Metadata } from "next";
 
-const liquidations = () => {
-  return (
-    <div className={styles.page}>
-      <Header />
-      <div className={styles.body}>liquidations</div>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "LiquidOps | Liquidations",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  description:
+    "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
 };
 
-export default liquidations;
+const Page = () => {
+  return <Liquidations />;
+};
+
+export default Page;

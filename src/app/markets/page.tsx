@@ -1,14 +1,17 @@
-"use client";
-import styles from "./markets.module.css";
-import Header from "../../components/Header/Header";
+import Markets from "./markets";
+import { Metadata } from "next";
 
-const markets = () => {
-  return (
-    <div className={styles.page}>
-      <Header />
-      <div className={styles.body}>markets</div>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "LiquidOps | Markets",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  description:
+    "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
 };
 
-export default markets;
+const Page = () => {
+  return <Markets />;
+};
+
+export default Page;

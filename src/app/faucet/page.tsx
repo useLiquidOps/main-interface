@@ -1,14 +1,17 @@
-"use client";
-import styles from "./faucet.module.css";
-import Header from "../../components/Header/Header";
+import Faucet from "./faucet";
+import { Metadata } from "next";
 
-const faucet = () => {
-  return (
-    <div className={styles.page}>
-      <Header />
-      <div className={styles.body}>faucet</div>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "LiquidOps | Faucet",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  description:
+    "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
 };
 
-export default faucet;
+const Page = () => {
+  return <Faucet />;
+};
+
+export default Page;

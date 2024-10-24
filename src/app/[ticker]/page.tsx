@@ -1,22 +1,19 @@
-"use client";
-import React from "react";
-import { useParams } from "next/navigation";
-import styles from "./page.module.css";
-import Header from "../../components/Header/Header";
-import ProtocolBalance from "./ProtocolBalance/ProtocolBalance";
+import Home from "./home";
+import { Metadata } from "next";
 
-const Home = () => {
-  const params = useParams();
-  const currentToken = params.ticker as string;
-
-  return (
-    <div className={styles.page}>
-      <Header home={true} currentToken={currentToken} />
-      <div className={styles.body}>
-        <ProtocolBalance />
-      </div>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "LiquidOps | Home",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  description:
+    "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
 };
 
-export default Home;
+const Page = ({ params }: any) => {
+  const { ticker, tab } = params;
+
+  return <Home params={{ ticker, tab }} />;
+};
+
+export default Page;

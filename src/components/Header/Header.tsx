@@ -70,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({ home = false, currentToken }) => {
   const filteredTokens = sortedTokens.filter(
     (token) =>
       token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      token.ticker.toLowerCase().includes(searchTerm.toLowerCase())
+      token.ticker.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   useEffect(() => {
@@ -98,9 +98,12 @@ const Header: React.FC<HeaderProps> = ({ home = false, currentToken }) => {
     return null;
   }
 
-  const currentTokenData = home && currentToken
-    ? tokens.find(token => token.ticker.toLowerCase() === currentToken.toLowerCase())
-    : null;
+  const currentTokenData =
+    home && currentToken
+      ? tokens.find(
+          (token) => token.ticker.toLowerCase() === currentToken.toLowerCase(),
+        )
+      : null;
 
   return (
     <header className={styles.header}>

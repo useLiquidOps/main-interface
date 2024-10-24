@@ -1,132 +1,132 @@
 .protocolBalance {
-    background-color: white;
-    border-radius: 24px;
-    padding: 24px;
-    width: 700px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .mainContent {
-    flex: 1;
-    padding-right: 24px;
-  }
-  
-  .title {
-    font-size: 16px;
-    color: var(--secondary-slate-blue);
-    font-weight: 700;
-    margin: 0 0 16px 0;
-  }
-  
-  .balance {
-    display: flex;
-    align-items: center;
-    margin-bottom: 24px;
-  }
-  
-  .balanceIcon {
-    margin-right: 12px;
-  }
-  
-  .amount {
-    font-size: 48px;
-    font-weight: 700;
-    font-weight: bold;
-    color: var(--primary-ultramarine);
-    margin-right: 6px;
-  }
-  
-  .currency {
-    font-size: 30px;
-    color: var(--secondary-slate-blue);
-    font-weight: 500;
-  }
-  
-  .actions {
-    display: flex;
-    gap: 12px;
-  }
-  
-  .button {
-    padding: 10px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    gap: 8px;
-  }
-  
-  .supplyButton {
-    background-color: var(--primary-palatinate-blue);
-    color: white;
-  }
+  background-color: white;
+  border-radius: 24px;
+  padding: 24px;
+  width: 700px;
+  display: flex;
+  justify-content: space-between;
+}
 
-  .supplyButton:hover {
-    background-color: #322ECE;
-  }
-  
-  .borrowButton {
-    background-color: var(--secondary-tea-green);
-    color: black;
-  }
+.mainContent {
+  flex: 1;
+  padding-right: 24px;
+}
 
-  .borrowButton:hover {
-    background-color: #A6C45D;
-  }
-  
-  .aprSection {
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .aprContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-  
-  .aprLabel {
-    font-size: 12px;
-    color: var(--secondary-slate-blue);
-    margin-bottom: 2px;
-    font-weight: 700;
-  }
-  
-  .aprValue {
-    font-size: 16px;
-    color: var(--secondary-slate-blue);
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  
-  .graph {
-    margin-top: auto;
-  }
+.title {
+  font-size: 16px;
+  color: var(--secondary-slate-blue);
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
 
-  .customTooltip {
-    background-color: var(--background);
-    border-radius: 4px;
-    padding: 8px;
-  }
-  
-  .tooltipDate {
-    color: black;
-    font-size: 12px;
-    margin: 0;
-  }
-  
-  .tooltipValue {
-    color: black;
-    font-size: 14px;
-    margin: 4px 0 0;
-  }
+.balance {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.balanceIcon {
+  margin-right: 12px;
+}
+
+.amount {
+  font-size: 48px;
+  font-weight: 700;
+  font-weight: bold;
+  color: var(--primary-ultramarine);
+  margin-right: 6px;
+}
+
+.currency {
+  font-size: 30px;
+  color: var(--secondary-slate-blue);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.button {
+  padding: 10px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 8px;
+}
+
+.supplyButton {
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+}
+
+.supplyButton:hover {
+  background-color: #322ece;
+}
+
+.borrowButton {
+  background-color: var(--secondary-tea-green);
+  color: black;
+}
+
+.borrowButton:hover {
+  background-color: #a6c45d;
+}
+
+.aprSection {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.aprContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.aprLabel {
+  font-size: 12px;
+  color: var(--secondary-slate-blue);
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+
+.aprValue {
+  font-size: 16px;
+  color: var(--secondary-slate-blue);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.graph {
+  margin-top: auto;
+}
+
+.customTooltip {
+  background-color: var(--background);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.tooltipDate {
+  color: black;
+  font-size: 12px;
+  margin: 0;
+}
+
+.tooltipValue {
+  color: black;
+  font-size: 14px;
+  margin: 4px 0 0;
+}

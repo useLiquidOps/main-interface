@@ -16,15 +16,18 @@ interface DataPoint {
 }
 
 const dummyData: DataPoint[] = [
-  { date: "2023-10-01", value: 3 },
-  { date: "2023-10-02", value: 1 },
-  { date: "2023-10-03", value: 2 },
-  { date: "2023-10-04", value: 3 },
-  { date: "2023-10-05", value: 4 },
-  { date: "2023-10-06", value: 3.5 },
-  { date: "2023-10-07", value: 4.5 },
-  { date: "2023-10-08", value: 4 },
-  { date: "2023-10-09", value: 3.5 },
+  { date: "2023-10-01", value: 4.2 },
+  { date: "2023-10-02", value: 4.0 },
+  { date: "2023-10-03", value: 1.8 },
+  { date: "2023-10-04", value: 2.0 },
+  { date: "2023-10-05", value: 2.5 },
+  { date: "2023-10-06", value: 3.0 },
+  { date: "2023-10-07", value: 3.2 },
+  { date: "2023-10-08", value: 4.2 },
+  { date: "2023-10-09", value: 3.8 },
+  { date: "2023-10-10", value: 4.2 },
+  { date: "2023-10-11", value: 4.0 },
+  { date: "2023-10-12", value: 3.5 },
 ];
 
 const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
@@ -57,8 +60,8 @@ const ProtocolBalance: React.FC = () => {
               height={50}
             />
           </div>
-          <span className={styles.amount}>3,745.62</span>
-          <span className={styles.currency}>qAR</span>
+          <p className={styles.amount}>3,745.62</p>
+          <p className={styles.currency}>qAR</p>
         </div>
         <div className={styles.actions}>
           <button className={`${styles.button} ${styles.supplyButton}`}>
@@ -73,29 +76,27 @@ const ProtocolBalance: React.FC = () => {
       </div>
       <div className={styles.aprSection}>
         <div className={styles.aprContainer}>
-          <span className={styles.aprLabel}>APR</span>
+          <p className={styles.aprLabel}>APR</p>
           <div className={styles.aprValue}>
             <Image
               src="/icons/APRUp.svg"
               alt="Up Arrow"
-              width={15}
-              height={15}
+              width={0}
+              height={16}
+              style={{ width: "auto", height: "16px" }}
             />
-            <span>4.57%</span>
+            <p className={styles.aprText}>4.57%</p>
           </div>
         </div>
         <div className={styles.graph}>
-          <ResponsiveContainer width="100%" height={60}>
-            <LineChart
-              data={dummyData}
-              margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
-            >
+          <ResponsiveContainer width="100%">
+            <LineChart data={dummyData}>
               <XAxis dataKey="date" hide />
               <Line
-                type="monotone"
+                type="linear"
                 dataKey="value"
                 stroke="var(--secondary-slate-blue)"
-                strokeWidth={2}
+                strokeWidth={3}
                 dot={false}
               />
               <Tooltip

@@ -4,6 +4,7 @@ import styles from "./home.module.css";
 import Header from "../../components/Header/Header";
 import ProtocolBalance from "./ProtocolBalance/ProtocolBalance";
 import Market from "./Market/Market";
+import PositionSummary from "./PositionSummary/PositionSummary";
 
 const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
   const currentToken = params.ticker as string;
@@ -17,9 +18,7 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
 
           <div className={styles.grid}>
             <Market />
-            <Market />
-            <Market />
-            <Market />
+            <PositionSummary />
           </div>
         </div>
       </div>

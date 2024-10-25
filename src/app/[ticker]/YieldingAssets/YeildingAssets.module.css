@@ -167,3 +167,29 @@
 .withdrawIcon {
   margin-left: 17px;
 }
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 286px;
+}
+
+.emptyStateIcon {
+  margin-bottom: 16px;
+}
+
+.emptyStateTitle {
+  color: var(--primary-ultramarine);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.emptyStateText {
+  color: var(--secondary-periwinkle);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}

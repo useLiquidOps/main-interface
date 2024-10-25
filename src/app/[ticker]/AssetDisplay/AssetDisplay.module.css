@@ -167,6 +167,7 @@
 .withdrawIcon {
   margin-left: 17px;
 }
+
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -192,4 +193,26 @@
   font-size: 14px;
   font-weight: 500;
   margin: 0;
+  width: 230px;
+  overflow: auto;
+}
+
+.lendContainer {
+  height: 390px;
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+
+.borrowContainer {
+  height: 390px;
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+
+.lendContainer.expanded {
+  height: 100%;
+}
+
+.borrowContainer.expanded {
+  height: 100%;
 }

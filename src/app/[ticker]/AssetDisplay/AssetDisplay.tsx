@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./YeildingAssets.module.css";
+import styles from "./AssetDisplay.module.css";
 import Image from "next/image";
 
 interface Asset {
@@ -10,87 +10,63 @@ interface Asset {
   apr: string;
   change: string;
   isPositive: boolean;
+  extraAmount?: string;
 }
 
-const assets: Asset[] = [
-  {
-    icon: "/tokens/qAR.svg",
-    name: "Quantum Arweave",
-    amount: "13,579.24",
-    symbol: "qAR",
-    apr: "4.57",
-    change: "0.02",
-    isPositive: true,
-  },
-  {
-    icon: "/tokens/DAI.svg",
-    name: "Dai",
-    amount: "124.5",
-    symbol: "DAI",
-    apr: "2.03",
-    change: "0.17",
-    isPositive: false,
-  },
-  {
-    icon: "/tokens/stETH.svg",
-    name: "Staked Ethereum",
-    amount: "13,579.24",
-    symbol: "stETH",
-    apr: "4.57",
-    change: "0.02",
-    isPositive: true,
-  },
-  {
-    icon: "/tokens/qAR.svg",
-    name: "Quantum Arweave",
-    amount: "13,579.24",
-    symbol: "qAR",
-    apr: "4.57",
-    change: "0.02",
-    isPositive: true,
-  },
-  {
-    icon: "/tokens/DAI.svg",
-    name: "Dai",
-    amount: "124.5",
-    symbol: "DAI",
-    apr: "2.03",
-    change: "0.17",
-    isPositive: false,
-  },
-  {
-    icon: "/tokens/stETH.svg",
-    name: "Staked Ethereum",
-    amount: "13,579.24",
-    symbol: "stETH",
-    apr: "4.57",
-    change: "0.02",
-    isPositive: true,
-  },
-];
+interface AssetDisplayProps {
+  mode: "lend" | "borrow";
+  assets: Asset[];
+  maxYield?: string;
+}
 
-const YieldingAssets: React.FC = () => {
-  const maxYield = "5.1";
-
+const AssetDisplay: React.FC<AssetDisplayProps> = ({
+  mode,
+  assets,
+  maxYield,
+}) => {
   const [showAll, setShowAll] = useState(false);
 
   const displayedAssets = showAll ? assets : assets.slice(0, 4);
 
-  const toggleView = () => {
-    setShowAll(!showAll);
+  const getDisplayText = () => {
+    if (mode === "lend") {
+      return {
+        title: "Yielding assets",
+        emptyTitle: "No assets supplied yet",
+        emptyText: `Providing collateral can earn you up to ${maxYield}% APY`,
+        actionButton: "Withdraw",
+        actionIcon: "/icons/withdraw.svg",
+      };
+    }
+    return {
+      title: "Borrowed assets",
+      emptyTitle: "No borrows yet",
+      emptyText: "You can take out a loan using your supplied collateral.",
+      actionButton: "Repay",
+      actionIcon: "/icons/repay.svg",
+    };
   };
 
+  const displayText = getDisplayText();
+
+  const containerClass = `${styles.container} ${
+    mode === "lend" ? styles.lendContainer : styles.borrowContainer
+  } ${showAll ? styles.expanded : ""}`;
+
   return (
-    <div className={`${styles.container} ${showAll ? styles.expanded : ""}`}>
+    <div className={containerClass}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Yielding assets</h2>
+        <h2 className={styles.title}>{displayText.title}</h2>
         {assets.length > 4 &&
           (showAll ? (
-            <button onClick={toggleView} className={styles.closeButton}>
+            <button
+              onClick={() => setShowAll(false)}
+              className={styles.closeButton}
+            >
               <Image src="/icons/close.svg" alt="Close" width={9} height={9} />
             </button>
           ) : (
-            <button onClick={toggleView} className={styles.viewAll}>
+            <button onClick={() => setShowAll(true)} className={styles.viewAll}>
               View all
             </button>
           ))}
@@ -105,16 +81,14 @@ const YieldingAssets: React.FC = () => {
             height={120}
             className={styles.emptyStateIcon}
           />
-          <h3 className={styles.emptyStateTitle}>No assets supplied yet</h3>
-          <p className={styles.emptyStateText}>
-            Providing collateral can earn you up to {maxYield}% APY
-          </p>
+          <h3 className={styles.emptyStateTitle}>{displayText.emptyTitle}</h3>
+          <p className={styles.emptyStateText}>{displayText.emptyText}</p>
         </div>
       ) : (
         <div className={styles.assetsList}>
           {displayedAssets.map((asset, index) => (
             <div
-              key={`${asset.name}-${index}`}
+              key={`${mode}-${asset.name}-${index}`}
               className={styles.assetRowWrapper}
             >
               <div className={styles.assetRow}>
@@ -131,6 +105,9 @@ const YieldingAssets: React.FC = () => {
                     <p className={styles.name}>{asset.name}</p>
                     <p className={styles.amount}>
                       {asset.amount} {asset.symbol}
+                      {mode === "borrow" &&
+                        asset.extraAmount &&
+                        ` + ${asset.extraAmount}`}
                     </p>
                   </div>
                 </div>
@@ -154,13 +131,13 @@ const YieldingAssets: React.FC = () => {
               </div>
               <button className={styles.withdrawButton}>
                 <Image
-                  src="/icons/withdraw.svg"
-                  alt="Withdraw"
+                  src={displayText.actionIcon}
+                  alt={displayText.actionButton}
                   width={14}
                   height={14}
                   className={styles.withdrawIcon}
                 />
-                <span>Withdraw</span>
+                <span>{displayText.actionButton}</span>
               </button>
             </div>
           ))}
@@ -170,4 +147,4 @@ const YieldingAssets: React.FC = () => {
   );
 };
 
-export default YieldingAssets;
+export default AssetDisplay;

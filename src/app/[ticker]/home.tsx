@@ -5,7 +5,8 @@ import Header from "../../components/Header/Header";
 import ProtocolBalance from "./ProtocolBalance/ProtocolBalance";
 import Market from "./Market/Market";
 import PositionSummary from "./PositionSummary/PositionSummary";
-import YieldingAssets from "./YieldingAssets/YeildingAssets";
+import AssetDisplay from "./AssetDisplay/AssetDisplay";
+import { AssetDisplayData } from "../data";
 
 const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
   const currentToken = params.ticker as string;
@@ -18,9 +19,16 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
           <ProtocolBalance />
 
           <div className={styles.grid}>
-            {/* <Market />
-            <PositionSummary /> */}
-            <YieldingAssets />
+            <Market />
+            <PositionSummary />
+
+            <AssetDisplay
+              mode="lend"
+              assets={AssetDisplayData}
+              maxYield="5.1"
+            />
+
+            <AssetDisplay mode="borrow" assets={AssetDisplayData} />
           </div>
         </div>
       </div>

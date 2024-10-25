@@ -28,7 +28,7 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
               maxYield="5.1"
             />
 
-            <AssetDisplay mode="borrow" assets={AssetDisplayData} />
+            <AssetDisplay mode="borrow" assets={[]} />
           </div>
         </div>
       </div>

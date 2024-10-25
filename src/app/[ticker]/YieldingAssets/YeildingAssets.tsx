@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from './YeildingAssets.module.css'
+import styles from "./YeildingAssets.module.css";
 import Image from "next/image";
 
 interface Asset {
@@ -79,17 +79,12 @@ const YieldingAssets: React.FC = () => {
   };
 
   return (
-    <div className={`${styles.container} ${showAll ? styles.expanded : ''}`}>
+    <div className={`${styles.container} ${showAll ? styles.expanded : ""}`}>
       <div className={styles.header}>
         <h2 className={styles.title}>Yielding assets</h2>
         {showAll ? (
           <button onClick={toggleView} className={styles.closeButton}>
-            <Image
-              src="/icons/close.svg"
-              alt="Close"
-              width={9}
-              height={9}
-            />
+            <Image src="/icons/close.svg" alt="Close" width={9} height={9} />
           </button>
         ) : (
           <button onClick={toggleView} className={styles.viewAll}>
@@ -100,42 +95,55 @@ const YieldingAssets: React.FC = () => {
 
       <div className={styles.assetsList}>
         {displayedAssets.map((asset, index) => (
-          <div key={`${asset.name}-${index}`} className={styles.assetRow}>
-            <div className={styles.assetInfo}>
-              <div className={styles.iconWrapper}>
-                <Image
-                  src={asset.icon}
-                  alt={asset.name}
-                  width={40}
-                  height={40}
-                />
+          <div
+            key={`${asset.name}-${index}`}
+            className={styles.assetRowWrapper}
+          >
+            <div className={styles.assetRow}>
+              <div className={styles.assetInfo}>
+                <div className={styles.iconWrapper}>
+                  <Image
+                    src={asset.icon}
+                    alt={asset.name}
+                    width={40}
+                    height={40}
+                  />
+                </div>
+                <div className={styles.nameAmount}>
+                  <p className={styles.name}>{asset.name}</p>
+                  <p className={styles.amount}>
+                    {asset.amount} {asset.symbol}
+                  </p>
+                </div>
               </div>
-              <div className={styles.nameAmount}>
-                <p className={styles.name}>{asset.name}</p>
-                <p className={styles.amount}>
-                  {asset.amount} {asset.symbol}
-                </p>
-              </div>
-            </div>
 
-            <div className={styles.aprInfo}>
-              <p className={styles.apr}>APR {asset.apr}%</p>
-              <div className={styles.changeInfo}>
-                <Image
-                  src={
-                    asset.isPositive ? "/icons/APRUp.svg" : "/icons/APRDown.svg"
-                  }
-                  alt="APR change indicator"
-                  width={16}
-                  height={16}
-                />
-                <p
-                  className={styles.change}
-                >
-                  {asset.change}%
-                </p>
+              <div className={styles.aprInfo}>
+                <p className={styles.apr}>APR {asset.apr}%</p>
+                <div className={styles.changeInfo}>
+                  <Image
+                    src={
+                      asset.isPositive
+                        ? "/icons/APRUp.svg"
+                        : "/icons/APRDown.svg"
+                    }
+                    alt="APR change indicator"
+                    width={16}
+                    height={16}
+                  />
+                  <p className={styles.change}>{asset.change}%</p>
+                </div>
               </div>
             </div>
+            <button className={styles.withdrawButton}>
+              <Image
+                src="/icons/withdraw.svg"
+                alt="Withdraw"
+                width={14}
+                height={14}
+                className={styles.withdrawIcon}
+              />
+              <span>Withdraw</span>
+            </button>
           </div>
         ))}
       </div>

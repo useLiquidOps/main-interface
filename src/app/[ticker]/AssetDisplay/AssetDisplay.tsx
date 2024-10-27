@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./AssetDisplay.module.css";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Asset {
   icon: string;
@@ -91,7 +92,10 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
               key={`${mode}-${asset.name}-${index}`}
               className={styles.assetRowWrapper}
             >
-              <div className={styles.assetRow}>
+              <Link
+                href={`/${asset.symbol.toLowerCase()}`}
+                className={styles.assetRow}
+              >
                 <div className={styles.assetInfo}>
                   <div className={styles.iconWrapper}>
                     <Image
@@ -128,7 +132,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
                     <p className={styles.change}>{asset.change}%</p>
                   </div>
                 </div>
-              </div>
+              </Link>
               <button className={styles.withdrawButton}>
                 <Image
                   src={displayText.actionIcon}

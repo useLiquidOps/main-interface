@@ -13,8 +13,8 @@ const Markets = () => {
         <div className={styles.bodyContainer}>
           <div className={styles.marketsList}>
             {marketData.map((market, index) => (
-              <Link 
-                href={`/${market.symbol.toLowerCase()}`} 
+              <Link
+                href={`/${market.symbol.toLowerCase()}`}
                 key={market.symbol}
                 className={styles.marketLink}
               >
@@ -49,12 +49,16 @@ const Markets = () => {
                     </div>
 
                     <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>{market.utilization}%</p>
+                      <p className={styles.metricValue}>
+                        {market.utilization}%
+                      </p>
                       <p className={styles.metricLabel}>Utilization</p>
                     </div>
 
                     <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>{market.utilization2}%</p>
+                      <p className={styles.metricValue}>
+                        {market.utilization2}%
+                      </p>
                       <p className={styles.metricLabel}>Utilization</p>
                     </div>
 

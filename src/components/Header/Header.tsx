@@ -80,7 +80,8 @@ const Header: React.FC<HeaderProps> = ({
 
   useEffect(() => {
     setIsMounted(true);
-    setActiveLink(pathname);
+    const basePath = pathname.split('/')[1];
+    setActiveLink(basePath ? `/${basePath}` : '/');
   }, [pathname]);
 
   const toggleDropdown = (e: React.MouseEvent) => {
@@ -111,6 +112,18 @@ const Header: React.FC<HeaderProps> = ({
           (token) => token.ticker.toLowerCase() === currentToken.toLowerCase(),
         )
       : null;
+
+  const isLinkActive = (path: string) => {
+    const firstPathSegment = pathname.split('/')[1];
+    
+    if (path === '/') {
+      return pathname === '/' || (!firstPathSegment || (firstPathSegment && !['markets', 'liquidations', 'faucet'].includes(firstPathSegment)));
+    }
+    if (path === '/faucet') {
+      return pathname.startsWith('/faucet');
+    }
+    return '/' + firstPathSegment === path;
+  };
 
   return (
     <header className={styles.header}>
@@ -202,25 +215,25 @@ const Header: React.FC<HeaderProps> = ({
         <nav className={styles.navLinks}>
           <Link
             href="/"
-            className={activeLink === "/" ? styles.activeLink : ""}
+            className={isLinkActive("/") ? styles.activeLink : ""}
           >
             <p>Home</p>
           </Link>
           <Link
             href="/markets"
-            className={activeLink === "/markets" ? styles.activeLink : ""}
+            className={isLinkActive("/markets") ? styles.activeLink : ""}
           >
             <p>Markets</p>
           </Link>
           <Link
             href="/liquidations"
-            className={activeLink === "/liquidations" ? styles.activeLink : ""}
+            className={isLinkActive("/liquidations") ? styles.activeLink : ""}
           >
             <p>Liquidations</p>
           </Link>
           <Link
             href="/faucet"
-            className={activeLink === "/faucet" ? styles.activeLink : ""}
+            className={isLinkActive("/faucet") ? styles.activeLink : ""}
           >
             <p>Faucet</p>
           </Link>

@@ -10,6 +10,8 @@ import {
 } from "recharts";
 import styles from "./ProtocolBalance.module.css";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 interface DataPoint {
   date: string;
@@ -52,6 +54,14 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
 };
 
 const ProtocolBalance: React.FC = () => {
+  const router = useRouter();
+  const params = useParams();
+  const ticker = params.ticker as string;
+
+  const handleNavigate = (type: "supply" | "borrow") => {
+    router.push(`/${ticker}/${type}`);
+  };
+
   return (
     <div className={styles.protocolBalance}>
       <div className={styles.mainContent}>
@@ -69,11 +79,17 @@ const ProtocolBalance: React.FC = () => {
           <p className={styles.currency}>qAR</p>
         </div>
         <div className={styles.actions}>
-          <button className={`${styles.button} ${styles.supplyButton}`}>
+          <button
+            className={`${styles.button} ${styles.supplyButton}`}
+            onClick={() => handleNavigate("supply")}
+          >
             <Image src="/icons/plus.svg" alt="Plus" width={16} height={16} />
             <span>Supply assets</span>
           </button>
-          <button className={`${styles.button} ${styles.borrowButton}`}>
+          <button
+            className={`${styles.button} ${styles.borrowButton}`}
+            onClick={() => handleNavigate("borrow")}
+          >
             <span>Borrow assets</span>
             <Image src="/icons/bank.svg" alt="Borrow" width={16} height={16} />
           </button>

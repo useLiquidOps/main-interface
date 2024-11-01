@@ -10,6 +10,7 @@ import { useClickOutside } from "../utils/utils";
 
 interface HeaderProps {
   home?: boolean;
+  faucet?: boolean;
   currentToken?: string;
 }
 
@@ -23,7 +24,11 @@ interface TokenData {
   };
 }
 
-const Header: React.FC<HeaderProps> = ({ home = false, currentToken }) => {
+const Header: React.FC<HeaderProps> = ({
+  home = false,
+  faucet = false,
+  currentToken,
+}) => {
   const pathname = usePathname();
   const router = useRouter();
   const [activeLink, setActiveLink] = useState<string | null>(null);
@@ -86,6 +91,8 @@ const Header: React.FC<HeaderProps> = ({ home = false, currentToken }) => {
   const selectToken = (token: string) => {
     if (home) {
       router.push(`/${token.toLowerCase()}`);
+    } else if (faucet) {
+      router.push(`/faucet/${token.toLowerCase()}`);
     }
     setIsDropdownOpen(false);
   };
@@ -99,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({ home = false, currentToken }) => {
   }
 
   const currentTokenData =
-    home && currentToken
+    (home || faucet) && currentToken
       ? tokens.find(
           (token) => token.ticker.toLowerCase() === currentToken.toLowerCase(),
         )
@@ -119,7 +126,7 @@ const Header: React.FC<HeaderProps> = ({ home = false, currentToken }) => {
             />
             <h2 className={styles.pageTitle}>LiquidOps</h2>
           </Link>
-          {home && currentToken && (
+          {(home || faucet) && currentToken && (
             <div className={styles.tokenDropdown} ref={dropdownRef}>
               <div className={styles.selectedToken}>
                 /{" "}

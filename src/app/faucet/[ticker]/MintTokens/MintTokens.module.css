@@ -1,0 +1,73 @@
+.mintTokens {
+  background-color: white;
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+}
+
+.title {
+  color: var(--secondary-slate-blue);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  margin-bottom: 16px;
+}
+
+.inputContainer {
+  background-color: var(--primary-ghost-white);
+  border-radius: 15px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.inputContainer.focused {
+  border-color: var(--primary-palatinate-blue);
+}
+
+.inputSection {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+}
+
+.amountInput {
+  width: 100%;
+  font-size: 24px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 8px;
+  color: var(--primary-ultramarine);
+  font-family: "DM Sans", sans-serif;
+}
+
+.amountInput::placeholder {
+  color: var(--primary-ultramarine);
+}
+
+.tokenSelector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-ultramarine);
+}

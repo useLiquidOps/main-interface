@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import Image from "next/image";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import styles from "./ActionTab.module.css";
+import {
+  formatInputNumber,
+  calculateUsdValue,
+  formatMaxAmount,
+  formatNumberWithCommas,
+} from "../utils/utils";
 
 interface ActionTabProps {
   ticker: string;
-  mode: 'supply' | 'borrow';
+  mode: "supply" | "borrow";
 }
 
 const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
@@ -20,7 +26,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const calculateMaxAmount = () => {
-    if (mode === 'supply') {
+    if (mode === "supply") {
       return walletBalance;
     } else {
       return walletBalance * utilizationRate;
@@ -28,44 +34,20 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/[^\d.]/g, "");
-
-    const decimalCount = rawValue.split(".").length - 1;
-    if (decimalCount > 1) return;
-
-    if (rawValue === "") {
-      setInputValue("");
-      return;
-    }
-
-    const formattedValue = Number(rawValue).toLocaleString("en-US", {
-      maximumFractionDigits: 8,
-      useGrouping: true,
-    });
-
+    const formattedValue = formatInputNumber(e.target.value);
     setInputValue(formattedValue);
   };
 
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
-    const formattedMax = maxAmount.toLocaleString("en-US", {
-      maximumFractionDigits: 8,
-      useGrouping: true,
-    });
-    setInputValue(formattedMax);
-  };
-
-  const calculateUsdValue = (value: string): string => {
-    const numValue = Number(value.replace(/,/g, "")) || 0;
-    return (numValue * tokenToUsdRate).toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
+    setInputValue(formatMaxAmount(maxAmount));
   };
 
   return (
     <div className={styles.actionTab}>
-      <p className={styles.borrowTitle}>{mode === 'supply' ? 'Deposit' : 'Borrow'}</p>
+      <p className={styles.borrowTitle}>
+        {mode === "supply" ? "Deposit" : "Borrow"}
+      </p>
 
       <div
         className={`${styles.inputContainer} ${isFocused ? styles.focused : ""}`}
@@ -82,7 +64,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
               placeholder="0"
             />
             <p className={styles.usdValue}>
-              ≈{calculateUsdValue(inputValue)} USD
+              ≈{calculateUsdValue(inputValue, tokenToUsdRate)} USD
             </p>
           </div>
           <div className={styles.rightSection}>
@@ -103,7 +85,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
                 alt="Wallet"
               />
               <span className={styles.balanceAmount}>
-                {walletBalance.toLocaleString()} {ticker}
+                {formatNumberWithCommas(walletBalance)} {ticker}
               </span>
               <span className={styles.separator}>|</span>
               <button className={styles.maxButton} onClick={handleMaxClick}>
@@ -118,7 +100,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         <div className={styles.infoDetails}>
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>
-              {mode === 'supply' ? 'Supply' : 'Borrow'} APY: {estimatedApy}%
+              {mode === "supply" ? "Supply" : "Borrow"} APY: {estimatedApy}%
             </span>
           </div>
           <div className={styles.infoRow}>

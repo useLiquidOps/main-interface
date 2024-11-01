@@ -27,7 +27,7 @@ const Supply: React.FC<{
 
           <div className={styles.content}>
             <div className={styles.leftColumn}>
-              <ActionTab ticker={ticker}  mode="supply" />
+              <ActionTab ticker={ticker} mode="supply" />
             </div>
             <div className={styles.rightColumn}>
               {/* <PositionSummary /> */}

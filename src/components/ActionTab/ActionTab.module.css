@@ -1,0 +1,130 @@
+.actionTab {
+  background-color: white;
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+}
+
+.borrowTitle {
+  color: var(--secondary-slate-blue);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  margin-bottom: 16px;
+}
+
+.inputContainer {
+  background-color: var(--primary-ghost-white);
+  border-radius: 15px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.inputContainer.focused {
+  border-color: var(--primary-palatinate-blue);
+}
+
+.inputSection {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.amountInput {
+  width: 100%;
+  font-size: 24px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 8px;
+  color: var(--primary-ultramarine);
+  font-family: "DM Sans", sans-serif;
+}
+
+.amountInput::placeholder {
+  color: var(--primary-ultramarine);
+}
+
+.tokenSelector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-ultramarine);
+}
+
+.usdValue {
+  color: var(--secondary-periwinkle);
+  font-size: 10px;
+  font-weight: 700;
+  margin: 0;
+  padding-left: 8px;
+}
+
+.walletInfo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--secondary-periwinkle);
+  font-weight: 700;
+}
+
+.maxButton {
+  color: var(--primary-palatinate-blue);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  padding: 0;
+  font-size: 10px;
+}
+
+.infoContainer {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.infoDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+}
+
+.infoLabel {
+  color: var(--secondary-periwinkle);
+  font-weight: 700;
+}
+
+.customiseIcon {
+  cursor: not-allowed;
+}

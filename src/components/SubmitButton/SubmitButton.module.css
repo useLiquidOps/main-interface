@@ -1,0 +1,55 @@
+.submitButton {
+  width: 100%;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.idle {
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+}
+
+.loading {
+  background-color: var(--secondary-lavender);
+  color: var(--primary-palatinate-blue);
+}
+
+.success {
+  background-color: var(--secondary-tea-green);
+  color: var(--submit-green);
+}
+
+.error {
+  background-color: var(--failed-red);
+  color: var(--failed-red-text);
+}
+
+.iconWrapper {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

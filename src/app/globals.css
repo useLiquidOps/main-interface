@@ -24,4 +24,7 @@ a {
   --secondary-honeydew: #eef9e2;
   --secondary-lavender: #dcdcff;
   --background: #fafafc;
+  --failed-red: #f5cbcb;
+  --failed-red-text: #b52221;
+  --submit-green: #588740;
 }

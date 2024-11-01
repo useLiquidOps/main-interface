@@ -1,12 +1,12 @@
 "use client";
-import styles from "./Borrow.module.css";
+import styles from "./Supply.module.css";
 import Header from "@/components/Header/Header";
 import Image from "next/image";
 import ActionTab from "@/components/ActionTab/ActionTab";
 import Link from "next/link";
 import PositionSummary from "../PositionSummary/PositionSummary";
 
-const Borrow: React.FC<{
+const Supply: React.FC<{
   ticker: string;
 }> = ({ ticker }) => {
   return (
@@ -22,15 +22,15 @@ const Borrow: React.FC<{
               height={24}
               className={styles.backIcon}
             />
-            <h2 className={styles.title}>Borrow assets</h2>
+            <h2 className={styles.title}>Supply assets</h2>
           </Link>
 
           <div className={styles.content}>
             <div className={styles.leftColumn}>
-              <ActionTab ticker={ticker} mode="borrow" />
+              <ActionTab ticker={ticker}  mode="supply" />
             </div>
             <div className={styles.rightColumn}>
-              <PositionSummary />
+              {/* <PositionSummary /> */}
             </div>
           </div>
         </div>
@@ -39,4 +39,4 @@ const Borrow: React.FC<{
   );
 };
 
-export default Borrow;
+export default Supply;

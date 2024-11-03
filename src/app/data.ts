@@ -99,3 +99,68 @@ export const marketData = [
     lentCurrency: "USD",
   },
 ];
+
+
+interface DataPoint {
+  date: string;
+  value: number;
+}
+
+export const graphDummyData: DataPoint[] = [
+  { date: "2023-10-01", value: 4 },
+  { date: "2023-10-02", value: 3.9 },
+  { date: "2023-10-02", value: 3.9 },
+  { date: "2023-10-02", value: 3.8 },
+  { date: "2023-10-03", value: 3 },
+  { date: "2023-10-04", value: 2.0 },
+  { date: "2023-10-05", value: 2.5 },
+  { date: "2023-10-05", value: 2.5 },
+  { date: "2023-10-06", value: 3.0 },
+  { date: "2023-10-07", value: 3.5 },
+  { date: "2023-10-07", value: 3.5 },
+  { date: "2023-10-08", value: 4.2 },
+  { date: "2023-10-09", value: 3.8 },
+  { date: "2023-10-10", value: 4.2 },
+  { date: "2023-10-11", value: 4.0 },
+  { date: "2023-10-12", value: 3.5 },
+];
+
+interface TokenData {
+  name: string;
+  ticker: string;
+  APR: string;
+  percentChange: {
+    change: string;
+    outcome: boolean;
+  };
+}
+
+export const headerTokensData: TokenData[] = [
+  {
+    name: "Quantum Arweave",
+    ticker: "qAR",
+    APR: "5.2",
+    percentChange: {
+      change: "1.2",
+      outcome: true,
+    },
+  },
+  {
+    name: "Dai",
+    ticker: "DAI",
+    APR: "3.8",
+    percentChange: {
+      change: "0.2",
+      outcome: false,
+    },
+  },
+  {
+    name: "Staked Ethereum",
+    ticker: "stETH",
+    APR: "4.5",
+    percentChange: {
+      change: "1.2",
+      outcome: true,
+    },
+  },
+];

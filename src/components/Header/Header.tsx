@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Connect from "../Connect/Connect";
 import Input from "../Input/Input";
 import { useClickOutside } from "../utils/utils";
+import { headerTokensData } from '../../app/data'
 
 interface HeaderProps {
   home?: boolean;
@@ -14,15 +15,6 @@ interface HeaderProps {
   currentToken?: string;
 }
 
-interface TokenData {
-  name: string;
-  ticker: string;
-  APR: string;
-  percentChange: {
-    change: string;
-    outcome: boolean;
-  };
-}
 
 const Header: React.FC<HeaderProps> = ({
   home = false,
@@ -40,37 +32,7 @@ const Header: React.FC<HeaderProps> = ({
     setIsDropdownOpen(false);
   });
 
-  const tokens: TokenData[] = [
-    {
-      name: "Quantum Arweave",
-      ticker: "qAR",
-      APR: "5.2",
-      percentChange: {
-        change: "1.2",
-        outcome: true,
-      },
-    },
-    {
-      name: "Dai",
-      ticker: "DAI",
-      APR: "3.8",
-      percentChange: {
-        change: "0.2",
-        outcome: false,
-      },
-    },
-    {
-      name: "Staked Ethereum",
-      ticker: "stETH",
-      APR: "4.5",
-      percentChange: {
-        change: "1.2",
-        outcome: true,
-      },
-    },
-  ];
-
-  const sortedTokens = [...tokens].sort((a, b) => a.name.localeCompare(b.name));
+  const sortedTokens = [...headerTokensData].sort((a, b) => a.name.localeCompare(b.name));
 
   const filteredTokens = sortedTokens.filter(
     (token) =>
@@ -108,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const currentTokenData =
     (home || faucet) && currentToken
-      ? tokens.find(
+      ? headerTokensData.find(
           (token) => token.ticker.toLowerCase() === currentToken.toLowerCase(),
         )
       : null;

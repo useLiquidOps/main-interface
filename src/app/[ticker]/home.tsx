@@ -9,14 +9,14 @@ import AssetDisplay from "./AssetDisplay/AssetDisplay";
 import { AssetDisplayData } from "../data";
 
 const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
-  const currentToken = params.ticker as string;
+  const ticker = params.ticker as string;
 
   return (
     <div className={styles.page}>
-      <Header home={true} currentToken={currentToken} />
+      <Header home={true} currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
-          <ProtocolBalance />
+          <ProtocolBalance ticker={ticker} />
 
           <div className={styles.grid}>
             <Market />

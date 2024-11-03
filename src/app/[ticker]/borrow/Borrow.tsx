@@ -30,7 +30,7 @@ const Borrow: React.FC<{
               <ActionTab ticker={ticker} mode="borrow" />
             </div>
             <div className={styles.rightColumn}>
-              <PositionSummary />
+              <PositionSummary ticker={ticker} />
             </div>
           </div>
         </div>

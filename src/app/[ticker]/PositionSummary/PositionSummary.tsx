@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
+import { tokens, headerTokensData } from "@/app/data";
 
 interface PositionData {
   collateralValue: number;
@@ -9,18 +10,13 @@ interface PositionData {
   availableToBorrow: number;
 }
 
-interface Token {
-  symbol: string;
-  imagePath: string;
-}
+const PositionSummary: React.FC<{
+  ticker: string;
+}> = ({ ticker }) => {
+  const tokenData = headerTokensData.find(
+    (token) => token.ticker.toLowerCase() === ticker.toLowerCase()
+  );
 
-const tokens: Token[] = [
-  { symbol: "DAI", imagePath: "/tokens/dai.svg" },
-  { symbol: "stETH", imagePath: "/tokens/stETH.svg" },
-  { symbol: "qAR", imagePath: "/tokens/qAR.svg" },
-];
-
-const PositionSummary: React.FC = () => {
   const positionData: PositionData = {
     collateralValue: 9413.37,
     borrowCapacity: 4813.93,
@@ -34,6 +30,10 @@ const PositionSummary: React.FC = () => {
     return `${(currentBorrow / maxBorrow) * 100}%`;
   };
 
+  if (!tokenData) {
+    return null;
+  }
+
   return (
     <div className={styles.body}>
       <div className={styles.container}>
@@ -45,7 +45,7 @@ const PositionSummary: React.FC = () => {
               <p className={styles.label}>Collateral Value</p>
               <p
                 className={styles.value}
-              >{`${formatTMB(positionData.collateralValue)} qAR`}</p>
+              >{`${formatTMB(positionData.collateralValue)} ${tokenData.ticker}`}</p>
             </div>
             <div className={styles.tokens}>
               {tokens.map((token, index) => (
@@ -65,7 +65,7 @@ const PositionSummary: React.FC = () => {
               <p className={styles.label}>Borrow Capacity</p>
               <p
                 className={styles.value}
-              >{`${formatTMB(positionData.borrowCapacity)} qAR`}</p>
+              >{`${formatTMB(positionData.borrowCapacity)} ${tokenData.ticker}`}</p>
             </div>
             <div className={styles.progressContainer}>
               <div
@@ -81,7 +81,7 @@ const PositionSummary: React.FC = () => {
               <p className={styles.label}>Liquidation Point</p>
               <p
                 className={styles.value}
-              >{`${formatTMB(positionData.liquidationPoint)} qAR`}</p>
+              >{`${formatTMB(positionData.liquidationPoint)} ${tokenData.ticker}`}</p>
             </div>
           </div>
 
@@ -90,7 +90,7 @@ const PositionSummary: React.FC = () => {
               <p className={styles.label}>Available to Borrow</p>
               <p
                 className={styles.value}
-              >{`${formatTMB(positionData.availableToBorrow)} qAR`}</p>
+              >{`${formatTMB(positionData.availableToBorrow)} ${tokenData.ticker}`}</p>
             </div>
           </div>
         </div>

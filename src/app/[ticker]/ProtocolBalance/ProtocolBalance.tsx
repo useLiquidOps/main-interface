@@ -44,7 +44,7 @@ const ProtocolBalance: React.FC<{
             />
           </div>
           <p className={styles.amount}>3,745.62</p>
-          <p className={styles.currency}>{ticker}</p>
+          <p className={styles.currency}>{tokenData.ticker}</p>
         </div>
         <div className={styles.actions}>
           <button

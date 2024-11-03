@@ -5,18 +5,18 @@ import Market from "../../[ticker]/Market/Market";
 import MintTokens from "./MintTokens/MintTokens";
 
 const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
-  const currentToken = params.ticker as string;
+  const ticker = params.ticker as string;
   return (
     <div className={styles.page}>
-      <Header faucet={true} currentToken={currentToken} />
+      <Header faucet={true} currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <div className={styles.content}>
             <div className={styles.leftColumn}>
-              <MintTokens ticker={currentToken} />
+              <MintTokens ticker={ticker} />
             </div>
             <div className={styles.rightColumn}>
-              <Market />
+              <Market ticker={ticker} />
             </div>
           </div>
 

@@ -19,8 +19,8 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
           <ProtocolBalance ticker={ticker} />
 
           <div className={styles.grid}>
-            <Market />
-            <PositionSummary />
+            <Market ticker={ticker} />
+            <PositionSummary ticker={ticker} />
 
             <AssetDisplay
               mode="lend"

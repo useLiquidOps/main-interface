@@ -164,3 +164,15 @@ export const headerTokensData: TokenData[] = [
     },
   },
 ];
+
+
+interface Token {
+  symbol: string;
+  imagePath: string;
+}
+
+export const tokens: Token[] = [
+  { symbol: "DAI", imagePath: "/tokens/dai.svg" },
+  { symbol: "stETH", imagePath: "/tokens/stETH.svg" },
+  { symbol: "qAR", imagePath: "/tokens/qAR.svg" },
+];

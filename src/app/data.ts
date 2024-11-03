@@ -76,7 +76,7 @@ export const marketData = [
   },
   {
     icon: "/tokens/qAR.svg",
-    name: "qAR",
+    name: "Qauntum Arweave",
     symbol: "qAR",
     apy: "4.57",
     utilization: "56.19",

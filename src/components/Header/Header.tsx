@@ -10,16 +10,11 @@ import { useClickOutside } from "../utils/utils";
 import { headerTokensData } from "../../app/data";
 
 interface HeaderProps {
-  home?: boolean;
-  faucet?: boolean;
   currentToken?: string;
+  mode?: "home" | "supply" | "borrow" | "faucet";
 }
 
-const Header: React.FC<HeaderProps> = ({
-  home = false,
-  faucet = false,
-  currentToken,
-}) => {
+const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [activeLink, setActiveLink] = useState<string | null>(null);
@@ -53,11 +48,15 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const selectToken = (token: string) => {
-    if (home) {
-      router.push(`/${token.toLowerCase()}`);
-    } else if (faucet) {
-      router.push(`/faucet/${token.toLowerCase()}`);
-    }
+    const tokenLower = token;
+    const routes = {
+      home: `/${tokenLower}`,
+      supply: `/${tokenLower}/supply`,
+      borrow: `/${tokenLower}/borrow`,
+      faucet: `/faucet/${tokenLower}`,
+    };
+
+    router.push(routes[mode]);
     setIsDropdownOpen(false);
   };
 
@@ -69,12 +68,11 @@ const Header: React.FC<HeaderProps> = ({
     return null;
   }
 
-  const currentTokenData =
-    (home || faucet) && currentToken
-      ? headerTokensData.find(
-          (token) => token.ticker.toLowerCase() === currentToken.toLowerCase(),
-        )
-      : null;
+  const currentTokenData = currentToken
+    ? headerTokensData.find(
+        (token) => token.ticker.toLowerCase() === currentToken.toLowerCase(),
+      )
+    : null;
 
   const isLinkActive = (path: string) => {
     const firstPathSegment = pathname.split("/")[1];
@@ -84,7 +82,9 @@ const Header: React.FC<HeaderProps> = ({
         pathname === "/" ||
         !firstPathSegment ||
         (firstPathSegment &&
-          !["markets", "liquidations", "faucet"].includes(firstPathSegment))
+          !["markets", "liquidations", "faucet", "supply", "borrow"].includes(
+            firstPathSegment,
+          ))
       );
     }
     if (path === "/faucet") {
@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({
             />
             <h2 className={styles.pageTitle}>LiquidOps</h2>
           </Link>
-          {(home || faucet) && currentToken && (
+          {currentToken && (
             <div className={styles.tokenDropdown} ref={dropdownRef}>
               <div className={styles.selectedToken}>
                 /{" "}
@@ -181,7 +181,10 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         <nav className={styles.navLinks}>
-          <Link href="/" className={isLinkActive("/") ? styles.activeLink : ""}>
+          <Link
+            href="/qAR"
+            className={isLinkActive("/") ? styles.activeLink : ""}
+          >
             <p>Home</p>
           </Link>
           <Link
@@ -197,7 +200,7 @@ const Header: React.FC<HeaderProps> = ({
             <p>Liquidations</p>
           </Link>
           <Link
-            href="/faucet"
+            href="/faucet/qAR"
             className={isLinkActive("/faucet") ? styles.activeLink : ""}
           >
             <p>Faucet</p>

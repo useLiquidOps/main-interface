@@ -8,7 +8,7 @@ const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
   const ticker = params.ticker as string;
   return (
     <div className={styles.page}>
-      <Header faucet={true} currentToken={ticker} />
+      <Header mode="faucet" currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <div className={styles.content}>

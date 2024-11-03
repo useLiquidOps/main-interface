@@ -13,7 +13,7 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
 
   return (
     <div className={styles.page}>
-      <Header home={true} currentToken={ticker} />
+      <Header mode="home" currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <ProtocolBalance ticker={ticker} />

@@ -11,7 +11,7 @@ const Supply: React.FC<{
 }> = ({ ticker }) => {
   return (
     <div className={styles.page}>
-      <Header home={true} currentToken={ticker} />
+      <Header mode="supply" currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <Link href={`/${ticker}`} className={styles.titleWrapper}>

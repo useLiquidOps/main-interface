@@ -14,7 +14,7 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const tokenData = headerTokensData.find(
-    (token) => token.ticker.toLowerCase() === ticker.toLowerCase()
+    (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

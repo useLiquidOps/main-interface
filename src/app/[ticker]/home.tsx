@@ -7,6 +7,7 @@ import Market from "./Market/Market";
 import PositionSummary from "./PositionSummary/PositionSummary";
 import AssetDisplay from "./AssetDisplay/AssetDisplay";
 import { AssetDisplayData } from "../data";
+import WithdrawRepay from "@/components/WithdrawRepay/WithdrawRepay";
 
 const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
   const ticker = params.ticker as string;
@@ -19,7 +20,7 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
           <ProtocolBalance ticker={ticker} />
 
           <div className={styles.grid}>
-            <Market ticker={ticker} />
+            {/* <Market ticker={ticker} />
             <PositionSummary ticker={ticker} />
 
             <AssetDisplay
@@ -28,7 +29,9 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
               maxYield="5.1"
             />
 
-            <AssetDisplay mode="borrow" assets={[]} />
+            <AssetDisplay mode="borrow" assets={[]} /> */}
+            <WithdrawRepay mode="withdraw" ticker={ticker} />
+            <WithdrawRepay mode="repay" ticker={ticker} />
           </div>
         </div>
       </div>

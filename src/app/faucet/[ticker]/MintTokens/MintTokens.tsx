@@ -3,6 +3,7 @@ import Image from "next/image";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import styles from "./MintTokens.module.css";
 import { formatInputNumber } from "../../../../components/utils/utils";
+import { headerTokensData } from "@/app/data";
 
 interface MintTokensProps {
   ticker: string;
@@ -12,10 +13,18 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
+  const tokenData = headerTokensData.find(
+    (token) => token.ticker.toLowerCase() === ticker.toLowerCase()
+  );
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formattedValue = formatInputNumber(e.target.value);
     setInputValue(formattedValue);
   };
+
+  if (!tokenData) {
+    return null;
+  }
 
   return (
     <div className={styles.mintTokens}>
@@ -39,12 +48,12 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
           <div className={styles.rightSection}>
             <div className={styles.tokenSelector}>
               <Image
-                src={`/tokens/${ticker}.svg`}
+                src={`/tokens/${tokenData.ticker.toLowerCase()}.svg`}
                 height={20}
                 width={20}
-                alt={ticker}
+                alt={tokenData.name}
               />
-              <span>{ticker}</span>
+              <span>{tokenData.ticker}</span>
             </div>
           </div>
         </div>

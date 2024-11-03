@@ -80,8 +80,8 @@ const Header: React.FC<HeaderProps> = ({
 
   useEffect(() => {
     setIsMounted(true);
-    const basePath = pathname.split('/')[1];
-    setActiveLink(basePath ? `/${basePath}` : '/');
+    const basePath = pathname.split("/")[1];
+    setActiveLink(basePath ? `/${basePath}` : "/");
   }, [pathname]);
 
   const toggleDropdown = (e: React.MouseEvent) => {
@@ -114,15 +114,20 @@ const Header: React.FC<HeaderProps> = ({
       : null;
 
   const isLinkActive = (path: string) => {
-    const firstPathSegment = pathname.split('/')[1];
-    
-    if (path === '/') {
-      return pathname === '/' || (!firstPathSegment || (firstPathSegment && !['markets', 'liquidations', 'faucet'].includes(firstPathSegment)));
+    const firstPathSegment = pathname.split("/")[1];
+
+    if (path === "/") {
+      return (
+        pathname === "/" ||
+        !firstPathSegment ||
+        (firstPathSegment &&
+          !["markets", "liquidations", "faucet"].includes(firstPathSegment))
+      );
     }
-    if (path === '/faucet') {
-      return pathname.startsWith('/faucet');
+    if (path === "/faucet") {
+      return pathname.startsWith("/faucet");
     }
-    return '/' + firstPathSegment === path;
+    return "/" + firstPathSegment === path;
   };
 
   return (
@@ -213,10 +218,7 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         <nav className={styles.navLinks}>
-          <Link
-            href="/"
-            className={isLinkActive("/") ? styles.activeLink : ""}
-          >
+          <Link href="/" className={isLinkActive("/") ? styles.activeLink : ""}>
             <p>Home</p>
           </Link>
           <Link

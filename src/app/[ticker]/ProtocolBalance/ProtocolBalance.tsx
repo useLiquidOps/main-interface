@@ -87,6 +87,25 @@ const ProtocolBalance: React.FC<{
               data={graphDummyData}
               margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
             >
+              <defs>
+                <linearGradient
+                  id="graphBackground"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop offset="0%" stopColor="#F6F6FE" stopOpacity={1} />
+                  <stop offset="100%" stopColor="#FFFFFF" stopOpacity={1} />
+                </linearGradient>
+              </defs>
+              <rect
+                x="0"
+                y="0"
+                width="100%"
+                height="100%"
+                fill="url(#graphBackground)"
+              />
               <YAxis domain={["dataMin - 0.5", "dataMax + 0.5"]} hide={true} />
               <XAxis dataKey="date" hide />
               <Line

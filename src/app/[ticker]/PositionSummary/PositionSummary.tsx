@@ -14,7 +14,7 @@ const PositionSummary: React.FC<{
   ticker: string;
 }> = ({ ticker }) => {
   const tokenData = headerTokensData.find(
-    (token) => token.ticker.toLowerCase() === ticker.toLowerCase()
+    (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
   const positionData: PositionData = {

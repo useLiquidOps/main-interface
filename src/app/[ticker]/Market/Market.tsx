@@ -13,9 +13,9 @@ const Market: React.FC<{
   ticker: string;
 }> = ({ ticker }) => {
   const tokenData = headerTokensData.find(
-    (token) => token.ticker.toLowerCase() === ticker.toLowerCase()
+    (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
-  
+
   const marketData: MarketData = {
     totalSupply: 676500000,
     availableCollateral: 507370000,

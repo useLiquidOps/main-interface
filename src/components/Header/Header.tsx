@@ -7,14 +7,13 @@ import { usePathname, useRouter } from "next/navigation";
 import Connect from "../Connect/Connect";
 import Input from "../Input/Input";
 import { useClickOutside } from "../utils/utils";
-import { headerTokensData } from '../../app/data'
+import { headerTokensData } from "../../app/data";
 
 interface HeaderProps {
   home?: boolean;
   faucet?: boolean;
   currentToken?: string;
 }
-
 
 const Header: React.FC<HeaderProps> = ({
   home = false,
@@ -32,7 +31,9 @@ const Header: React.FC<HeaderProps> = ({
     setIsDropdownOpen(false);
   });
 
-  const sortedTokens = [...headerTokensData].sort((a, b) => a.name.localeCompare(b.name));
+  const sortedTokens = [...headerTokensData].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
 
   const filteredTokens = sortedTokens.filter(
     (token) =>

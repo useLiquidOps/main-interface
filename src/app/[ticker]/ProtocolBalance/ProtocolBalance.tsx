@@ -17,9 +17,9 @@ const ProtocolBalance: React.FC<{
   ticker: string;
 }> = ({ ticker }) => {
   const router = useRouter();
-  
+
   const tokenData = headerTokensData.find(
-    (token) => token.ticker.toLowerCase() === ticker.toLowerCase()
+    (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
   const handleNavigate = (type: "supply" | "borrow") => {
@@ -68,7 +68,11 @@ const ProtocolBalance: React.FC<{
           <p className={styles.aprLabel}>APR</p>
           <div className={styles.aprValue}>
             <Image
-              src={tokenData.percentChange.outcome ? "/icons/APRUp.svg" : "/icons/APRDown.svg"}
+              src={
+                tokenData.percentChange.outcome
+                  ? "/icons/APRUp.svg"
+                  : "/icons/APRDown.svg"
+              }
               alt={tokenData.percentChange.outcome ? "Up Arrow" : "Down Arrow"}
               width={0}
               height={16}

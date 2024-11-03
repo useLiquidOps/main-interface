@@ -100,7 +100,6 @@ export const marketData = [
   },
 ];
 
-
 interface DataPoint {
   date: string;
   value: number;
@@ -164,7 +163,6 @@ export const headerTokensData: TokenData[] = [
     },
   },
 ];
-
 
 interface Token {
   symbol: string;

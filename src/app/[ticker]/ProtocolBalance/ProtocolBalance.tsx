@@ -95,8 +95,8 @@ const ProtocolBalance: React.FC<{
                   x2="0"
                   y2="1"
                 >
-                  <stop offset="0%" stopColor="#F6F6FE" stopOpacity={1} />
-                  <stop offset="100%" stopColor="#FFFFFF" stopOpacity={1} />
+                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity={1} />
+                  <stop offset="100%" stopColor="#F6F6FE" stopOpacity={1} />
                 </linearGradient>
               </defs>
               <rect

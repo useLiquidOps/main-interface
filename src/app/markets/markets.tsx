@@ -14,7 +14,7 @@ const Markets = () => {
           <div className={styles.marketsList}>
             {marketData.map((market, index) => (
               <Link
-                href={`/${market.symbol.toLowerCase()}`}
+                href={`/${market.symbol}`}
                 key={market.symbol}
                 className={styles.marketLink}
               >

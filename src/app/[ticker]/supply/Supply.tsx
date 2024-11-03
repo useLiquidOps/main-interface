@@ -4,7 +4,7 @@ import Header from "@/components/Header/Header";
 import Image from "next/image";
 import ActionTab from "@/components/ActionTab/ActionTab";
 import Link from "next/link";
-import PositionSummary from "../PositionSummary/PositionSummary";
+import Market from "../Market/Market";
 
 const Supply: React.FC<{
   ticker: string;
@@ -30,7 +30,7 @@ const Supply: React.FC<{
               <ActionTab ticker={ticker} mode="supply" />
             </div>
             <div className={styles.rightColumn}>
-              {/* <PositionSummary /> */}
+              <Market ticker={ticker} />
             </div>
           </div>
         </div>

@@ -1,13 +1,10 @@
+"use client";
 import React, { useState } from "react";
 import Image from "next/image";
 import SubmitButton from "../SubmitButton/SubmitButton";
+import InputBox from "../InputBox/InputBox";
 import styles from "./ActionTab.module.css";
-import {
-  formatInputNumber,
-  calculateUsdValue,
-  formatMaxAmount,
-  formatNumberWithCommas,
-} from "../utils/utils";
+import { formatMaxAmount } from "../utils/utils";
 
 interface ActionTabProps {
   ticker: string;
@@ -33,11 +30,6 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatInputNumber(e.target.value);
-    setInputValue(formattedValue);
-  };
-
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
     setInputValue(formatMaxAmount(maxAmount));
@@ -49,52 +41,16 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         {mode === "supply" ? "Deposit" : "Borrow"}
       </p>
 
-      <div
-        className={`${styles.inputContainer} ${isFocused ? styles.focused : ""}`}
-      >
-        <div className={styles.inputSection}>
-          <div className={styles.leftSection}>
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              className={styles.amountInput}
-              placeholder="0"
-            />
-            <p className={styles.usdValue}>
-              ≈{calculateUsdValue(inputValue, tokenToUsdRate)} USD
-            </p>
-          </div>
-          <div className={styles.rightSection}>
-            <div className={styles.tokenSelector}>
-              <Image
-                src={`/tokens/${ticker}.svg`}
-                height={20}
-                width={20}
-                alt={ticker}
-              />
-              <span>{ticker}</span>
-            </div>
-            <div className={styles.walletInfo}>
-              <Image
-                src="/icons/wallet.svg"
-                height={14}
-                width={14}
-                alt="Wallet"
-              />
-              <span className={styles.balanceAmount}>
-                {formatNumberWithCommas(walletBalance)} {ticker}
-              </span>
-              <span className={styles.separator}>|</span>
-              <button className={styles.maxButton} onClick={handleMaxClick}>
-                Max
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <InputBox
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        isFocused={isFocused}
+        setIsFocused={setIsFocused}
+        ticker={ticker}
+        tokenToUsdRate={tokenToUsdRate}
+        walletBalance={walletBalance}
+        onMaxClick={handleMaxClick}
+      />
 
       <div className={styles.infoContainer}>
         <div className={styles.infoDetails}>

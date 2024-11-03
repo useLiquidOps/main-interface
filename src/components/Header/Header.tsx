@@ -19,12 +19,20 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
   const router = useRouter();
   const [activeLink, setActiveLink] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() => {
-    setIsDropdownOpen(false);
+    closeDropdown();
   });
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+    setTimeout(() => {
+      setIsDropdownVisible(false);
+    }, 200);
+  };
 
   const sortedTokens = [...headerTokensData].sort((a, b) =>
     a.name.localeCompare(b.name),
@@ -44,7 +52,12 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
 
   const toggleDropdown = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsDropdownOpen(!isDropdownOpen);
+    if (!isDropdownOpen) {
+      setIsDropdownVisible(true);
+      setIsDropdownOpen(true);
+    } else {
+      closeDropdown();
+    }
   };
 
   const selectToken = (token: string) => {
@@ -57,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
     };
 
     router.push(routes[mode]);
-    setIsDropdownOpen(false);
+    closeDropdown();
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,8 +142,12 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
                   className={styles.dropdownIcon}
                 />
               </button>
-              {isDropdownOpen && (
-                <div className={styles.tokenDropdownContent}>
+              {isDropdownVisible && (
+                <div
+                  className={`${styles.tokenDropdownContent} ${
+                    isDropdownOpen ? styles.fadeIn : styles.fadeOut
+                  }`}
+                >
                   <Input
                     labelText="Search"
                     value={searchTerm}

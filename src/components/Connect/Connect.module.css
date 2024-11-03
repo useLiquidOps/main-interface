@@ -59,6 +59,16 @@
   padding: 15px;
   z-index: 1000;
   width: 150px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fadeIn {
+  opacity: 1;
+}
+
+.fadeOut {
+  opacity: 0;
 }
 
 .addressContainer {

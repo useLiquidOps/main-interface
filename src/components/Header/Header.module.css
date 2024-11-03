@@ -120,6 +120,16 @@
   z-index: 1000;
   border-radius: 12px;
   padding: 15px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fadeIn {
+  opacity: 1;
+}
+
+.fadeOut {
+  opacity: 0;
 }
 
 .tokenDropdownItem {

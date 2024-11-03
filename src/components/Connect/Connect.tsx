@@ -13,11 +13,19 @@ const Connect: React.FC = () => {
   const connected = true; // TODO remove when arwkit fixed
   const address = "psh5nUh3VF22Pr8LoV1K2blRNOOnoVH0BbZ85yRick"; // TODO replace with actual address when arwkit fixed
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [profile, setProfile] = useState<any>(null);
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() => {
-    setIsOpen(false);
+    closeDropdown();
   });
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 200);
+  };
 
   const tokens: TokenInfo[] = [
     { symbol: "DAI", balance: 1736.55, icon: "/tokens/DAI.svg" }, // TODO: render from somewhere
@@ -76,14 +84,19 @@ const Connect: React.FC = () => {
   const handleLogout = async () => {
     try {
       console.log("logout");
-      setIsOpen(false);
+      closeDropdown();
     } catch (error) {
       console.error("Error logging out:", error);
     }
   };
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+    if (!isOpen) {
+      setIsVisible(true);
+      setIsOpen(true);
+    } else {
+      closeDropdown();
+    }
   };
 
   return (
@@ -102,8 +115,10 @@ const Connect: React.FC = () => {
             alt="Profile image"
             className={styles.connectImage}
           />
-          {isOpen && (
-            <div className={styles.dropdown}>
+          {isVisible && (
+            <div
+              className={`${styles.dropdown} ${isOpen ? styles.fadeIn : styles.fadeOut}`}
+            >
               <div className={styles.addressContainer}>
                 <span>{shortenAddress(address)}</span>
                 <button

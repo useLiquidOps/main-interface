@@ -20,7 +20,7 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
           <ProtocolBalance ticker={ticker} />
 
           <div className={styles.grid}>
-            {/* <Market ticker={ticker} />
+            <Market ticker={ticker} />
             <PositionSummary ticker={ticker} />
 
             <AssetDisplay
@@ -29,7 +29,9 @@ const Home = ({ params }: { params: { ticker: string; tab: string } }) => {
               maxYield="5.1"
             />
 
-            <AssetDisplay mode="borrow" assets={[]} /> */}
+            <AssetDisplay mode="borrow" assets={[]} />
+
+            {/* find out where these go */}
             <WithdrawRepay mode="withdraw" ticker={ticker} />
             <WithdrawRepay mode="repay" ticker={ticker} />
           </div>

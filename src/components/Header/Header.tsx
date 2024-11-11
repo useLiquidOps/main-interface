@@ -5,10 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Connect from "../Connect/Connect";
-import Input from "../Input/Input";
 import { useClickOutside } from "../utils/utils";
 import { headerTokensData } from "../../app/data";
 import DropdownButton from "../DropDown/DropDown";
+import SearchInput from "../SearchInput/SearchInput";
 
 interface HeaderProps {
   currentToken?: string;
@@ -143,10 +143,10 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
                     isDropdownOpen ? styles.fadeIn : styles.fadeOut
                   }`}
                 >
-                  <Input
-                    labelText="Search"
+                  <SearchInput
                     value={searchTerm}
                     onChange={handleSearch}
+                    labelText="Search"
                   />
                   {filteredTokens.map((token) => (
                     <button

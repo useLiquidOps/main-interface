@@ -40,7 +40,7 @@ const HomeContent = ({
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <WithdrawRepay
-              mode={modalType}
+              mode={modalType as "withdraw" | "repay"}
               ticker={assetData?.symbol || ticker}
             />
           </div>

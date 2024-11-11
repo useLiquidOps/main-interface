@@ -12,7 +12,7 @@ interface TokenInfo {
   imagePath: string;
 }
 
-const Liquidations = () => {
+const LiquidationsContent = () => {
   const [mounted, setMounted] = useState(false);
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
   const [showSendDropdown, setShowSendDropdown] = useState(false);
@@ -24,6 +24,7 @@ const Liquidations = () => {
     symbol: "All tokens",
     imagePath: "/icons/list.svg",
   });
+  const { modalType, openModal } = useModal();
 
   useEffect(() => {
     setMounted(true);
@@ -32,6 +33,10 @@ const Liquidations = () => {
   const handleClickOutside = () => {
     setShowReceiveDropdown(false);
     setShowSendDropdown(false);
+  };
+
+  const handleLiquidate = (liquidation: any) => {
+    openModal('liquidate', liquidation);
   };
 
   const receiveTokens = useMemo(
@@ -73,9 +78,6 @@ const Liquidations = () => {
   }
 
   return (
-    <ModalProvider>
-
-    
     <div className={styles.page}>
       <Header />
       <div className={styles.body} onClick={handleClickOutside}>
@@ -232,7 +234,10 @@ const Liquidations = () => {
                       <p className={styles.metricLabel}>Price</p>
                     </div>
                   </div>
-                  <button className={styles.liquidateButton}>
+                  <button 
+                    className={styles.liquidateButton}
+                    onClick={() => handleLiquidate(liquidation)}
+                  >
                     <Image
                       src="/icons/liquidate.svg"
                       alt="Liquidate"
@@ -252,7 +257,21 @@ const Liquidations = () => {
           </div>
         </div>
       </div>
+      {modalType === 'liquidate' && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            Add it liquidate here
+          </div>
+        </div>
+      )}
     </div>
+  );
+};
+
+const Liquidations = () => {
+  return (
+    <ModalProvider>
+      <LiquidationsContent />
     </ModalProvider>
   );
 };

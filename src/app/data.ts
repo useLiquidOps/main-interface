@@ -174,3 +174,50 @@ export const tokens: Token[] = [
   { symbol: "stETH", imagePath: "/tokens/stETH.svg" },
   { symbol: "qAR", imagePath: "/tokens/qAR.svg" },
 ];
+export const liquidationsData = [
+  {
+    fromToken: {
+      name: "Staked Ethereum",
+      symbol: "stETH",
+      icon: "/tokens/stETH.svg",
+    },
+    toToken: {
+      name: "Dai Stablecoin",
+      symbol: "DAI",
+      icon: "/tokens/DAI.svg",
+    },
+    profit: "125.45 DAI",
+    available: "1,250.32 DAI",
+    price: "1,850.93 USD",
+  },
+  {
+    fromToken: {
+      name: "Dai Stablecoin",
+      symbol: "DAI",
+      icon: "/tokens/DAI.svg",
+    },
+    toToken: {
+      name: "Quantum Arweave",
+      symbol: "qAR",
+      icon: "/tokens/qAR.svg",
+    },
+    profit: "3.45 qAR",
+    available: "45.23 qAR",
+    price: "0.99 USD",
+  },
+  {
+    fromToken: {
+      name: "Quantum Arweave",
+      symbol: "qAR",
+      icon: "/tokens/qAR.svg",
+    },
+    toToken: {
+      name: "Staked Ethereum",
+      symbol: "stETH",
+      icon: "/tokens/stETH.svg",
+    },
+    profit: "0.056 stETH",
+    available: "0.892 stETH",
+    price: "5,850.93 USD",
+  },
+];

@@ -1,0 +1,20 @@
+.dropdownButton {
+  background: var(--primary-ghost-white);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+}
+
+.dropdownIcon {
+  height: 5px;
+  transition: transform 0.2s ease;
+}
+
+.open .dropdownIcon {
+  transform: rotate(180deg);
+}

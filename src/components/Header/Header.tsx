@@ -8,6 +8,7 @@ import Connect from "../Connect/Connect";
 import Input from "../Input/Input";
 import { useClickOutside } from "../utils/utils";
 import { headerTokensData } from "../../app/data";
+import DropdownButton from "../DropDown/DropDown";
 
 interface HeaderProps {
   currentToken?: string;
@@ -132,16 +133,10 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
                 />{" "}
                 {currentTokenData?.ticker || currentToken}
               </div>
-              <button
-                className={styles.dropdownButton}
-                onClick={toggleDropdown}
-              >
-                <img
-                  src="/icons/dropdown.svg"
-                  alt="Dropdown"
-                  className={styles.dropdownIcon}
-                />
-              </button>
+              <DropdownButton
+                isOpen={isDropdownOpen}
+                onToggle={toggleDropdown}
+              />
               {isDropdownVisible && (
                 <div
                   className={`${styles.tokenDropdownContent} ${

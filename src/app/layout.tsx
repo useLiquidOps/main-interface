@@ -1,6 +1,7 @@
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
+import { ModalProvider } from "./[ticker]/PopUp/PopUp";
 // import { ArweaveWalletKit } from "@arweave-wallet-kit-beta/react";
 // import BrowserWalletStrategy from "@arweave-wallet-kit-beta/browser-wallet-strategy";
 // import ArConnectStrategy from "@arweave-wallet-kit-beta/arconnect-strategy";
@@ -38,7 +39,7 @@ export default function RootLayout({
           ensurePermissions: true,
           appInfo: {
             name: "LiquidOps",
-            logo: "https://arweave.net/jgP-YC0385KYOc5YvRmqajQWxutpC1lb1_wkCsfWCBo",
+            logo: "/favicon.svg",
           },
         }}
         theme={{
@@ -48,9 +49,12 @@ export default function RootLayout({
           radius: "default",
         }}
       > */}
-      <body className={dmSans.className} style={{ margin: 0, padding: 0 }}>
-        {children}
-      </body>
+      <ModalProvider>
+        <body className={dmSans.className} style={{ margin: 0, padding: 0 }}>
+          {children}
+        </body>
+      </ModalProvider>
+
       {/* </ArweaveWalletKit> */}
     </html>
   );

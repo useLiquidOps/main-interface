@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./AssetDisplay.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { useModal } from "../PopUp/PopUp";
 
 interface Asset {
   icon: string;
@@ -26,6 +27,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
   maxYield,
 }) => {
   const [showAll, setShowAll] = useState(false);
+  const { openModal } = useModal();
 
   const displayedAssets = showAll ? assets : assets.slice(0, 4);
 
@@ -53,6 +55,10 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
   const containerClass = `${styles.container} ${
     mode === "lend" ? styles.lendContainer : styles.borrowContainer
   } ${showAll ? styles.expanded : ""}`;
+
+  const handleActionClick = (asset: Asset) => {
+    openModal(mode === "lend" ? "withdraw" : "repay", asset);
+  };
 
   return (
     <div className={containerClass}>
@@ -133,7 +139,13 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
                   </div>
                 </div>
               </Link>
-              <button className={styles.withdrawButton}>
+              <button
+                className={styles.withdrawButton}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleActionClick(asset);
+                }}
+              >
                 <Image
                   src={displayText.actionIcon}
                   alt={displayText.actionButton}

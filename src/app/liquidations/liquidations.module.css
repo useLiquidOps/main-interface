@@ -16,3 +16,193 @@
   background-color: var(--background);
   overflow-y: auto;
 }
+
+.bodyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: flex-start;
+  width: 900px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  gap: 25px;
+}
+
+.filterContainer {
+  display: inline-flex;
+  gap: 12px;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+.filterLabel {
+  color: var(--secondary-periwinkle);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dropdownContainer {
+  position: relative;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  color: var(--primary-ultramarine);
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  z-index: 10;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  color: var(--primary-ultramarine);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background-color: var(--primary-ghost-white);
+}
+
+.liquidationsList {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: white;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.liquidationRowWrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.liquidationRow {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  transition: all 0.3s ease-in-out;
+  background: white;
+  border-radius: 10px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.liquidationRow:hover {
+  background: var(--primary-ghost-white);
+}
+
+.tokenInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.arrowContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+}
+
+.iconWrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nameSymbol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.name {
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.symbol {
+  color: var(--secondary-periwinkle);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metricBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: right;
+  flex: 1;
+}
+
+.metricValue {
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.metricLabel {
+  color: var(--secondary-periwinkle);
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.noLiquidations {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: var(--secondary-periwinkle);
+  font-size: 15px;
+  font-weight: 500;
+}

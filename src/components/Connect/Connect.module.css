@@ -28,26 +28,10 @@
 
 .connectImage {
   height: 32px;
-  height: 32px;
+  width: 32px;
   border-radius: 50%;
   object-fit: cover;
   margin-left: 4px;
-}
-
-.dropdownButton {
-  background: var(--primary-ghost-white);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 25px;
-}
-
-.dropdownIcon {
-  height: 5px;
 }
 
 .dropdown {

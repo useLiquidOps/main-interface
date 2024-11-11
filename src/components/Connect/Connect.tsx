@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styles from "./Connect.module.css";
 import Account from "arweave-account";
 import { useClickOutside } from "../utils/utils";
+import DropdownButton from "../DropDown/DropDown";
+import Image from "next/image";
 
 interface TokenInfo {
   symbol: string;
@@ -103,16 +105,12 @@ const Connect: React.FC = () => {
     <div className={styles.connectContainer} ref={dropdownRef}>
       {connected && address ? (
         <div className={styles.profileContainer}>
-          <button className={styles.dropdownButton} onClick={toggleDropdown}>
-            <img
-              src="/icons/dropdown.svg"
-              alt="Dropdown"
-              className={styles.dropdownIcon}
-            />
-          </button>
-          <img
+          <DropdownButton isOpen={isOpen} onToggle={toggleDropdown} />
+          <Image
             src={profile?.profile?.avatarURL || "/icons/user.png"}
             alt="Profile image"
+            width={32}
+            height={32}
             className={styles.connectImage}
           />
           {isVisible && (
@@ -125,13 +123,23 @@ const Connect: React.FC = () => {
                   className={styles.copyButton}
                   onClick={() => copyToClipboard(address)}
                 >
-                  <img src="/icons/copy.svg" alt="Copy" />
+                  <Image
+                    src="/icons/copy.svg"
+                    alt="Copy"
+                    width={14}
+                    height={14}
+                  />
                 </button>
               </div>
 
               {tokens.map((token, index) => (
                 <div key={index} className={styles.balance}>
-                  <img src={token.icon} alt={token.symbol} />
+                  <Image
+                    src={token.icon}
+                    alt={token.symbol}
+                    width={24}
+                    height={24}
+                  />
                   <span>
                     {formatBalance(token.balance)} {token.symbol}
                   </span>

@@ -30,7 +30,7 @@ const Supply: React.FC<{
               <ActionTab ticker={ticker} mode="supply" />
             </div>
             <div className={styles.rightColumn}>
-              <Market ticker={ticker} />
+              <Market ticker={ticker} extraData={true} />
             </div>
           </div>
         </div>

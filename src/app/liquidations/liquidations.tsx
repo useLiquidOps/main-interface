@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
 import { liquidationsData, tokens } from "../data";
 import DropdownButton from "@/components/DropDown/DropDown";
+import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
 
 interface TokenInfo {
   symbol: string;
@@ -33,7 +34,6 @@ const Liquidations = () => {
     setShowSendDropdown(false);
   };
 
-
   const receiveTokens = useMemo(
     () => [{ symbol: "All tokens", imagePath: "/icons/list.svg" }, ...tokens],
     [],
@@ -44,7 +44,6 @@ const Liquidations = () => {
     [],
   );
 
-  // Filter liquidations based on selected tokens
   const filteredLiquidations = useMemo(() => {
     return liquidationsData.filter((liquidation) => {
       const receiveMatches =
@@ -74,6 +73,9 @@ const Liquidations = () => {
   }
 
   return (
+    <ModalProvider>
+
+    
     <div className={styles.page}>
       <Header />
       <div className={styles.body} onClick={handleClickOutside}>
@@ -230,6 +232,16 @@ const Liquidations = () => {
                       <p className={styles.metricLabel}>Price</p>
                     </div>
                   </div>
+                  <button className={styles.liquidateButton}>
+                    <Image
+                      src="/icons/liquidate.svg"
+                      alt="Liquidate"
+                      width={20}
+                      height={20}
+                      className={styles.liquidateIcon}
+                    />
+                    <span>Liquidate</span>
+                  </button>
                 </div>
               ))
             ) : (
@@ -241,6 +253,7 @@ const Liquidations = () => {
         </div>
       </div>
     </div>
+    </ModalProvider>
   );
 };
 

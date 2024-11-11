@@ -63,6 +63,7 @@
   font-weight: 600;
   transition: background-color 0.2s ease;
   min-width: 120px;
+  cursor: pointer;
 }
 
 .dropdown {
@@ -116,12 +117,17 @@
   padding: 16px;
   transition: all 0.3s ease-in-out;
   background: white;
-  border-radius: 10px;
+  border-radius: 14px;
   justify-content: space-between;
-  width: 100%;
+  width: calc(100%);
+  transform: translateX(0);
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
 }
 
-.liquidationRow:hover {
+.liquidationRowWrapper:hover .liquidationRow {
+  transform: translateX(-60px);
   background: var(--primary-ghost-white);
 }
 
@@ -195,6 +201,41 @@
   font-size: 12px;
   font-weight: 500;
   margin: 0;
+}
+
+.liquidateButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 80px;
+  padding: 8px 16px;
+  background: var(--secondary-slate-blue);
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 14px;
+  z-index: 1;
+}
+
+.liquidateButton span {
+  font-size: 9px;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: 600;
+  margin-left: 15px;
+}
+
+.liquidateIcon {
+  margin-bottom: 2px;
+  margin-left: 15px;
 }
 
 .noLiquidations {

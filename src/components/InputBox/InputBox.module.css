@@ -110,3 +110,11 @@
   font-size: 10px;
   font-weight: 700;
 }
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.disabled .amountInput {
+  cursor: not-allowed;
+}

@@ -17,6 +17,7 @@ interface InputBoxProps {
   tokenToUsdRate: number;
   walletBalance: number;
   onMaxClick: () => void;
+  disabled?: boolean;
 }
 
 const InputBox: React.FC<InputBoxProps> = ({
@@ -28,18 +29,20 @@ const InputBox: React.FC<InputBoxProps> = ({
   tokenToUsdRate,
   walletBalance,
   onMaxClick,
+  disabled = false,
 }) => {
   const [showError, setShowError] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
+
     const formattedValue = formatInputNumber(e.target.value);
     const numberValue = Number(formattedValue.replace(/,/g, ""));
 
     if (!isNaN(numberValue)) {
       if (numberValue > walletBalance) {
-        // Trigger error animation
         setShowError(true);
-        setTimeout(() => setShowError(false), 820); // Animation duration + small buffer
+        setTimeout(() => setShowError(false), 820);
       } else {
         setInputValue(formattedValue);
       }
@@ -50,7 +53,9 @@ const InputBox: React.FC<InputBoxProps> = ({
 
   return (
     <div
-      className={`${styles.inputContainer} ${isFocused ? styles.focused : ""} ${showError ? styles.error : ""}`}
+      className={`${styles.inputContainer} ${isFocused ? styles.focused : ""} ${
+        showError ? styles.error : ""
+      } ${disabled ? styles.disabled : ""}`}
     >
       <div className={styles.inputSection}>
         <div className={styles.leftSection}>
@@ -58,10 +63,11 @@ const InputBox: React.FC<InputBoxProps> = ({
             type="text"
             value={inputValue}
             onChange={handleInputChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={() => !disabled && setIsFocused(true)}
+            onBlur={() => !disabled && setIsFocused(false)}
             className={styles.amountInput}
             placeholder="0"
+            readOnly={disabled}
           />
           <p className={styles.usdValue}>
             ≈{calculateUsdValue(inputValue, tokenToUsdRate)} USD
@@ -77,21 +83,23 @@ const InputBox: React.FC<InputBoxProps> = ({
             />
             <span>{ticker}</span>
           </div>
-          <div className={styles.walletInfo}>
-            <Image
-              src="/icons/wallet.svg"
-              height={14}
-              width={14}
-              alt="Wallet"
-            />
-            <span className={styles.balanceAmount}>
-              {formatNumberWithCommas(walletBalance)} {ticker}
-            </span>
-            <span className={styles.separator}>|</span>
-            <button className={styles.maxButton} onClick={onMaxClick}>
-              Max
-            </button>
-          </div>
+          {!disabled && (
+            <div className={styles.walletInfo}>
+              <Image
+                src="/icons/wallet.svg"
+                height={14}
+                width={14}
+                alt="Wallet"
+              />
+              <span className={styles.balanceAmount}>
+                {formatNumberWithCommas(walletBalance)} {ticker}
+              </span>
+              <span className={styles.separator}>|</span>
+              <button className={styles.maxButton} onClick={onMaxClick}>
+                Max
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

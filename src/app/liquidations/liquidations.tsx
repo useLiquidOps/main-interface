@@ -6,6 +6,7 @@ import { useState, useMemo, useEffect } from "react";
 import { liquidationsData, tokens } from "../data";
 import DropdownButton from "@/components/DropDown/DropDown";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
+import LiquidateTab from "./LiquidateTab/LiquidateTab";
 
 interface TokenInfo {
   symbol: string;
@@ -36,7 +37,7 @@ const LiquidationsContent = () => {
   };
 
   const handleLiquidate = (liquidation: any) => {
-    openModal('liquidate', liquidation);
+    openModal("liquidate", liquidation);
   };
 
   const receiveTokens = useMemo(
@@ -234,7 +235,7 @@ const LiquidationsContent = () => {
                       <p className={styles.metricLabel}>Price</p>
                     </div>
                   </div>
-                  <button 
+                  <button
                     className={styles.liquidateButton}
                     onClick={() => handleLiquidate(liquidation)}
                   >
@@ -257,10 +258,10 @@ const LiquidationsContent = () => {
           </div>
         </div>
       </div>
-      {modalType === 'liquidate' && (
+      {modalType === "liquidate" && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
-            Add it liquidate here
+            <LiquidateTab />
           </div>
         </div>
       )}

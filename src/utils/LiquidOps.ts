@@ -1,6 +1,6 @@
-import LiquidOps from "liquidops";
-import { createDataItemSigner } from "@permaweb/aoconnect";
+// import LiquidOps from "liquidops";
+// import { createDataItemSigner } from "@permaweb/aoconnect";
 
-const signer = "";
+// const signer = "";
 
-export const client = new LiquidOps(signer);
+// export const client = new LiquidOps(signer);

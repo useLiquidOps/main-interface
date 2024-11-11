@@ -8,7 +8,6 @@ import InputBox from "@/components/InputBox/InputBox";
 const LiquidateTab: React.FC = () => {
   const { closeModal } = useModal();
 
-
   const dummyData = {
     fromToken: {
       symbol: "qAR",
@@ -20,7 +19,7 @@ const LiquidateTab: React.FC = () => {
       available: 100,
       price: 2000,
     },
-    conversionRate: 0.0005, 
+    conversionRate: 0.0005,
   };
 
   // Input states for the first (from) token
@@ -34,7 +33,7 @@ const LiquidateTab: React.FC = () => {
   // Placeholder values
   const tokenToUsdRate = 15;
   const walletBalance = dummyData.fromToken.available;
-  const offMarketPrice = 8
+  const offMarketPrice = 8;
 
   useEffect(() => {
     if (fromInputValue === "") {
@@ -45,10 +44,12 @@ const LiquidateTab: React.FC = () => {
     const fromAmount = parseFloat(fromInputValue.replace(/,/g, ""));
     if (!isNaN(fromAmount)) {
       const convertedAmount = fromAmount * dummyData.conversionRate;
-      setToInputValue(convertedAmount.toLocaleString('en-US', {
-        maximumFractionDigits: 6,
-        minimumFractionDigits: 2
-      }));
+      setToInputValue(
+        convertedAmount.toLocaleString("en-US", {
+          maximumFractionDigits: 6,
+          minimumFractionDigits: 2,
+        }),
+      );
     }
   }, [fromInputValue]);
 
@@ -107,7 +108,9 @@ const LiquidateTab: React.FC = () => {
           width={16}
           alt="percentIcon"
         />
-        <p className={styles.offMarketPriceText}>{offMarketPrice}% off market price</p>
+        <p className={styles.offMarketPriceText}>
+          {offMarketPrice}% off market price
+        </p>
       </div>
 
       <SubmitButton />

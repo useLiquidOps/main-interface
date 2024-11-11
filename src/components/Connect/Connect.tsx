@@ -107,7 +107,7 @@ const Connect: React.FC = () => {
         <div className={styles.profileContainer}>
           <DropdownButton isOpen={isOpen} onToggle={toggleDropdown} />
           <Image
-            src={profile?.profile?.avatarURL || "/icons/user.png"}
+            src={profile?.profile?.avatarURL || "/icons/user.svg"}
             alt="Profile image"
             width={32}
             height={32}

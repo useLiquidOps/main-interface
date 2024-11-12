@@ -4,6 +4,7 @@ import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import { useModal } from "@/app/[ticker]/PopUp/PopUp";
 import Image from "next/image";
 import InputBox from "@/components/InputBox/InputBox";
+import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
 
 const LiquidateTab: React.FC = () => {
   const { closeModal } = useModal();
@@ -25,6 +26,7 @@ const LiquidateTab: React.FC = () => {
   // Input states for the first (from) token
   const [fromInputValue, setFromInputValue] = useState("");
   const [isFromFocused, setIsFromFocused] = useState(false);
+  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(null);
 
   // Input states for the second (to) token
   const [toInputValue, setToInputValue] = useState("");
@@ -55,6 +57,28 @@ const LiquidateTab: React.FC = () => {
 
   const handleFromMaxClick = () => {
     setFromInputValue(walletBalance.toString());
+    setSelectedPercentage(100);
+  };
+
+  const handlePercentageClick = (percentage: number) => {
+    const amount = (walletBalance * percentage) / 100;
+    setFromInputValue(
+      amount.toLocaleString("en-US", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      })
+    );
+    setSelectedPercentage(percentage);
+  };
+
+  const getCurrentPercentage = () => {
+    if (!fromInputValue || walletBalance === 0) return 0;
+
+    const numberValue = Number(fromInputValue.replace(/,/g, ""));
+    if (isNaN(numberValue)) return 0;
+
+    const percentage = (numberValue / walletBalance) * 100;
+    return Math.min(100, Math.max(0, percentage));
   };
 
   return (
@@ -99,6 +123,13 @@ const LiquidateTab: React.FC = () => {
         walletBalance={dummyData.toToken.available}
         onMaxClick={() => {}}
         disabled={true}
+      />
+
+      <PercentagePicker
+        mode="withdraw"
+        selectedPercentage={selectedPercentage}
+        currentPercentage={getCurrentPercentage()}
+        onPercentageClick={handlePercentageClick}
       />
 
       <div className={styles.offMarketPriceContiner}>

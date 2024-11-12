@@ -182,3 +182,12 @@
   font-weight: 600;
   color: var(--secondary-periwinkle);
 }
+
+.noTokens {
+  color: var(--secondary-periwinkle);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 10px;
+}

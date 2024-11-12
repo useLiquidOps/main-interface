@@ -157,44 +157,48 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
                     onChange={handleSearch}
                     labelText="Search"
                   />
-                  {filteredTokens.map((token) => (
-                    <button
-                      key={token.ticker}
-                      onClick={() => selectToken(token.ticker)}
-                      className={styles.tokenDropdownItem}
-                    >
-                      <div className={styles.tokenInfo}>
-                        <Image
-                          src={`/tokens/${token.ticker.toLowerCase()}.svg`}
-                          alt={token.name}
-                          width={40}
-                          height={40}
-                        />
-                        <div className={styles.tokenNameTicker}>
-                          <p className={styles.tokenName}>{token.name}</p>
-                          <p className={styles.tokenTicker}>{token.ticker}</p>
-                        </div>
-                      </div>
-                      <div className={styles.tokenMetrics}>
-                        <p className={styles.tokenAPR}>APR {token.APR}%</p>
-                        <div className={styles.percentChangeContainer}>
+                  {filteredTokens.length > 0 ? (
+                    filteredTokens.map((token) => (
+                      <button
+                        key={token.ticker}
+                        onClick={() => selectToken(token.ticker)}
+                        className={styles.tokenDropdownItem}
+                      >
+                        <div className={styles.tokenInfo}>
                           <Image
-                            src={
-                              token.percentChange.outcome
-                                ? "/icons/APRUp.svg"
-                                : "/icons/APRDown.svg"
-                            }
-                            alt={token.percentChange.outcome ? "Up" : "Down"}
-                            width={16}
-                            height={16}
+                            src={`/tokens/${token.ticker.toLowerCase()}.svg`}
+                            alt={token.name}
+                            width={40}
+                            height={40}
                           />
-                          <p className={styles.percentChange}>
-                            {token.percentChange.change}%
-                          </p>
+                          <div className={styles.tokenNameTicker}>
+                            <p className={styles.tokenName}>{token.name}</p>
+                            <p className={styles.tokenTicker}>{token.ticker}</p>
+                          </div>
                         </div>
-                      </div>
-                    </button>
-                  ))}
+                        <div className={styles.tokenMetrics}>
+                          <p className={styles.tokenAPR}>APR {token.APR}%</p>
+                          <div className={styles.percentChangeContainer}>
+                            <Image
+                              src={
+                                token.percentChange.outcome
+                                  ? "/icons/APRUp.svg"
+                                  : "/icons/APRDown.svg"
+                              }
+                              alt={token.percentChange.outcome ? "Up" : "Down"}
+                              width={16}
+                              height={16}
+                            />
+                            <p className={styles.percentChange}>
+                              {token.percentChange.change}%
+                            </p>
+                          </div>
+                        </div>
+                      </button>
+                    ))
+                  ) : (
+                    <div className={styles.noTokens}>No tokens found</div>
+                  )}
                 </div>
               )}
             </div>

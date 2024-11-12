@@ -131,7 +131,8 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
                   width={24}
                   height={24}
                 />{" "}
-                {currentTokenData?.ticker || currentToken}
+                <p className={styles.ticker}>{currentTokenData?.ticker || currentToken}</p>
+                
               </div>
               <DropdownButton
                 isOpen={isDropdownOpen}

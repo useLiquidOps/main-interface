@@ -95,6 +95,12 @@
   height: 25px;
 }
 
+.ticker {
+  font-family: "DM Sans", sans-serif;
+  margin: 0;
+  font-weight: 600;
+}
+
 .tokenDropdownContent {
   position: absolute;
   top: 100%;

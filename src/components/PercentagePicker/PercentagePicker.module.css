@@ -32,12 +32,13 @@
 
 .percentageButtonsContainer {
   display: flex;
-  gap: 4px;
+  justify-content: space-between;
   margin-bottom: 24px;
 }
 
 .percentageButton {
-  padding: 6px 12px;
+  width: auto;
+  padding: 6px 13px;
   border-radius: 9px;
   background-color: var(--primary-ghost-white);
   border: none;
@@ -47,7 +48,6 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: "DM Sans", sans-serif;
-  flex: 1;
   min-width: 0;
   white-space: nowrap;
 }

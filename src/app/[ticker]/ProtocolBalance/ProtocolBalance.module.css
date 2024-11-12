@@ -78,6 +78,11 @@
   background-color: #322ece;
 }
 
+.supplyButton > span {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+}
+
 .borrowButton {
   background-color: var(--secondary-tea-green);
   color: black;
@@ -85,6 +90,11 @@
 
 .borrowButton:hover {
   background-color: #a6c45d;
+}
+
+.borrowButton > span {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
 }
 
 .aprSection {

@@ -8,11 +8,13 @@ interface PositionData {
   borrowCapacity: number;
   liquidationPoint: number;
   availableToBorrow: number;
+  liquidationRisk?: number;
 }
 
 const PositionSummary: React.FC<{
   ticker: string;
-}> = ({ ticker }) => {
+  extraData?: boolean;
+}> = ({ ticker, extraData = false }) => {
   const tokenData = headerTokensData.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
@@ -22,6 +24,7 @@ const PositionSummary: React.FC<{
     borrowCapacity: 4813.93,
     liquidationPoint: 1470.5,
     availableToBorrow: 2406.51,
+    liquidationRisk: 44,
   };
 
   const getProgressWidth = (value: number): string => {
@@ -63,9 +66,12 @@ const PositionSummary: React.FC<{
           <div className={styles.metric}>
             <div className={styles.metricInfo}>
               <p className={styles.label}>Borrow Capacity</p>
-              <p
-                className={styles.value}
-              >{`${formatTMB(positionData.borrowCapacity)} ${tokenData.ticker}`}</p>
+              <div className={styles.valueContainer}>
+                <p
+                  className={styles.value}
+                >{`${formatTMB(positionData.borrowCapacity)} ${tokenData.ticker}`}</p>
+                {extraData && <div className={styles.redDot} />}
+              </div>
             </div>
             <div className={styles.progressContainer}>
               <div
@@ -93,6 +99,27 @@ const PositionSummary: React.FC<{
               >{`${formatTMB(positionData.availableToBorrow)} ${tokenData.ticker}`}</p>
             </div>
           </div>
+
+          {extraData && positionData.liquidationRisk && (
+            <div className={styles.metric}>
+              <div className={styles.metricInfo}>
+                <p className={styles.label}>Liquidation Risk</p>
+                <div className={styles.riskContainer}>
+                <p className={styles.value}>{`${positionData.liquidationRisk}%`}</p>
+                <div className={styles.riskProgressContainer}>
+                <div
+                  className={styles.riskProgress}
+                  style={{ width: `${positionData.liquidationRisk}%` }}
+                />
+                <div className={styles.riskIndicator} style={{ left: `${positionData.liquidationRisk}%` }} />
+              </div>
+
+                </div>
+                
+              </div>
+              
+            </div>
+          )}
         </div>
       </div>
     </div>

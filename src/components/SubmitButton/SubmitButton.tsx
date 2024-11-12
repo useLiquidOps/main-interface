@@ -22,14 +22,13 @@ const SubmitButton = () => {
       case "loading":
         return (
           <>
-
-              <Image
-                src="/icons/loadingSubmit.svg"
-                alt="Loading"
-                width={12}
-                height={12}
-                className={styles.loadingIcon}
-              />
+            <Image
+              src="/icons/loadingSubmit.svg"
+              alt="Loading"
+              width={12}
+              height={12}
+              className={styles.loadingIcon}
+            />
             <span>Loading</span>
           </>
         );

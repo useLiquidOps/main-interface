@@ -8,7 +8,7 @@ const Market: React.FC<{
   ticker: string;
   extraData?: boolean;
 }> = ({ ticker, extraData = false }) => {
-  const [tooltipContent, setTooltipContent] = useState<string>('');
+  const [tooltipContent, setTooltipContent] = useState<string>("");
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -33,17 +33,19 @@ const Market: React.FC<{
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const totalWidth = rect.width;
-    
+
     // Calculate total value for percentage calculation
     const totalValue = marketData.availableCollateral + marketData.totalBorrow;
-    
+
     // Calculate the width of each section
-    const collateralWidth = (marketData.availableCollateral / totalValue) * totalWidth;
+    const collateralWidth =
+      (marketData.availableCollateral / totalValue) * totalWidth;
     const borrowWidth = (marketData.totalBorrow / totalValue) * totalWidth;
-    
-    let tooltipText = '';
+
+    let tooltipText = "";
     if (x <= collateralWidth) {
-      const collateralPercentage = (marketData.availableCollateral / totalValue) * 100;
+      const collateralPercentage =
+        (marketData.availableCollateral / totalValue) * 100;
       tooltipText = `Available Collateral: ${collateralPercentage.toFixed(1)}%`;
     } else if (x <= collateralWidth + borrowWidth) {
       const borrowPercentage = (marketData.totalBorrow / totalValue) * 100;
@@ -136,7 +138,7 @@ const Market: React.FC<{
             </div>
           </div>
 
-          <div 
+          <div
             className={styles.progressBar}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -156,7 +158,7 @@ const Market: React.FC<{
       </div>
 
       {showTooltip && (
-        <div 
+        <div
           className={styles.tooltip}
           style={{
             left: `${tooltipPosition.x + 10}px`,

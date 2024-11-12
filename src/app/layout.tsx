@@ -24,15 +24,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-
-
       <ModalProvider>
         <body className={dmSans.className} style={{ margin: 0, padding: 0 }}>
           {children}
         </body>
       </ModalProvider>
-
-
     </html>
   );
 }

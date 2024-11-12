@@ -121,10 +121,14 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
             <h2 className={styles.pageTitle}>LiquidOps</h2>
           </Link>
           {currentToken && (
-            <div className={styles.tokenDropdown} ref={dropdownRef} onClick={(e) => {
-              e.stopPropagation();
-              toggleDropdown();
-            }}>
+            <div
+              className={styles.tokenDropdown}
+              ref={dropdownRef}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDropdown();
+              }}
+            >
               <div className={styles.selectedToken}>
                 /{" "}
                 <Image

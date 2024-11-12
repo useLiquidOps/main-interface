@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   LineChart,
   Line,
@@ -69,7 +69,7 @@ const ProtocolBalance: React.FC<{
       <div className={styles.aprSection}>
         <div className={styles.aprContainer}>
           <p className={styles.aprLabel}>
-            {hoverData ? hoverData.date : 'APR'}
+            {hoverData ? hoverData.date : "APR"}
           </p>
           <div className={styles.aprValue}>
             {!hoverData && (
@@ -79,7 +79,9 @@ const ProtocolBalance: React.FC<{
                     ? "/icons/APRUp.svg"
                     : "/icons/APRDown.svg"
                 }
-                alt={tokenData.percentChange.outcome ? "Up Arrow" : "Down Arrow"}
+                alt={
+                  tokenData.percentChange.outcome ? "Up Arrow" : "Down Arrow"
+                }
                 width={0}
                 height={16}
                 style={{ width: "auto", height: "16px" }}

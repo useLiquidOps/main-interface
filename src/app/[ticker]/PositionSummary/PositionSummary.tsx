@@ -15,7 +15,7 @@ const PositionSummary: React.FC<{
   ticker: string;
   extraData?: boolean;
 }> = ({ ticker, extraData = false }) => {
-  const [tooltipContent, setTooltipContent] = useState<string>('');
+  const [tooltipContent, setTooltipContent] = useState<string>("");
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -41,12 +41,12 @@ const PositionSummary: React.FC<{
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const percentage = (x / rect.width) * 100;
-    
+
     const maxBorrow = positionData.collateralValue * 0.75;
     const currentBorrow = maxBorrow - positionData.availableToBorrow;
     const currentBorrowPercentage = (currentBorrow / maxBorrow) * 100;
-    
-    let tooltipText = '';
+
+    let tooltipText = "";
     if (percentage <= currentBorrowPercentage) {
       tooltipText = `Current Borrow: ${currentBorrowPercentage.toFixed(1)}%`;
     } else {
@@ -102,7 +102,7 @@ const PositionSummary: React.FC<{
                 {extraData && <div className={styles.redDot} />}
               </div>
             </div>
-            <div 
+            <div
               className={styles.progressContainer}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
@@ -138,13 +138,18 @@ const PositionSummary: React.FC<{
               <div className={styles.metricInfo}>
                 <p className={styles.label}>Liquidation Risk</p>
                 <div className={styles.riskContainer}>
-                  <p className={styles.value}>{`${positionData.liquidationRisk}%`}</p>
+                  <p
+                    className={styles.value}
+                  >{`${positionData.liquidationRisk}%`}</p>
                   <div className={styles.riskProgressContainer}>
                     <div
                       className={styles.riskProgress}
                       style={{ width: `${positionData.liquidationRisk}%` }}
                     />
-                    <div className={styles.riskIndicator} style={{ left: `${positionData.liquidationRisk}%` }} />
+                    <div
+                      className={styles.riskIndicator}
+                      style={{ left: `${positionData.liquidationRisk}%` }}
+                    />
                   </div>
                 </div>
               </div>
@@ -152,9 +157,9 @@ const PositionSummary: React.FC<{
           )}
         </div>
       </div>
-      
+
       {showTooltip && (
-        <div 
+        <div
           className={styles.tooltip}
           style={{
             left: `${tooltipPosition.x + 10}px`,

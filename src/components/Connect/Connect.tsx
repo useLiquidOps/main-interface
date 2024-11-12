@@ -104,10 +104,13 @@ const Connect: React.FC = () => {
   return (
     <div className={styles.connectContainer} ref={dropdownRef}>
       {connected && address ? (
-        <div className={styles.profileContainer} onClick={(e) => {
-          e.stopPropagation();
-          toggleDropdown();
-        }}>
+        <div
+          className={styles.profileContainer}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleDropdown();
+          }}
+        >
           <DropdownButton isOpen={isOpen} onToggle={toggleDropdown} />
           <Image
             src={profile?.profile?.avatarURL || "/icons/user.svg"}

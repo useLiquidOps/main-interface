@@ -1,6 +1,7 @@
 export const AssetDisplayData = [
   {
     icon: "/tokens/qAR.svg",
+    oIcon: "/tokens/oQAR.svg",
     name: "Quantum Arweave",
     amount: "13,579.24",
     symbol: "qAR",
@@ -11,6 +12,7 @@ export const AssetDisplayData = [
   },
   {
     icon: "/tokens/DAI.svg",
+    oIcon: "/tokens/oDAI.svg",
     name: "Dai",
     amount: "124.5",
     symbol: "DAI",
@@ -21,36 +23,7 @@ export const AssetDisplayData = [
   },
   {
     icon: "/tokens/stETH.svg",
-    name: "Staked Ethereum",
-    amount: "13,579.24",
-    symbol: "stETH",
-    apr: "4.57",
-    change: "0.02",
-    isPositive: true,
-    extraAmount: "1",
-  },
-  {
-    icon: "/tokens/qAR.svg",
-    name: "Quantum Arweave",
-    amount: "13,579.24",
-    symbol: "qAR",
-    apr: "4.57",
-    change: "0.02",
-    isPositive: true,
-    extraAmount: "1",
-  },
-  {
-    icon: "/tokens/DAI.svg",
-    name: "Dai",
-    amount: "124.5",
-    symbol: "DAI",
-    apr: "2.03",
-    change: "0.17",
-    isPositive: false,
-    extraAmount: "1",
-  },
-  {
-    icon: "/tokens/stETH.svg",
+    oIcon: "/tokens/oSTETH.svg",
     name: "Staked Ethereum",
     amount: "13,579.24",
     symbol: "stETH",

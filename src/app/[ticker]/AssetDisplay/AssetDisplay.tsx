@@ -6,6 +6,7 @@ import { useModal } from "../PopUp/PopUp";
 
 interface Asset {
   icon: string;
+  oIcon: string;
   name: string;
   amount: string;
   symbol: string;
@@ -105,7 +106,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
                 <div className={styles.assetInfo}>
                   <div className={styles.iconWrapper}>
                     <Image
-                      src={asset.icon}
+                      src={mode === "lend" ? asset.oIcon || asset.icon : asset.icon}
                       alt={asset.name}
                       width={40}
                       height={40}

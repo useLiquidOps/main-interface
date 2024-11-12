@@ -51,8 +51,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
     setActiveLink(basePath ? `/${basePath}` : "/");
   }, [pathname]);
 
-  const toggleDropdown = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const toggleDropdown = () => {
     if (!isDropdownOpen) {
       setIsDropdownVisible(true);
       setIsDropdownOpen(true);
@@ -122,7 +121,10 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
             <h2 className={styles.pageTitle}>LiquidOps</h2>
           </Link>
           {currentToken && (
-            <div className={styles.tokenDropdown} ref={dropdownRef}>
+            <div className={styles.tokenDropdown} ref={dropdownRef} onClick={(e) => {
+              e.stopPropagation();
+              toggleDropdown();
+            }}>
               <div className={styles.selectedToken}>
                 /{" "}
                 <Image
@@ -144,6 +146,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
                   className={`${styles.tokenDropdownContent} ${
                     isDropdownOpen ? styles.fadeIn : styles.fadeOut
                   }`}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <SearchInput
                     value={searchTerm}

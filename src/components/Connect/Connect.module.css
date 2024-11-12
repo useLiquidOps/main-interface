@@ -24,6 +24,7 @@
 .profileContainer {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .connectImage {

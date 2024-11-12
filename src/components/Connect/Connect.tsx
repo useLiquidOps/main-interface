@@ -104,7 +104,10 @@ const Connect: React.FC = () => {
   return (
     <div className={styles.connectContainer} ref={dropdownRef}>
       {connected && address ? (
-        <div className={styles.profileContainer}>
+        <div className={styles.profileContainer} onClick={(e) => {
+          e.stopPropagation();
+          toggleDropdown();
+        }}>
           <DropdownButton isOpen={isOpen} onToggle={toggleDropdown} />
           <Image
             src={profile?.profile?.avatarURL || "/icons/user.svg"}
@@ -116,6 +119,7 @@ const Connect: React.FC = () => {
           {isVisible && (
             <div
               className={`${styles.dropdown} ${isOpen ? styles.fadeIn : styles.fadeOut}`}
+              onClick={(e) => e.stopPropagation()}
             >
               <div className={styles.addressContainer}>
                 <span>{shortenAddress(address)}</span>

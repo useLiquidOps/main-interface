@@ -114,10 +114,10 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
                   <div className={styles.nameAmount}>
                     <p className={styles.name}>{asset.name}</p>
                     <p className={styles.amount}>
-                      {asset.amount} {asset.symbol}
+                      {asset.amount}
                       {mode === "borrow" &&
                         asset.extraAmount &&
-                        ` + ${asset.extraAmount}`}
+                        ` + ${asset.extraAmount} ${asset.symbol}`}
                     </p>
                   </div>
                 </div>

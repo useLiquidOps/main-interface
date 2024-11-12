@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Market.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import { headerTokensData } from "@/app/data";
@@ -8,6 +8,10 @@ const Market: React.FC<{
   ticker: string;
   extraData?: boolean;
 }> = ({ ticker, extraData = false }) => {
+  const [tooltipContent, setTooltipContent] = useState<string>('');
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [showTooltip, setShowTooltip] = useState(false);
+
   const tokenData = headerTokensData.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
@@ -21,7 +25,38 @@ const Market: React.FC<{
   };
 
   const getProgressWidth = (value: number): string => {
-    return `${(value / marketData.totalSupply) * 100}%`;
+    const total = marketData.availableCollateral + marketData.totalBorrow;
+    return `${(value / total) * 100}%`;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const totalWidth = rect.width;
+    
+    // Calculate total value for percentage calculation
+    const totalValue = marketData.availableCollateral + marketData.totalBorrow;
+    
+    // Calculate the width of each section
+    const collateralWidth = (marketData.availableCollateral / totalValue) * totalWidth;
+    const borrowWidth = (marketData.totalBorrow / totalValue) * totalWidth;
+    
+    let tooltipText = '';
+    if (x <= collateralWidth) {
+      const collateralPercentage = (marketData.availableCollateral / totalValue) * 100;
+      tooltipText = `Available Collateral: ${collateralPercentage.toFixed(1)}%`;
+    } else if (x <= collateralWidth + borrowWidth) {
+      const borrowPercentage = (marketData.totalBorrow / totalValue) * 100;
+      tooltipText = `Total Borrow: ${borrowPercentage.toFixed(1)}%`;
+    }
+
+    setTooltipContent(tooltipText);
+    setTooltipPosition({ x: e.clientX, y: e.clientY });
+    setShowTooltip(!!tooltipText);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
   };
 
   if (!tokenData) {
@@ -101,7 +136,11 @@ const Market: React.FC<{
             </div>
           </div>
 
-          <div className={styles.progressBar}>
+          <div 
+            className={styles.progressBar}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+          >
             <div
               className={styles.progressGreen}
               style={{
@@ -115,6 +154,18 @@ const Market: React.FC<{
           </div>
         </div>
       </div>
+
+      {showTooltip && (
+        <div 
+          className={styles.tooltip}
+          style={{
+            left: `${tooltipPosition.x + 10}px`,
+            top: `${tooltipPosition.y - 25}px`,
+          }}
+        >
+          {tooltipContent}
+        </div>
+      )}
     </div>
   );
 };

@@ -189,7 +189,10 @@ const LiquidationsContent = () => {
             {filteredLiquidations.length > 0 ? (
               filteredLiquidations.map((liquidation, index) => (
                 <div key={index} className={styles.liquidationRowWrapper}>
-                  <div className={styles.liquidationRow}>
+                  <div
+                    className={styles.liquidationRow}
+                    onClick={() => handleLiquidate(liquidation)}
+                  >
                     <div className={styles.tokenInfo}>
                       <div className={styles.iconWrapper}>
                         <Image

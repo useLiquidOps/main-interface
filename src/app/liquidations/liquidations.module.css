@@ -123,6 +123,7 @@
   transform: translateX(0);
   position: relative;
   z-index: 2;
+  cursor: pointer;
 }
 
 .liquidationRowWrapper:hover .liquidationRow {

@@ -26,7 +26,9 @@ const LiquidateTab: React.FC = () => {
   // Input states for the first (from) token
   const [fromInputValue, setFromInputValue] = useState("");
   const [isFromFocused, setIsFromFocused] = useState(false);
-  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(null);
+  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
+    null,
+  );
 
   // Input states for the second (to) token
   const [toInputValue, setToInputValue] = useState("");
@@ -66,7 +68,7 @@ const LiquidateTab: React.FC = () => {
       amount.toLocaleString("en-US", {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
-      })
+      }),
     );
     setSelectedPercentage(percentage);
   };

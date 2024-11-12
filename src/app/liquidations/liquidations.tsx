@@ -62,14 +62,12 @@ const LiquidationsContent = () => {
     });
   }, [selectedReceiveToken.symbol, selectedSendToken.symbol]);
 
-  const toggleReceiveDropdown = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const toggleReceiveDropdown = () => {
     setShowReceiveDropdown(!showReceiveDropdown);
     setShowSendDropdown(false);
   };
 
-  const toggleSendDropdown = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const toggleSendDropdown = () => {
     setShowSendDropdown(!showSendDropdown);
     setShowReceiveDropdown(false);
   };
@@ -86,7 +84,13 @@ const LiquidationsContent = () => {
           <div className={styles.filterContainer}>
             <div className={styles.filterGroup}>
               <span className={styles.filterLabel}>Send</span>
-              <div className={styles.dropdownContainer}>
+              <div
+                className={styles.dropdownContainer}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleSendDropdown();
+                }}
+              >
                 <button className={styles.filterButton}>
                   <Image
                     src={selectedSendToken.imagePath}
@@ -126,7 +130,13 @@ const LiquidationsContent = () => {
             </div>
             <div className={styles.filterGroup}>
               <span className={styles.filterLabel}>Receive</span>
-              <div className={styles.dropdownContainer}>
+              <div
+                className={styles.dropdownContainer}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleReceiveDropdown();
+                }}
+              >
                 <button className={styles.filterButton}>
                   <Image
                     src={selectedReceiveToken.imagePath}

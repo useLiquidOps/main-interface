@@ -133,20 +133,3 @@
   height: 100px;
 }
 
-.customTooltip {
-  background-color: var(--background);
-  border-radius: 4px;
-  padding: 8px;
-}
-
-.tooltipDate {
-  color: black;
-  font-size: 12px;
-  margin: 0;
-}
-
-.tooltipValue {
-  color: black;
-  font-size: 14px;
-  margin: 4px 0 0;
-}

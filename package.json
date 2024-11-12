@@ -3,16 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run prettier && bun run link && next dev",
+    "dev": "bun run prettier && bun run link && next dev",
     "build": "next build",
     "prettier": "prettier --write .",
     "link": "bun link liquidops"
   },
   "dependencies": {
-    "@arweave-wallet-kit-beta/arconnect-strategy": "^0.0.1-beta.5",
-    "@arweave-wallet-kit-beta/browser-wallet-strategy": "^0.0.1-beta.4",
-    "@arweave-wallet-kit-beta/othent-strategy": "^0.0.1-beta.12",
-    "@arweave-wallet-kit-beta/react": "^0.0.1-beta.12",
     "@permaweb/aoconnect": "^0.0.59",
     "arweave-account": "^1.4.3",
     "axios": "^1.7.7",

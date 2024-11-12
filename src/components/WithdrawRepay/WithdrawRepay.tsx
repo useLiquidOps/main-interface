@@ -7,13 +7,18 @@ import InputBox from "../InputBox/InputBox";
 import Image from "next/image";
 import { formatMaxAmount, formatNumberWithCommas } from "../utils/utils";
 import { headerTokensData } from "@/app/data";
-import { useModal } from "@/app/[ticker]/PopUp/PopUp";
 
-const WithdrawRepay: React.FC<{
+interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
   ticker: string;
-}> = ({ mode, ticker }) => {
-  const { closeModal } = useModal();
+  onClose: () => void;
+}
+
+const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
+  mode,
+  ticker,
+  onClose,
+}) => {
   const tokenData = headerTokensData.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
@@ -66,7 +71,7 @@ const WithdrawRepay: React.FC<{
         <p className={styles.title}>
           {mode === "withdraw" ? "Withdraw" : "Repay loan"}
         </p>
-        <button className={styles.close} onClick={closeModal}>
+        <button className={styles.close} onClick={onClose}>
           <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
         </button>
       </div>

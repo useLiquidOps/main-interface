@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styles from "./LiquidateTab.module.css";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
-import { useModal } from "@/app/[ticker]/PopUp/PopUp";
 import Image from "next/image";
 import InputBox from "@/components/InputBox/InputBox";
 import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
 
-const LiquidateTab: React.FC = () => {
-  const { closeModal } = useModal();
+interface LiquidateTabProps {
+  onClose: () => void;
+}
 
+const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
   const dummyData = {
     fromToken: {
       symbol: "qAR",
@@ -89,7 +90,7 @@ const LiquidateTab: React.FC = () => {
         <p className={styles.title}>
           Liquidate {dummyData.fromToken.symbol}/{dummyData.toToken.symbol}
         </p>
-        <button className={styles.close} onClick={closeModal}>
+        <button className={styles.close} onClick={onClose}>
           <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
         </button>
       </div>

@@ -17,6 +17,7 @@ const LiquidationsContent = () => {
   const [mounted, setMounted] = useState(false);
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
   const [showSendDropdown, setShowSendDropdown] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [selectedReceiveToken, setSelectedReceiveToken] = useState<TokenInfo>({
     symbol: "All tokens",
     imagePath: "/icons/list.svg",
@@ -25,7 +26,15 @@ const LiquidationsContent = () => {
     symbol: "All tokens",
     imagePath: "/icons/list.svg",
   });
-  const { modalType, openModal } = useModal();
+  const { modalType, openModal, closeModal } = useModal();
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      closeModal();
+      setIsClosing(false);
+    }, 300);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -269,9 +278,13 @@ const LiquidationsContent = () => {
         </div>
       </div>
       {modalType === "liquidate" && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <LiquidateTab />
+        <div
+          className={`${styles.modalOverlay} ${isClosing ? styles.closing : ""}`}
+        >
+          <div
+            className={`${styles.modalContent} ${isClosing ? styles.closing : ""}`}
+          >
+            <LiquidateTab onClose={handleClose} />
           </div>
         </div>
       )}

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./home.module.css";
 import Header from "../../components/Header/Header";
 import ProtocolBalance from "./ProtocolBalance/ProtocolBalance";
@@ -15,8 +15,17 @@ const HomeContent = ({
 }: {
   params: { ticker: string; tab: string };
 }) => {
-  const { modalType, assetData } = useModal();
+  const { modalType, assetData, closeModal } = useModal();
+  const [isClosing, setIsClosing] = useState(false);
   const ticker = params.ticker as string;
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      closeModal();
+      setIsClosing(false);
+    }, 300);
+  };
 
   return (
     <div className={styles.page}>
@@ -37,11 +46,16 @@ const HomeContent = ({
         </div>
       </div>
       {modalType && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
+        <div
+          className={`${styles.modalOverlay} ${isClosing ? styles.closing : ""}`}
+        >
+          <div
+            className={`${styles.modalContent} ${isClosing ? styles.closing : ""}`}
+          >
             <WithdrawRepay
               mode={modalType as "withdraw" | "repay"}
               ticker={assetData?.symbol || ticker}
+              onClose={handleClose}
             />
           </div>
         </div>

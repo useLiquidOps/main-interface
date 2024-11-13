@@ -45,7 +45,7 @@
   z-index: 1000;
   width: 200px;
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+  transition: background-color 0.2s ease;
   cursor: default;
 }
 

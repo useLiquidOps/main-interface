@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "bun run prettier && bun run link && next dev",
+    "dev": "bun run prettier && next dev",
     "build": "next build",
     "prettier": "prettier --write .",
     "link": "bun link liquidops"

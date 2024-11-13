@@ -67,6 +67,7 @@
   justify-content: center;
   gap: 8px;
   width: fit-content;
+  transition: all .3s ease;
 }
 
 .supplyButton {

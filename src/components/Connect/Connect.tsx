@@ -20,6 +20,7 @@ const Connect: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [profile, setProfile] = useState<any>(null);
+  const [isCopied, setIsCopied] = useState(false);
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() => {
     closeDropdown();
@@ -54,6 +55,10 @@ const Connect: React.FC = () => {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 150);
     } catch (err) {
       console.error("Failed to copy address: ", err);
     }
@@ -144,7 +149,7 @@ const Connect: React.FC = () => {
                     onClick={() => copyToClipboard(address)}
                   >
                     <Image
-                      src="/icons/copy.svg"
+                      src={isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"}
                       alt="Copy"
                       width={14}
                       height={14}

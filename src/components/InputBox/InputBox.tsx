@@ -37,6 +37,27 @@ const InputBox: React.FC<InputBoxProps> = ({
 }) => {
   const [showError, setShowError] = useState(false);
 
+  const getDecimalPlaces = (ticker: string) => {
+    switch (ticker) {
+      case 'DAI':
+        return 2;
+      case 'stETH':
+        return 4;
+      case 'qAR':
+        return 3;
+      default:
+        return 2;
+    }
+  };
+
+  const formatTokenValue = (value: number) => {
+    const decimals = getDecimalPlaces(ticker);
+    return value.toLocaleString("en-US", {
+      maximumFractionDigits: decimals,
+      minimumFractionDigits: decimals,
+    });
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
 
@@ -59,10 +80,13 @@ const InputBox: React.FC<InputBoxProps> = ({
     if (!inputValue || !liquidationDiscount) return "0";
     const currentValue = parseFloat(inputValue.replace(/,/g, ""));
     const bonusAmount = currentValue * (1 + (liquidationDiscount / 100));
-    return bonusAmount.toLocaleString("en-US", {
-      maximumFractionDigits: 7,
-      minimumFractionDigits: 2,
-    });
+    return formatTokenValue(bonusAmount);
+  };
+
+  const formatDisplayValue = (value: string) => {
+    if (!value) return value;
+    const numberValue = parseFloat(value.replace(/,/g, ""));
+    return formatTokenValue(numberValue);
   };
 
   const renderUsdValue = () => {
@@ -90,7 +114,7 @@ const InputBox: React.FC<InputBoxProps> = ({
     const baseInput = (
       <input
         type="text"
-        value={liquidationMode && disabled ? getBonusAmount() : inputValue}
+        value={liquidationMode && disabled ? formatDisplayValue(getBonusAmount()) : inputValue}
         onChange={handleInputChange}
         onFocus={() => !disabled && setIsFocused(true)}
         onBlur={() => !disabled && setIsFocused(false)}
@@ -108,7 +132,7 @@ const InputBox: React.FC<InputBoxProps> = ({
     ) {
       return (
         <div className={styles.inputWithPrices}>
-          <span className={styles.baseAmount}>{inputValue}</span>
+          <span className={styles.baseAmount}>{formatDisplayValue(inputValue)}</span>
           {baseInput}
         </div>
       );

@@ -31,7 +31,7 @@ const LiquidationsContent = () => {
     symbol: "All tokens",
     imagePath: "/icons/list.svg",
   });
-  const { modalType, openModal, closeModal } = useModal();
+  const { modalType, assetData, openModal, closeModal } = useModal();
 
   const handleClose = () => {
     setIsModalClosing(true);
@@ -64,8 +64,16 @@ const LiquidationsContent = () => {
     }
   };
 
+  const getConversionRate = (fromPrice: number, toPrice: number) => {
+    return fromPrice / toPrice;
+  };
+
   const handleLiquidate = (liquidation: any) => {
-    openModal("liquidate", liquidation);
+    const enhancedLiquidation = {
+      ...liquidation,
+      conversionRate: getConversionRate(liquidation.fromToken.price, liquidation.toToken.price)
+    };
+    openModal("liquidate", enhancedLiquidation);
   };
 
   const receiveTokens = useMemo(
@@ -282,19 +290,21 @@ const LiquidationsContent = () => {
                     </div>
 
                     <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>{liquidation.profit}</p>
+                      <p className={styles.metricValue}>
+                        {liquidation.toToken.available} {liquidation.toToken.symbol}
+                      </p>
                       <p className={styles.metricLabel}>Profit</p>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.available}
+                        {liquidation.toToken.available} {liquidation.toToken.symbol}
                       </p>
                       <p className={styles.metricLabel}>Available</p>
                     </div>
 
                     <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>{liquidation.price}</p>
+                      <p className={styles.metricValue}>{liquidation.fromToken.price} USD</p>
                       <p className={styles.metricLabel}>Price</p>
                     </div>
                   </div>
@@ -321,14 +331,20 @@ const LiquidationsContent = () => {
           </div>
         </div>
       </div>
-      {modalType === "liquidate" && (
+      {modalType === "liquidate" && assetData && (
         <div
           className={`${ModalBackDropStyles.modalOverlay} ${isModalClosing ? ModalBackDropStyles.closing : ""}`}
         >
           <div
             className={`${ModalBackDropStyles.modalContent} ${isModalClosing ? ModalBackDropStyles.closing : ""}`}
           >
-            <LiquidateTab onClose={handleClose} />
+            <LiquidateTab 
+              onClose={handleClose} 
+              fromToken={assetData.fromToken}
+              toToken={assetData.toToken}
+              offMarketPrice={assetData.offMarketPrice}
+              conversionRate={assetData.conversionRate}
+            />
           </div>
         </div>
       )}

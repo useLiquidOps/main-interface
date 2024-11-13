@@ -152,8 +152,8 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
                 <Image
                   src={displayText.actionIcon}
                   alt={displayText.actionButton}
-                  width={14}
-                  height={14}
+                  width={18}
+                  height={18}
                   className={styles.withdrawIcon}
                 />
                 <span>{displayText.actionButton}</span>

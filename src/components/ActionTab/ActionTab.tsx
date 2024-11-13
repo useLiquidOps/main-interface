@@ -13,7 +13,6 @@ interface ActionTabProps {
 }
 
 const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
-
   const tokenData = headerTokensData.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );

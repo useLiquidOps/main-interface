@@ -1,5 +1,6 @@
 "use client";
 import styles from "./liquidations.module.css";
+import DropDownBackDropStyles from "../../components/DropDown/DropDownBackdrop.module.css";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
@@ -17,7 +18,10 @@ const LiquidationsContent = () => {
   const [mounted, setMounted] = useState(false);
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
   const [showSendDropdown, setShowSendDropdown] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
+  const [isModalClosing, setIsModalClosing] = useState(false);
+  const [isReceiveClosing, setIsReceiveClosing] = useState(false);
+  const [isSendClosing, setIsSendClosing] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedReceiveToken, setSelectedReceiveToken] = useState<TokenInfo>({
     symbol: "All tokens",
     imagePath: "/icons/list.svg",
@@ -29,10 +33,10 @@ const LiquidationsContent = () => {
   const { modalType, openModal, closeModal } = useModal();
 
   const handleClose = () => {
-    setIsClosing(true);
+    setIsModalClosing(true);
     setTimeout(() => {
       closeModal();
-      setIsClosing(false);
+      setIsModalClosing(false);
     }, 300);
   };
 
@@ -41,8 +45,22 @@ const LiquidationsContent = () => {
   }, []);
 
   const handleClickOutside = () => {
-    setShowReceiveDropdown(false);
-    setShowSendDropdown(false);
+    if (showReceiveDropdown) {
+      setIsReceiveClosing(true);
+      setIsDropdownOpen(false);
+      setTimeout(() => {
+        setShowReceiveDropdown(false);
+        setIsReceiveClosing(false);
+      }, 300);
+    }
+    if (showSendDropdown) {
+      setIsSendClosing(true);
+      setIsDropdownOpen(false);
+      setTimeout(() => {
+        setShowSendDropdown(false);
+        setIsSendClosing(false);
+      }, 300);
+    }
   };
 
   const handleLiquidate = (liquidation: any) => {
@@ -72,13 +90,25 @@ const LiquidationsContent = () => {
   }, [selectedReceiveToken.symbol, selectedSendToken.symbol]);
 
   const toggleReceiveDropdown = () => {
-    setShowReceiveDropdown(!showReceiveDropdown);
-    setShowSendDropdown(false);
+    if (!showReceiveDropdown) {
+      setShowReceiveDropdown(true);
+      setIsReceiveClosing(false);
+      setIsDropdownOpen(true);
+      setShowSendDropdown(false);
+    } else {
+      handleClickOutside();
+    }
   };
 
   const toggleSendDropdown = () => {
-    setShowSendDropdown(!showSendDropdown);
-    setShowReceiveDropdown(false);
+    if (!showSendDropdown) {
+      setShowSendDropdown(true);
+      setIsSendClosing(false);
+      setIsDropdownOpen(true);
+      setShowReceiveDropdown(false);
+    } else {
+      handleClickOutside();
+    }
   };
 
   if (!mounted) {
@@ -87,8 +117,14 @@ const LiquidationsContent = () => {
 
   return (
     <div className={styles.page}>
+      {(showReceiveDropdown || showSendDropdown) && (
+        <div
+          className={`${DropDownBackDropStyles.overlay} ${isReceiveClosing || isSendClosing ? DropDownBackDropStyles.closing : ""}`}
+          onClick={handleClickOutside}
+        />
+      )}
       <Header />
-      <div className={styles.body} onClick={handleClickOutside}>
+      <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <div className={styles.filterContainer}>
             <div className={styles.filterGroup}>
@@ -114,14 +150,16 @@ const LiquidationsContent = () => {
                   />
                 </button>
                 {showSendDropdown && (
-                  <div className={styles.dropdown}>
+                  <div
+                    className={`${styles.dropdown} ${isDropdownOpen ? styles.fadeIn : styles.fadeOut}`}
+                  >
                     {sendTokens.map((token) => (
                       <div
                         key={token.symbol}
                         className={styles.dropdownItem}
                         onClick={() => {
                           setSelectedSendToken(token);
-                          setShowSendDropdown(false);
+                          handleClickOutside();
                         }}
                       >
                         <Image
@@ -160,14 +198,16 @@ const LiquidationsContent = () => {
                   />
                 </button>
                 {showReceiveDropdown && (
-                  <div className={styles.dropdown}>
+                  <div
+                    className={`${styles.dropdown} ${isDropdownOpen ? styles.fadeIn : styles.fadeOut}`}
+                  >
                     {receiveTokens.map((token) => (
                       <div
                         key={token.symbol}
                         className={styles.dropdownItem}
                         onClick={() => {
                           setSelectedReceiveToken(token);
-                          setShowReceiveDropdown(false);
+                          handleClickOutside();
                         }}
                       >
                         <Image
@@ -282,10 +322,10 @@ const LiquidationsContent = () => {
       </div>
       {modalType === "liquidate" && (
         <div
-          className={`${styles.modalOverlay} ${isClosing ? styles.closing : ""}`}
+          className={`${styles.modalOverlay} ${isModalClosing ? styles.closing : ""}`}
         >
           <div
-            className={`${styles.modalContent} ${isClosing ? styles.closing : ""}`}
+            className={`${styles.modalContent} ${isModalClosing ? styles.closing : ""}`}
           >
             <LiquidateTab onClose={handleClose} />
           </div>

@@ -74,7 +74,17 @@
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   min-width: 120px;
-  z-index: 10;
+  z-index: 1001;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.dropdown.fadeIn {
+  opacity: 1;
+}
+
+.dropdown.fadeOut {
+  opacity: 0;
 }
 
 .dropdownItem {
@@ -92,6 +102,9 @@
 .dropdownItem:hover {
   background-color: var(--primary-ghost-white);
 }
+
+/* Rest of your existing styles... */
+/* (keeping all the other styles exactly the same) */
 
 .liquidationsList {
   width: 100%;
@@ -247,6 +260,7 @@
   font-size: 15px;
   font-weight: 500;
 }
+
 .modalOverlay {
   position: fixed;
   top: 0;

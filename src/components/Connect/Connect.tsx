@@ -1,5 +1,7 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import styles from "./Connect.module.css";
+import DropDownBackDropStyles from "../../components/DropDown/DropDownBackdrop.module.css";
 import Account from "arweave-account";
 import { useClickOutside } from "../utils/utils";
 import DropdownButton from "../DropDown/DropDown";
@@ -16,6 +18,7 @@ const Connect: React.FC = () => {
   const address = "psh5nUh3VF22Pr8LoV1K2blRNOOnoVH0BbZ85yRick"; // TODO replace with actual address when arwkit fixed
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [profile, setProfile] = useState<any>(null);
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() => {
@@ -23,10 +26,12 @@ const Connect: React.FC = () => {
   });
 
   const closeDropdown = () => {
+    setIsClosing(true);
     setIsOpen(false);
     setTimeout(() => {
+      setIsClosing(false);
       setIsVisible(false);
-    }, 200);
+    }, 300);
   };
 
   const tokens: TokenInfo[] = [
@@ -96,77 +101,89 @@ const Connect: React.FC = () => {
     if (!isOpen) {
       setIsVisible(true);
       setIsOpen(true);
+      setIsClosing(false);
     } else {
       closeDropdown();
     }
   };
 
   return (
-    <div className={styles.connectContainer} ref={dropdownRef}>
-      {connected && address ? (
+    <>
+      {isVisible && (
         <div
-          className={styles.profileContainer}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleDropdown();
-          }}
-        >
-          <DropdownButton isOpen={isOpen} onToggle={toggleDropdown} />
-          <Image
-            src={profile?.profile?.avatarURL || "/icons/user.svg"}
-            alt="Profile image"
-            width={32}
-            height={32}
-            className={styles.connectImage}
-          />
-          {isVisible && (
-            <div
-              className={`${styles.dropdown} ${isOpen ? styles.fadeIn : styles.fadeOut}`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className={styles.addressContainer}>
-                <span>{shortenAddress(address)}</span>
-                <button
-                  className={styles.copyButton}
-                  onClick={() => copyToClipboard(address)}
-                >
-                  <Image
-                    src="/icons/copy.svg"
-                    alt="Copy"
-                    width={14}
-                    height={14}
-                  />
-                </button>
-              </div>
-
-              {tokens.map((token, index) => (
-                <div key={index} className={styles.balance}>
-                  <Image
-                    src={token.icon}
-                    alt={token.symbol}
-                    width={24}
-                    height={24}
-                  />
-                  <span>
-                    {formatBalance(token.balance)} {token.symbol}
-                  </span>
-                </div>
-              ))}
-
-              <div className={styles.logoutButtonContainer}>
-                <button className={styles.logoutButton} onClick={handleLogout}>
-                  Logout
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      ) : (
-        <button className={styles.connectButton} onClick={handleConnectClick}>
-          Login
-        </button>
+          className={`${DropDownBackDropStyles.overlay} ${isClosing ? DropDownBackDropStyles.closing : ""}`}
+          onClick={closeDropdown}
+        />
       )}
-    </div>
+      <div className={styles.connectContainer} ref={dropdownRef}>
+        {connected && address ? (
+          <div
+            className={styles.profileContainer}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleDropdown();
+            }}
+          >
+            <DropdownButton isOpen={isOpen} onToggle={toggleDropdown} />
+            <Image
+              src={profile?.profile?.avatarURL || "/icons/user.svg"}
+              alt="Profile image"
+              width={32}
+              height={32}
+              className={styles.connectImage}
+            />
+            {isVisible && (
+              <div
+                className={`${styles.dropdown} ${isOpen ? styles.fadeIn : styles.fadeOut}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className={styles.addressContainer}>
+                  <span>{shortenAddress(address)}</span>
+                  <button
+                    className={styles.copyButton}
+                    onClick={() => copyToClipboard(address)}
+                  >
+                    <Image
+                      src="/icons/copy.svg"
+                      alt="Copy"
+                      width={14}
+                      height={14}
+                    />
+                  </button>
+                </div>
+
+                {tokens.map((token, index) => (
+                  <div key={index} className={styles.balance}>
+                    <Image
+                      src={token.icon}
+                      alt={token.symbol}
+                      width={24}
+                      height={24}
+                    />
+                    <span>
+                      {formatBalance(token.balance)} {token.symbol}
+                    </span>
+                  </div>
+                ))}
+
+                <div className={styles.logoutButtonContainer}>
+                  <button
+                    className={styles.logoutButton}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button className={styles.connectButton} onClick={handleConnectClick}>
+            Login
+          </button>
+        )}
+      </div>
+    </>
   );
 };
 

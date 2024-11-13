@@ -149,7 +149,9 @@ const Connect: React.FC = () => {
                     onClick={() => copyToClipboard(address)}
                   >
                     <Image
-                      src={isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"}
+                      src={
+                        isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"
+                      }
                       alt="Copy"
                       width={14}
                       height={14}

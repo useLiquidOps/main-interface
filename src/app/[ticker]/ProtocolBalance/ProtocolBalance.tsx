@@ -83,8 +83,8 @@ const ProtocolBalance: React.FC<{
                   tokenData.percentChange.outcome ? "Up Arrow" : "Down Arrow"
                 }
                 width={0}
-                height={16}
-                style={{ width: "auto", height: "16px" }}
+                height={13}
+                style={{ width: "auto", height: "13px" }}
               />
             )}
             <p className={styles.aprText}>

@@ -114,21 +114,21 @@
 }
 
 .aprLabel {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--secondary-slate-blue);
   margin: 0;
   margin-bottom: 2px;
-  font-weight: 700;
+  font-weight: 600;
   text-align: right;
 }
 
 .aprValue {
-  font-size: 16px;
+  font-size: 24px;
   color: var(--secondary-slate-blue);
-  font-weight: 700;
+  font-weight: 600;
   display: flex;
-  align-items: flex-start;
-  gap: 4px;
+  align-items: center;
+  gap: 10px;
   line-height: 1;
   justify-content: flex-end;
   width: 100%;

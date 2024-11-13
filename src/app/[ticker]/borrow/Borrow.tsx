@@ -18,8 +18,8 @@ const Borrow: React.FC<{
             <Image
               src="/icons/back.svg"
               alt="Back"
-              width={24}
-              height={24}
+              width={20}
+              height={20}
               className={styles.backIcon}
             />
             <h2 className={styles.title}>Borrow assets</h2>

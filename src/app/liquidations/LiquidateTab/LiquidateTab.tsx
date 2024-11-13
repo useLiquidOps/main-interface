@@ -4,6 +4,7 @@ import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import Image from "next/image";
 import InputBox from "@/components/InputBox/InputBox";
 import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
+import DropdownButton from "@/components/DropDown/DropDown";
 
 interface LiquidateTabProps {
   onClose: () => void;
@@ -39,6 +40,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
   const tokenToUsdRate = 15;
   const walletBalance = dummyData.fromToken.available;
   const offMarketPrice = 8;
+  const maxSlippage = 5;
 
   useEffect(() => {
     if (fromInputValue === "") {
@@ -145,6 +147,13 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
         <p className={styles.offMarketPriceText}>
           {offMarketPrice}% off market price
         </p>
+      </div>
+
+      <div className={styles.slippageButton}>
+        <p>Max. slippage: {maxSlippage}%</p>
+
+        {/* @ts-ignore */}
+        <DropdownButton />
       </div>
 
       <SubmitButton />

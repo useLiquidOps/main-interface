@@ -48,7 +48,7 @@
   gap: 8px;
   padding: 10px;
   border-radius: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .offMarketPriceText {
@@ -56,4 +56,22 @@
 
   font-weight: 600;
   font-size: 13px;
+}
+
+.slippageButton {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 6px;
+}
+
+.slippageButton > p {
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.slippageButton > button {
+  cursor: not-allowed;
 }

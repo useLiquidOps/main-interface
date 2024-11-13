@@ -37,9 +37,9 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
   const [isToFocused, setIsToFocused] = useState(false);
 
   // Placeholder values
-  const tokenToUsdRate = 15;
+  const tokenToUsdRate = 10;
   const walletBalance = dummyData.fromToken.available;
-  const offMarketPrice = 8;
+  const offMarketPrice = 10;
   const maxSlippage = 5;
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
     <div className={styles.liquidateTab}>
       <div className={styles.titleContainer}>
         <p className={styles.title}>
-          Liquidate {dummyData.fromToken.symbol}/{dummyData.toToken.symbol}
+          Liquidate {dummyData.toToken.symbol}/{dummyData.fromToken.symbol}
         </p>
         <button className={styles.close} onClick={onClose}>
           <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
@@ -128,6 +128,8 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
         walletBalance={dummyData.toToken.available}
         onMaxClick={() => {}}
         disabled={true}
+        liquidationMode={true}
+        liquidationDiscount={offMarketPrice}
       />
 
       <PercentagePicker

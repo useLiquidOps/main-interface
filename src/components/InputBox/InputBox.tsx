@@ -18,6 +18,8 @@ interface InputBoxProps {
   walletBalance: number;
   onMaxClick: () => void;
   disabled?: boolean;
+  liquidationMode?: boolean;
+  liquidationDiscount?: number;
 }
 
 const InputBox: React.FC<InputBoxProps> = ({
@@ -30,6 +32,8 @@ const InputBox: React.FC<InputBoxProps> = ({
   walletBalance,
   onMaxClick,
   disabled = false,
+  liquidationMode = false,
+  liquidationDiscount = 0,
 }) => {
   const [showError, setShowError] = useState(false);
 
@@ -51,6 +55,68 @@ const InputBox: React.FC<InputBoxProps> = ({
     }
   };
 
+  const getBonusAmount = () => {
+    if (!inputValue || !liquidationDiscount) return "0";
+    const currentValue = parseFloat(inputValue.replace(/,/g, ""));
+    const bonusAmount = currentValue * (1 + (liquidationDiscount / 100));
+    return bonusAmount.toLocaleString("en-US", {
+      maximumFractionDigits: 7,
+      minimumFractionDigits: 2,
+    });
+  };
+
+  const renderUsdValue = () => {
+    if (liquidationMode && disabled && inputValue && parseFloat(inputValue) !== 0) {
+      return (
+        <div className={styles.usdValueContainer}>
+          <span className={styles.baseUsdValue}>
+            ≈{calculateUsdValue(inputValue, tokenToUsdRate)} USD
+          </span>
+          <span className={styles.usdValue}>
+            ≈{calculateUsdValue(getBonusAmount(), tokenToUsdRate)} USD
+          </span>
+        </div>
+      );
+    }
+
+    return (
+      <p className={styles.usdValue}>
+        ≈{calculateUsdValue(inputValue, tokenToUsdRate)} USD
+      </p>
+    );
+  };
+
+  const renderInput = () => {
+    const baseInput = (
+      <input
+        type="text"
+        value={liquidationMode && disabled ? getBonusAmount() : inputValue}
+        onChange={handleInputChange}
+        onFocus={() => !disabled && setIsFocused(true)}
+        onBlur={() => !disabled && setIsFocused(false)}
+        className={styles.amountInput}
+        placeholder="0"
+        readOnly={disabled}
+      />
+    );
+
+    if (
+      liquidationMode &&
+      disabled &&
+      inputValue &&
+      parseFloat(inputValue) !== 0
+    ) {
+      return (
+        <div className={styles.inputWithPrices}>
+          <span className={styles.baseAmount}>{inputValue}</span>
+          {baseInput}
+        </div>
+      );
+    }
+
+    return baseInput;
+  };
+
   return (
     <div
       className={`${styles.inputContainer} ${isFocused ? styles.focused : ""} ${
@@ -59,19 +125,10 @@ const InputBox: React.FC<InputBoxProps> = ({
     >
       <div className={styles.inputSection}>
         <div className={styles.leftSection}>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            onFocus={() => !disabled && setIsFocused(true)}
-            onBlur={() => !disabled && setIsFocused(false)}
-            className={styles.amountInput}
-            placeholder="0"
-            readOnly={disabled}
-          />
-          <p className={styles.usdValue}>
-            ≈{calculateUsdValue(inputValue, tokenToUsdRate)} USD
-          </p>
+          {renderInput()}
+          <div className={styles.valueSection}>
+            {renderUsdValue()}
+          </div>
         </div>
         <div className={styles.rightSection}>
           <div className={styles.tokenSelector}>

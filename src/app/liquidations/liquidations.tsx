@@ -1,6 +1,7 @@
 "use client";
 import styles from "./liquidations.module.css";
 import DropDownBackDropStyles from "../../components/DropDown/DropDownBackdrop.module.css";
+import ModalBackDropStyles from "../../components/DropDown/ModalBackdrop.module.css";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
@@ -322,10 +323,10 @@ const LiquidationsContent = () => {
       </div>
       {modalType === "liquidate" && (
         <div
-          className={`${styles.modalOverlay} ${isModalClosing ? styles.closing : ""}`}
+          className={`${ModalBackDropStyles.modalOverlay} ${isModalClosing ? ModalBackDropStyles.closing : ""}`}
         >
           <div
-            className={`${styles.modalContent} ${isModalClosing ? styles.closing : ""}`}
+            className={`${ModalBackDropStyles.modalContent} ${isModalClosing ? ModalBackDropStyles.closing : ""}`}
           >
             <LiquidateTab onClose={handleClose} />
           </div>

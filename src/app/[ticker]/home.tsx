@@ -9,6 +9,7 @@ import AssetDisplay from "./AssetDisplay/AssetDisplay";
 import { AssetDisplayData } from "../data";
 import WithdrawRepay from "@/components/WithdrawRepay/WithdrawRepay";
 import { useModal, ModalProvider } from "./PopUp/PopUp";
+import ModalBackDropStyles from "../../components/DropDown/ModalBackdrop.module.css";
 
 const HomeContent = ({
   params,
@@ -47,10 +48,10 @@ const HomeContent = ({
       </div>
       {modalType && (
         <div
-          className={`${styles.modalOverlay} ${isClosing ? styles.closing : ""}`}
+          className={`${ModalBackDropStyles.modalOverlay} ${isClosing ? ModalBackDropStyles.closing : ""}`}
         >
           <div
-            className={`${styles.modalContent} ${isClosing ? styles.closing : ""}`}
+            className={`${ModalBackDropStyles.modalContent} ${isClosing ? ModalBackDropStyles.closing : ""}`}
           >
             <WithdrawRepay
               mode={modalType as "withdraw" | "repay"}

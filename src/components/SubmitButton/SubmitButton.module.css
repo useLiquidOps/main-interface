@@ -11,6 +11,11 @@
   gap: 8px;
   border: none;
   cursor: pointer;
+  transition: all .3s ease;
+}
+
+.submitButton.idle:hover {
+  background-color: #322ece;
 }
 
 .idle {

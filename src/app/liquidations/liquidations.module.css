@@ -131,6 +131,7 @@
   position: relative;
   z-index: 2;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
 .liquidationRowWrapper:hover .liquidationRow {

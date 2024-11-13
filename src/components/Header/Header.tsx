@@ -22,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
   const [activeLink, setActiveLink] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -30,8 +31,10 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
   });
 
   const closeDropdown = () => {
+    setIsClosing(true);
     setIsDropdownOpen(false);
     setTimeout(() => {
+      setIsClosing(false);
       setIsDropdownVisible(false);
     }, 300);
   };
@@ -56,6 +59,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
     if (!isDropdownOpen) {
       setIsDropdownVisible(true);
       setIsDropdownOpen(true);
+      setIsClosing(false);
     } else {
       closeDropdown();
     }
@@ -111,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
     <>
       {isDropdownVisible && (
         <div
-          className={`${DropDownBackDropStyles.overlay} ${isDropdownOpen ? DropDownBackDropStyles.overlayVisible : ""}`}
+          className={`${DropDownBackDropStyles.overlay} ${isClosing ? DropDownBackDropStyles.closing : ""}`}
           onClick={closeDropdown}
         />
       )}

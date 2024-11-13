@@ -52,7 +52,6 @@
   font-weight: 500;
   padding: 10px 15px;
   border-radius: 9px;
-  transition: background-color 0.3s ease;
 }
 
 .navLinks p {
@@ -114,12 +113,13 @@
   border-radius: 12px;
   padding: 15px;
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+  
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 10px;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .fadeIn {

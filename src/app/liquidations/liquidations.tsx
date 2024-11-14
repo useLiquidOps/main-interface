@@ -71,7 +71,10 @@ const LiquidationsContent = () => {
   const handleLiquidate = (liquidation: any) => {
     const enhancedLiquidation = {
       ...liquidation,
-      conversionRate: getConversionRate(liquidation.fromToken.price, liquidation.toToken.price)
+      conversionRate: getConversionRate(
+        liquidation.fromToken.price,
+        liquidation.toToken.price,
+      ),
     };
     openModal("liquidate", enhancedLiquidation);
   };
@@ -291,20 +294,24 @@ const LiquidationsContent = () => {
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.toToken.available} {liquidation.toToken.symbol}
+                        {liquidation.toToken.available}{" "}
+                        {liquidation.toToken.symbol}
                       </p>
                       <p className={styles.metricLabel}>Profit</p>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.toToken.available} {liquidation.toToken.symbol}
+                        {liquidation.toToken.available}{" "}
+                        {liquidation.toToken.symbol}
                       </p>
                       <p className={styles.metricLabel}>Available</p>
                     </div>
 
                     <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>{liquidation.fromToken.price} USD</p>
+                      <p className={styles.metricValue}>
+                        {liquidation.fromToken.price} USD
+                      </p>
                       <p className={styles.metricLabel}>Price</p>
                     </div>
                   </div>
@@ -338,8 +345,8 @@ const LiquidationsContent = () => {
           <div
             className={`${ModalBackDropStyles.modalContent} ${isModalClosing ? ModalBackDropStyles.closing : ""}`}
           >
-            <LiquidateTab 
-              onClose={handleClose} 
+            <LiquidateTab
+              onClose={handleClose}
               fromToken={assetData.fromToken}
               toToken={assetData.toToken}
               offMarketPrice={assetData.offMarketPrice}

@@ -39,11 +39,11 @@ const InputBox: React.FC<InputBoxProps> = ({
 
   const getDecimalPlaces = (ticker: string) => {
     switch (ticker) {
-      case 'DAI':
+      case "DAI":
         return 2;
-      case 'stETH':
+      case "stETH":
         return 4;
-      case 'qAR':
+      case "qAR":
         return 3;
       default:
         return 2;
@@ -79,7 +79,7 @@ const InputBox: React.FC<InputBoxProps> = ({
   const getBonusAmount = () => {
     if (!inputValue || !liquidationDiscount) return "0";
     const currentValue = parseFloat(inputValue.replace(/,/g, ""));
-    const bonusAmount = currentValue * (1 + (liquidationDiscount / 100));
+    const bonusAmount = currentValue * (1 + liquidationDiscount / 100);
     return formatTokenValue(bonusAmount);
   };
 
@@ -90,7 +90,12 @@ const InputBox: React.FC<InputBoxProps> = ({
   };
 
   const renderUsdValue = () => {
-    if (liquidationMode && disabled && inputValue && parseFloat(inputValue) !== 0) {
+    if (
+      liquidationMode &&
+      disabled &&
+      inputValue &&
+      parseFloat(inputValue) !== 0
+    ) {
       return (
         <div className={styles.usdValueContainer}>
           <span className={styles.baseUsdValue}>
@@ -114,7 +119,11 @@ const InputBox: React.FC<InputBoxProps> = ({
     const baseInput = (
       <input
         type="text"
-        value={liquidationMode && disabled ? formatDisplayValue(getBonusAmount()) : inputValue}
+        value={
+          liquidationMode && disabled
+            ? formatDisplayValue(getBonusAmount())
+            : inputValue
+        }
         onChange={handleInputChange}
         onFocus={() => !disabled && setIsFocused(true)}
         onBlur={() => !disabled && setIsFocused(false)}
@@ -132,7 +141,9 @@ const InputBox: React.FC<InputBoxProps> = ({
     ) {
       return (
         <div className={styles.inputWithPrices}>
-          <span className={styles.baseAmount}>{formatDisplayValue(inputValue)}</span>
+          <span className={styles.baseAmount}>
+            {formatDisplayValue(inputValue)}
+          </span>
           {baseInput}
         </div>
       );
@@ -150,9 +161,7 @@ const InputBox: React.FC<InputBoxProps> = ({
       <div className={styles.inputSection}>
         <div className={styles.leftSection}>
           {renderInput()}
-          <div className={styles.valueSection}>
-            {renderUsdValue()}
-          </div>
+          <div className={styles.valueSection}>{renderUsdValue()}</div>
         </div>
         <div className={styles.rightSection}>
           <div className={styles.tokenSelector}>

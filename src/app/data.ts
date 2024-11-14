@@ -161,9 +161,9 @@ export const liquidationsData = [
       symbol: "DAI",
       icon: "/tokens/DAI.svg",
       available: 1250.32,
-      price: 1.00,
+      price: 1.0,
     },
-    offMarketPrice: 8
+    offMarketPrice: 8,
   },
   {
     fromToken: {
@@ -171,16 +171,16 @@ export const liquidationsData = [
       symbol: "DAI",
       icon: "/tokens/DAI.svg",
       available: 45000,
-      price: 1.00,
+      price: 1.0,
     },
     toToken: {
       name: "Quantum Arweave",
       symbol: "qAR",
       icon: "/tokens/qAR.svg",
       available: 45.23,
-      price: 15.50,
+      price: 15.5,
     },
-    offMarketPrice: 12
+    offMarketPrice: 12,
   },
   {
     fromToken: {
@@ -188,7 +188,7 @@ export const liquidationsData = [
       symbol: "qAR",
       icon: "/tokens/qAR.svg",
       available: 1000000,
-      price: 15.50,
+      price: 15.5,
     },
     toToken: {
       name: "Staked Ethereum",
@@ -197,6 +197,6 @@ export const liquidationsData = [
       available: 0.892,
       price: 1850.93,
     },
-    offMarketPrice: 10
+    offMarketPrice: 10,
   },
 ];

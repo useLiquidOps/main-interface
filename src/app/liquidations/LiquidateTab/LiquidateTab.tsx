@@ -27,7 +27,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   fromToken,
   toToken,
   offMarketPrice,
-  conversionRate
+  conversionRate,
 }) => {
   // Input states for the first (from) token
   const [fromInputValue, setFromInputValue] = useState("");
@@ -159,10 +159,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
 
       <div className={styles.slippageButton}>
         <p>Max. slippage: {maxSlippage}%</p>
-        <DropdownButton 
-          isOpen={isSlippageOpen}
-          onToggle={toggleSlippage}
-        />
+        <DropdownButton isOpen={isSlippageOpen} onToggle={toggleSlippage} />
       </div>
 
       <SubmitButton />

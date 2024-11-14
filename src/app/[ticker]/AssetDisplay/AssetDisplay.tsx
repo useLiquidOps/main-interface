@@ -106,9 +106,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
                 <div className={styles.assetInfo}>
                   <div className={styles.iconWrapper}>
                     <Image
-                      src={
-                        mode === "lend" ? asset.oIcon || asset.icon : asset.icon
-                      }
+                      src={asset.icon}
                       alt={asset.name}
                       width={40}
                       height={40}

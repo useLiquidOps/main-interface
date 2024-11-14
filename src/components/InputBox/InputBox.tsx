@@ -52,6 +52,7 @@ const InputBox: React.FC<InputBoxProps> = ({
 
   const formatTokenValue = (value: number) => {
     const decimals = getDecimalPlaces(ticker);
+    if (value === 0 && liquidationMode) return "0";
     return value.toLocaleString("en-US", {
       maximumFractionDigits: decimals,
       minimumFractionDigits: decimals,

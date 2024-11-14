@@ -1,6 +1,5 @@
 "use client";
 import styles from "./liquidations.module.css";
-import ModalBackDropStyles from "../../components/DropDown/ModalBackdrop.module.css";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
@@ -9,10 +8,12 @@ import DropdownButton from "@/components/DropDown/DropDown";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
 import LiquidateTab from "./LiquidateTab/LiquidateTab";
 import { motion, AnimatePresence } from "framer-motion";
+import ModalBackDropStyles from "../../components/DropDown/ModalBackdrop.module.css";
 import {
   dropdownVariants,
   overlayVariants,
 } from "../../components/DropDown/FramerMotion";
+
 
 interface TokenInfo {
   symbol: string;
@@ -83,6 +84,7 @@ const LiquidationsContent = () => {
     setShowSendDropdown(!showSendDropdown);
     setShowReceiveDropdown(false);
   };
+
 
   if (!mounted) return null;
 
@@ -235,9 +237,7 @@ const LiquidationsContent = () => {
                         />
                       </div>
                       <div className={styles.nameSymbol}>
-                        <h2 className={styles.name}>
-                          {liquidation.fromToken.name}
-                        </h2>
+                        <h2 className={styles.name}>{liquidation.fromToken.name}</h2>
                         <p className={styles.symbol}>
                           {liquidation.fromToken.symbol}
                         </p>
@@ -263,27 +263,21 @@ const LiquidationsContent = () => {
                         />
                       </div>
                       <div className={styles.nameSymbol}>
-                        <h2 className={styles.name}>
-                          {liquidation.toToken.name}
-                        </h2>
-                        <p className={styles.symbol}>
-                          {liquidation.toToken.symbol}
-                        </p>
+                        <h2 className={styles.name}>{liquidation.toToken.name}</h2>
+                        <p className={styles.symbol}>{liquidation.toToken.symbol}</p>
                       </div>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.toToken.available}{" "}
-                        {liquidation.toToken.symbol}
+                        {liquidation.toToken.available} {liquidation.toToken.symbol}
                       </p>
                       <p className={styles.metricLabel}>Profit</p>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.toToken.available}{" "}
-                        {liquidation.toToken.symbol}
+                        {liquidation.toToken.available} {liquidation.toToken.symbol}
                       </p>
                       <p className={styles.metricLabel}>Available</p>
                     </div>
@@ -318,7 +312,7 @@ const LiquidationsContent = () => {
           </div>
         </div>
       </div>
-
+      
       {modalType === "liquidate" && assetData && (
         <div className={ModalBackDropStyles.modalOverlay}>
           <div className={ModalBackDropStyles.modalContent}>

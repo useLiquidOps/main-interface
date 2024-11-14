@@ -246,7 +246,7 @@
   font-weight: 500;
 }
 
-.overlay {
+.modalOverlay {
   position: fixed;
   top: 0;
   left: 0;

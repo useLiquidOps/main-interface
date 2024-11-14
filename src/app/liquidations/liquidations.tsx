@@ -8,11 +8,10 @@ import DropdownButton from "@/components/DropDown/DropDown";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
 import LiquidateTab from "./LiquidateTab/LiquidateTab";
 import { motion, AnimatePresence } from "framer-motion";
-import ModalBackDropStyles from "../../components/DropDown/ModalBackdrop.module.css";
 import {
-  dropdownVariants,
   overlayVariants,
-} from "../../components/DropDown/FramerMotion";
+  dropdownVariants,
+} from "@/components/DropDown/FramerMotion";
 
 interface TokenInfo {
   symbol: string;
@@ -319,19 +318,35 @@ const LiquidationsContent = () => {
         </div>
       </div>
 
-      {modalType === "liquidate" && assetData && (
-        <div className={ModalBackDropStyles.modalOverlay}>
-          <div className={ModalBackDropStyles.modalContent}>
-            <LiquidateTab
-              onClose={closeModal}
-              fromToken={assetData.fromToken}
-              toToken={assetData.toToken}
-              offMarketPrice={assetData.offMarketPrice}
-              conversionRate={assetData.conversionRate}
-            />
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {modalType === "liquidate" && assetData && (
+          <motion.div
+            className={styles.modalOverlay}
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={closeModal}
+          >
+            <motion.div
+              className={styles.modalContent}
+              variants={dropdownVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <LiquidateTab
+                onClose={closeModal}
+                fromToken={assetData.fromToken}
+                toToken={assetData.toToken}
+                offMarketPrice={assetData.offMarketPrice}
+                conversionRate={assetData.conversionRate}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

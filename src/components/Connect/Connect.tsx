@@ -7,9 +7,9 @@ import DropdownButton from "../DropDown/DropDown";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  dropdownVariants,
   overlayVariants,
-} from "../../components/DropDown/FramerMotion";
+  dropdownVariants,
+} from "@/components/DropDown/FramerMotion";
 
 interface TokenInfo {
   symbol: string;

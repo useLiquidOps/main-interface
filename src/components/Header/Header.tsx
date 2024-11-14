@@ -10,7 +10,10 @@ import { headerTokensData } from "../../app/data";
 import DropdownButton from "../DropDown/DropDown";
 import SearchInput from "../SearchInput/SearchInput";
 import { motion, AnimatePresence } from "framer-motion";
-import { dropdownVariants, overlayVariants } from "../DropDown/FramerMotion";
+import {
+  overlayVariants,
+  dropdownVariants,
+} from "@/components/DropDown/FramerMotion";
 
 interface HeaderProps {
   currentToken?: string;

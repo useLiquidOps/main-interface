@@ -14,7 +14,6 @@ import {
   overlayVariants,
 } from "../../components/DropDown/FramerMotion";
 
-
 interface TokenInfo {
   symbol: string;
   imagePath: string;
@@ -84,7 +83,6 @@ const LiquidationsContent = () => {
     setShowSendDropdown(!showSendDropdown);
     setShowReceiveDropdown(false);
   };
-
 
   if (!mounted) return null;
 
@@ -237,7 +235,9 @@ const LiquidationsContent = () => {
                         />
                       </div>
                       <div className={styles.nameSymbol}>
-                        <h2 className={styles.name}>{liquidation.fromToken.name}</h2>
+                        <h2 className={styles.name}>
+                          {liquidation.fromToken.name}
+                        </h2>
                         <p className={styles.symbol}>
                           {liquidation.fromToken.symbol}
                         </p>
@@ -263,21 +263,27 @@ const LiquidationsContent = () => {
                         />
                       </div>
                       <div className={styles.nameSymbol}>
-                        <h2 className={styles.name}>{liquidation.toToken.name}</h2>
-                        <p className={styles.symbol}>{liquidation.toToken.symbol}</p>
+                        <h2 className={styles.name}>
+                          {liquidation.toToken.name}
+                        </h2>
+                        <p className={styles.symbol}>
+                          {liquidation.toToken.symbol}
+                        </p>
                       </div>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.toToken.available} {liquidation.toToken.symbol}
+                        {liquidation.toToken.available}{" "}
+                        {liquidation.toToken.symbol}
                       </p>
                       <p className={styles.metricLabel}>Profit</p>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.toToken.available} {liquidation.toToken.symbol}
+                        {liquidation.toToken.available}{" "}
+                        {liquidation.toToken.symbol}
                       </p>
                       <p className={styles.metricLabel}>Available</p>
                     </div>
@@ -312,7 +318,7 @@ const LiquidationsContent = () => {
           </div>
         </div>
       </div>
-      
+
       {modalType === "liquidate" && assetData && (
         <div className={ModalBackDropStyles.modalOverlay}>
           <div className={ModalBackDropStyles.modalContent}>

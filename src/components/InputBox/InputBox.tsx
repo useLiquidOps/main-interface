@@ -22,6 +22,75 @@ interface InputBoxProps {
   liquidationDiscount?: number;
 }
 
+interface TokenConfig {
+  [key: string]: number;
+  DAI: number;
+  stETH: number;
+  qAR: number;
+}
+
+const DECIMAL_PLACES: TokenConfig = {
+  DAI: 2,
+  stETH: 4,
+  qAR: 3,
+};
+
+const useInputValidation = (walletBalance: number) => {
+  const [showError, setShowError] = useState(false);
+
+  const validateInput = (numberValue: number) => {
+    if (numberValue > walletBalance) {
+      setShowError(true);
+      setTimeout(() => setShowError(false), 820);
+      return false;
+    }
+    return true;
+  };
+
+  return { showError, validateInput };
+};
+
+const useTokenFormatting = (ticker: string) => {
+  const formatTokenValue = (value: number, isLiquidationMode = false) => {
+    if (value === 0 && isLiquidationMode) return "0";
+    const decimals = DECIMAL_PLACES[ticker] || 2;
+    return value.toLocaleString("en-US", {
+      maximumFractionDigits: decimals,
+      minimumFractionDigits: decimals,
+    });
+  };
+
+  const formatDisplayValue = (value: string) => {
+    if (!value) return value;
+    const numberValue = parseFloat(value.replace(/,/g, ""));
+    return formatTokenValue(numberValue);
+  };
+
+  return { formatTokenValue, formatDisplayValue };
+};
+
+const useLiquidationCalculations = (
+  inputValue: string,
+  liquidationDiscount: number = 0,
+  formatTokenValue: (value: number) => string,
+) => {
+  const getBonusAmount = () => {
+    if (!inputValue || !liquidationDiscount) return "0";
+    const currentValue = parseFloat(inputValue.replace(/,/g, ""));
+    const bonusAmount = currentValue * (1 + liquidationDiscount / 100);
+    return formatTokenValue(bonusAmount);
+  };
+
+  const getProfit = () => {
+    if (!inputValue || !liquidationDiscount) return "0";
+    const baseAmount = parseFloat(inputValue.replace(/,/g, ""));
+    const bonusAmount = parseFloat(getBonusAmount().replace(/,/g, ""));
+    return formatTokenValue(bonusAmount - baseAmount);
+  };
+
+  return { getBonusAmount, getProfit };
+};
+
 const InputBox: React.FC<InputBoxProps> = ({
   inputValue,
   setInputValue,
@@ -35,29 +104,13 @@ const InputBox: React.FC<InputBoxProps> = ({
   liquidationMode = false,
   liquidationDiscount = 0,
 }) => {
-  const [showError, setShowError] = useState(false);
-
-  const getDecimalPlaces = (ticker: string) => {
-    switch (ticker) {
-      case "DAI":
-        return 2;
-      case "stETH":
-        return 4;
-      case "qAR":
-        return 3;
-      default:
-        return 2;
-    }
-  };
-
-  const formatTokenValue = (value: number) => {
-    const decimals = getDecimalPlaces(ticker);
-    if (value === 0 && liquidationMode) return "0";
-    return value.toLocaleString("en-US", {
-      maximumFractionDigits: decimals,
-      minimumFractionDigits: decimals,
-    });
-  };
+  const { showError, validateInput } = useInputValidation(walletBalance);
+  const { formatTokenValue, formatDisplayValue } = useTokenFormatting(ticker);
+  const { getBonusAmount, getProfit } = useLiquidationCalculations(
+    inputValue,
+    liquidationDiscount,
+    (value: number) => formatTokenValue(value, liquidationMode),
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
@@ -66,10 +119,7 @@ const InputBox: React.FC<InputBoxProps> = ({
     const numberValue = Number(formattedValue.replace(/,/g, ""));
 
     if (!isNaN(numberValue)) {
-      if (numberValue > walletBalance) {
-        setShowError(true);
-        setTimeout(() => setShowError(false), 820);
-      } else {
+      if (validateInput(numberValue)) {
         setInputValue(formattedValue);
       }
     } else if (formattedValue === "") {
@@ -77,26 +127,12 @@ const InputBox: React.FC<InputBoxProps> = ({
     }
   };
 
-  const getBonusAmount = () => {
-    if (!inputValue || !liquidationDiscount) return "0";
-    const currentValue = parseFloat(inputValue.replace(/,/g, ""));
-    const bonusAmount = currentValue * (1 + liquidationDiscount / 100);
-    return formatTokenValue(bonusAmount);
-  };
-
-  const formatDisplayValue = (value: string) => {
-    if (!value) return value;
-    const numberValue = parseFloat(value.replace(/,/g, ""));
-    return formatTokenValue(numberValue);
-  };
-
   const renderUsdValue = () => {
-    if (
-      liquidationMode &&
-      disabled &&
-      inputValue &&
-      parseFloat(inputValue) !== 0
-    ) {
+    const isLiquidationActive =
+      liquidationMode && disabled && inputValue && parseFloat(inputValue) !== 0;
+
+    if (isLiquidationActive) {
+      const profit = getProfit();
       return (
         <div className={styles.usdValueContainer}>
           <span className={styles.baseUsdValue}>
@@ -104,6 +140,9 @@ const InputBox: React.FC<InputBoxProps> = ({
           </span>
           <span className={styles.usdValue}>
             ≈{calculateUsdValue(getBonusAmount(), tokenToUsdRate)} USD
+          </span>
+          <span className={styles.profitValue}>
+            (+ {calculateUsdValue(profit, tokenToUsdRate)} USD)
           </span>
         </div>
       );
@@ -117,7 +156,10 @@ const InputBox: React.FC<InputBoxProps> = ({
   };
 
   const renderInput = () => {
-    const baseInput = (
+    const isLiquidationActive =
+      liquidationMode && disabled && inputValue && parseFloat(inputValue) !== 0;
+
+    const inputElement = (
       <input
         type="text"
         value={
@@ -134,24 +176,45 @@ const InputBox: React.FC<InputBoxProps> = ({
       />
     );
 
-    if (
-      liquidationMode &&
-      disabled &&
-      inputValue &&
-      parseFloat(inputValue) !== 0
-    ) {
+    if (isLiquidationActive) {
       return (
         <div className={styles.inputWithPrices}>
           <span className={styles.baseAmount}>
             {formatDisplayValue(inputValue)}
           </span>
-          {baseInput}
+          {inputElement}
         </div>
       );
     }
 
-    return baseInput;
+    return inputElement;
   };
+
+  const renderTokenInfo = () => (
+    <div className={styles.tokenSelector}>
+      <Image
+        src={`/tokens/${ticker}.svg`}
+        height={20}
+        width={20}
+        alt={ticker}
+      />
+      <span>{ticker}</span>
+    </div>
+  );
+
+  const renderWalletInfo = () =>
+    !disabled && (
+      <div className={styles.walletInfo}>
+        <Image src="/icons/wallet.svg" height={14} width={14} alt="Wallet" />
+        <span className={styles.balanceAmount}>
+          {formatNumberWithCommas(walletBalance)} {ticker}
+        </span>
+        <span className={styles.separator}>|</span>
+        <button className={styles.maxButton} onClick={onMaxClick}>
+          Max
+        </button>
+      </div>
+    );
 
   return (
     <div
@@ -165,32 +228,8 @@ const InputBox: React.FC<InputBoxProps> = ({
           <div className={styles.valueSection}>{renderUsdValue()}</div>
         </div>
         <div className={styles.rightSection}>
-          <div className={styles.tokenSelector}>
-            <Image
-              src={`/tokens/${ticker}.svg`}
-              height={20}
-              width={20}
-              alt={ticker}
-            />
-            <span>{ticker}</span>
-          </div>
-          {!disabled && (
-            <div className={styles.walletInfo}>
-              <Image
-                src="/icons/wallet.svg"
-                height={14}
-                width={14}
-                alt="Wallet"
-              />
-              <span className={styles.balanceAmount}>
-                {formatNumberWithCommas(walletBalance)} {ticker}
-              </span>
-              <span className={styles.separator}>|</span>
-              <button className={styles.maxButton} onClick={onMaxClick}>
-                Max
-              </button>
-            </div>
-          )}
+          {renderTokenInfo()}
+          {renderWalletInfo()}
         </div>
       </div>
     </div>

@@ -19,6 +19,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   ticker,
   onClose,
 }) => {
+  // TODO: get real fee
+  const networkFee = 0;
   const tokenData = headerTokensData.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
@@ -129,6 +131,10 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         currentPercentage={getCurrentPercentage()}
         onPercentageClick={handlePercentageClick}
       />
+
+      <div className={styles.infoRow}>
+        <span className={styles.infoLabel}>Network fee: {networkFee} AO</span>
+      </div>
 
       <SubmitButton />
     </div>

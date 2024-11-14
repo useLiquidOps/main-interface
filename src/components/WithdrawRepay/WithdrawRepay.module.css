@@ -90,3 +90,15 @@
   font-size: 14px;
   font-weight: 600;
 }
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  margin-bottom: 24px;
+}
+
+.infoLabel {
+  color: var(--secondary-periwinkle);
+  font-weight: 700;
+}

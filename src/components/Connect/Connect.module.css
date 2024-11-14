@@ -44,17 +44,7 @@
   padding: 15px;
   z-index: 1000;
   width: 200px;
-  opacity: 0;
   cursor: default;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.fadeIn {
-  opacity: 1;
-}
-
-.fadeOut {
-  opacity: 0;
 }
 
 .addressContainer {
@@ -112,6 +102,18 @@
   font-size: 14px;
   color: var(--primary-palatinate-blue);
   cursor: pointer;
-  transition: background-color 0.3s;
   font-weight: 600;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

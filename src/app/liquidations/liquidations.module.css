@@ -73,16 +73,6 @@
   border-radius: 8px;
   min-width: 120px;
   z-index: 1001;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.dropdown.fadeIn {
-  opacity: 1;
-}
-
-.dropdown.fadeOut {
-  opacity: 0;
 }
 
 .dropdownItem {
@@ -254,4 +244,17 @@
   color: var(--secondary-periwinkle);
   font-size: 15px;
   font-weight: 500;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

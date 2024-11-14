@@ -1,11 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import styles from "./Connect.module.css";
-import DropDownBackDropStyles from "../../components/DropDown/DropDownBackdrop.module.css";
 import Account from "arweave-account";
 import { useClickOutside } from "../utils/utils";
 import DropdownButton from "../DropDown/DropDown";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  dropdownVariants,
+  overlayVariants,
+} from "../../components/DropDown/FramerMotion";
 
 interface TokenInfo {
   symbol: string;
@@ -14,31 +18,20 @@ interface TokenInfo {
 }
 
 const Connect: React.FC = () => {
-  const connected = true; // TODO remove when arwkit fixed
-  const address = "psh5nUh3VF22Pr8LoV1K2blRNOOnoVH0BbZ85yRick"; // TODO replace with actual address when arwkit fixed
+  const connected = true;
+  const address = "psh5nUh3VF22Pr8LoV1K2blRNOOnoVH0BbZ85yRick";
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [isCopied, setIsCopied] = useState(false);
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() => {
-    closeDropdown();
+    setIsOpen(false);
   });
 
-  const closeDropdown = () => {
-    setIsClosing(true);
-    setIsOpen(false);
-    setTimeout(() => {
-      setIsClosing(false);
-      setIsVisible(false);
-    }, 300);
-  };
-
   const tokens: TokenInfo[] = [
-    { symbol: "DAI", balance: 1736.55, icon: "/tokens/DAI.svg" }, // TODO: render from somewhere
-    { symbol: "qAR", balance: 3745.62, icon: "/tokens/qAR.svg" }, // TODO: render from somewhere
-    { symbol: "stETH", balance: 394.11, icon: "/tokens/stETH.svg" }, // TODO: render from somewhere
+    { symbol: "DAI", balance: 1736.55, icon: "/tokens/DAI.svg" },
+    { symbol: "qAR", balance: 3745.62, icon: "/tokens/qAR.svg" },
+    { symbol: "stETH", balance: 394.11, icon: "/tokens/stETH.svg" },
   ];
 
   const shortenAddress = (addr: string): string => {
@@ -74,10 +67,9 @@ const Connect: React.FC = () => {
         });
         try {
           const profileData = await account.get(address);
-          console.log(profileData);
           setProfile(profileData);
         } catch (error) {
-          //   console.error("Error fetching profile:", error); TODO uncomment when bazar profile ready
+          // Handle error
         }
       }
     };
@@ -96,40 +88,39 @@ const Connect: React.FC = () => {
   const handleLogout = async () => {
     try {
       console.log("logout");
-      closeDropdown();
+      setIsOpen(false);
     } catch (error) {
       console.error("Error logging out:", error);
     }
   };
 
-  const toggleDropdown = () => {
-    if (!isOpen) {
-      setIsVisible(true);
-      setIsOpen(true);
-      setIsClosing(false);
-    } else {
-      closeDropdown();
-    }
-  };
-
   return (
     <>
-      {isVisible && (
-        <div
-          className={`${DropDownBackDropStyles.overlay} ${isClosing ? DropDownBackDropStyles.closing : ""}`}
-          onClick={closeDropdown}
-        />
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className={styles.overlay}
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={() => setIsOpen(false)}
+          />
+        )}
+      </AnimatePresence>
       <div className={styles.connectContainer} ref={dropdownRef}>
         {connected && address ? (
           <div
             className={styles.profileContainer}
             onClick={(e) => {
               e.stopPropagation();
-              toggleDropdown();
+              setIsOpen(!isOpen);
             }}
           >
-            <DropdownButton isOpen={isOpen} onToggle={toggleDropdown} />
+            <DropdownButton
+              isOpen={isOpen}
+              onToggle={() => setIsOpen(!isOpen)}
+            />
             <Image
               src={profile?.profile?.avatarURL || "/icons/user.svg"}
               alt="Profile image"
@@ -137,52 +128,58 @@ const Connect: React.FC = () => {
               height={32}
               className={styles.connectImage}
             />
-            {isVisible && (
-              <div
-                className={`${styles.dropdown} ${isOpen ? styles.fadeIn : styles.fadeOut}`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className={styles.addressContainer}>
-                  <span>{shortenAddress(address)}</span>
-                  <button
-                    className={styles.copyButton}
-                    onClick={() => copyToClipboard(address)}
-                  >
-                    <Image
-                      src={
-                        isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"
-                      }
-                      alt="Copy"
-                      width={14}
-                      height={14}
-                    />
-                  </button>
-                </div>
-
-                {tokens.map((token, index) => (
-                  <div key={index} className={styles.balance}>
-                    <Image
-                      src={token.icon}
-                      alt={token.symbol}
-                      width={24}
-                      height={24}
-                    />
-                    <span>
-                      {formatBalance(token.balance)} {token.symbol}
-                    </span>
+            <AnimatePresence>
+              {isOpen && (
+                <motion.div
+                  className={styles.dropdown}
+                  variants={dropdownVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className={styles.addressContainer}>
+                    <span>{shortenAddress(address)}</span>
+                    <button
+                      className={styles.copyButton}
+                      onClick={() => copyToClipboard(address)}
+                    >
+                      <Image
+                        src={
+                          isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"
+                        }
+                        alt="Copy"
+                        width={14}
+                        height={14}
+                      />
+                    </button>
                   </div>
-                ))}
 
-                <div className={styles.logoutButtonContainer}>
-                  <button
-                    className={styles.logoutButton}
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
+                  {tokens.map((token, index) => (
+                    <div key={index} className={styles.balance}>
+                      <Image
+                        src={token.icon}
+                        alt={token.symbol}
+                        width={24}
+                        height={24}
+                      />
+                      <span>
+                        {formatBalance(token.balance)} {token.symbol}
+                      </span>
+                    </div>
+                  ))}
+
+                  <div className={styles.logoutButtonContainer}>
+                    <button
+                      className={styles.logoutButton}
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         ) : (
           <button className={styles.connectButton} onClick={handleConnectClick}>

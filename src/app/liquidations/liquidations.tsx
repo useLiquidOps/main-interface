@@ -1,6 +1,5 @@
 "use client";
 import styles from "./liquidations.module.css";
-import DropDownBackDropStyles from "../../components/DropDown/DropDownBackdrop.module.css";
 import ModalBackDropStyles from "../../components/DropDown/ModalBackdrop.module.css";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
@@ -9,6 +8,11 @@ import { liquidationsData, tokens } from "../data";
 import DropdownButton from "@/components/DropDown/DropDown";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
 import LiquidateTab from "./LiquidateTab/LiquidateTab";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  dropdownVariants,
+  overlayVariants,
+} from "../../components/DropDown/FramerMotion";
 
 interface TokenInfo {
   symbol: string;
@@ -19,10 +23,6 @@ const LiquidationsContent = () => {
   const [mounted, setMounted] = useState(false);
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
   const [showSendDropdown, setShowSendDropdown] = useState(false);
-  const [isModalClosing, setIsModalClosing] = useState(false);
-  const [isReceiveClosing, setIsReceiveClosing] = useState(false);
-  const [isSendClosing, setIsSendClosing] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedReceiveToken, setSelectedReceiveToken] = useState<TokenInfo>({
     symbol: "All tokens",
     imagePath: "/icons/list.svg",
@@ -33,36 +33,9 @@ const LiquidationsContent = () => {
   });
   const { modalType, assetData, openModal, closeModal } = useModal();
 
-  const handleClose = () => {
-    setIsModalClosing(true);
-    setTimeout(() => {
-      closeModal();
-      setIsModalClosing(false);
-    }, 300);
-  };
-
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const handleClickOutside = () => {
-    if (showReceiveDropdown) {
-      setIsReceiveClosing(true);
-      setIsDropdownOpen(false);
-      setTimeout(() => {
-        setShowReceiveDropdown(false);
-        setIsReceiveClosing(false);
-      }, 300);
-    }
-    if (showSendDropdown) {
-      setIsSendClosing(true);
-      setIsDropdownOpen(false);
-      setTimeout(() => {
-        setShowSendDropdown(false);
-        setIsSendClosing(false);
-      }, 300);
-    }
-  };
 
   const getConversionRate = (fromPrice: number, toPrice: number) => {
     return fromPrice / toPrice;
@@ -102,39 +75,34 @@ const LiquidationsContent = () => {
   }, [selectedReceiveToken.symbol, selectedSendToken.symbol]);
 
   const toggleReceiveDropdown = () => {
-    if (!showReceiveDropdown) {
-      setShowReceiveDropdown(true);
-      setIsReceiveClosing(false);
-      setIsDropdownOpen(true);
-      setShowSendDropdown(false);
-    } else {
-      handleClickOutside();
-    }
+    setShowReceiveDropdown(!showReceiveDropdown);
+    setShowSendDropdown(false);
   };
 
   const toggleSendDropdown = () => {
-    if (!showSendDropdown) {
-      setShowSendDropdown(true);
-      setIsSendClosing(false);
-      setIsDropdownOpen(true);
-      setShowReceiveDropdown(false);
-    } else {
-      handleClickOutside();
-    }
+    setShowSendDropdown(!showSendDropdown);
+    setShowReceiveDropdown(false);
   };
 
-  if (!mounted) {
-    return null;
-  }
+  if (!mounted) return null;
 
   return (
     <div className={styles.page}>
-      {(showReceiveDropdown || showSendDropdown) && (
-        <div
-          className={`${DropDownBackDropStyles.overlay} ${isReceiveClosing || isSendClosing ? DropDownBackDropStyles.closing : ""}`}
-          onClick={handleClickOutside}
-        />
-      )}
+      <AnimatePresence>
+        {(showReceiveDropdown || showSendDropdown) && (
+          <motion.div
+            className={styles.modalOverlay}
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={() => {
+              setShowReceiveDropdown(false);
+              setShowSendDropdown(false);
+            }}
+          />
+        )}
+      </AnimatePresence>
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
@@ -161,30 +129,36 @@ const LiquidationsContent = () => {
                     onToggle={toggleSendDropdown}
                   />
                 </button>
-                {showSendDropdown && (
-                  <div
-                    className={`${styles.dropdown} ${isDropdownOpen ? styles.fadeIn : styles.fadeOut}`}
-                  >
-                    {sendTokens.map((token) => (
-                      <div
-                        key={token.symbol}
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                          setSelectedSendToken(token);
-                          handleClickOutside();
-                        }}
-                      >
-                        <Image
-                          src={token.imagePath}
-                          alt={token.symbol}
-                          width={16}
-                          height={16}
-                        />
-                        <span>{token.symbol}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <AnimatePresence>
+                  {showSendDropdown && (
+                    <motion.div
+                      className={styles.dropdown}
+                      variants={dropdownVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+                      {sendTokens.map((token) => (
+                        <div
+                          key={token.symbol}
+                          className={styles.dropdownItem}
+                          onClick={() => {
+                            setSelectedSendToken(token);
+                            setShowSendDropdown(false);
+                          }}
+                        >
+                          <Image
+                            src={token.imagePath}
+                            alt={token.symbol}
+                            width={16}
+                            height={16}
+                          />
+                          <span>{token.symbol}</span>
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
             <div className={styles.filterGroup}>
@@ -209,30 +183,36 @@ const LiquidationsContent = () => {
                     onToggle={toggleReceiveDropdown}
                   />
                 </button>
-                {showReceiveDropdown && (
-                  <div
-                    className={`${styles.dropdown} ${isDropdownOpen ? styles.fadeIn : styles.fadeOut}`}
-                  >
-                    {receiveTokens.map((token) => (
-                      <div
-                        key={token.symbol}
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                          setSelectedReceiveToken(token);
-                          handleClickOutside();
-                        }}
-                      >
-                        <Image
-                          src={token.imagePath}
-                          alt={token.symbol}
-                          width={16}
-                          height={16}
-                        />
-                        <span>{token.symbol}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <AnimatePresence>
+                  {showReceiveDropdown && (
+                    <motion.div
+                      className={styles.dropdown}
+                      variants={dropdownVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+                      {receiveTokens.map((token) => (
+                        <div
+                          key={token.symbol}
+                          className={styles.dropdownItem}
+                          onClick={() => {
+                            setSelectedReceiveToken(token);
+                            setShowReceiveDropdown(false);
+                          }}
+                        >
+                          <Image
+                            src={token.imagePath}
+                            alt={token.symbol}
+                            width={16}
+                            height={16}
+                          />
+                          <span>{token.symbol}</span>
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -338,15 +318,12 @@ const LiquidationsContent = () => {
           </div>
         </div>
       </div>
+
       {modalType === "liquidate" && assetData && (
-        <div
-          className={`${ModalBackDropStyles.modalOverlay} ${isModalClosing ? ModalBackDropStyles.closing : ""}`}
-        >
-          <div
-            className={`${ModalBackDropStyles.modalContent} ${isModalClosing ? ModalBackDropStyles.closing : ""}`}
-          >
+        <div className={ModalBackDropStyles.modalOverlay}>
+          <div className={ModalBackDropStyles.modalContent}>
             <LiquidateTab
-              onClose={handleClose}
+              onClose={closeModal}
               fromToken={assetData.fromToken}
               toToken={assetData.toToken}
               offMarketPrice={assetData.offMarketPrice}

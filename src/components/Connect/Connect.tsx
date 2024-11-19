@@ -23,6 +23,7 @@ declare global {
 }
 
 const Connect: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +40,10 @@ const Connect: React.FC = () => {
   ];
 
   const checkWalletConnection = async () => {
-    if (typeof window === "undefined" || !window.arweaveWallet) return;
+    if (typeof window === "undefined" || !window.arweaveWallet) {
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const permissions = await window.arweaveWallet.getPermissions();
@@ -51,6 +55,7 @@ const Connect: React.FC = () => {
     } catch (error) {
       console.error("Wallet initialization error:", error);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -98,7 +103,6 @@ const Connect: React.FC = () => {
     try {
       await window.arweaveWallet.connect(
         ["ACCESS_ADDRESS", "SIGN_TRANSACTION"],
-
         {
           name: "LiquidOps",
           logo: "https://arweave.net/crrW3xFrtKTdEODVu08XCJB_XPpqhlNDG2f8H8O4iSw",
@@ -109,6 +113,10 @@ const Connect: React.FC = () => {
       console.error("Connection error:", error);
     }
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <>

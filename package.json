@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@permaweb/aoconnect": "^0.0.59",
-    "arweave-account": "^1.4.3",
     "axios": "^1.7.7",
     "framer-motion": "^11.11.16",
     "next": "14.2.15",

@@ -19,8 +19,9 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   ticker,
   onClose,
 }) => {
-  // TODO: get real fee
+  // TODO: get real fee + interest owed
   const networkFee = 0;
+  const interestOwed = 10;
   const tokenData = headerTokensData.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
@@ -65,6 +66,11 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
     const percentage = (numberValue / maxAmount) * 100;
     return Math.min(100, Math.max(0, percentage));
+  };
+
+  const handleInterestClick = () => {
+    setInputValue(formatMaxAmount(interestOwed));
+    setSelectedPercentage(null);
   };
 
   return (
@@ -130,6 +136,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         selectedPercentage={selectedPercentage}
         currentPercentage={getCurrentPercentage()}
         onPercentageClick={handlePercentageClick}
+        interestOwed={interestOwed}
+        onInterestClick={handleInterestClick}
       />
 
       <div className={styles.infoRow}>

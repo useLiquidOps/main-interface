@@ -37,7 +37,7 @@ const HomeContent = ({
               assets={AssetDisplayData}
               maxYield="5.1"
             />
-            <AssetDisplay mode="borrow" assets={[]} />
+            <AssetDisplay mode="borrow" assets={AssetDisplayData} />
           </div>
         </div>
       </div>

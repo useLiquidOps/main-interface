@@ -22,7 +22,7 @@
 
 .balance {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   margin-bottom: 16px;
   line-height: 1;
 }
@@ -41,7 +41,7 @@
   line-height: 1;
 }
 
-.currency {
+.amount span {
   font-size: 30px;
   color: var(--secondary-slate-blue);
   font-weight: 500;
@@ -67,7 +67,7 @@
   justify-content: center;
   gap: 8px;
   width: fit-content;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .supplyButton {

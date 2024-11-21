@@ -4,26 +4,31 @@ import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import Image from "next/image";
 import InputBox from "@/components/InputBox/InputBox";
 import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
+import DropdownButton from "@/components/DropDown/DropDown";
+
+interface TokenData {
+  name: string;
+  symbol: string;
+  icon: string;
+  available: number;
+  price: number;
+}
 
 interface LiquidateTabProps {
   onClose: () => void;
+  fromToken: TokenData;
+  toToken: TokenData;
+  offMarketPrice: number;
+  conversionRate: number;
 }
 
-const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
-  const dummyData = {
-    fromToken: {
-      symbol: "qAR",
-      available: 1000000,
-      price: 1,
-    },
-    toToken: {
-      symbol: "stETH",
-      available: 100,
-      price: 2000,
-    },
-    conversionRate: 0.0005,
-  };
-
+const LiquidateTab: React.FC<LiquidateTabProps> = ({
+  onClose,
+  fromToken,
+  toToken,
+  offMarketPrice,
+  conversionRate,
+}) => {
   // Input states for the first (from) token
   const [fromInputValue, setFromInputValue] = useState("");
   const [isFromFocused, setIsFromFocused] = useState(false);
@@ -35,10 +40,13 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
   const [toInputValue, setToInputValue] = useState("");
   const [isToFocused, setIsToFocused] = useState(false);
 
-  // Placeholder values
-  const tokenToUsdRate = 15;
-  const walletBalance = dummyData.fromToken.available;
-  const offMarketPrice = 8;
+  // Slippage states
+  const [isSlippageOpen, setIsSlippageOpen] = useState(false);
+  const maxSlippage = 5;
+
+  const toggleSlippage = () => {
+    setIsSlippageOpen(!isSlippageOpen);
+  };
 
   useEffect(() => {
     if (fromInputValue === "") {
@@ -48,7 +56,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
 
     const fromAmount = parseFloat(fromInputValue.replace(/,/g, ""));
     if (!isNaN(fromAmount)) {
-      const convertedAmount = fromAmount * dummyData.conversionRate;
+      const convertedAmount = fromAmount * conversionRate;
       setToInputValue(
         convertedAmount.toLocaleString("en-US", {
           maximumFractionDigits: 6,
@@ -56,15 +64,15 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
         }),
       );
     }
-  }, [fromInputValue]);
+  }, [fromInputValue, conversionRate]);
 
   const handleFromMaxClick = () => {
-    setFromInputValue(walletBalance.toString());
+    setFromInputValue(fromToken.available.toString());
     setSelectedPercentage(100);
   };
 
   const handlePercentageClick = (percentage: number) => {
-    const amount = (walletBalance * percentage) / 100;
+    const amount = (fromToken.available * percentage) / 100;
     setFromInputValue(
       amount.toLocaleString("en-US", {
         maximumFractionDigits: 2,
@@ -75,12 +83,12 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
   };
 
   const getCurrentPercentage = () => {
-    if (!fromInputValue || walletBalance === 0) return 0;
+    if (!fromInputValue || fromToken.available === 0) return 0;
 
     const numberValue = Number(fromInputValue.replace(/,/g, ""));
     if (isNaN(numberValue)) return 0;
 
-    const percentage = (numberValue / walletBalance) * 100;
+    const percentage = (numberValue / fromToken.available) * 100;
     return Math.min(100, Math.max(0, percentage));
   };
 
@@ -88,7 +96,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
     <div className={styles.liquidateTab}>
       <div className={styles.titleContainer}>
         <p className={styles.title}>
-          Liquidate {dummyData.fromToken.symbol}/{dummyData.toToken.symbol}
+          Liquidate {toToken.symbol}/{fromToken.symbol}
         </p>
         <button className={styles.close} onClick={onClose}>
           <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
@@ -100,9 +108,9 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
         setInputValue={setFromInputValue}
         isFocused={isFromFocused}
         setIsFocused={setIsFromFocused}
-        ticker={dummyData.fromToken.symbol}
-        tokenToUsdRate={tokenToUsdRate}
-        walletBalance={walletBalance}
+        ticker={fromToken.symbol}
+        tokenToUsdRate={fromToken.price}
+        walletBalance={fromToken.available}
         onMaxClick={handleFromMaxClick}
       />
 
@@ -121,11 +129,13 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
         setInputValue={setToInputValue}
         isFocused={isToFocused}
         setIsFocused={setIsToFocused}
-        ticker={dummyData.toToken.symbol}
-        tokenToUsdRate={tokenToUsdRate}
-        walletBalance={dummyData.toToken.available}
+        ticker={toToken.symbol}
+        tokenToUsdRate={toToken.price}
+        walletBalance={toToken.available}
         onMaxClick={() => {}}
         disabled={true}
+        liquidationMode={true}
+        liquidationDiscount={offMarketPrice}
       />
 
       <PercentagePicker
@@ -145,6 +155,11 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({ onClose }) => {
         <p className={styles.offMarketPriceText}>
           {offMarketPrice}% off market price
         </p>
+      </div>
+
+      <div className={styles.slippageButton}>
+        <p>Max. slippage: {maxSlippage}%</p>
+        <DropdownButton isOpen={isSlippageOpen} onToggle={toggleSlippage} />
       </div>
 
       <SubmitButton />

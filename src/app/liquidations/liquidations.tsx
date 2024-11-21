@@ -7,6 +7,11 @@ import { liquidationsData, tokens } from "../data";
 import DropdownButton from "@/components/DropDown/DropDown";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
 import LiquidateTab from "./LiquidateTab/LiquidateTab";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  overlayVariants,
+  dropdownVariants,
+} from "@/components/DropDown/FramerMotion";
 
 interface TokenInfo {
   symbol: string;
@@ -17,7 +22,6 @@ const LiquidationsContent = () => {
   const [mounted, setMounted] = useState(false);
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
   const [showSendDropdown, setShowSendDropdown] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
   const [selectedReceiveToken, setSelectedReceiveToken] = useState<TokenInfo>({
     symbol: "All tokens",
     imagePath: "/icons/list.svg",
@@ -26,27 +30,25 @@ const LiquidationsContent = () => {
     symbol: "All tokens",
     imagePath: "/icons/list.svg",
   });
-  const { modalType, openModal, closeModal } = useModal();
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      closeModal();
-      setIsClosing(false);
-    }, 300);
-  };
+  const { modalType, assetData, openModal, closeModal } = useModal();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const handleClickOutside = () => {
-    setShowReceiveDropdown(false);
-    setShowSendDropdown(false);
+  const getConversionRate = (fromPrice: number, toPrice: number) => {
+    return fromPrice / toPrice;
   };
 
   const handleLiquidate = (liquidation: any) => {
-    openModal("liquidate", liquidation);
+    const enhancedLiquidation = {
+      ...liquidation,
+      conversionRate: getConversionRate(
+        liquidation.fromToken.price,
+        liquidation.toToken.price,
+      ),
+    };
+    openModal("liquidate", enhancedLiquidation);
   };
 
   const receiveTokens = useMemo(
@@ -81,14 +83,27 @@ const LiquidationsContent = () => {
     setShowReceiveDropdown(false);
   };
 
-  if (!mounted) {
-    return null;
-  }
+  if (!mounted) return null;
 
   return (
     <div className={styles.page}>
+      <AnimatePresence>
+        {(showReceiveDropdown || showSendDropdown) && (
+          <motion.div
+            className={styles.modalOverlay}
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={() => {
+              setShowReceiveDropdown(false);
+              setShowSendDropdown(false);
+            }}
+          />
+        )}
+      </AnimatePresence>
       <Header />
-      <div className={styles.body} onClick={handleClickOutside}>
+      <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <div className={styles.filterContainer}>
             <div className={styles.filterGroup}>
@@ -113,28 +128,36 @@ const LiquidationsContent = () => {
                     onToggle={toggleSendDropdown}
                   />
                 </button>
-                {showSendDropdown && (
-                  <div className={styles.dropdown}>
-                    {sendTokens.map((token) => (
-                      <div
-                        key={token.symbol}
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                          setSelectedSendToken(token);
-                          setShowSendDropdown(false);
-                        }}
-                      >
-                        <Image
-                          src={token.imagePath}
-                          alt={token.symbol}
-                          width={16}
-                          height={16}
-                        />
-                        <span>{token.symbol}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <AnimatePresence>
+                  {showSendDropdown && (
+                    <motion.div
+                      className={styles.dropdown}
+                      variants={dropdownVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+                      {sendTokens.map((token) => (
+                        <div
+                          key={token.symbol}
+                          className={styles.dropdownItem}
+                          onClick={() => {
+                            setSelectedSendToken(token);
+                            setShowSendDropdown(false);
+                          }}
+                        >
+                          <Image
+                            src={token.imagePath}
+                            alt={token.symbol}
+                            width={16}
+                            height={16}
+                          />
+                          <span>{token.symbol}</span>
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
             <div className={styles.filterGroup}>
@@ -159,28 +182,36 @@ const LiquidationsContent = () => {
                     onToggle={toggleReceiveDropdown}
                   />
                 </button>
-                {showReceiveDropdown && (
-                  <div className={styles.dropdown}>
-                    {receiveTokens.map((token) => (
-                      <div
-                        key={token.symbol}
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                          setSelectedReceiveToken(token);
-                          setShowReceiveDropdown(false);
-                        }}
-                      >
-                        <Image
-                          src={token.imagePath}
-                          alt={token.symbol}
-                          width={16}
-                          height={16}
-                        />
-                        <span>{token.symbol}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <AnimatePresence>
+                  {showReceiveDropdown && (
+                    <motion.div
+                      className={styles.dropdown}
+                      variants={dropdownVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+                      {receiveTokens.map((token) => (
+                        <div
+                          key={token.symbol}
+                          className={styles.dropdownItem}
+                          onClick={() => {
+                            setSelectedReceiveToken(token);
+                            setShowReceiveDropdown(false);
+                          }}
+                        >
+                          <Image
+                            src={token.imagePath}
+                            alt={token.symbol}
+                            width={16}
+                            height={16}
+                          />
+                          <span>{token.symbol}</span>
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -241,19 +272,25 @@ const LiquidationsContent = () => {
                     </div>
 
                     <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>{liquidation.profit}</p>
+                      <p className={styles.metricValue}>
+                        {liquidation.toToken.available}{" "}
+                        {liquidation.toToken.symbol}
+                      </p>
                       <p className={styles.metricLabel}>Profit</p>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.available}
+                        {liquidation.toToken.available}{" "}
+                        {liquidation.toToken.symbol}
                       </p>
                       <p className={styles.metricLabel}>Available</p>
                     </div>
 
                     <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>{liquidation.price}</p>
+                      <p className={styles.metricValue}>
+                        {liquidation.fromToken.price} USD
+                      </p>
                       <p className={styles.metricLabel}>Price</p>
                     </div>
                   </div>
@@ -280,17 +317,36 @@ const LiquidationsContent = () => {
           </div>
         </div>
       </div>
-      {modalType === "liquidate" && (
-        <div
-          className={`${styles.modalOverlay} ${isClosing ? styles.closing : ""}`}
-        >
-          <div
-            className={`${styles.modalContent} ${isClosing ? styles.closing : ""}`}
+
+      <AnimatePresence>
+        {modalType === "liquidate" && assetData && (
+          <motion.div
+            className={styles.modalOverlay}
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={closeModal}
           >
-            <LiquidateTab onClose={handleClose} />
-          </div>
-        </div>
-      )}
+            <motion.div
+              className={styles.modalContent}
+              variants={dropdownVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <LiquidateTab
+                onClose={closeModal}
+                fromToken={assetData.fromToken}
+                toToken={assetData.toToken}
+                offMarketPrice={assetData.offMarketPrice}
+                conversionRate={assetData.conversionRate}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

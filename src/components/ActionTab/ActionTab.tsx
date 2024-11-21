@@ -5,6 +5,7 @@ import SubmitButton from "../SubmitButton/SubmitButton";
 import InputBox from "../InputBox/InputBox";
 import styles from "./ActionTab.module.css";
 import { formatMaxAmount } from "../utils/utils";
+import { headerTokensData } from "@/app/data";
 
 interface ActionTabProps {
   ticker: string;
@@ -12,12 +13,15 @@ interface ActionTabProps {
 }
 
 const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
+  const tokenData = headerTokensData.find(
+    (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
+  );
+
   // TODO: get real variables
   const tokenToUsdRate = 15;
   const walletBalance = 4819.93;
   const utilizationRate = 0.75;
-  const estimatedApy = 4.33;
-  const networkFee = 0.000001;
+  const networkFee = 0;
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -56,7 +60,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         <div className={styles.infoDetails}>
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>
-              {mode === "supply" ? "Supply" : "Borrow"} APY: {estimatedApy}%
+              {mode === "supply" ? "Supply" : "Borrow"} APY: {tokenData?.APR}%
             </span>
           </div>
           <div className={styles.infoRow}>

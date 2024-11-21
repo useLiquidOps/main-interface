@@ -51,7 +51,6 @@
   font-weight: 500;
   padding: 10px 15px;
   border-radius: 9px;
-  transition: background-color 0.3s ease;
 }
 
 .navLinks p {
@@ -103,6 +102,7 @@
 }
 
 .tokenDropdownContent {
+  cursor: default;
   position: absolute;
   top: 100%;
   left: 0;
@@ -111,16 +111,11 @@
   z-index: 1000;
   border-radius: 12px;
   padding: 15px;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.fadeIn {
-  opacity: 1;
-}
-
-.fadeOut {
-  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .tokenDropdownItem {
@@ -137,7 +132,6 @@
   cursor: pointer;
   font-family: "DM Sans", sans-serif;
   font-size: 14px;
-  margin-top: 10px;
 }
 
 .tokenInfo {
@@ -190,4 +184,17 @@
   font-size: 14px;
   font-weight: 500;
   margin-top: 10px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

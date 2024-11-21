@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styles from "./AssetDisplay.module.css";
 import Image from "next/image";
-import Link from "next/link";
 import { useModal } from "../PopUp/PopUp";
 
 interface Asset {
@@ -57,7 +56,8 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
     mode === "lend" ? styles.lendContainer : styles.borrowContainer
   } ${showAll ? styles.expanded : ""}`;
 
-  const handleActionClick = (asset: Asset) => {
+  const handleActionClick = (asset: Asset, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     openModal(mode === "lend" ? "withdraw" : "repay", asset);
   };
 
@@ -98,17 +98,14 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
             <div
               key={`${mode}-${asset.name}-${index}`}
               className={styles.assetRowWrapper}
+              onClick={() => handleActionClick(asset)}
+              style={{ cursor: "pointer" }}
             >
-              <Link
-                href={`/${asset.symbol.toLowerCase()}`}
-                className={styles.assetRow}
-              >
+              <div className={styles.assetRow}>
                 <div className={styles.assetInfo}>
                   <div className={styles.iconWrapper}>
                     <Image
-                      src={
-                        mode === "lend" ? asset.oIcon || asset.icon : asset.icon
-                      }
+                      src={asset.icon}
                       alt={asset.name}
                       width={40}
                       height={40}
@@ -141,13 +138,10 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
                     <p className={styles.change}>{asset.change}%</p>
                   </div>
                 </div>
-              </Link>
+              </div>
               <button
                 className={styles.withdrawButton}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleActionClick(asset);
-                }}
+                onClick={(e) => handleActionClick(asset, e)}
               >
                 <Image
                   src={displayText.actionIcon}

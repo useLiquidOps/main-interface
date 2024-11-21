@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import styles from "./home.module.css";
 import Header from "../../components/Header/Header";
 import ProtocolBalance from "./ProtocolBalance/ProtocolBalance";
@@ -9,6 +9,11 @@ import AssetDisplay from "./AssetDisplay/AssetDisplay";
 import { AssetDisplayData } from "../data";
 import WithdrawRepay from "@/components/WithdrawRepay/WithdrawRepay";
 import { useModal, ModalProvider } from "./PopUp/PopUp";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  overlayVariants,
+  dropdownVariants,
+} from "@/components/DropDown/FramerMotion";
 
 const HomeContent = ({
   params,
@@ -16,16 +21,7 @@ const HomeContent = ({
   params: { ticker: string; tab: string };
 }) => {
   const { modalType, assetData, closeModal } = useModal();
-  const [isClosing, setIsClosing] = useState(false);
   const ticker = params.ticker as string;
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      closeModal();
-      setIsClosing(false);
-    }, 300);
-  };
 
   return (
     <div className={styles.page}>
@@ -41,25 +37,37 @@ const HomeContent = ({
               assets={AssetDisplayData}
               maxYield="5.1"
             />
-            <AssetDisplay mode="borrow" assets={[]} />
+            <AssetDisplay mode="borrow" assets={AssetDisplayData} />
           </div>
         </div>
       </div>
-      {modalType && (
-        <div
-          className={`${styles.modalOverlay} ${isClosing ? styles.closing : ""}`}
-        >
-          <div
-            className={`${styles.modalContent} ${isClosing ? styles.closing : ""}`}
+      <AnimatePresence>
+        {modalType && (
+          <motion.div
+            className={styles.modalOverlay}
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={closeModal}
           >
-            <WithdrawRepay
-              mode={modalType as "withdraw" | "repay"}
-              ticker={assetData?.symbol || ticker}
-              onClose={handleClose}
-            />
-          </div>
-        </div>
-      )}
+            <motion.div
+              className={styles.modalContent}
+              variants={dropdownVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <WithdrawRepay
+                mode={modalType as "withdraw" | "repay"}
+                ticker={assetData?.symbol || ticker}
+                onClose={closeModal}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

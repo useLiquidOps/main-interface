@@ -11,9 +11,9 @@
   width: 100%;
   font-size: 15px;
   background: var(--primary-ghost-white);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 12px;
-  padding: 16px 16px;
+  padding: 14px 16px;
   outline: none;
   color: var(--primary-ultramarine);
   font-family: "DM Sans", sans-serif;

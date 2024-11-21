@@ -107,7 +107,7 @@
   top: 100%;
   left: 0;
   background-color: white;
-  width: 275px;
+  width: auto;
   z-index: 1000;
   border-radius: 12px;
   padding: 15px;
@@ -128,10 +128,21 @@
   border: none;
   background: none;
   width: 100%;
+  gap: 1rem;
   text-align: left;
   cursor: pointer;
   font-family: "DM Sans", sans-serif;
   font-size: 14px;
+  border-radius: 12px;
+  transition: all .27s ease;
+}
+
+.tokenDropdownItem:hover {
+  background-color: var(--primary-ghost-white);
+}
+
+.tokenDropdownItem p {
+  white-space: nowrap;
 }
 
 .tokenInfo {

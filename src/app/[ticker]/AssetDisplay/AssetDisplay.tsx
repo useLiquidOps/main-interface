@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./AssetDisplay.module.css";
 import Image from "next/image";
 import { useModal } from "../PopUp/PopUp";
@@ -52,17 +52,13 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
 
   const displayText = getDisplayText();
 
-  const containerClass = `${styles.container} ${
-    mode === "lend" ? styles.lendContainer : styles.borrowContainer
-  } ${showAll ? styles.expanded : ""}`;
-
   const handleActionClick = (asset: Asset, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     openModal(mode === "lend" ? "withdraw" : "repay", asset);
   };
 
   return (
-    <div className={containerClass}>
+    <div className={styles.container + " " + (showAll ? styles.expanded : "")}>
       <div className={styles.header}>
         <h2 className={styles.title}>{displayText.title}</h2>
         {assets.length > 4 &&

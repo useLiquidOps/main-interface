@@ -24,8 +24,18 @@ const Markets = () => {
         <div className={styles.bodyContainer}>
           <div className={styles.marketsList}>
             {statsQueries.map(({ symbol, stats, icon, headerData, price }) => {
-              if (stats.isLoading) return null;
-              if (!stats.data || !headerData) return null;
+              const isLoading = stats.isLoading || !stats.data || !headerData;
+              const data = isLoading
+                ? {
+                    apr: 0,
+                    protocolBalance: 0,
+                    available: "0",
+                    lent: "0",
+                    utilizationRate: 0,
+                  }
+                : stats.data;
+
+              const tokenPrice = price?.price || 0;
 
               return (
                 <Link
@@ -39,23 +49,23 @@ const Markets = () => {
                         <div className={styles.iconWrapper}>
                           <Image
                             src={icon}
-                            alt={headerData.name}
+                            alt={headerData?.name || symbol}
                             width={40}
                             height={40}
                           />
                         </div>
                         <div className={styles.nameSymbol}>
-                          <h2 className={styles.name}>{headerData.name}</h2>
+                          <h2 className={styles.name}>{headerData?.name || symbol}</h2>
                           <p className={styles.symbol}>{symbol}</p>
                         </div>
                       </div>
 
                       <div className={styles.aprInfo}>
                         <div className={styles.aprValue}>
-                          <p className={styles.apr}>{stats.data.apr}%</p>
+                          <p className={styles.apr}>{data.apr.toFixed(2)}%</p>
                           <Image
                             src={
-                              headerData.percentChange.outcome
+                              headerData?.percentChange.outcome
                                 ? "/icons/APRUp.svg"
                                 : "/icons/APRDown.svg"
                             }
@@ -69,34 +79,32 @@ const Markets = () => {
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {formatTMB(
-                            Number(stats.data.protocolBalance) * price.price,
-                          )}{" "}
+                          {formatTMB(Number(data.protocolBalance) * tokenPrice)}{" "}
                           USD
                         </p>
                         <p className={styles.metricLabel}>
-                          {formatTMB(Number(stats.data.protocolBalance))}{" "}
+                          {formatTMB(Number(data.protocolBalance))}{" "}
                           {symbol} TVL
                         </p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {formatTMB(Number(stats.data.available))} USD
+                          {formatTMB(Number(data.available))} USD
                         </p>
                         <p className={styles.metricLabel}>Available</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {formatTMB(Number(stats.data.lent))} USD
+                          {formatTMB(Number(data.lent))} USD
                         </p>
                         <p className={styles.metricLabel}>Borrowed</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {stats.data.utilizationRate.toFixed(2)}%
+                          {data.utilizationRate.toFixed(2)}%
                         </p>
                         <p className={styles.metricLabel}>Utilization</p>
                       </div>

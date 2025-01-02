@@ -102,6 +102,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         onPercentageClick={handlePercentageClick}
         interestOwed={interestOwed}
         onInterestClick={handleInterestClick}
+        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
       />
 
       <div className={styles.infoRow}>

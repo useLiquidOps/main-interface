@@ -43,6 +43,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   // Slippage states
   const [isSlippageOpen, setIsSlippageOpen] = useState(false);
   const maxSlippage = 5;
+  const walletBalance = fromToken.available;
 
   const toggleSlippage = () => {
     setIsSlippageOpen(!isSlippageOpen);
@@ -110,7 +111,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         setIsFocused={setIsFromFocused}
         ticker={fromToken.symbol}
         tokenPrice={fromToken.price}
-        walletBalance={fromToken.available}
+        walletBalance={walletBalance}
         onMaxClick={handleFromMaxClick}
       />
 
@@ -131,7 +132,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         setIsFocused={setIsToFocused}
         ticker={toToken.symbol}
         tokenPrice={toToken.price}
-        walletBalance={toToken.available}
+        walletBalance={walletBalance}
         onMaxClick={() => {}}
         disabled={true}
         liquidationMode={true}
@@ -143,6 +144,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         selectedPercentage={selectedPercentage}
         currentPercentage={getCurrentPercentage()}
         onPercentageClick={handlePercentageClick}
+        walletBalance={walletBalance}
       />
 
       <div className={styles.offMarketPriceContiner}>

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { dropdownVariants } from "@/components/DropDown/FramerMotion";
 import SearchInput from "../SearchInput/SearchInput";
 import styles from "./Header.module.css";
@@ -71,40 +71,38 @@ const SearchDropDown: React.FC<SearchDropDownProps> = ({
   filteredTokens,
   onTokenSelect,
 }) => {
-  filteredTokens.forEach((token) => {
-    useProtocolStats(token.ticker);
-  });
-
-  if (!isOpen) return null;
-
   return (
-    <motion.div
-      className={styles.tokenDropdownContent}
-      variants={dropdownVariants}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <SearchInput
-        value={searchTerm}
-        onChange={onSearchChange}
-        labelText="Search"
-      />
-      {filteredTokens.length > 0 ? (
-        filteredTokens.map((token) => (
-          <button
-            key={token.ticker}
-            onClick={() => onTokenSelect(token.ticker)}
-            className={styles.tokenDropdownItem}
-          >
-            <TokenItem token={token} />
-          </button>
-        ))
-      ) : (
-        <div className={styles.noTokens}>No tokens found</div>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className={styles.tokenDropdownContent}
+          variants={dropdownVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <SearchInput
+            value={searchTerm}
+            onChange={onSearchChange}
+            labelText="Search"
+          />
+          {filteredTokens.length > 0 ? (
+            filteredTokens.map((token) => (
+              <button
+                key={token.ticker}
+                onClick={() => onTokenSelect(token.ticker)}
+                className={styles.tokenDropdownItem}
+              >
+                <TokenItem token={token} />
+              </button>
+            ))
+          ) : (
+            <div className={styles.noTokens}>No tokens found</div>
+          )}
+        </motion.div>
       )}
-    </motion.div>
+    </AnimatePresence>
   );
 };
 

@@ -144,15 +144,14 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
                   isOpen={isDropdownOpen}
                   onToggle={() => setIsDropdownOpen(!isDropdownOpen)}
                 />
-                <AnimatePresence>
-                  <SearchDropDown
-                    isOpen={isDropdownOpen}
-                    searchTerm={searchTerm}
-                    onSearchChange={handleSearch}
-                    filteredTokens={filteredTokens}
-                    onTokenSelect={selectToken}
-                  />
-                </AnimatePresence>
+
+                <SearchDropDown
+                  isOpen={isDropdownOpen}
+                  searchTerm={searchTerm}
+                  onSearchChange={handleSearch}
+                  filteredTokens={filteredTokens}
+                  onTokenSelect={selectToken}
+                />
               </div>
             )}
           </div>

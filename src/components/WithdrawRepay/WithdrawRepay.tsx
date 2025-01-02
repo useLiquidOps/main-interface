@@ -126,7 +126,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         isFocused={isFocused}
         setIsFocused={setIsFocused}
         ticker={ticker}
-        tokenToUsdRate={tokenToUsdRate}
+        tokenPrice={tokenToUsdRate}
         walletBalance={walletBalance}
         onMaxClick={handleMaxClick}
       />

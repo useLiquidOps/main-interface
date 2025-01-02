@@ -109,7 +109,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         isFocused={isFromFocused}
         setIsFocused={setIsFromFocused}
         ticker={fromToken.symbol}
-        tokenToUsdRate={fromToken.price}
+        tokenPrice={fromToken.price}
         walletBalance={fromToken.available}
         onMaxClick={handleFromMaxClick}
       />
@@ -130,7 +130,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         isFocused={isToFocused}
         setIsFocused={setIsToFocused}
         ticker={toToken.symbol}
-        tokenToUsdRate={toToken.price}
+        tokenPrice={toToken.price}
         walletBalance={toToken.available}
         onMaxClick={() => {}}
         disabled={true}

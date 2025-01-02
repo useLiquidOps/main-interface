@@ -5,7 +5,9 @@ import SubmitButton from "../SubmitButton/SubmitButton";
 import InputBox from "../InputBox/InputBox";
 import styles from "./ActionTab.module.css";
 import { formatMaxAmount } from "../utils/utils";
-import { headerTokensData } from "@/app/data";
+import { useTokenPrice } from "@/hooks/useTokenPrice";
+import { useProtocolStats } from "@/hooks/useProtocolStats";
+import { useUserBalance } from "@/hooks/useUserBalance";
 
 interface ActionTabProps {
   ticker: string;
@@ -13,20 +15,21 @@ interface ActionTabProps {
 }
 
 const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
-  const tokenData = headerTokensData.find(
-    (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
+  const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
+  const { data: protocolStats, isLoading: isLoadingProtocolStats } =
+    useProtocolStats(ticker.toUpperCase());
+  const { data: walletBalance, isLoading: isLoadingBalance } = useUserBalance(
+    ticker.toUpperCase(),
   );
 
-  // TODO: get real variables
-  const tokenToUsdRate = 15;
-  const walletBalance = 4819.93;
-  const utilizationRate = 0.75;
-  const networkFee = 0;
+  const utilizationRate = 0.75; // TODO: get real value when known
+  const networkFee = 0; // TODO: when fee structure is known
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
   const calculateMaxAmount = () => {
+    if (isLoadingBalance || !walletBalance) return 0;
     if (mode === "supply") {
       return walletBalance;
     } else {
@@ -51,8 +54,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         isFocused={isFocused}
         setIsFocused={setIsFocused}
         ticker={ticker}
-        tokenToUsdRate={tokenToUsdRate}
-        walletBalance={walletBalance}
+        tokenPrice={tokenPrice}
+        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
         onMaxClick={handleMaxClick}
       />
 
@@ -60,7 +63,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         <div className={styles.infoDetails}>
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>
-              {mode === "supply" ? "Supply" : "Borrow"} APY: {tokenData?.APR}%
+              {mode === "supply" ? "Supply" : "Borrow"} APY:{" "}
+              {isLoadingProtocolStats ? "0.00" : protocolStats?.apr}%
             </span>
           </div>
           <div className={styles.infoRow}>

@@ -14,7 +14,7 @@ interface InputBoxProps {
   isFocused: boolean;
   setIsFocused: (value: boolean) => void;
   ticker: string;
-  tokenToUsdRate: number;
+  tokenPrice: number;
   walletBalance: number;
   onMaxClick: () => void;
   disabled?: boolean;
@@ -97,7 +97,7 @@ const InputBox: React.FC<InputBoxProps> = ({
   isFocused,
   setIsFocused,
   ticker,
-  tokenToUsdRate,
+  tokenPrice,
   walletBalance,
   onMaxClick,
   disabled = false,
@@ -136,13 +136,13 @@ const InputBox: React.FC<InputBoxProps> = ({
       return (
         <div className={styles.usdValueContainer}>
           <span className={styles.baseUsdValue}>
-            ≈{calculateUsdValue(inputValue, tokenToUsdRate)} USD
+            ≈{calculateUsdValue(inputValue, tokenPrice)} USD
           </span>
           <span className={styles.usdValue}>
-            ≈{calculateUsdValue(getBonusAmount(), tokenToUsdRate)} USD
+            ≈{calculateUsdValue(getBonusAmount(), tokenPrice)} USD
           </span>
           <span className={styles.profitValue}>
-            (+ {calculateUsdValue(profit, tokenToUsdRate)} USD)
+            (+ {calculateUsdValue(profit, tokenPrice)} USD)
           </span>
         </div>
       );
@@ -150,7 +150,7 @@ const InputBox: React.FC<InputBoxProps> = ({
 
     return (
       <p className={styles.usdValue}>
-        ≈{calculateUsdValue(inputValue, tokenToUsdRate)} USD
+        ≈{calculateUsdValue(inputValue, tokenPrice)} USD
       </p>
     );
   };
@@ -207,7 +207,8 @@ const InputBox: React.FC<InputBoxProps> = ({
       <div className={styles.walletInfo}>
         <Image src="/icons/wallet.svg" height={14} width={14} alt="Wallet" />
         <span className={styles.balanceAmount}>
-          {formatNumberWithCommas(walletBalance)} {ticker}
+          {walletBalance === 0 ? "0.00" : formatNumberWithCommas(walletBalance)}{" "}
+          {ticker}
         </span>
         <span className={styles.separator}>|</span>
         <button className={styles.maxButton} onClick={onMaxClick}>

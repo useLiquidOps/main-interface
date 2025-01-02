@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 
 interface ProtocolStats {
-  available: string;
-  lent: string;
+  unLent: string;
+  borrows: string;
   protocolBalance: number;
   utilizationRate: number;
   apr: number;
@@ -30,7 +30,8 @@ export function useProtocolStats(token: string) {
           : 0;
 
       return {
-        ...reserves,
+        unLent: reserves.available,
+        borrows: reserves.lent,
         protocolBalance,
         utilizationRate,
         apr: Number(apr.toFixed(2)),

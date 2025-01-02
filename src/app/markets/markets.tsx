@@ -29,8 +29,8 @@ const Markets = () => {
                 ? {
                     apr: 0,
                     protocolBalance: 0,
-                    available: "0",
-                    lent: "0",
+                    unLent: "0",
+                    borrows: "0",
                     utilizationRate: 0,
                   }
                 : stats.data;
@@ -91,14 +91,14 @@ const Markets = () => {
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {formatTMB(Number(data.available))} USD
+                          {formatTMB(Number(data.unLent))} USD
                         </p>
                         <p className={styles.metricLabel}>Available</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {formatTMB(Number(data.lent))} USD
+                          {formatTMB(Number(data.borrows))} USD
                         </p>
                         <p className={styles.metricLabel}>Borrowed</p>
                       </div>

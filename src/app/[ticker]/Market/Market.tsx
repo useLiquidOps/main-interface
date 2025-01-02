@@ -3,6 +3,13 @@ import styles from "./Market.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import { headerTokensData } from "@/app/data";
 import Image from "next/image";
+import { useProtocolStats } from "@/hooks/useProtocolStats";
+
+// TODO: Replace these with real data
+const PLACEHOLDER_EXTRA_DATA = {
+  extraTotalSupply: 6000,
+  extraLent: 1000,
+};
 
 const Market: React.FC<{
   ticker: string;
@@ -16,17 +23,12 @@ const Market: React.FC<{
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
-  const marketData = {
-    totalSupply: 6765000,
-    totalSupplyExtraData: 6000,
-    availableCollateral: 507370000,
-    totalBorrow: 169120000,
-    collteralExtraData: 1000,
-  };
+  const { data: protocolStats } = useProtocolStats(ticker.toUpperCase());
 
   const getProgressWidth = (value: number): string => {
-    const total = marketData.availableCollateral + marketData.totalBorrow;
-    return `${(value / total) * 100}%`;
+    const total =
+      Number(protocolStats?.unLent || 0) + Number(protocolStats?.borrows || 0);
+    return total > 0 ? `${(value / total) * 100}%` : "0%";
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -34,22 +36,21 @@ const Market: React.FC<{
     const x = e.clientX - rect.left;
     const totalWidth = rect.width;
 
-    // Calculate total value for percentage calculation
-    const totalValue = marketData.availableCollateral + marketData.totalBorrow;
+    const totalValue =
+      Number(protocolStats?.unLent || 0) + Number(protocolStats?.borrows || 0);
 
-    // Calculate the width of each section
-    const collateralWidth =
-      (marketData.availableCollateral / totalValue) * totalWidth;
-    const borrowWidth = (marketData.totalBorrow / totalValue) * totalWidth;
+    const unlentWidth =
+      (Number(protocolStats?.unLent || 0) / totalValue) * totalWidth;
 
     let tooltipText = "";
-    if (x <= collateralWidth) {
-      const collateralPercentage =
-        (marketData.availableCollateral / totalValue) * 100;
-      tooltipText = `Available Collateral: ${collateralPercentage.toFixed(1)}%`;
-    } else if (x <= collateralWidth + borrowWidth) {
-      const borrowPercentage = (marketData.totalBorrow / totalValue) * 100;
-      tooltipText = `Total Borrow: ${borrowPercentage.toFixed(1)}%`;
+    if (x <= unlentWidth) {
+      const availablePercentage =
+        (Number(protocolStats?.unLent || 0) / totalValue) * 100;
+      tooltipText = `Available Lent Tokens: ${availablePercentage.toFixed(1)}%`;
+    } else {
+      const borrowsPercentage =
+        (Number(protocolStats?.borrows || 0) / totalValue) * 100;
+      tooltipText = `Total Borrows: ${borrowsPercentage.toFixed(1)}%`;
     }
 
     setTooltipContent(tooltipText);
@@ -77,21 +78,25 @@ const Market: React.FC<{
 
               <div className={styles.APRContainer}>
                 <div className={styles.flexDisplay}>
-                  <p className={styles.value}>{tokenData.APR}%</p>
+                  <p className={styles.value}>
+                    {protocolStats?.apr || "0.00"}%
+                  </p>
                   <Image
                     src={
-                      tokenData.percentChange.outcome
-                        ? "/icons/APRup.svg"
-                        : "/icons/APRdown.svg"
+                      protocolStats?.percentChange?.outcome === false
+                        ? "/icons/APRdown.svg"
+                        : "/icons/APRup.svg"
                     }
                     alt={
-                      tokenData.percentChange.outcome ? "APR Up" : "APR Down"
+                      protocolStats?.percentChange?.outcome === false
+                        ? "APR Down"
+                        : "APR Up"
                     }
                     width={24}
                     height={24}
                   />
                   <p className={styles.extraData}>
-                    {tokenData.percentChange.change}%
+                    {protocolStats?.percentChange.change || "0.00"}%
                   </p>
                 </div>
               </div>
@@ -102,11 +107,11 @@ const Market: React.FC<{
             <p className={styles.label}>Total Supply</p>
             <div className={styles.flexDisplay}>
               <p className={styles.value}>
-                {`${formatTMB(marketData.totalSupply)} ${tokenData.ticker}`}
+                {`${formatTMB(protocolStats?.protocolBalance || 0)} ${tokenData.ticker}`}
               </p>
               {extraData && (
                 <p className={styles.extraData}>
-                  +{formatTMB(marketData.totalSupplyExtraData)}{" "}
+                  +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraTotalSupply)}{" "}
                   {tokenData.ticker}
                 </p>
               )}
@@ -114,25 +119,26 @@ const Market: React.FC<{
           </div>
 
           <div className={styles.metric}>
-            <p className={styles.label}>Available Collateral</p>
+            <p className={styles.label}>Available Lent Tokens</p>
             <div className={styles.valueWithIndicator}>
               <p className={styles.value}>
-                {`${formatTMB(marketData.availableCollateral)} ${tokenData.ticker}`}
+                {`${formatTMB(Number(protocolStats?.unLent || 0))} ${tokenData.ticker}`}
               </p>
               <div className={styles.indicatorGreen}></div>
               {extraData && (
                 <p className={styles.extraData}>
-                  +{formatTMB(marketData.collteralExtraData)} {tokenData.ticker}
+                  +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraLent)}{" "}
+                  {tokenData.ticker}
                 </p>
               )}
             </div>
           </div>
 
           <div className={styles.metric}>
-            <p className={styles.label}>Total Borrow</p>
+            <p className={styles.label}>Total Borrows</p>
             <div className={styles.valueWithIndicator}>
               <p className={styles.value}>
-                {`${formatTMB(marketData.totalBorrow)} ${tokenData.ticker}`}
+                {`${formatTMB(Number(protocolStats?.borrows || 0))} ${tokenData.ticker}`}
               </p>
               <div className={styles.indicatorBlue}></div>
             </div>
@@ -146,12 +152,14 @@ const Market: React.FC<{
             <div
               className={styles.progressGreen}
               style={{
-                width: getProgressWidth(marketData.availableCollateral),
+                width: getProgressWidth(Number(protocolStats?.unLent || 0)),
               }}
             />
             <div
               className={styles.progressBlue}
-              style={{ width: getProgressWidth(marketData.totalBorrow) }}
+              style={{
+                width: getProgressWidth(Number(protocolStats?.borrows || 0)),
+              }}
             />
           </div>
         </div>

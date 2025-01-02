@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import {
   LineChart,
@@ -11,11 +12,15 @@ import styles from "./ProtocolBalance.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { graphDummyData, headerTokensData } from "@/app/data";
+import { useProtocolStats } from "@/hooks/useProtocolStats";
 
 const ProtocolBalance: React.FC<{
   ticker: string;
 }> = ({ ticker }) => {
   const router = useRouter();
+  const { data: protocolStats, isLoading } = useProtocolStats(
+    ticker.toUpperCase(),
+  );
   const [hoverData, setHoverData] = useState<{
     date: string;
     value: number;
@@ -46,7 +51,9 @@ const ProtocolBalance: React.FC<{
               height={50}
             />
           </div>
-          <p className={styles.amount}>3,745.62</p>
+          <p className={styles.amount}>
+          {isLoading ? "0" : protocolStats?.protocolBalance.toLocaleString()}
+          </p>
           <p className={styles.currency}>{tokenData.ticker}</p>
         </div>
         <div className={styles.actions}>
@@ -88,7 +95,7 @@ const ProtocolBalance: React.FC<{
               />
             )}
             <p className={styles.aprText}>
-              {hoverData ? `${hoverData.value}%` : `${tokenData.APR}%`}
+            {isLoading ? "0" : (hoverData ? `${hoverData.value}%` : `${protocolStats?.apr}%`)}
             </p>
           </div>
         </div>

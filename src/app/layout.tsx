@@ -2,6 +2,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
 import { ModalProvider } from "./[ticker]/PopUp/PopUp";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "LiquidOps | Home",
@@ -26,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <ModalProvider>
         <body className={dmSans.className} style={{ margin: 0, padding: 0 }}>
-          {children}
+          <Providers>{children}</Providers>
         </body>
       </ModalProvider>
     </html>

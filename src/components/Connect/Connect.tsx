@@ -5,14 +5,11 @@ import { useClickOutside } from "../utils/utils";
 import DropdownButton from "../DropDown/DropDown";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  overlayVariants,
-  dropdownVariants,
-} from "@/components/DropDown/FramerMotion";
+import { overlayVariants } from "@/components/DropDown/FramerMotion";
+import ProfileDropDown from "./ProfileDropDown";
 
 interface TokenInfo {
   symbol: string;
-  balance: number;
   icon: string;
 }
 
@@ -34,9 +31,9 @@ const Connect: React.FC = () => {
   );
 
   const tokens: TokenInfo[] = [
-    { symbol: "DAI", balance: 1736.55, icon: "/tokens/DAI.svg" },
-    { symbol: "qAR", balance: 3745.62, icon: "/tokens/qAR.svg" },
-    { symbol: "stETH", balance: 394.11, icon: "/tokens/stETH.svg" },
+    { symbol: "DAI", icon: "/tokens/dai.svg" },
+    { symbol: "QAR", icon: "/tokens/qar.svg" },
+    { symbol: "STETH", icon: "/tokens/steth.svg" },
   ];
 
   const checkWalletConnection = async () => {
@@ -61,15 +58,6 @@ const Connect: React.FC = () => {
   useEffect(() => {
     checkWalletConnection();
   }, []);
-
-  const shortenAddress = (addr: string) =>
-    `${addr.slice(0, 3)}...${addr.slice(-3)}`;
-
-  const formatBalance = (balance: number) =>
-    balance.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -152,58 +140,14 @@ const Connect: React.FC = () => {
               height={32}
               className={styles.connectImage}
             />
-            <AnimatePresence>
-              {isOpen && (
-                <motion.div
-                  className={styles.dropdown}
-                  variants={dropdownVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className={styles.addressContainer}>
-                    <span>{shortenAddress(address)}</span>
-                    <button
-                      className={styles.copyButton}
-                      onClick={() => copyToClipboard(address)}
-                    >
-                      <Image
-                        src={
-                          isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"
-                        }
-                        alt="Copy"
-                        width={14}
-                        height={14}
-                      />
-                    </button>
-                  </div>
-
-                  {tokens.map((token, index) => (
-                    <div key={index} className={styles.balance}>
-                      <Image
-                        src={token.icon}
-                        alt={token.symbol}
-                        width={24}
-                        height={24}
-                      />
-                      <span>
-                        {formatBalance(token.balance)} {token.symbol}
-                      </span>
-                    </div>
-                  ))}
-
-                  <div className={styles.logoutButtonContainer}>
-                    <button
-                      className={styles.logoutButton}
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <ProfileDropDown
+              isOpen={isOpen}
+              address={address}
+              tokens={tokens}
+              isCopied={isCopied}
+              onCopy={copyToClipboard}
+              onLogout={handleLogout}
+            />
           </div>
         ) : (
           <button className={styles.connectButton} onClick={handleConnect}>

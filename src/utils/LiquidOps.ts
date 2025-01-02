@@ -1,3 +1,4 @@
+"use client";
 // @ts-ignore, due to bun link not importing types
 import LiquidOps from "liquidops";
 import { createDataItemSigner } from "@permaweb/aoconnect";

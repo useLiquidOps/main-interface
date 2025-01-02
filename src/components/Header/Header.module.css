@@ -163,6 +163,7 @@
   font-weight: 600;
   color: var(--primary-ultramarine);
   margin: 0;
+  width: 80px;
 }
 
 .percentChangeContainer {

@@ -7,6 +7,10 @@ interface ProtocolStats {
   protocolBalance: number;
   utilizationRate: number;
   apr: number;
+  percentChange: {
+    outcome: boolean;
+    change: string;
+  };
 }
 
 export function useProtocolStats(token: string) {
@@ -30,6 +34,11 @@ export function useProtocolStats(token: string) {
         protocolBalance,
         utilizationRate,
         apr: Number(apr.toFixed(2)),
+        percentChange: {
+          // TODO: This is a placeholder, replace with real data
+          outcome: true,
+          change: "1.00",
+        },
       };
     },
   });

@@ -55,7 +55,9 @@ const Markets = () => {
                           />
                         </div>
                         <div className={styles.nameSymbol}>
-                          <h2 className={styles.name}>{headerData?.name || symbol}</h2>
+                          <h2 className={styles.name}>
+                            {headerData?.name || symbol}
+                          </h2>
                           <p className={styles.symbol}>{symbol}</p>
                         </div>
                       </div>
@@ -83,8 +85,7 @@ const Markets = () => {
                           USD
                         </p>
                         <p className={styles.metricLabel}>
-                          {formatTMB(Number(data.protocolBalance))}{" "}
-                          {symbol} TVL
+                          {formatTMB(Number(data.protocolBalance))} {symbol} TVL
                         </p>
                       </div>
 

@@ -8,12 +8,9 @@ import Connect from "../Connect/Connect";
 import { useClickOutside } from "../utils/utils";
 import { headerTokensData } from "../../app/data";
 import DropdownButton from "../DropDown/DropDown";
-import SearchInput from "../SearchInput/SearchInput";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  overlayVariants,
-  dropdownVariants,
-} from "@/components/DropDown/FramerMotion";
+import { overlayVariants } from "@/components/DropDown/FramerMotion";
+import SearchDropDown from "./SearchDropDown";
 
 interface HeaderProps {
   currentToken?: string;
@@ -148,70 +145,13 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
                   onToggle={() => setIsDropdownOpen(!isDropdownOpen)}
                 />
                 <AnimatePresence>
-                  {isDropdownOpen && (
-                    <motion.div
-                      className={styles.tokenDropdownContent}
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <SearchInput
-                        value={searchTerm}
-                        onChange={handleSearch}
-                        labelText="Search"
-                      />
-                      {filteredTokens.length > 0 ? (
-                        filteredTokens.map((token) => (
-                          <button
-                            key={token.ticker}
-                            onClick={() => selectToken(token.ticker)}
-                            className={styles.tokenDropdownItem}
-                          >
-                            <div className={styles.tokenInfo}>
-                              <Image
-                                src={`/tokens/${token.ticker.toLowerCase()}.svg`}
-                                alt={token.name}
-                                width={40}
-                                height={40}
-                              />
-                              <div className={styles.tokenNameTicker}>
-                                <p className={styles.tokenName}>{token.name}</p>
-                                <p className={styles.tokenTicker}>
-                                  {token.ticker}
-                                </p>
-                              </div>
-                            </div>
-                            <div className={styles.tokenMetrics}>
-                              <p className={styles.tokenAPR}>
-                                APR {token.APR}%
-                              </p>
-                              <div className={styles.percentChangeContainer}>
-                                <Image
-                                  src={
-                                    token.percentChange.outcome
-                                      ? "/icons/APRUp.svg"
-                                      : "/icons/APRDown.svg"
-                                  }
-                                  alt={
-                                    token.percentChange.outcome ? "Up" : "Down"
-                                  }
-                                  width={16}
-                                  height={16}
-                                />
-                                <p className={styles.percentChange}>
-                                  {token.percentChange.change}%
-                                </p>
-                              </div>
-                            </div>
-                          </button>
-                        ))
-                      ) : (
-                        <div className={styles.noTokens}>No tokens found</div>
-                      )}
-                    </motion.div>
-                  )}
+                  <SearchDropDown
+                    isOpen={isDropdownOpen}
+                    searchTerm={searchTerm}
+                    onSearchChange={handleSearch}
+                    filteredTokens={filteredTokens}
+                    onTokenSelect={selectToken}
+                  />
                 </AnimatePresence>
               </div>
             )}

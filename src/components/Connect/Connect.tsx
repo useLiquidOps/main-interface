@@ -32,8 +32,8 @@ const Connect: React.FC = () => {
 
   const tokens: TokenInfo[] = [
     { symbol: "DAI", icon: "/tokens/dai.svg" },
-    { symbol: "QAR", icon: "/tokens/qar.svg" },
-    { symbol: "STETH", icon: "/tokens/steth.svg" },
+    { symbol: "qAR", icon: "/tokens/qar.svg" },
+    { symbol: "stETH", icon: "/tokens/steth.svg" },
   ];
 
   const checkWalletConnection = async () => {

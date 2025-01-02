@@ -5,8 +5,9 @@ import SubmitButton from "../SubmitButton/SubmitButton";
 import PercentagePicker from "../PercentagePicker/PercentagePicker";
 import InputBox from "../InputBox/InputBox";
 import Image from "next/image";
-import { formatMaxAmount, formatNumberWithCommas } from "../utils/utils";
-import { headerTokensData } from "@/app/data";
+import { formatMaxAmount } from "../utils/utils";
+import { useUserBalance } from "@/hooks/useUserBalance";
+import { useTokenPrice } from "@/hooks/useTokenPrice";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -19,15 +20,14 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   ticker,
   onClose,
 }) => {
-  // TODO: get real fee + interest owed
-  const networkFee = 0;
-  const interestOwed = 10;
-  const tokenData = headerTokensData.find(
-    (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
+  const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
+  const { data: walletBalance, isLoading: isLoadingBalance } = useUserBalance(
+    ticker.toUpperCase(),
   );
 
-  const tokenToUsdRate = 15;
-  const walletBalance = 222122;
+  // TODO: fill in with real data
+  const networkFee = 0;
+  const interestOwed = 10;
   const utilizationRate = 0.75;
 
   const [inputValue, setInputValue] = useState("");
@@ -37,6 +37,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   );
 
   const calculateMaxAmount = () => {
+    if (isLoadingBalance || !walletBalance) return 0;
     if (mode === "withdraw") {
       return walletBalance;
     } else {
@@ -47,7 +48,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
     setInputValue(formatMaxAmount(maxAmount));
-    setSelectedPercentage(100);
   };
 
   const handlePercentageClick = (percentage: number) => {
@@ -84,50 +84,14 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         </button>
       </div>
 
-      <div className={styles.statsContainer}>
-        <div className={styles.tokenInfo}>
-          <Image
-            src={`/tokens/${ticker}.svg`}
-            height={35}
-            width={35}
-            alt={ticker}
-          />
-          <div className={styles.tokenDetails}>
-            <p className={styles.tokenName}>{tokenData?.name}</p>
-            <p className={styles.ticker}>
-              {formatNumberWithCommas(walletBalance)} {ticker}
-            </p>
-          </div>
-        </div>
-
-        <div className={styles.aprInfo}>
-          <p className={styles.apr}>APR {tokenData?.APR}%</p>
-          <div className={styles.aprChange}>
-            <Image
-              src={
-                tokenData?.percentChange.outcome
-                  ? "/icons/APRUp.svg"
-                  : "/icons/APRDown.svg"
-              }
-              height={15}
-              width={15}
-              alt={tokenData?.percentChange.outcome ? "APR Up" : "APR Down"}
-            />
-            <p className={styles.percentageChange}>
-              {tokenData?.percentChange.change}%
-            </p>
-          </div>
-        </div>
-      </div>
-
       <InputBox
         inputValue={inputValue}
         setInputValue={setInputValue}
         isFocused={isFocused}
         setIsFocused={setIsFocused}
         ticker={ticker}
-        tokenPrice={tokenToUsdRate}
-        walletBalance={walletBalance}
+        tokenPrice={tokenPrice}
+        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
         onMaxClick={handleMaxClick}
       />
 

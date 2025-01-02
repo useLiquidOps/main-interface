@@ -34,45 +34,6 @@ export const AssetDisplayData = [
   },
 ];
 
-export const marketData = [
-  {
-    icon: "/tokens/dai.svg",
-    name: "Dai",
-    symbol: "DAI",
-    apy: "4.57",
-    utilization: "56.19",
-    utilization2: "56.19",
-    available: "15.8M",
-    availableCurrency: "USD",
-    lent: "16.3M",
-    lentCurrency: "USD",
-  },
-  {
-    icon: "/tokens/qAR.svg",
-    name: "Qauntum Arweave",
-    symbol: "qAR",
-    apy: "4.57",
-    utilization: "56.19",
-    utilization2: "56.19",
-    available: "15.8M",
-    availableCurrency: "USD",
-    lent: "16.3M",
-    lentCurrency: "USD",
-  },
-  {
-    icon: "/tokens/stETH.svg",
-    name: "Staked ETH",
-    symbol: "stETH",
-    apy: "4.57",
-    utilization: "56.19",
-    utilization2: "56.19",
-    available: "15.8M",
-    availableCurrency: "USD",
-    lent: "16.3M",
-    lentCurrency: "USD",
-  },
-];
-
 interface DataPoint {
   date: string;
   value: number;

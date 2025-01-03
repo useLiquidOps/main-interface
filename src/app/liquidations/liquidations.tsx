@@ -19,6 +19,28 @@ interface TokenInfo {
   imagePath: string;
 }
 
+const calculateLiquidationStats = (liquidations: any[]) => { // TODO: correct stats when real data is here
+  return liquidations.reduce(
+    (acc, liquidation) => {
+      return {
+        availableLiquidations:
+          acc.availableLiquidations + liquidation.toToken.available,
+        totalProfit: acc.totalProfit + liquidation.toToken.available,
+        markets: new Set([
+          ...acc.markets,
+          liquidation.fromToken.symbol,
+          liquidation.toToken.symbol,
+        ]),
+      };
+    },
+    {
+      availableLiquidations: 0,
+      totalProfit: 0,
+      markets: new Set<string>(),
+    },
+  );
+};
+
 const LiquidationsContent = () => {
   const [mounted, setMounted] = useState(false);
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
@@ -74,6 +96,11 @@ const LiquidationsContent = () => {
     });
   }, [selectedReceiveToken.symbol, selectedSendToken.symbol]);
 
+  const stats = useMemo(
+    () => calculateLiquidationStats(filteredLiquidations),
+    [filteredLiquidations],
+  );
+
   const toggleReceiveDropdown = () => {
     setShowReceiveDropdown(!showReceiveDropdown);
     setShowSendDropdown(false);
@@ -106,6 +133,28 @@ const LiquidationsContent = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
+          <div className={styles.liquidationStats}>
+            <div className={styles.liquidationStat}>
+              <p className={styles.liquidationStatValue}>
+                ${formatTMB(stats.availableLiquidations)}
+              </p>
+              <p className={styles.liquidationStatTitle}>
+                Available liquidations
+              </p>
+            </div>
+            <div className={styles.liquidationStat}>
+              <p className={styles.liquidationStatValue}>
+                ${formatTMB(stats.totalProfit)}
+              </p>
+              <p className={styles.liquidationStatTitle}>Total profit</p>
+            </div>
+            <div className={styles.liquidationStat}>
+              <p className={styles.liquidationStatValue}>
+                {stats.markets.size}
+              </p>
+              <p className={styles.liquidationStatTitle}>Markets</p>
+            </div>
+          </div>
           <div className={styles.filterContainer}>
             <div className={styles.filterGroup}>
               <span className={styles.filterLabel}>Send</span>

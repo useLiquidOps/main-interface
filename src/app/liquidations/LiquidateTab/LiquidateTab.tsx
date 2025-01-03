@@ -4,7 +4,8 @@ import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import Image from "next/image";
 import InputBox from "@/components/InputBox/InputBox";
 import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
-import DropdownButton from "@/components/DropDown/DropDown";
+import { useTokenPrice } from "@/hooks/useTokenPrice";
+import { useUserBalance } from "@/hooks/useUserBalance";
 
 interface TokenData {
   name: string;
@@ -40,14 +41,14 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   const [toInputValue, setToInputValue] = useState("");
   const [isToFocused, setIsToFocused] = useState(false);
 
-  // Slippage states
-  const [isSlippageOpen, setIsSlippageOpen] = useState(false);
-  const maxSlippage = 5;
-  const walletBalance = fromToken.available;
+  const { data: walletBalance, isLoading: isLoadingBalance } = useUserBalance(
+    toToken.symbol.toUpperCase(),
+  );
 
-  const toggleSlippage = () => {
-    setIsSlippageOpen(!isSlippageOpen);
-  };
+  const { price: fromTokenPrice } = useTokenPrice(
+    fromToken.symbol.toUpperCase(),
+  );
+  const { price: toTokenPrice } = useTokenPrice(toToken.symbol.toUpperCase());
 
   useEffect(() => {
     if (fromInputValue === "") {
@@ -110,8 +111,8 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         isFocused={isFromFocused}
         setIsFocused={setIsFromFocused}
         ticker={fromToken.symbol}
-        tokenPrice={fromToken.price}
-        walletBalance={walletBalance}
+        tokenPrice={fromTokenPrice}
+        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
         onMaxClick={handleFromMaxClick}
       />
 
@@ -131,8 +132,8 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         isFocused={isToFocused}
         setIsFocused={setIsToFocused}
         ticker={toToken.symbol}
-        tokenPrice={toToken.price}
-        walletBalance={walletBalance}
+        tokenPrice={toTokenPrice}
+        walletBalance={0} // we do not display balance for the second token
         onMaxClick={() => {}}
         disabled={true}
         liquidationMode={true}
@@ -144,7 +145,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         selectedPercentage={selectedPercentage}
         currentPercentage={getCurrentPercentage()}
         onPercentageClick={handlePercentageClick}
-        walletBalance={walletBalance}
+        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
       />
 
       <div className={styles.offMarketPriceContiner}>
@@ -157,11 +158,6 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         <p className={styles.offMarketPriceText}>
           {offMarketPrice}% off market price
         </p>
-      </div>
-
-      <div className={styles.slippageButton}>
-        <p>Max. slippage: {maxSlippage}%</p>
-        <DropdownButton isOpen={isSlippageOpen} onToggle={toggleSlippage} />
       </div>
 
       <SubmitButton />

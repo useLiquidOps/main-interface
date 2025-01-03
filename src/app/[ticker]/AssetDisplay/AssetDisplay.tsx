@@ -142,9 +142,11 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
                     <div className={styles.changeInfo}>
                       <Image
                         src={
-                          protocolStats?.percentChange?.outcome
-                            ? "/icons/APRUp.svg"
-                            : "/icons/APRDown.svg"
+                          protocolStats?.percentChange
+                            ? protocolStats.percentChange.outcome
+                              ? "/icons/APRUp.svg"
+                              : "/icons/APRDown.svg"
+                            : "/icons/APRUp.svg"
                         }
                         alt="APR change indicator"
                         width={16}

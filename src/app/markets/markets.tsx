@@ -17,11 +17,56 @@ const Markets = () => {
     price: useTokenPrice(token.symbol.toUpperCase()),
   }));
 
+  const calculateTotals = () => {
+    return statsQueries.reduce(
+      (acc, { stats, price }) => {
+        if (stats.isLoading || !stats.data) return acc;
+
+        const tokenPrice = price?.price || 0;
+        const data = stats.data;
+
+        return {
+          liquidOpsTVL:
+            acc.liquidOpsTVL + Number(data.protocolBalance) * tokenPrice,
+          totalCollateral: acc.totalCollateral + Number(data.unLent),
+          totalBorrows: acc.totalBorrows + Number(data.borrows),
+        };
+      },
+      {
+        liquidOpsTVL: 0,
+        totalCollateral: 0,
+        totalBorrows: 0,
+      },
+    );
+  };
+
+  const { liquidOpsTVL, totalCollateral, totalBorrows } = calculateTotals();
+
   return (
     <div className={styles.page}>
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
+          <div className={styles.marketStats}>
+            <div className={styles.marketStat}>
+              <p className={styles.marketStatValue}>
+                ${formatTMB(liquidOpsTVL)}
+              </p>
+              <p className={styles.marketStatTitle}>LiquidOps TVL</p>
+            </div>
+            <div className={styles.marketStat}>
+              <p className={styles.marketStatValue}>
+                ${formatTMB(totalCollateral)}
+              </p>
+              <p className={styles.marketStatTitle}>Total collateral</p>
+            </div>
+            <div className={styles.marketStat}>
+              <p className={styles.marketStatValue}>
+                ${formatTMB(totalBorrows)}
+              </p>
+              <p className={styles.marketStatTitle}>Total borrows</p>
+            </div>
+          </div>
           <div className={styles.marketsList}>
             {statsQueries.map(({ symbol, stats, icon, headerData, price }) => {
               const isLoading = stats.isLoading || !stats.data || !headerData;
@@ -93,7 +138,7 @@ const Markets = () => {
                         <p className={styles.metricValue}>
                           ${formatTMB(Number(data.unLent))}
                         </p>
-                        <p className={styles.metricLabel}>Available</p>
+                        <p className={styles.metricLabel}>Collateral</p>
                       </div>
 
                       <div className={styles.metricBox}>

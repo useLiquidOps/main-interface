@@ -1,35 +1,35 @@
+"use client";
 import React, { useState } from "react";
 import styles from "./AssetDisplay.module.css";
 import Image from "next/image";
 import { useModal } from "../PopUp/PopUp";
-
-interface Asset {
-  icon: string;
-  oIcon: string;
-  name: string;
-  amount: string;
-  symbol: string;
-  apr: string;
-  change: string;
-  isPositive: boolean;
-  extraAmount?: string;
-}
+import { useProtocolStats } from "@/hooks/useProtocolStats";
+import { useUserBalance } from "@/hooks/useUserBalance";
+import { formatTMB } from "@/components/utils/utils";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";
-  assets: Asset[];
   maxYield?: string;
+  tokens: Array<{
+    icon: string;
+    oIcon: string;
+    name: string;
+    symbol: string;
+  }>;
 }
 
 const AssetDisplay: React.FC<AssetDisplayProps> = ({
   mode,
-  assets,
   maxYield,
+  tokens,
 }) => {
   const [showAll, setShowAll] = useState(false);
   const { openModal } = useModal();
 
-  const displayedAssets = showAll ? assets : assets.slice(0, 4);
+  // TODO: find actual data and replace this
+  const extraAmount = 1;
+
+  const displayedAssets = showAll ? tokens : tokens.slice(0, 4);
 
   const getDisplayText = () => {
     if (mode === "lend") {
@@ -56,7 +56,10 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
     mode === "lend" ? styles.lendContainer : styles.borrowContainer
   } ${showAll ? styles.expanded : ""}`;
 
-  const handleActionClick = (asset: Asset, e?: React.MouseEvent) => {
+  const handleActionClick = (
+    asset: (typeof tokens)[0],
+    e?: React.MouseEvent,
+  ) => {
     if (e) e.stopPropagation();
     openModal(mode === "lend" ? "withdraw" : "repay", asset);
   };
@@ -65,7 +68,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
     <div className={containerClass}>
       <div className={styles.header}>
         <h2 className={styles.title}>{displayText.title}</h2>
-        {assets.length > 4 &&
+        {tokens.length > 4 &&
           (showAll ? (
             <button
               onClick={() => setShowAll(false)}
@@ -80,7 +83,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
           ))}
       </div>
 
-      {assets.length === 0 ? (
+      {tokens.length === 0 ? (
         <div className={styles.emptyState}>
           <Image
             src="/icons/noAssets.png"
@@ -94,66 +97,81 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
         </div>
       ) : (
         <div className={styles.assetsList}>
-          {displayedAssets.map((asset, index) => (
-            <div
-              key={`${mode}-${asset.name}-${index}`}
-              className={styles.assetRowWrapper}
-              onClick={() => handleActionClick(asset)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className={styles.assetRow}>
-                <div className={styles.assetInfo}>
-                  <div className={styles.iconWrapper}>
-                    <Image
-                      src={asset.icon}
-                      alt={asset.name}
-                      width={40}
-                      height={40}
-                    />
-                  </div>
-                  <div className={styles.nameAmount}>
-                    <p className={styles.name}>{asset.name}</p>
-                    <p className={styles.amount}>
-                      {asset.amount}
-                      {mode === "borrow" &&
-                        asset.extraAmount &&
-                        ` + ${asset.extraAmount} ${asset.symbol}`}
-                    </p>
-                  </div>
-                </div>
+          {displayedAssets.map((asset, index) => {
+            const { data: protocolStats } = useProtocolStats(
+              asset.symbol.toUpperCase(),
+            );
+            const { data: balance, isLoading } = useUserBalance(
+              asset.symbol.toUpperCase(),
+            );
 
-                <div className={styles.aprInfo}>
-                  <p className={styles.apr}>APR {asset.apr}%</p>
-                  <div className={styles.changeInfo}>
-                    <Image
-                      src={
-                        asset.isPositive
-                          ? "/icons/APRUp.svg"
-                          : "/icons/APRDown.svg"
-                      }
-                      alt="APR change indicator"
-                      width={16}
-                      height={16}
-                    />
-                    <p className={styles.change}>{asset.change}%</p>
+            return (
+              <div
+                key={`${mode}-${asset.name}-${index}`}
+                className={styles.assetRowWrapper}
+                onClick={() => handleActionClick(asset)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className={styles.assetRow}>
+                  <div className={styles.assetInfo}>
+                    <div className={styles.iconWrapper}>
+                      <Image
+                        src={asset.icon}
+                        alt={asset.name}
+                        width={40}
+                        height={40}
+                      />
+                    </div>
+                    <div className={styles.nameAmount}>
+                      <p className={styles.name}>{asset.name}</p>
+                      <p className={styles.amount}>
+                        {isLoading ? "0.00" : formatTMB(balance ?? 0)}{" "}
+                        {asset?.symbol}
+                        {mode === "borrow" &&
+                          (isLoading
+                            ? ` + 0.00 ${asset?.symbol}`
+                            : ` + ${formatTMB(Number(extraAmount))} ${asset?.symbol}`)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={styles.aprInfo}>
+                    <p className={styles.apr}>
+                      APR {protocolStats?.apr ?? "0.00"}%
+                    </p>
+                    <div className={styles.changeInfo}>
+                      <Image
+                        src={
+                          protocolStats?.percentChange?.outcome
+                            ? "/icons/APRUp.svg"
+                            : "/icons/APRDown.svg"
+                        }
+                        alt="APR change indicator"
+                        width={16}
+                        height={16}
+                      />
+                      <p className={styles.change}>
+                        {protocolStats?.percentChange?.change ?? "0.00"}%
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <button
+                  className={styles.withdrawButton}
+                  onClick={(e) => handleActionClick(asset, e)}
+                >
+                  <Image
+                    src={displayText.actionIcon}
+                    alt={displayText.actionButton}
+                    width={14}
+                    height={14}
+                    className={styles.withdrawIcon}
+                  />
+                  <span>{displayText.actionButton}</span>
+                </button>
               </div>
-              <button
-                className={styles.withdrawButton}
-                onClick={(e) => handleActionClick(asset, e)}
-              >
-                <Image
-                  src={displayText.actionIcon}
-                  alt={displayText.actionButton}
-                  width={14}
-                  height={14}
-                  className={styles.withdrawIcon}
-                />
-                <span>{displayText.actionButton}</span>
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

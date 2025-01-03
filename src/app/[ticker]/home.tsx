@@ -34,10 +34,10 @@ const HomeContent = ({
             <PositionSummary ticker={ticker} />
             <AssetDisplay
               mode="lend"
-              assets={AssetDisplayData}
+              tokens={AssetDisplayData}
               maxYield="5.1"
             />
-            <AssetDisplay mode="borrow" assets={AssetDisplayData} />
+            <AssetDisplay mode="borrow" tokens={AssetDisplayData} />
           </div>
         </div>
       </div>

@@ -67,9 +67,11 @@ const Markets = () => {
                           <p className={styles.apr}>{data.apr.toFixed(2)}%</p>
                           <Image
                             src={
-                              headerData?.percentChange.outcome
+                              isLoading
                                 ? "/icons/APRUp.svg"
-                                : "/icons/APRDown.svg"
+                                : stats.data.percentChange.outcome
+                                  ? "/icons/APRUp.svg"
+                                  : "/icons/APRDown.svg"
                             }
                             alt="APR trend"
                             width={16}
@@ -81,24 +83,22 @@ const Markets = () => {
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
+                          $
                           {formatTMB(Number(data.protocolBalance) * tokenPrice)}{" "}
-                          USD
                         </p>
-                        <p className={styles.metricLabel}>
-                          {formatTMB(Number(data.protocolBalance))} {symbol} TVL
-                        </p>
+                        <p className={styles.metricLabel}>TVL</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {formatTMB(Number(data.unLent))} USD
+                          ${formatTMB(Number(data.unLent))}
                         </p>
                         <p className={styles.metricLabel}>Available</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {formatTMB(Number(data.borrows))} USD
+                          ${formatTMB(Number(data.borrows))}
                         </p>
                         <p className={styles.metricLabel}>Borrowed</p>
                       </div>

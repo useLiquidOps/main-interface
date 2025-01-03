@@ -12,6 +12,7 @@ import {
   overlayVariants,
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
+import { formatTMB } from "@/components/utils/utils";
 
 interface TokenInfo {
   symbol: string;
@@ -272,24 +273,34 @@ const LiquidationsContent = () => {
                     </div>
 
                     <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>
-                        {liquidation.toToken.available}{" "}
-                        {liquidation.toToken.symbol}
-                      </p>
+                      <div className={styles.metricValue}>
+                        <p style={{ paddingRight: "2px", margin: "0px" }}>
+                          {formatTMB(liquidation.toToken.available)}
+                        </p>
+                        <p style={{ paddingLeft: "2px", margin: "0px" }}>
+                          {liquidation.toToken.symbol}
+                        </p>
+                      </div>
                       <p className={styles.metricLabel}>Profit</p>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.toToken.available}{" "}
-                        {liquidation.toToken.symbol}
+                        <p className={styles.metricValue}>
+                          <span style={{ paddingRight: "2px", margin: "0px" }}>
+                            {formatTMB(liquidation.toToken.available)}
+                          </span>
+                          <span style={{ paddingLeft: "2px", margin: "0px" }}>
+                            {liquidation.toToken.symbol}
+                          </span>
+                        </p>
                       </p>
                       <p className={styles.metricLabel}>Available</p>
                     </div>
 
                     <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        {liquidation.fromToken.price} USD
+                        ${formatTMB(liquidation.fromToken.price)}
                       </p>
                       <p className={styles.metricLabel}>Price</p>
                     </div>

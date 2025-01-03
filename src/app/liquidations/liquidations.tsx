@@ -19,7 +19,8 @@ interface TokenInfo {
   imagePath: string;
 }
 
-const calculateLiquidationStats = (liquidations: any[]) => { // TODO: correct stats when real data is here
+const calculateLiquidationStats = (liquidations: any[]) => {
+  // TODO: correct stats when real data is here
   return liquidations.reduce(
     (acc, liquidation) => {
       return {

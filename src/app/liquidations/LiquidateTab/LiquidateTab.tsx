@@ -4,8 +4,8 @@ import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import Image from "next/image";
 import InputBox from "@/components/InputBox/InputBox";
 import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
-import { useTokenPrice } from "@/hooks/useTokenPrice";
-import { useUserBalance } from "@/hooks/useUserBalance";
+import { useTokenPrice } from "@/hooks/data/useTokenPrice";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
 
 interface TokenData {
   name: string;

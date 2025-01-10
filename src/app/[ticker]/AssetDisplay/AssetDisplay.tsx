@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import styles from "./AssetDisplay.module.css";
 import Image from "next/image";
 import { useModal } from "../PopUp/PopUp";
-import { useProtocolStats } from "@/hooks/useProtocolStats";
-import { useUserBalance } from "@/hooks/useUserBalance";
+import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
 
 interface AssetDisplayProps {

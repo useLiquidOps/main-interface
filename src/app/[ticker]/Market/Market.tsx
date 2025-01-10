@@ -3,7 +3,7 @@ import styles from "./Market.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import { headerTokensData } from "@/app/data";
 import Image from "next/image";
-import { useProtocolStats } from "@/hooks/useProtocolStats";
+import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 
 // TODO: Replace these with real data
 const PLACEHOLDER_EXTRA_DATA = {

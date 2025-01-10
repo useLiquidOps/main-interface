@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { dropdownVariants } from "@/components/DropDown/FramerMotion";
 import styles from "./Connect.module.css";
-import { useUserBalance } from "@/hooks/useUserBalance";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
 
 interface TokenInfo {
   symbol: string;

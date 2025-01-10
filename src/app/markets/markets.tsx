@@ -4,8 +4,8 @@ import Header from "../../components/Header/Header";
 import Image from "next/image";
 import Link from "next/link";
 import { tokens, headerTokensData } from "../data";
-import { useProtocolStats } from "@/hooks/useProtocolStats";
-import { useTokenPrice } from "@/hooks/useTokenPrice";
+import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { formatTMB } from "@/components/utils/utils";
 
 const Markets = () => {

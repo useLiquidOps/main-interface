@@ -5,9 +5,9 @@ import SubmitButton from "../SubmitButton/SubmitButton";
 import InputBox from "../InputBox/InputBox";
 import styles from "./ActionTab.module.css";
 import { formatMaxAmount } from "../utils/utils";
-import { useTokenPrice } from "@/hooks/useTokenPrice";
-import { useProtocolStats } from "@/hooks/useProtocolStats";
-import { useUserBalance } from "@/hooks/useUserBalance";
+import { useTokenPrice } from "@/hooks/data/useTokenPrice";
+import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
 
 interface ActionTabProps {
   ticker: string;

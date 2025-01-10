@@ -6,8 +6,8 @@ import PercentagePicker from "../PercentagePicker/PercentagePicker";
 import InputBox from "../InputBox/InputBox";
 import Image from "next/image";
 import { formatMaxAmount } from "../utils/utils";
-import { useUserBalance } from "@/hooks/useUserBalance";
-import { useTokenPrice } from "@/hooks/useTokenPrice";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
+import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";

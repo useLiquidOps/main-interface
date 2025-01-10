@@ -12,7 +12,7 @@ import styles from "./ProtocolBalance.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { graphDummyData, headerTokensData } from "@/app/data";
-import { useProtocolStats } from "@/hooks/useProtocolStats";
+import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 
 const ProtocolBalance: React.FC<{
   ticker: string;

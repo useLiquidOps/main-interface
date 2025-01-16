@@ -159,8 +159,8 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
           {offMarketPrice}% off market price
         </p>
       </div>
-
-      <SubmitButton />
+      {/* TODO: correct button inputs with pending logic */}
+      {/* <SubmitButton /> */}
     </div>
   );
 };

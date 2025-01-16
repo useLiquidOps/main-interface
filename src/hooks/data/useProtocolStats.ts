@@ -42,5 +42,9 @@ export function useProtocolStats(token: string) {
         },
       };
     },
+    // Add stale time to prevent too frequent refetches
+    staleTime: 30 * 1000, // 30 seconds
+    // Add cache time to keep data for
+    gcTime: 5 * 60 * 1000, // 5 minutes
   });
 }

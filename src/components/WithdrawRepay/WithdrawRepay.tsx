@@ -109,7 +109,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         <span className={styles.infoLabel}>Network fee: {networkFee} AO</span>
       </div>
 
-      <SubmitButton />
+      {/* TODO: correct button inputs with pending logic */}
+      {/* <SubmitButton /> */}
     </div>
   );
 };

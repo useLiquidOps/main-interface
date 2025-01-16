@@ -1,20 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 
-interface LendParams {
+interface BorrowParams {
   token: string;
   quantity: bigint;
 }
 
-type UnlendParams = LendParams;
+type RepayParams = BorrowParams;
 
-export function useLend() {
+export function useBorrow() {
   const queryClient = useQueryClient();
 
-  const lendMutation = useMutation({
-    mutationFn: async ({ token, quantity }: LendParams) => {
+  const borrowMutation = useMutation({
+    mutationFn: async ({ token, quantity }: BorrowParams) => {
       try {
-        return await LiquidOpsClient.lend({
+        return await LiquidOpsClient.borrow({
           token,
           quantity,
         });
@@ -33,10 +33,10 @@ export function useLend() {
     },
   });
 
-  const unlendMutation = useMutation({
-    mutationFn: async ({ token, quantity }: UnlendParams) => {
+  const repayMutation = useMutation({
+    mutationFn: async ({ token, quantity }: RepayParams) => {
       try {
-        return await LiquidOpsClient.unLend({
+        return await LiquidOpsClient.repay({
           token,
           quantity,
         });
@@ -56,17 +56,17 @@ export function useLend() {
   });
 
   return {
-    lend: lendMutation.mutate,
-    isLending: lendMutation.isPending,
-    lendError: lendMutation.error,
+    borrow: borrowMutation.mutate,
+    isBorrowing: borrowMutation.isPending,
+    borrowError: borrowMutation.error,
 
-    unlend: unlendMutation.mutate,
-    isUnlending: unlendMutation.isPending,
-    unlendError: unlendMutation.error,
+    repay: repayMutation.mutate,
+    isRepaying: repayMutation.isPending,
+    repayError: repayMutation.error,
 
     reset: () => {
-      lendMutation.reset();
-      unlendMutation.reset();
+      borrowMutation.reset();
+      repayMutation.reset();
     },
   };
 }

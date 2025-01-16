@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import InputBox from "../InputBox/InputBox";
@@ -8,6 +8,7 @@ import { formatMaxAmount } from "../utils/utils";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
+import { useLend } from "@/hooks/actions/useLend";
 
 interface ActionTabProps {
   ticker: string;
@@ -22,11 +23,26 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
     ticker.toUpperCase(),
   );
 
-  const utilizationRate = 0.75; // TODO: get real value when known
-  const networkFee = 0; // TODO: when fee structure is known
+  const { lend, isLending, lendError } = useLend();
+
+  const utilizationRate = 0.75;
+  const networkFee = 0;
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "loading" | "success" | "error" | "pending"
+  >("idle");
+
+  // Reset submit status after success or error
+  useEffect(() => {
+    if (submitStatus === "success" || submitStatus === "error") {
+      const timer = setTimeout(() => {
+        setSubmitStatus("idle");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
   const calculateMaxAmount = () => {
     if (isLoadingBalance || !walletBalance) return 0;
@@ -40,6 +56,40 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
     setInputValue(formatMaxAmount(maxAmount));
+  };
+
+  const handleSubmit = () => {
+    if (!inputValue || mode !== "supply") return;
+
+    setSubmitStatus("loading");
+
+    const quantityBigInt = BigInt(Math.floor(parseFloat(inputValue) * 1)); // TODO
+
+    lend(
+      {
+        token: ticker.toUpperCase(),
+        quantity: quantityBigInt,
+      },
+      {
+        onSuccess: (result) => {
+          // Log the complete LiquidOps response
+          console.log("LiquidOps Raw Response:", result);
+
+          if (result.status === "pending") {
+            setSubmitStatus("pending");
+          } else if (result.status === true) {
+            setSubmitStatus("success");
+            setInputValue(""); // Clear input on success
+          } else {
+            setSubmitStatus("error");
+          }
+        },
+        onError: (error) => {
+          console.error("LiquidOps Error:", error);
+          setSubmitStatus("error");
+        },
+      },
+    );
   };
 
   return (
@@ -82,7 +132,13 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         />
       </div>
 
-      <SubmitButton />
+      <SubmitButton
+        onSubmit={handleSubmit}
+        isLoading={isLending}
+        disabled={!inputValue || parseFloat(inputValue) <= 0}
+        error={lendError}
+        status={submitStatus}
+      />
     </div>
   );
 };

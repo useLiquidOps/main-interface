@@ -1,22 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import styles from "./SubmitButton.module.css";
 
-const SubmitButton = () => {
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+interface SubmitButtonProps {
+  onSubmit: () => void;
+  isLoading: boolean;
+  disabled?: boolean;
+  error?: Error | null;
+  status: "idle" | "loading" | "success" | "error" | "pending";
+}
 
-  const handleClick = () => {
-    setStatus("loading");
-    setTimeout(() => {
-      setStatus("success");
-      setTimeout(() => {
-        setStatus("idle");
-      }, 2000);
-    }, 2000);
-  };
-
+const SubmitButton: React.FC<SubmitButtonProps> = ({
+  onSubmit,
+  isLoading,
+  disabled = false,
+  error = null,
+  status,
+}) => {
   const getButtonContent = () => {
     switch (status) {
       case "loading":
@@ -30,6 +30,19 @@ const SubmitButton = () => {
               className={styles.loadingIcon}
             />
             <span>Loading</span>
+          </>
+        );
+      case "pending":
+        return (
+          <>
+            <Image
+              src="/icons/loadingSubmit.svg"
+              alt="Pending"
+              width={12}
+              height={12}
+              className={styles.loadingIcon}
+            />
+            <span>Transaction Pending</span>
           </>
         );
       case "success":
@@ -53,7 +66,7 @@ const SubmitButton = () => {
               width={13}
               height={13}
             />
-            <span>Failed to submit</span>
+            <span>{error?.message || "Failed to submit"}</span>
           </>
         );
       default:
@@ -64,8 +77,10 @@ const SubmitButton = () => {
   return (
     <button
       className={`${styles.submitButton} ${styles[status]}`}
-      onClick={handleClick}
-      disabled={status === "loading"}
+      onClick={onSubmit}
+      disabled={
+        disabled || isLoading || status === "loading" || status === "pending"
+      }
     >
       {getButtonContent()}
     </button>

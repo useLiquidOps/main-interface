@@ -13,6 +13,11 @@
   cursor: pointer;
 }
 
+.submitButton.pending {
+  background-color: var(--secondary-lavender);;
+  color: black;
+}
+
 .idle {
   background-color: var(--primary-palatinate-blue);
   color: white;

@@ -160,7 +160,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         </p>
       </div>
       {/* TODO: correct button inputs with pending logic */}
-      {/* <SubmitButton /> */}
+      <SubmitButton />
     </div>
   );
 };

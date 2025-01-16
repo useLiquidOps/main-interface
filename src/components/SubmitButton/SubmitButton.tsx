@@ -42,7 +42,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
               height={12}
               className={styles.loadingIcon}
             />
-            <span>Transaction Pending</span>
+            <span>Pending</span>
           </>
         );
       case "success":

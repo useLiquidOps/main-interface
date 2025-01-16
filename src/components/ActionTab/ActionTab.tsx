@@ -9,6 +9,7 @@ import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLend } from "@/hooks/actions/useLend";
+import { useBorrow } from "@/hooks/actions/useBorrow";
 
 interface ActionTabProps {
   ticker: string;
@@ -24,6 +25,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   );
 
   const { lend, isLending, lendError } = useLend();
+  const { borrow, isBorrowing, borrowError } = useBorrow();
 
   const utilizationRate = 0.75;
   const networkFee = 0;
@@ -59,37 +61,47 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   };
 
   const handleSubmit = () => {
-    if (!inputValue || mode !== "supply") return;
+    if (!inputValue) return;
 
     setSubmitStatus("loading");
-
     const quantityBigInt = BigInt(Math.floor(parseFloat(inputValue) * 1)); // TODO
 
-    lend(
-      {
-        token: ticker.toUpperCase(),
-        quantity: quantityBigInt,
-      },
-      {
-        onSuccess: (result) => {
-          // Log the complete LiquidOps response
-          console.log("LiquidOps Raw Response:", result);
+    const params = {
+      token: ticker.toUpperCase(),
+      quantity: quantityBigInt,
+    };
 
-          if (result.status === "pending") {
-            setSubmitStatus("pending");
-          } else if (result.status === true) {
-            setSubmitStatus("success");
-            setInputValue(""); // Clear input on success
-          } else {
-            setSubmitStatus("error");
-          }
-        },
-        onError: (error) => {
-          console.error("LiquidOps Error:", error);
+    const callbacks = {
+      onSuccess: (result: any) => {
+        console.log(`LiquidOps ${mode} Response:`, result);
+
+        if (result.status === "pending") {
+          setSubmitStatus("pending");
+          setInputValue("");
+          setTimeout(() => setSubmitStatus("idle"), 2000);
+        } else if (result.status === true) {
+          setSubmitStatus("success");
+          setInputValue("");
+          setTimeout(() => setSubmitStatus("idle"), 2000);
+        } else {
           setSubmitStatus("error");
-        },
+          setInputValue("");
+          setTimeout(() => setSubmitStatus("idle"), 2000);
+        }
       },
-    );
+      onError: (error: any) => {
+        console.error(`LiquidOps ${mode} Error:`, error);
+        setSubmitStatus("error");
+        setInputValue("");
+        setTimeout(() => setSubmitStatus("idle"), 2000);
+      },
+    };
+
+    if (mode === "supply") {
+      lend(params, callbacks);
+    } else {
+      borrow(params, callbacks);
+    }
   };
 
   return (
@@ -134,9 +146,9 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
       <SubmitButton
         onSubmit={handleSubmit}
-        isLoading={isLending}
+        isLoading={mode === "supply" ? isLending : isBorrowing}
         disabled={!inputValue || parseFloat(inputValue) <= 0}
-        error={lendError}
+        error={mode === "supply" ? lendError : borrowError}
         status={submitStatus}
       />
     </div>

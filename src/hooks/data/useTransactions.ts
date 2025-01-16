@@ -1,36 +1,63 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { useWalletAddress } from "./useWalletAddress";
 import { GetTransactions, GetTransactionsRes } from "liquidops";
 
-type UseTransactionsParams = Omit<GetTransactions, "walletAddress">;
+type TransactionAction = GetTransactions["action"];
+type UseTransactionsParams = Omit<GetTransactions, "walletAddress" | "action"> & {
+  actions: TransactionAction[];
+};
 
-export function useTransactions({
-  token,
-  action,
-  cursor,
-}: UseTransactionsParams) {
+export function useTransactions({ token, cursor, actions }: UseTransactionsParams) {
   const { data: walletAddress } = useWalletAddress();
+  const queryClient = useQueryClient();
 
-  return useQuery({
-    queryKey: ["transactions", token, action, walletAddress, cursor],
-    queryFn: async (): Promise<GetTransactionsRes> => {
-      if (!walletAddress) throw new Error("Wallet address not available");
+  const queries = useQueries({
+    queries: actions.map((action) => ({
+      queryKey: ["transactions", token, action, walletAddress, cursor],
+      queryFn: async (): Promise<GetTransactionsRes> => {
+        if (!walletAddress) throw new Error("Wallet address not available");
 
-      const transactions = await LiquidOpsClient.getTransactions({
-        token,
-        action,
-        cursor,
-        walletAddress,
-      });
+        const transactions = await LiquidOpsClient.getTransactions({
+          token,
+          action,
+          cursor,
+          walletAddress,
+        });
 
-      return transactions;
-    },
-    // Only fetch when we have a wallet address
-    enabled: !!walletAddress,
-    // Add stale time to prevent too frequent refetches
-    staleTime: 30 * 1000, // 30 seconds
-    // Add cache time to keep data for
-    gcTime: 5 * 60 * 1000, // 5 minutes
+        return transactions;
+      },
+      enabled: !!walletAddress,
+      staleTime: 30 * 1000,
+      gcTime: 5 * 60 * 1000,
+    })),
   });
+
+  const getTransactionsByAction = (action: TransactionAction) => {
+    return queryClient.getQueryData<GetTransactionsRes>([
+      "transactions",
+      token,
+      action,
+      walletAddress,
+      cursor,
+    ]);
+  };
+
+  const isLoading = queries.some((query) => query.isLoading);
+  const isError = queries.some((query) => query.isError);
+  const errors = queries.map((query) => query.error).filter(Boolean);
+
+  // Create a results object based on requested actions
+  const results = actions.reduce((acc, action) => ({
+    ...acc,
+    [`${action}Transactions`]: getTransactionsByAction(action),
+  }), {});
+
+  return {
+    ...results,
+    isLoading,
+    isError,
+    errors,
+    queries,
+  };
 }

@@ -14,7 +14,7 @@
 }
 
 .submitButton.pending {
-  background-color: var(--secondary-lavender);;
+  background-color: var(--secondary-lavender);
   color: black;
 }
 

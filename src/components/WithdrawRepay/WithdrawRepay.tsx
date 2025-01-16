@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./WithdrawRepay.module.css";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import PercentagePicker from "../PercentagePicker/PercentagePicker";
@@ -8,6 +8,8 @@ import Image from "next/image";
 import { formatMaxAmount } from "../utils/utils";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
+import { useLend } from "@/hooks/actions/useLend";
+import { useBorrow } from "@/hooks/actions/useBorrow";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -25,6 +27,9 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     ticker.toUpperCase(),
   );
 
+  const { unlend, isUnlending, unlendError } = useLend();
+  const { repay, isRepaying, repayError } = useBorrow();
+
   // TODO: fill in with real data
   const networkFee = 0;
   const interestOwed = 10;
@@ -35,6 +40,19 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
     null,
   );
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "loading" | "success" | "error" | "pending"
+  >("idle");
+
+  // Reset submit status after success or error
+  useEffect(() => {
+    if (submitStatus === "success" || submitStatus === "error") {
+      const timer = setTimeout(() => {
+        setSubmitStatus("idle");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
   const calculateMaxAmount = () => {
     if (isLoadingBalance || !walletBalance) return 0;
@@ -73,6 +91,50 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     setSelectedPercentage(null);
   };
 
+  const handleSubmit = () => {
+    if (!inputValue) return;
+
+    setSubmitStatus("loading");
+    const quantityBigInt = BigInt(Math.floor(parseFloat(inputValue) * 1)); // TODO: Add proper decimal handling
+
+    const params = {
+      token: ticker.toUpperCase(),
+      quantity: quantityBigInt,
+    };
+
+    const callbacks = {
+      onSuccess: (result: any) => {
+        console.log(`LiquidOps ${mode} Response:`, result);
+
+        if (result.status === "pending") {
+          setSubmitStatus("pending");
+          setInputValue("");
+          setTimeout(() => setSubmitStatus("idle"), 2000);
+        } else if (result.status === true) {
+          setSubmitStatus("success");
+          setInputValue("");
+          setTimeout(() => setSubmitStatus("idle"), 2000);
+        } else {
+          setSubmitStatus("error");
+          setInputValue("");
+          setTimeout(() => setSubmitStatus("idle"), 2000);
+        }
+      },
+      onError: (error: any) => {
+        console.error(`LiquidOps ${mode} Error:`, error);
+        setSubmitStatus("error");
+        setInputValue("");
+        setTimeout(() => setSubmitStatus("idle"), 2000);
+      },
+    };
+
+    if (mode === "withdraw") {
+      unlend(params, callbacks);
+    } else {
+      repay(params, callbacks);
+    }
+  };
+
   return (
     <div className={styles.actionTab}>
       <div className={styles.titleContainer}>
@@ -109,8 +171,13 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         <span className={styles.infoLabel}>Network fee: {networkFee} AO</span>
       </div>
 
-      {/* TODO: correct button inputs with pending logic */}
-      {/* <SubmitButton /> */}
+      <SubmitButton
+        onSubmit={handleSubmit}
+        isLoading={mode === "withdraw" ? isUnlending : isRepaying}
+        disabled={!inputValue || parseFloat(inputValue) <= 0}
+        error={mode === "withdraw" ? unlendError : repayError}
+        status={submitStatus}
+      />
     </div>
   );
 };

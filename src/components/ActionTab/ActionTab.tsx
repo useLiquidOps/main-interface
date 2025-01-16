@@ -64,7 +64,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
     if (!inputValue) return;
 
     setSubmitStatus("loading");
-    const quantityBigInt = BigInt(Math.floor(parseFloat(inputValue) * 1)); // TODO
+    const quantityBigInt = BigInt(Math.floor(parseFloat(inputValue) * 1)); // TODO: Add proper decimal handling
 
     const params = {
       token: ticker.toUpperCase(),

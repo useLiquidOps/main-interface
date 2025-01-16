@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import styles from "./Connect.module.css";
 import { useClickOutside } from "../utils/utils";
 import DropdownButton from "../DropDown/DropDown";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { overlayVariants } from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "./ProfileDropDown";
+import { useAOProfile } from "@/hooks/data/useAOProfile";
 
 interface TokenInfo {
   symbol: string;
@@ -25,6 +25,8 @@ const Connect: React.FC = () => {
   const [address, setAddress] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+
+  const { data: profile, isLoading: isProfileLoading } = useAOProfile();
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() =>
     setIsOpen(false),
@@ -133,12 +135,20 @@ const Connect: React.FC = () => {
               isOpen={isOpen}
               onToggle={() => setIsOpen(!isOpen)}
             />
-            <Image
-              src="/icons/user.svg"
+            <img
+              src={
+                !isProfileLoading && profile?.thumbnail
+                  ? `https://arweave.net/${profile.thumbnail}`
+                  : "/icons/user.svg"
+              }
               alt="Profile image"
               width={32}
               height={32}
               className={styles.connectImage}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/icons/user.svg";
+              }}
             />
             <ProfileDropDown
               isOpen={isOpen}

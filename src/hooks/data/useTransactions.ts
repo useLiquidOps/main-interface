@@ -4,11 +4,18 @@ import { useWalletAddress } from "./useWalletAddress";
 import { GetTransactions, GetTransactionsRes } from "liquidops";
 
 type TransactionAction = GetTransactions["action"];
-type UseTransactionsParams = Omit<GetTransactions, "walletAddress" | "action"> & {
+type UseTransactionsParams = Omit<
+  GetTransactions,
+  "walletAddress" | "action"
+> & {
   actions: TransactionAction[];
 };
 
-export function useTransactions({ token, cursor, actions }: UseTransactionsParams) {
+export function useTransactions({
+  token,
+  cursor,
+  actions,
+}: UseTransactionsParams) {
   const { data: walletAddress } = useWalletAddress();
   const queryClient = useQueryClient();
 
@@ -48,10 +55,13 @@ export function useTransactions({ token, cursor, actions }: UseTransactionsParam
   const errors = queries.map((query) => query.error).filter(Boolean);
 
   // Create a results object based on requested actions
-  const results = actions.reduce((acc, action) => ({
-    ...acc,
-    [`${action}Transactions`]: getTransactionsByAction(action),
-  }), {});
+  const results = actions.reduce(
+    (acc, action) => ({
+      ...acc,
+      [`${action}Transactions`]: getTransactionsByAction(action),
+    }),
+    {},
+  );
 
   return {
     ...results,

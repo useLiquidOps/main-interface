@@ -51,13 +51,13 @@
   font-weight: 500;
   padding: 10px 15px;
   border-radius: 9px;
+  transition: all 0.18s ease;
 }
 
 .navLinks p {
   margin: 0;
   color: var(--primary-palatinate-blue);
   font-weight: 500;
-  transition: all 0.18s ease;
 }
 
 .favicon {

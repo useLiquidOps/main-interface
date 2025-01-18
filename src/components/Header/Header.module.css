@@ -51,6 +51,7 @@
   font-weight: 500;
   padding: 10px 15px;
   border-radius: 9px;
+  transition: all 0.18s ease;
 }
 
 .navLinks p {

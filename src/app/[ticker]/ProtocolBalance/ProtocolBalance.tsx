@@ -63,8 +63,8 @@ const ProtocolBalance: React.FC<{
             className={`${styles.button} ${styles.supplyButton}`}
             onClick={() => handleNavigate("supply")}
           >
-            <Image src="/icons/plus.svg" alt="Plus" width={16} height={16} />
             <span>Supply assets</span>
+            <Image src="/icons/plus.svg" alt="Plus" width={16} height={16} />
           </button>
           <button
             className={`${styles.button} ${styles.borrowButton}`}

@@ -75,7 +75,9 @@ export function useFaucet(options: UseFaucetOptions = {}) {
     onError: (error) => {
       // Let the UI update first with error state
       setTimeout(() => {
-        alert(error instanceof Error ? error.message : "Failed to claim tokens");
+        alert(
+          error instanceof Error ? error.message : "Failed to claim tokens",
+        );
         options.onError?.(error as Error);
       }, 500);
     },

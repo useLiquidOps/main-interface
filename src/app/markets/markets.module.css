@@ -1,0 +1,192 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  flex-grow: 1;
+  background-color: var(--background);
+  overflow-y: auto;
+}
+
+.bodyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 900px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  gap: 25px;
+}
+
+.marketStats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  width: 100%;
+  padding: 24px;
+  border-radius: 24px;
+  gap: 5px;
+}
+
+.marketStat {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 50px;
+  padding-top: 0;
+  padding-bottom: 0;
+  width: fit-content;
+}
+
+.marketStatValue {
+  margin: 0;
+  color: var(--primary-ultramarine);
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.marketStatTitle {
+  margin: 0;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
+  font-size: 0.5rem;
+  font-size: 12px;
+}
+
+.marketsList {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: white;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.marketRowWrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.marketRow {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  transition: all 0.3s ease-in-out;
+  background: white;
+  border-radius: 10px;
+  justify-content: space-between;
+  width: 100%;
+  transition: all 0.18s ease;
+}
+
+.marketRow:hover {
+  background: var(--primary-ghost-white);
+}
+
+.assetInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 190px;
+  flex-shrink: 0;
+}
+
+.iconWrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nameSymbol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: fit-content;
+}
+
+.name {
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.symbol {
+  color: var(--secondary-periwinkle);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.aprInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aprValue {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.apr {
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.aprLabel {
+  color: var(--secondary-periwinkle);
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.metricBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  width: 100px;
+}
+
+.metricValue {
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  width: 100px;
+}
+
+.metricLabel {
+  color: var(--secondary-periwinkle);
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+}

@@ -1,0 +1,32 @@
+html,
+body {
+  max-width: 100vw;
+  max-height: 100vh;
+  background: #f9f9f9;
+  font-family: "DM Sans", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+:root {
+  --primary-palatinate-blue: #4844ec;
+  --primary-ghost-white: #f5f5fe;
+  --primary-ultramarine: #191994;
+  --secondary-slate-blue: #6d6aff;
+  --secondary-tea-green: #d5efb5;
+  --secondary-periwinkle: #b3b3fb;
+  --secondary-honeydew: #eef9e2;
+  --secondary-lavender: #dcdcff;
+  --background: #fafafc;
+  --failed-red: #f5cbcb;
+  --failed-red-text: #b52221;
+  --submit-green: #588740;
+  --risk-progress-container: #fff3ca;
+  --risk-progress: #fad347;
+}

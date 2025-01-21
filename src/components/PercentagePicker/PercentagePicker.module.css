@@ -1,0 +1,58 @@
+.statusSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.statusBarContainer {
+  flex: 1;
+  background-color: var(--secondary-lavender);
+  border-radius: 100px;
+  height: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.statusBar {
+  background-color: var(--secondary-slate-blue);
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.3s ease;
+}
+
+.statusPercentage {
+  color: var(--secondary-periwinkle);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 36px;
+  text-align: right;
+}
+
+.percentageButtonsContainer {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.percentageButton {
+  padding: 6px 12px;
+  border-radius: 9px;
+  background-color: var(--primary-ghost-white);
+  border: none;
+  color: var(--primary-palatinate-blue);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "DM Sans", sans-serif;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.percentageButton.selected {
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+}

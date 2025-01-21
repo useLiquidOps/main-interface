@@ -1,0 +1,64 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  flex-grow: 1;
+  background-color: var(--background);
+  overflow-y: auto;
+}
+
+.bodyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 900px;
+  margin-top: 50px;
+  margin-bottom: 25px;
+  gap: 25px;
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.backIcon {
+  color: var(--secondary-slate-blue);
+}
+
+.title {
+  color: var(--secondary-slate-blue);
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  gap: 24px;
+}
+
+.leftColumn {
+  flex: 1;
+  min-width: 0;
+}
+
+.rightColumn {
+  width: 340px;
+  flex-shrink: 0;
+}

@@ -1,0 +1,218 @@
+.container {
+  background-color: white;
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  color: var(--secondary-slate-blue);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.viewAll {
+  color: var(--secondary-periwinkle);
+  font-size: 16px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.assetsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.assetRowWrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.assetRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% + 10px);
+  padding: 12px 16px;
+  transition: all 0.3s ease-in-out;
+  background: white;
+  transform: translateX(0);
+  border-radius: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.assetRowWrapper:hover .assetRow {
+  transform: translateX(-63px);
+  background: var(--primary-ghost-white);
+}
+
+.assetInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconWrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nameAmount {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name {
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.amount {
+  color: var(--secondary-periwinkle);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.aprInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.apr {
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.changeInfo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.change {
+  color: var(--secondary-periwinkle);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeButton {
+  background-color: var(--primary-ghost-white);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.withdrawButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 75px;
+  padding: 8px 16px;
+  background: var(--secondary-slate-blue);
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.withdrawButton span {
+  font-size: 9px;
+  text-align: center;
+  white-space: nowrap;
+  padding-left: 10px;
+  font-weight: 600;
+  padding-left: 17px;
+}
+
+.withdrawIcon {
+  margin-left: 17px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 286px;
+}
+
+.emptyStateIcon {
+  margin-bottom: 16px;
+}
+
+.emptyStateTitle {
+  color: var(--primary-ultramarine);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.emptyStateText {
+  color: var(--secondary-periwinkle);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  width: 230px;
+  overflow: auto;
+}
+
+.lendContainer {
+  height: 390px;
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+
+.borrowContainer {
+  height: 390px;
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+
+.lendContainer.expanded {
+  height: 100%;
+}
+
+.borrowContainer.expanded {
+  height: 100%;
+}

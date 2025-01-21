@@ -403,6 +403,7 @@ const LiquidationsContent = () => {
                 toToken={assetData.toToken}
                 offMarketPrice={assetData.offMarketPrice}
                 conversionRate={assetData.conversionRate}
+                targetUserAddress={['ADD HERE WHEN KNOWN']} // TODO: add target user address'
               />
             </motion.div>
           </motion.div>

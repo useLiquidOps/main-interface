@@ -69,67 +69,6 @@
   border-radius: 12px;
 }
 
-.profileDetails {
-  display: flex;
-  gap: 15px;
-  justify-content: left;
-  align-items: center;
-}
-
-.profileImage {
-  height: 42px;
-  width: 42px;
-  border-radius: 50%;
-}
-
-.profileName {
-  display: flex;
-  justify-content: center;
-  align-items: left;
-  flex-direction: column;
-  gap: 2px;
-  padding: 5px;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.userName {
-  font-family: "DM Sans", sans-serif;
-  font-size: 17px;
-  color: var(--secondary-slate-blue);
-  font-weight: 600;
-  margin: 0;
-}
-
-.addressContainer {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-.addressContainer span {
-  font-family: "DM Sans", sans-serif;
-  font-size: 10px;
-  color: var(--secondary-periwinkle);
-  font-weight: 600;
-}
-
-.copyButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  padding-left: 4px;
-  height: 10px;
-}
-
-.copyButton img {
-  height: 10px;
-}
-
 .logoutButton {
   display: flex;
   justify-content: center;

@@ -1,0 +1,152 @@
+.profileDetails {
+  display: flex;
+  gap: 15px;
+  justify-content: left;
+  align-items: center;
+}
+
+.profileImage {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+}
+
+.profileName {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.userName {
+  font-family: "DM Sans", sans-serif;
+  font-size: 17px;
+  color: var(--secondary-slate-blue);
+  font-weight: 600;
+  margin: 0;
+  cursor: text;
+}
+
+.addressContainer {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.addressContainer span {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
+}
+
+.copyButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  padding-left: 4px;
+  height: 10px;
+}
+
+.copyButton img {
+  height: 10px;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.usernameEditContainer {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  gap: 8px;
+}
+
+.usernameInput {
+  font-family: "DM Sans", sans-serif;
+  background: transparent;
+  color: var(--secondary-slate-blue);
+  font-size: 17px;
+  font-weight: 600;
+  outline: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: auto;
+}
+
+.measureText {
+  font-family: "DM Sans", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  visibility: hidden;
+  position: absolute;
+  white-space: pre;
+  pointer-events: none;
+}
+
+.profileImageContainer {
+  position: relative;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.confirmImageOverlay {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.confirmUsernameButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

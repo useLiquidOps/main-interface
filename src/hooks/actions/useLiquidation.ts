@@ -12,7 +12,12 @@ export function useLiquidation() {
   const queryClient = useQueryClient();
 
   const liquidationMutation = useMutation({
-    mutationFn: async ({ token, rewardToken, targetUserAddress, quantity }: LiquidationParams) => {
+    mutationFn: async ({
+      token,
+      rewardToken,
+      targetUserAddress,
+      quantity,
+    }: LiquidationParams) => {
       try {
         return await LiquidOpsClient.liquidate({
           token,

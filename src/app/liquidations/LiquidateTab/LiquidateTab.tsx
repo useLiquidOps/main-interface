@@ -38,7 +38,9 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   // Input states for the first (from) token
   const [fromInputValue, setFromInputValue] = useState<string>("");
   const [isFromFocused, setIsFromFocused] = useState<boolean>(false);
-  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(null);
+  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
+    null,
+  );
 
   // Input states for the second (to) token
   const [toInputValue, setToInputValue] = useState<string>("");
@@ -223,7 +225,9 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
       <SubmitButton
         onSubmit={handleSubmit}
         isLoading={isLiquidating}
-        disabled={!fromInputValue || parseFloat(fromInputValue.replace(/,/g, "")) <= 0}
+        disabled={
+          !fromInputValue || parseFloat(fromInputValue.replace(/,/g, "")) <= 0
+        }
         error={liquidationError}
         status={submitStatus}
       />

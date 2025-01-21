@@ -5,6 +5,7 @@ import { oTokens } from "liquidops";
 interface FaucetResponse {
   status: boolean;
   remainingHours?: number;
+  error?: string;
 }
 
 interface FaucetParams {
@@ -63,18 +64,18 @@ export function useFaucet(options: UseFaucetOptions = {}) {
           );
           options.onSuccess?.(data);
         }, 500);
+      } else if (data.error) {
+        throw new Error(data.error);
       } else if (data.remainingHours) {
         throw new Error(
-          `Minted max tokens, please wait ${data.remainingHours.toLocaleString()} hours.`,
+          `Please wait ${data.remainingHours} hours before claiming again.`,
         );
       }
     },
     onError: (error) => {
       // Let the UI update first with error state
       setTimeout(() => {
-        alert(
-          error instanceof Error ? error.message : "Failed to claim tokens",
-        );
+        alert(error instanceof Error ? error.message : "Failed to claim tokens");
         options.onError?.(error as Error);
       }, 500);
     },

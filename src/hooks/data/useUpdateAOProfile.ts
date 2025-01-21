@@ -34,11 +34,11 @@ export function useUpdateAOProfile() {
   const { data: walletAddress } = useWalletAddress();
   const { data: profile } = useAOProfile();
   const queryClient = useQueryClient();
-  
+
   const { createProfile, updateProfile } = AOProfile.init({
     ao,
     signer,
-    arweave
+    arweave,
   });
 
   const createProfileMutation = useMutation({
@@ -47,7 +47,10 @@ export function useUpdateAOProfile() {
       if (!walletAddress) throw new Error("Wallet address not available");
       return await createProfile(data);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["ao-profile", walletAddress] })
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["ao-profile", walletAddress],
+      }),
   });
 
   const updateProfileMutation = useMutation({
@@ -56,16 +59,22 @@ export function useUpdateAOProfile() {
       if (!walletAddress) throw new Error("Wallet address not available");
       return await updateProfile(data);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["ao-profile", walletAddress] })
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["ao-profile", walletAddress],
+      }),
   });
 
   const handleProfileUpdate = (data: Omit<ProfileData, "profileId">) => {
     const existingProfile = profile as AOProfileResponse | undefined;
-    
+
     console.log("Handle profile update:", { data, existingProfile });
 
     if (existingProfile?.id) {
-      return updateProfileMutation.mutate({ ...data, profileId: existingProfile.id });
+      return updateProfileMutation.mutate({
+        ...data,
+        profileId: existingProfile.id,
+      });
     }
     return createProfileMutation.mutate(data);
   };

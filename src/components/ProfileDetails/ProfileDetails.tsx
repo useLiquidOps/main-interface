@@ -30,8 +30,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   const [inputWidth, setInputWidth] = useState("auto");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const measureRef = useRef<HTMLSpanElement>(null);
-  
-  const { createProfile, updateProfile, isCreating, isUpdating } = useUpdateAOProfile();
+
+  const { createProfile, updateProfile, isCreating, isUpdating } =
+    useUpdateAOProfile();
 
   useEffect(() => {
     if (measureRef.current) {
@@ -48,7 +49,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
     `${addr.slice(0, 5)}...${addr.slice(-5)}`;
 
   const formatUsername = (username: string) => {
-    return username.length > MAX_USERNAME_LENGTH 
+    return username.length > MAX_USERNAME_LENGTH
       ? `${username.slice(0, MAX_USERNAME_LENGTH)}...`
       : username;
   };
@@ -61,7 +62,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
     fileInputRef.current?.click();
   };
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -86,11 +89,11 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
     try {
       // Only use updateProfile since we require a username first
       if (!profile?.username) return;
-      
+
       if (profile.profileId) {
         await updateProfile({
           ...baseData,
-          profileId: profile.profileId
+          profileId: profile.profileId,
         });
       } else {
         await createProfile(baseData);
@@ -111,14 +114,14 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
           displayName: newUsername.slice(0, MAX_USERNAME_LENGTH),
           description: "",
           thumbnail: profile.thumbnail || "/icons/user.svg",
-          profileId: profile.profileId
+          profileId: profile.profileId,
         });
       } else {
         await createProfile({
           userName: newUsername.slice(0, MAX_USERNAME_LENGTH),
           displayName: newUsername.slice(0, MAX_USERNAME_LENGTH),
           description: "",
-          thumbnail: "/icons/user.svg"
+          thumbnail: "/icons/user.svg",
         });
       }
       setIsEditingUsername(false);
@@ -138,7 +141,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
       <div className={styles.profileImageContainer}>
         <img
           src={
-            pendingImage || 
+            pendingImage ||
             (!isProfileLoading && profile?.thumbnail
               ? `https://arweave.net/${profile.thumbnail}`
               : "/icons/user.svg")
@@ -152,7 +155,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
             const target = e.target as HTMLImageElement;
             target.src = "/icons/user.svg";
           }}
-          style={{ cursor: profile?.username ? 'pointer' : 'default' }}
+          style={{ cursor: profile?.username ? "pointer" : "default" }}
         />
         {(isCreating || isUpdating) && (
           <div className={styles.imageOverlay}>
@@ -160,7 +163,10 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
           </div>
         )}
         {pendingImage && !isCreating && !isUpdating && (
-          <div className={styles.confirmImageOverlay} onClick={handleConfirmImage}>
+          <div
+            className={styles.confirmImageOverlay}
+            onClick={handleConfirmImage}
+          >
             <Image
               src="/icons/check.svg"
               alt="Confirm"
@@ -180,16 +186,15 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
       <div className={styles.profileName}>
         {isEditingUsername ? (
           <div className={styles.usernameEditContainer}>
-            <span 
-              ref={measureRef} 
-              className={styles.measureText}
-            >
+            <span ref={measureRef} className={styles.measureText}>
               {newUsername || "Set username"}
             </span>
             <input
               type="text"
               value={newUsername}
-              onChange={(e) => setNewUsername(e.target.value.slice(0, MAX_USERNAME_LENGTH))}
+              onChange={(e) =>
+                setNewUsername(e.target.value.slice(0, MAX_USERNAME_LENGTH))
+              }
               className={styles.usernameInput}
               autoFocus
               placeholder={!profile?.username ? "Set username" : ""}
@@ -197,7 +202,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
               maxLength={MAX_USERNAME_LENGTH}
             />
             {newUsername !== profile?.username && newUsername.trim() !== "" && (
-              <button 
+              <button
                 className={styles.confirmUsernameButton}
                 onClick={handleUsernameConfirm}
               >
@@ -211,10 +216,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
             )}
           </div>
         ) : (
-          <p 
-            className={styles.userName}
-            onClick={handleUsernameClick}
-          >
+          <p className={styles.userName} onClick={handleUsernameClick}>
             {!isProfileLoading && profile?.username
               ? formatUsername(profile.username)
               : "Click to create profile"}
@@ -222,10 +224,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
         )}
         <div className={styles.addressContainer}>
           <span>{shortenAddress(address)}</span>
-          <button
-            className={styles.copyButton}
-            onClick={() => onCopy(address)}
-          >
+          <button className={styles.copyButton} onClick={() => onCopy(address)}>
             <Image
               src={isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"}
               alt="Copy"

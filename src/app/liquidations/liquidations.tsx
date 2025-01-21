@@ -13,6 +13,7 @@ import {
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
 import { formatTMB } from "@/components/utils/utils";
+// import { useGetLiquidations } from "@/hooks/data/useGetLiquidations";
 
 interface TokenInfo {
   symbol: string;
@@ -113,6 +114,27 @@ const LiquidationsContent = () => {
   };
 
   if (!mounted) return null;
+
+  // const { getLiquidations, isGettingLiquidations } = useGetLiquidations();
+
+  // useEffect(() => {
+  //   getLiquidations(
+  //     {
+  //       token:
+  //         selectedSendToken.symbol === "All tokens"
+  //           ? ""
+  //           : selectedSendToken.symbol,
+  //     },
+  //     {
+  //       onSuccess: (result) => {
+  //         console.log("Available liquidations:", result);
+  //       },
+  //       onError: (error) => {
+  //         console.error("Error fetching liquidations:", error);
+  //       },
+  //     },
+  //   );
+  // }, [selectedSendToken.symbol, getLiquidations]);
 
   return (
     <div className={styles.page}>

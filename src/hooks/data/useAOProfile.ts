@@ -2,23 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 // @ts-ignore, no aoprofile types
 import AOProfile from "@permaweb/aoprofile";
-import { arweave } from "@/utils/Arweave";
-import { signer } from "@/utils/AO";
-import { ao } from "@/utils/AO";
+import { connect, createDataItemSigner } from "@permaweb/aoconnect";
+import Arweave from "arweave";
 
 export function useAOProfile() {
   const { data: walletAddress } = useWalletAddress();
+  const ao = connect();
+  const signer = createDataItemSigner(window.arweaveWallet);
   const { getProfileByWalletAddress } = AOProfile.init({
     ao,
     signer,
-    arweave,
+    arweave: Arweave.init({}),
   });
 
   return useQuery({
     queryKey: ["ao-profile", walletAddress],
     queryFn: async () => {
       if (!walletAddress) throw new Error("Wallet address not available");
-      console.log(await getProfileByWalletAddress({ address: walletAddress }));
       return await getProfileByWalletAddress({ address: walletAddress });
     },
     enabled: !!walletAddress,

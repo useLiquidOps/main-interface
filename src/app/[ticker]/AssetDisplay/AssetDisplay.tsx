@@ -9,7 +9,6 @@ import { formatTMB } from "@/components/utils/utils";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";
-  maxYield?: string;
   tokens: Array<{
     icon: string;
     oIcon: string;
@@ -20,7 +19,6 @@ interface AssetDisplayProps {
 
 const AssetDisplay: React.FC<AssetDisplayProps> = ({
   mode,
-  maxYield,
   tokens,
 }) => {
   const [showAll, setShowAll] = useState(false);
@@ -36,7 +34,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
       return {
         title: "Yielding assets",
         emptyTitle: "No assets supplied yet",
-        emptyText: `Providing collateral can earn you up to ${maxYield}% APY`,
+        emptyText: `Providing collateral can earn you APY.`,
         actionButton: "Withdraw",
         actionIcon: "/icons/withdraw.svg",
       };
@@ -86,7 +84,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({
       {tokens.length === 0 ? (
         <div className={styles.emptyState}>
           <Image
-            src="/icons/noAssets.png"
+            src="/icons/noAssets.svg"
             alt="No assets"
             width={120}
             height={120}

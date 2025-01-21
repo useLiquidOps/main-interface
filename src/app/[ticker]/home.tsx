@@ -35,7 +35,6 @@ const HomeContent = ({
             <AssetDisplay
               mode="lend"
               tokens={AssetDisplayData}
-              maxYield="5.1"
             />
             <AssetDisplay mode="borrow" tokens={AssetDisplayData} />
           </div>

@@ -97,7 +97,8 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
             </button>
           </div>
 
-          <ActivityList transactions={transactions} isLoading={isLoading} />
+          {/* TODO: add correct transactions */}
+          <ActivityList transactions={[]} isLoading={isLoading} />
         </motion.div>
       )}
     </AnimatePresence>

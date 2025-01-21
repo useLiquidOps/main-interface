@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
-import { oTokens } from "liquidops";
+import { tokens } from "liquidops";
 
 interface FaucetResponse {
   status: boolean;
@@ -30,8 +30,7 @@ export function useFaucet(options: UseFaucetOptions = {}) {
       walletAddress,
       amount,
     }: FaucetParams): Promise<FaucetResponse> => {
-      const tokenKey = `o${ticker.toUpperCase()}` as keyof typeof oTokens;
-      const tokenAddress = oTokens[tokenKey];
+      const tokenAddress = tokens[ticker.toUpperCase()];
 
       if (!tokenAddress) {
         throw new Error(`No token address found for ${ticker}`);

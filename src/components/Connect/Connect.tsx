@@ -8,13 +8,9 @@ import { overlayVariants } from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "./ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
 
-interface TokenInfo {
-  symbol: string;
-  icon: string;
-}
-
 declare global {
   interface Window {
+    //@ts-ignore
     arweaveWallet: any;
   }
 }
@@ -31,12 +27,6 @@ const Connect: React.FC = () => {
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() =>
     setIsOpen(false),
   );
-
-  const tokens: TokenInfo[] = [
-    { symbol: "DAI", icon: "/tokens/dai.svg" },
-    { symbol: "qAR", icon: "/tokens/qar.svg" },
-    { symbol: "stETH", icon: "/tokens/steth.svg" },
-  ];
 
   const checkWalletConnection = async () => {
     if (typeof window === "undefined" || !window.arweaveWallet) {
@@ -153,10 +143,11 @@ const Connect: React.FC = () => {
             <ProfileDropDown
               isOpen={isOpen}
               address={address}
-              tokens={tokens}
               isCopied={isCopied}
               onCopy={copyToClipboard}
               onLogout={handleLogout}
+              isProfileLoading={isProfileLoading}
+              profile={profile}
             />
           </div>
         ) : (

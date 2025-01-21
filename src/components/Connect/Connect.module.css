@@ -32,7 +32,6 @@
   height: 32px;
   width: 32px;
   border-radius: 50%;
-  object-fit: cover;
   margin-left: 4px;
 }
 
@@ -42,68 +41,104 @@
   right: 0;
   background-color: white;
   border-radius: 12px;
-  padding: 15px;
+  padding: 20px;
   z-index: 1000;
-  width: 200px;
+  width: 318px;
   cursor: default;
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.title {
+  font-family: "DM Sans", sans-serif;
+  color: var(--secondary-slate-blue);
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: var(--primary-ghost-white);
+  border-radius: 12px;
+}
+
+.profileDetails {
+  display: flex;
+  gap: 15px;
+  justify-content: left;
+  align-items: center;
+}
+
+.profileImage {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+}
+
+.profileName {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.userName {
+  font-family: "DM Sans", sans-serif;
+  font-size: 17px;
+  color: var(--secondary-slate-blue);
+  font-weight: 600;
+  margin: 0;
 }
 
 .addressContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
-  padding: 10px;
 }
 
 .addressContainer span {
   font-family: "DM Sans", sans-serif;
-  font-size: 14px;
-  color: var(--primary-palatinate-blue);
-  font-weight: 700;
+  font-size: 10px;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
 }
 
 .copyButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
+  padding-left: 4px;
+  height: 10px;
 }
 
 .copyButton img {
-  height: 14px;
-}
-
-.balance {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px;
-}
-
-.balance img {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-}
-
-.balance span {
-  font-family: "DM Sans", sans-serif;
-  font-size: 14px;
-  color: var(--primary-ultramarine);
-  font-weight: 600;
+  height: 10px;
 }
 
 .logoutButton {
-  width: 100%;
-  background: var(--primary-ghost-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
+  width: 28px;
   border: none;
-  border-radius: 8px;
-  padding: 10px;
-  font-family: "DM Sans", sans-serif;
-  font-size: 14px;
-  color: var(--primary-palatinate-blue);
   cursor: pointer;
-  font-weight: 600;
+  background: transparent;
 }
 
 .overlay {

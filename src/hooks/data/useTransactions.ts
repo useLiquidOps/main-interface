@@ -1,73 +1,45 @@
-import { useQueries, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { useWalletAddress } from "./useWalletAddress";
-import { GetTransactions, GetTransactionsRes } from "liquidops";
+import { GetTransactions } from "liquidops";
 
 type TransactionAction = GetTransactions["action"];
-type UseTransactionsParams = Omit<
-  GetTransactions,
-  "walletAddress" | "action"
-> & {
-  actions: TransactionAction[];
-};
 
-export function useTransactions({
-  token,
-  cursor,
-  actions,
-}: UseTransactionsParams) {
+const TOKENS = ["QAR", "STETH", "DAI"] as const;
+const ACTIONS: TransactionAction[] = ["borrow", "lend", "repay", "unLend"];
+
+export function useTransactions() {
   const { data: walletAddress } = useWalletAddress();
-  const queryClient = useQueryClient();
 
-  const queries = useQueries({
-    queries: actions.map((action) => ({
-      queryKey: ["transactions", token, action, walletAddress, cursor],
-      queryFn: async (): Promise<GetTransactionsRes> => {
-        if (!walletAddress) throw new Error("Wallet address not available");
+  return useQuery({
+    queryKey: ["allTransactions", walletAddress],
+    queryFn: async () => {
+      if (!walletAddress) throw new Error("Wallet address not available");
+      
+      const allTransactions = [];
 
-        const transactions = await LiquidOpsClient.getTransactions({
-          token,
-          action,
-          cursor,
-          walletAddress,
-        });
+      for (const token of TOKENS) {
+        for (const action of ACTIONS) {
+          const result = await LiquidOpsClient.getTransactions({
+            token,
+            action,
+            walletAddress,
+          });
+          
+          allTransactions.push(...result.transactions);
+        }
+      }
 
-        return transactions;
-      },
-      enabled: !!walletAddress,
-      staleTime: 30 * 1000,
-      gcTime: 5 * 60 * 1000,
-    })),
+      // Sort transactions by timestamp in descending order
+      return allTransactions.sort((a, b) => {
+        const timestampA = b.block?.timestamp || 0;
+        const timestampB = a.block?.timestamp || 0;
+        return timestampA - timestampB;
+      });
+      
+    },
+    enabled: !!walletAddress,
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
-
-  const getTransactionsByAction = (action: TransactionAction) => {
-    return queryClient.getQueryData<GetTransactionsRes>([
-      "transactions",
-      token,
-      action,
-      walletAddress,
-      cursor,
-    ]);
-  };
-
-  const isLoading = queries.some((query) => query.isLoading);
-  const isError = queries.some((query) => query.isError);
-  const errors = queries.map((query) => query.error).filter(Boolean);
-
-  // Create a results object based on requested actions
-  const results = actions.reduce(
-    (acc, action) => ({
-      ...acc,
-      [`${action}Transactions`]: getTransactionsByAction(action),
-    }),
-    {},
-  );
-
-  return {
-    ...results,
-    isLoading,
-    isError,
-    errors,
-    queries,
-  };
 }

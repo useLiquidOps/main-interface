@@ -184,7 +184,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
             <Link
               href="https://labs.liquidops.io"
               target="_blank"
-              className={isLinkActive("/faucet") ? styles.activeLink : ""}
+              className={isLinkActive("/Company") ? styles.activeLink : ""}
             >
               <p>Company</p>
             </Link>

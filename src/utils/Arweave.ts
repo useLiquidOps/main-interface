@@ -1,3 +1,3 @@
-import Arweave from 'arweave';
+import Arweave from "arweave";
 
 export const arweave = Arweave.init({});

@@ -11,14 +11,14 @@ export function useAOProfile() {
   const { getProfileByWalletAddress } = AOProfile.init({
     ao,
     signer,
-    arweave
+    arweave,
   });
 
   return useQuery({
     queryKey: ["ao-profile", walletAddress],
     queryFn: async () => {
       if (!walletAddress) throw new Error("Wallet address not available");
-      console.log(await getProfileByWalletAddress({ address: walletAddress }))
+      console.log(await getProfileByWalletAddress({ address: walletAddress }));
       return await getProfileByWalletAddress({ address: walletAddress });
     },
     enabled: !!walletAddress,

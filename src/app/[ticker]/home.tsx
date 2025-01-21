@@ -32,10 +32,7 @@ const HomeContent = ({
           <div className={styles.grid}>
             <Market ticker={ticker} />
             <PositionSummary ticker={ticker} />
-            <AssetDisplay
-              mode="lend"
-              tokens={AssetDisplayData}
-            />
+            <AssetDisplay mode="lend" tokens={AssetDisplayData} />
             <AssetDisplay mode="borrow" tokens={AssetDisplayData} />
           </div>
         </div>

@@ -17,10 +17,7 @@ interface AssetDisplayProps {
   }>;
 }
 
-const AssetDisplay: React.FC<AssetDisplayProps> = ({
-  mode,
-  tokens,
-}) => {
+const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode, tokens }) => {
   const [showAll, setShowAll] = useState(false);
   const { openModal } = useModal();
 

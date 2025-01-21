@@ -15,7 +15,7 @@ export function useTransactions() {
     queryKey: ["allTransactions", walletAddress],
     queryFn: async () => {
       if (!walletAddress) throw new Error("Wallet address not available");
-      
+
       const allTransactions = [];
 
       for (const token of TOKENS) {
@@ -25,7 +25,7 @@ export function useTransactions() {
             action,
             walletAddress,
           });
-          
+
           allTransactions.push(...result.transactions);
         }
       }
@@ -36,7 +36,6 @@ export function useTransactions() {
         const timestampB = a.block?.timestamp || 0;
         return timestampA - timestampB;
       });
-      
     },
     enabled: !!walletAddress,
     staleTime: 30 * 1000,

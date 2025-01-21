@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://server.liquidops.io/",
+  baseURL: "https://faucet.liquidops.io/",
 });

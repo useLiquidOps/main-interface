@@ -18,9 +18,10 @@ export function useProtocolStats(token: string) {
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
-      const [reserves, apr, t] = await Promise.all([
+      const [reserves, apr, historicalAPRList, t] = await Promise.all([
         LiquidOpsClient.getReserves({ token }),
         LiquidOpsClient.getAPR({ token }),
+        LiquidOpsClient.getHistoricalAPR({ token }),
         await Token(token),
       ]);
 
@@ -35,16 +36,28 @@ export function useProtocolStats(token: string) {
           )
         : zero;
 
+      
+      const currentAPR = Number(apr.toFixed(2));
+      
+      // Get yesterday's timestamp
+      const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+      
+      // Find APR entry closest to 24 hours ago
+      const yesterdayEntry = historicalAPRList.reduce((prev, curr) => {
+        return Math.abs(curr.timestamp - oneDayAgo) < Math.abs(prev.timestamp - oneDayAgo) ? curr : prev;
+      });
+
+      const change = ((currentAPR - yesterdayEntry.apr) / yesterdayEntry.apr * 100).toFixed(2);
+
       return {
         unLent: available,
         borrows: lent,
         protocolBalance,
         utilizationRate,
-        apr: Number(apr.toFixed(2)),
+        apr: currentAPR,
         percentChange: {
-          // TODO: This is a placeholder, replace with real data
-          outcome: true,
-          change: "1.00",
+          outcome: currentAPR >= yesterdayEntry.apr,
+          change
         },
       };
     },

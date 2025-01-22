@@ -7,7 +7,6 @@ type TransactionAction = GetTransactions["action"];
 
 const TOKENS = ["QAR", "STETH", "DAI"] as const;
 const ACTIONS: TransactionAction[] = ["borrow", "lend", "repay", "unLend"];
-
 export function useTransactions() {
   const { data: walletAddress } = useWalletAddress();
 
@@ -30,12 +29,14 @@ export function useTransactions() {
         }
       }
 
-      // Sort transactions by timestamp in descending order
-      return allTransactions.sort((a, b) => {
-        const timestampA = b.block?.timestamp || 0;
-        const timestampB = a.block?.timestamp || 0;
-        return timestampA - timestampB;
-      });
+      // Filter out transactions without a tag timestamp and sort by tag timestamp (newest first)
+      return allTransactions
+        .filter((tx) => tx.tags?.timestamp)
+        .sort((a, b) => {
+          const timestampA = parseInt(a.tags.timestamp);
+          const timestampB = parseInt(b.tags.timestamp);
+          return timestampB - timestampA; // Switched order for descending (newest first)
+        });
     },
     enabled: !!walletAddress,
     staleTime: 30 * 1000,

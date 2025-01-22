@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./ActivityList.module.css";
 import { formatTMB } from "../utils/utils";
 import { tokens } from "liquidops";
-import { Quantity } from "ao-tokens"
+import { Quantity } from "ao-tokens";
 
 export interface Transaction {
   id: string;

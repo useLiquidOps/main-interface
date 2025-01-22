@@ -7,6 +7,7 @@ import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLiquidation } from "@/hooks/actions/useLiquidation";
+import { Quantity } from "ao-tokens"
 
 interface TokenData {
   name: string;
@@ -174,8 +175,9 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         setIsFocused={setIsFromFocused}
         ticker={fromToken.symbol}
         tokenPrice={fromTokenPrice}
-        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
+        walletBalance={isLoadingBalance || !walletBalance ? new Quantity(0n, 12n) : walletBalance}
         onMaxClick={handleFromMaxClick}
+        denomination={walletBalance?.denomination || 12n}
       />
 
       <div className={styles.arrowContainer}>
@@ -195,11 +197,12 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         setIsFocused={setIsToFocused}
         ticker={toToken.symbol}
         tokenPrice={toTokenPrice}
-        walletBalance={0} // we do not display balance for the second token
+        walletBalance={new Quantity(0n, 12n)} // we do not display balance for the second token
         onMaxClick={() => {}}
         disabled={true}
         liquidationMode={true}
         liquidationDiscount={offMarketPrice}
+        denomination={walletBalance?.denomination || 12n}
       />
 
       <PercentagePicker
@@ -207,7 +210,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         selectedPercentage={selectedPercentage}
         currentPercentage={getCurrentPercentage()}
         onPercentageClick={handlePercentageClick}
-        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
+        walletBalance={isLoadingBalance || !walletBalance ? new Quantity(0n, 12n) : walletBalance}
       />
 
       <div className={styles.offMarketPriceContiner}>

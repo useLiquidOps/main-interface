@@ -130,6 +130,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
             : walletBalance
         }
         onMaxClick={handleMaxClick}
+        denomination={walletBalance?.denomination || 12n}
       />
 
       <div className={styles.infoContainer}>

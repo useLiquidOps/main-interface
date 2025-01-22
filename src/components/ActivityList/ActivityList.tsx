@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./ActivityList.module.css";
 import { formatTMB } from "../utils/utils";
 import { tokens } from "liquidops";
+import { Quantity } from "ao-tokens"
 
 export interface Transaction {
   id: string;
@@ -83,7 +84,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
                 <div className={styles.actionDetails}>
                   <p className={styles.action}>{getTransactionType(tx.tags)}</p>
                   <p className={styles.amount}>
-                    {formatTMB(Number(tx.tags["Quantity"]))}
+                    {/** this is hardcoded, fix it with the proper denomination */}
+                    {formatTMB(new Quantity(tx.tags["Quantity"], 12n))}
                   </p>
                 </div>
               </div>

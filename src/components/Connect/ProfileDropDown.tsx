@@ -36,7 +36,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
 
   return (
     <AnimatePresence>
-      {!isOpen && (
+      {isOpen && (
         <motion.div
           className={styles.dropdown}
           variants={dropdownVariants}

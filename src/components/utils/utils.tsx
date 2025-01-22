@@ -25,7 +25,7 @@ export const useClickOutside = <T extends HTMLElement>(
 
 // format thousands, millions, billions
 export const formatTMB = (value: Quantity): string => {
-  console.log(value)
+  console.log(value);
   const billions = new Quantity(0, value.denomination).fromNumber(1000000000);
   const millions = new Quantity(0, value.denomination).fromNumber(1000000);
   if (Quantity.le(billions, value)) {

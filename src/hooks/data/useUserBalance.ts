@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { useWalletAddress } from "./useWalletAddress";
+import { Token, Quantity } from "ao-tokens";
 
 export function useUserBalance(token: string) {
   const { data: walletAddress } = useWalletAddress();
@@ -9,12 +10,17 @@ export function useUserBalance(token: string) {
     queryKey: ["user-balance", token, walletAddress],
     queryFn: async () => {
       if (!walletAddress) throw new Error("Wallet address not available");
-
-      return Number(
+      const [rawBalance, t] = await Promise.all([
         await LiquidOpsClient.getBalance({
           token,
           walletAddress,
         }),
+        await Token(token)
+      ]);
+
+      return new Quantity(
+        rawBalance as bigint,
+        t.info.Denomination
       );
     },
     // Only fetch when we have a wallet address

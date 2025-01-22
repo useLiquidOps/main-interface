@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
+import { Token, Quantity } from "ao-tokens"
 
 interface ProtocolStats {
   unLent: string;
   borrows: string;
-  protocolBalance: number;
-  utilizationRate: number;
+  protocolBalance: Quantity;
+  utilizationRate: Quantity;
   apr: number;
   percentChange: {
     outcome: boolean;
@@ -17,17 +18,22 @@ export function useProtocolStats(token: string) {
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
-      const [reserves, apr] = await Promise.all([
+      const [reserves, apr, t] = await Promise.all([
         LiquidOpsClient.getReserves({ token }),
         LiquidOpsClient.getAPR({ token }),
+        await Token(token)
       ]);
 
-      const protocolBalance =
-        Number(reserves.available) + Number(reserves.lent);
+      const lent = t.Quantity.fromString(reserves.lent);
+      const protocolBalance = Quantity.__add(
+        t.Quantity.fromString(reserves.available),
+        lent
+      );
+      const zero = t.Quantity.fromNumber(0);
       const utilizationRate =
-        protocolBalance > 0
-          ? (Number(reserves.lent) / protocolBalance) * 100
-          : 0;
+        Quantity.lt(zero, protocolBalance)
+          ? Quantity.__div(Quantity.__mul(lent, t.Quantity.fromNumber(100)), protocolBalance)
+          : zero;
 
       return {
         unLent: reserves.available,

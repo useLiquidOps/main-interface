@@ -10,6 +10,7 @@ import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
+import { Quantity } from "ao-tokens";
 
 interface ActionTabProps {
   ticker: string;
@@ -27,7 +28,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   const { lend, isLending, lendError } = useLend();
   const { borrow, isBorrowing, borrowError } = useBorrow();
 
-  const utilizationRate = 0.75;
+  const utilizationRate = new Quantity(75, 2n);
   const networkFee = 0;
 
   const [inputValue, setInputValue] = useState("");
@@ -47,28 +48,34 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   }, [submitStatus]);
 
   const calculateMaxAmount = () => {
-    if (isLoadingBalance || !walletBalance) return 0;
+    if (isLoadingBalance || !walletBalance) return new Quantity(0n, 12n);
     if (mode === "supply") {
       return walletBalance;
     } else {
-      return walletBalance * utilizationRate;
+      return Quantity.__mul(walletBalance, utilizationRate);
     }
   };
 
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
-    setInputValue(formatMaxAmount(maxAmount));
+    setInputValue(
+      maxAmount.toLocaleString("en-US", {
+        maximumFractionDigits: 8,
+        useGrouping: true,
+      }),
+    );
   };
 
   const handleSubmit = () => {
-    if (!inputValue) return;
+    if (!inputValue || !walletBalance) return;
 
     setSubmitStatus("loading");
-    const quantityBigInt = BigInt(Math.floor(parseFloat(inputValue) * 1)); // TODO: Add proper decimal handling
 
     const params = {
       token: ticker.toUpperCase(),
-      quantity: quantityBigInt,
+      quantity: new Quantity(0n, walletBalance.denomination).fromString(
+        inputValue,
+      ).raw,
     };
 
     const callbacks = {
@@ -117,8 +124,13 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         setIsFocused={setIsFocused}
         ticker={ticker}
         tokenPrice={tokenPrice}
-        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
+        walletBalance={
+          isLoadingBalance || !walletBalance
+            ? new Quantity(0n, 12n)
+            : walletBalance
+        }
         onMaxClick={handleMaxClick}
+        denomination={walletBalance?.denomination || 12n}
       />
 
       <div className={styles.infoContainer}>

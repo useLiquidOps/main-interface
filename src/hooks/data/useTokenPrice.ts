@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Quantity } from "ao-tokens";
 
 interface Prices {
   [key: string]: { usd: number };
@@ -27,7 +28,7 @@ export function useTokenPrice(ticker: string) {
   const { data: prices, isLoading } = usePrices();
 
   return {
-    price: prices?.[geckoId]?.usd ?? 0,
+    price: new Quantity(0n, 12n).fromNumber(prices?.[geckoId]?.usd ?? 0),
     isLoading,
   };
 }

@@ -10,6 +10,7 @@ import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
+import { Quantity } from "ao-tokens";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -55,11 +56,16 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   }, [submitStatus]);
 
   const calculateMaxAmount = () => {
-    if (isLoadingBalance || !walletBalance) return 0;
+    if (isLoadingBalance || !walletBalance) return new Quantity(0n, 12n);
     if (mode === "withdraw") {
       return walletBalance;
     } else {
-      return walletBalance * utilizationRate;
+      return Quantity.__mul(
+        walletBalance,
+        new Quantity(0n, walletBalance.denomination || 12n).fromNumber(
+          utilizationRate,
+        ),
+      );
     }
   };
 
@@ -70,20 +76,28 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
   const handlePercentageClick = (percentage: number) => {
     const maxAmount = calculateMaxAmount();
-    const amount = (maxAmount * percentage) / 100;
+    const amount = Quantity.__div(
+      Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),
+      new Quantity(0n, 12n).fromNumber(100),
+    );
     setInputValue(formatMaxAmount(amount));
     setSelectedPercentage(percentage);
   };
 
   const getCurrentPercentage = () => {
     const maxAmount = calculateMaxAmount();
-    if (!inputValue || maxAmount === 0) return 0;
+    if (!inputValue || Quantity.eq(maxAmount, new Quantity(0n, 12n))) return 0;
 
-    const numberValue = Number(inputValue.replace(/,/g, ""));
-    if (isNaN(numberValue)) return 0;
+    if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
 
-    const percentage = (numberValue / maxAmount) * 100;
-    return Math.min(100, Math.max(0, percentage));
+    const percentage = Quantity.__div(
+      Quantity.__mul(
+        new Quantity(0n, maxAmount.denomination).fromString(inputValue),
+        new Quantity(0n, maxAmount.denomination).fromNumber(100),
+      ),
+      maxAmount,
+    );
+    return Math.min(100, Math.max(0, percentage.toNumber()));
   };
 
   const handleInterestClick = () => {
@@ -153,8 +167,13 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         setIsFocused={setIsFocused}
         ticker={ticker}
         tokenPrice={tokenPrice}
-        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
+        walletBalance={
+          isLoadingBalance || !walletBalance
+            ? new Quantity(0n, 12n)
+            : walletBalance
+        }
         onMaxClick={handleMaxClick}
+        denomination={walletBalance?.denomination || 12n}
       />
 
       <PercentagePicker
@@ -164,7 +183,11 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         onPercentageClick={handlePercentageClick}
         interestOwed={interestOwed}
         onInterestClick={handleInterestClick}
-        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
+        walletBalance={
+          isLoadingBalance || !walletBalance
+            ? new Quantity(0n, 12n)
+            : walletBalance
+        }
       />
 
       <div className={styles.infoRow}>

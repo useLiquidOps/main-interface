@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import styles from "./PercentagePicker.module.css";
+import { Quantity } from "ao-tokens";
 
 interface PercentagePickerProps {
   mode: "withdraw" | "repay";
@@ -9,7 +10,7 @@ interface PercentagePickerProps {
   onPercentageClick: (percentage: number) => void;
   interestOwed?: number;
   onInterestClick?: () => void;
-  walletBalance: number;
+  walletBalance: Quantity;
 }
 
 const PercentagePicker: React.FC<PercentagePickerProps> = ({

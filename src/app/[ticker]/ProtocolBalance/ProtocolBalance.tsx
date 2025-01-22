@@ -55,7 +55,7 @@ const ProtocolBalance: React.FC<{
           <p className={styles.amount}>
             {isLoading
               ? "0.00"
-              : protocolStats?.protocolBalance.toLocaleString()}
+              : protocolStats?.protocolBalance?.toLocaleString()}
           </p>
           <p className={styles.currency}>{tokenData.ticker}</p>
         </div>

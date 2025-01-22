@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "./LiquidateTab.module.css";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import Image from "next/image";
@@ -7,13 +7,14 @@ import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLiquidation } from "@/hooks/actions/useLiquidation";
+import { Quantity } from "ao-tokens";
 
 interface TokenData {
   name: string;
   symbol: string;
   icon: string;
-  available: number;
-  price: number;
+  available: Quantity;
+  price: Quantity;
 }
 
 interface LiquidateTabProps {
@@ -21,7 +22,7 @@ interface LiquidateTabProps {
   fromToken: TokenData;
   toToken: TokenData;
   offMarketPrice: number;
-  conversionRate: number;
+  conversionRate: Quantity;
   targetUserAddress: string[];
 }
 
@@ -59,15 +60,22 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   );
   const { price: toTokenPrice } = useTokenPrice(toToken.symbol.toUpperCase());
 
+  const fromDenomination = useMemo(
+    () => fromToken?.available?.denomination || 12n,
+    [fromToken]
+  );
+
   useEffect(() => {
     if (fromInputValue === "") {
       setToInputValue("");
       return;
     }
-
-    const fromAmount = parseFloat(fromInputValue.replace(/,/g, ""));
-    if (!isNaN(fromAmount)) {
-      const convertedAmount = fromAmount * conversionRate;
+    
+    if (!isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) {
+      const convertedAmount = Quantity.__mul(
+        new Quantity(0n, fromDenomination).fromString(fromInputValue),
+        conversionRate
+      );
       setToInputValue(
         convertedAmount.toLocaleString("en-US", {
           maximumFractionDigits: 6,
@@ -93,7 +101,13 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   };
 
   const handlePercentageClick = (percentage: number) => {
-    const amount = (fromToken.available * percentage) / 100;
+    const amount = Quantity.__div(
+      Quantity.__mul(
+        fromToken.available,
+        new Quantity(0n, fromDenomination).fromNumber(percentage)
+      ),
+      new Quantity(0n, fromDenomination).fromNumber(100)
+    );
     setFromInputValue(
       amount.toLocaleString("en-US", {
         maximumFractionDigits: 2,
@@ -104,29 +118,33 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   };
 
   const getCurrentPercentage = () => {
-    if (!fromInputValue || fromToken.available === 0) return 0;
+    if (!fromInputValue || Quantity.eq(fromToken.available, new Quantity(0n, fromDenomination))) return 0;
 
-    const numberValue = Number(fromInputValue.replace(/,/g, ""));
-    if (isNaN(numberValue)) return 0;
+    if (isNaN(Number(fromInputValue.replace(/,/g, "")))) return 0;
 
-    const percentage = (numberValue / fromToken.available) * 100;
+    const percentage = Quantity.__div(
+      Quantity.__mul(
+        new Quantity(0n, fromDenomination).fromString(fromInputValue),
+        new Quantity(0n, fromDenomination).fromNumber(100)
+      ),
+      fromToken.available
+    ).toNumber();
+    
     return Math.min(100, Math.max(0, percentage));
   };
 
   const handleSubmit = () => {
     if (!fromInputValue || !targetUserAddress.length) return;
+    if (isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) return;
 
     setSubmitStatus("loading");
-    const numericValue = parseFloat(fromInputValue.replace(/,/g, ""));
-    // TODO: Add proper decimal handling
-    const quantityBigInt = BigInt(Math.floor(numericValue));
 
     // TODO: Add proper handling for multiple target addresses instead of just using the first one
     const params = {
       token: fromToken.symbol.toUpperCase(),
       rewardToken: toToken.symbol.toUpperCase(),
       targetUserAddress: targetUserAddress[0],
-      quantity: quantityBigInt,
+      quantity: new Quantity(0n, fromDenomination).fromString(fromInputValue).raw,
     };
 
     liquidate(params, {
@@ -174,8 +192,13 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         setIsFocused={setIsFromFocused}
         ticker={fromToken.symbol}
         tokenPrice={fromTokenPrice}
-        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
+        walletBalance={
+          isLoadingBalance || !walletBalance
+            ? new Quantity(0n, 12n)
+            : walletBalance
+        }
         onMaxClick={handleFromMaxClick}
+        denomination={walletBalance?.denomination || 12n}
       />
 
       <div className={styles.arrowContainer}>
@@ -195,11 +218,12 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         setIsFocused={setIsToFocused}
         ticker={toToken.symbol}
         tokenPrice={toTokenPrice}
-        walletBalance={0} // we do not display balance for the second token
+        walletBalance={new Quantity(0n, 12n)} // we do not display balance for the second token
         onMaxClick={() => {}}
         disabled={true}
         liquidationMode={true}
         liquidationDiscount={offMarketPrice}
+        denomination={walletBalance?.denomination || 12n}
       />
 
       <PercentagePicker
@@ -207,7 +231,11 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         selectedPercentage={selectedPercentage}
         currentPercentage={getCurrentPercentage()}
         onPercentageClick={handlePercentageClick}
-        walletBalance={isLoadingBalance || !walletBalance ? 0 : walletBalance}
+        walletBalance={
+          isLoadingBalance || !walletBalance
+            ? new Quantity(0n, 12n)
+            : walletBalance
+        }
       />
 
       <div className={styles.offMarketPriceContiner}>

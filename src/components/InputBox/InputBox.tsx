@@ -7,6 +7,7 @@ import {
   calculateUsdValue,
   formatNumberWithCommas,
 } from "../utils/utils";
+import { Quantity } from "ao-tokens"
 
 interface InputBoxProps {
   inputValue: string;
@@ -35,11 +36,11 @@ const DECIMAL_PLACES: TokenConfig = {
   qAR: 3,
 };
 
-const useInputValidation = (walletBalance: number) => {
+const useInputValidation = (walletBalance: Quantity) => {
   const [showError, setShowError] = useState(false);
 
-  const validateInput = (numberValue: number) => {
-    if (numberValue > walletBalance) {
+  const validateInput = (numberValue: Quantity) => {
+    if (Quantity.lt(walletBalance, numberValue)) {
       setShowError(true);
       setTimeout(() => setShowError(false), 820);
       return false;
@@ -51,19 +52,18 @@ const useInputValidation = (walletBalance: number) => {
 };
 
 const useTokenFormatting = (ticker: string) => {
-  const formatTokenValue = (value: number, isLiquidationMode = false) => {
-    if (value === 0 && isLiquidationMode) return "0";
+  const formatTokenValue = (value: Quantity, isLiquidationMode = false) => {
+    if (value.raw === 0n && isLiquidationMode) return "0";
     const decimals = DECIMAL_PLACES[ticker] || 2;
     return value.toLocaleString("en-US", {
       maximumFractionDigits: decimals,
       minimumFractionDigits: decimals,
-    });
+    } as BigIntToLocaleStringOptions);
   };
 
-  const formatDisplayValue = (value: string) => {
+  const formatDisplayValue = (value: string, denomination: bigint) => {
     if (!value) return value;
-    const numberValue = parseFloat(value.replace(/,/g, ""));
-    return formatTokenValue(numberValue);
+    return formatTokenValue(new Quantity(0n, denomination).fromString(value));
   };
 
   return { formatTokenValue, formatDisplayValue };
@@ -72,20 +72,24 @@ const useTokenFormatting = (ticker: string) => {
 const useLiquidationCalculations = (
   inputValue: string,
   liquidationDiscount: number = 0,
-  formatTokenValue: (value: number) => string,
+  formatTokenValue: (value: Quantity) => string,
+  denomination: bigint
 ) => {
   const getBonusAmount = () => {
     if (!inputValue || !liquidationDiscount) return "0";
-    const currentValue = parseFloat(inputValue.replace(/,/g, ""));
-    const bonusAmount = currentValue * (1 + liquidationDiscount / 100);
+    const currentValue = new Quantity(0n, denomination).fromString(inputValue);
+    const bonusAmount = Quantity.__mul(
+      currentValue,
+      new Quantity(0n, denomination).fromNumber(1 + liquidationDiscount / 100)
+    );
     return formatTokenValue(bonusAmount);
   };
 
   const getProfit = () => {
     if (!inputValue || !liquidationDiscount) return "0";
-    const baseAmount = parseFloat(inputValue.replace(/,/g, ""));
-    const bonusAmount = parseFloat(getBonusAmount().replace(/,/g, ""));
-    return formatTokenValue(bonusAmount - baseAmount);
+    const baseAmount = new Quantity(0n, denomination).fromString(inputValue);
+    const bonusAmount = new Quantity(0n, denomination).fromString(getBonusAmount());
+    return formatTokenValue(Quantity.__sub(bonusAmount, baseAmount));
   };
 
   return { getBonusAmount, getProfit };

@@ -1,3 +1,4 @@
+import { Quantity } from "ao-tokens";
 import { useEffect, useRef } from "react";
 
 // click outside of a popup
@@ -39,10 +40,11 @@ export const formatTMB = (value: number): string => {
 };
 
 export const formatNumberWithCommas = (
-  value: number,
+  value: number | Quantity,
   decimals: number = 8,
 ): string => {
   return value.toLocaleString("en-US", {
+    // @ts-expect-error
     maximumFractionDigits: decimals,
     useGrouping: true,
   });
@@ -62,9 +64,14 @@ export const formatInputNumber = (value: string): string => {
   });
 };
 
-export const calculateUsdValue = (value: string, rate: number): string => {
+export const calculateUsdValue = (value: string, rate: Quantity): string => {
   const numValue = Number(value.replace(/,/g, "")) || 0;
-  return (numValue * rate).toLocaleString("en-US", {
+  if (numValue === 0) return "0";
+  const preciseValue = Quantity.__mul(
+    new Quantity(0n, 12n).fromString(value),
+    rate
+  );
+  return preciseValue.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
   });

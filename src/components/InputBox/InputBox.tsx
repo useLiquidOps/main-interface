@@ -15,8 +15,9 @@ interface InputBoxProps {
   isFocused: boolean;
   setIsFocused: (value: boolean) => void;
   ticker: string;
-  tokenPrice: number;
-  walletBalance: number;
+  tokenPrice: Quantity;
+  denomination: bigint;
+  walletBalance: Quantity;
   onMaxClick: () => void;
   disabled?: boolean;
   liquidationMode?: boolean;
@@ -107,13 +108,15 @@ const InputBox: React.FC<InputBoxProps> = ({
   disabled = false,
   liquidationMode = false,
   liquidationDiscount = 0,
+  denomination
 }) => {
   const { showError, validateInput } = useInputValidation(walletBalance);
   const { formatTokenValue, formatDisplayValue } = useTokenFormatting(ticker);
   const { getBonusAmount, getProfit } = useLiquidationCalculations(
     inputValue,
     liquidationDiscount,
-    (value: number) => formatTokenValue(value, liquidationMode),
+    (value: Quantity) => formatTokenValue(value, liquidationMode),
+    denomination
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,7 +126,7 @@ const InputBox: React.FC<InputBoxProps> = ({
     const numberValue = Number(formattedValue.replace(/,/g, ""));
 
     if (!isNaN(numberValue)) {
-      if (validateInput(numberValue)) {
+      if (validateInput(new Quantity(0n, denomination).fromString(formattedValue))) {
         setInputValue(formattedValue);
       }
     } else if (formattedValue === "") {
@@ -168,7 +171,7 @@ const InputBox: React.FC<InputBoxProps> = ({
         type="text"
         value={
           liquidationMode && disabled
-            ? formatDisplayValue(getBonusAmount())
+            ? formatDisplayValue(getBonusAmount(), denomination)
             : inputValue
         }
         onChange={handleInputChange}
@@ -184,7 +187,7 @@ const InputBox: React.FC<InputBoxProps> = ({
       return (
         <div className={styles.inputWithPrices}>
           <span className={styles.baseAmount}>
-            {formatDisplayValue(inputValue)}
+            {formatDisplayValue(inputValue, denomination)}
           </span>
           {inputElement}
         </div>
@@ -211,7 +214,7 @@ const InputBox: React.FC<InputBoxProps> = ({
       <div className={styles.walletInfo}>
         <Image src="/icons/wallet.svg" height={14} width={14} alt="Wallet" />
         <span className={styles.balanceAmount}>
-          {walletBalance === 0 ? "0.00" : formatNumberWithCommas(walletBalance)}{" "}
+          {Quantity.eq(walletBalance, new Quantity(0n, denomination)) ? "0.00" : formatNumberWithCommas(walletBalance)}{" "}
           {ticker}
         </span>
         <span className={styles.separator}>|</span>

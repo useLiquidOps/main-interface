@@ -36,7 +36,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {!isOpen && (
         <motion.div
           className={styles.dropdown}
           variants={dropdownVariants}
@@ -97,8 +97,10 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
             </button>
           </div>
 
-          {/* TODO: add correct transactions */}
-          <ActivityList transactions={[]} isLoading={isLoading} />
+          <ActivityList
+            transactions={transactions ?? []}
+            isLoading={isLoading}
+          />
         </motion.div>
       )}
     </AnimatePresence>

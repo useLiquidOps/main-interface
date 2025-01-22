@@ -3,8 +3,8 @@ import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { Token, Quantity } from "ao-tokens"
 
 interface ProtocolStats {
-  unLent: string;
-  borrows: string;
+  unLent: Quantity;
+  borrows: Quantity;
   protocolBalance: Quantity;
   utilizationRate: Quantity;
   apr: number;
@@ -24,11 +24,9 @@ export function useProtocolStats(token: string) {
         await Token(token)
       ]);
 
+      const available = t.Quantity.fromString(reserves.available);
       const lent = t.Quantity.fromString(reserves.lent);
-      const protocolBalance = Quantity.__add(
-        t.Quantity.fromString(reserves.available),
-        lent
-      );
+      const protocolBalance = Quantity.__add(available, lent);
       const zero = t.Quantity.fromNumber(0);
       const utilizationRate =
         Quantity.lt(zero, protocolBalance)
@@ -36,8 +34,8 @@ export function useProtocolStats(token: string) {
           : zero;
 
       return {
-        unLent: reserves.available,
-        borrows: reserves.lent,
+        unLent: available,
+        borrows: lent,
         protocolBalance,
         utilizationRate,
         apr: Number(apr.toFixed(2)),

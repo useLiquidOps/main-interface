@@ -7,6 +7,7 @@ import { tokens, headerTokensData } from "../data";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { formatTMB } from "@/components/utils/utils";
+import { Quantity } from "ao-tokens";
 
 const Markets = () => {
   const statsQueries = tokens.map((token) => ({
@@ -22,20 +23,22 @@ const Markets = () => {
       (acc, { stats, price }) => {
         if (stats.isLoading || !stats.data) return acc;
 
-        const tokenPrice = price?.price || 0;
+        const tokenPrice = new Quantity(0n, 12n).fromNumber(price?.price || 0);
         const data = stats.data;
 
         return {
-          liquidOpsTVL:
-            acc.liquidOpsTVL + Number(data.protocolBalance) * tokenPrice,
-          totalCollateral: acc.totalCollateral + Number(data.unLent),
-          totalBorrows: acc.totalBorrows + Number(data.borrows),
+          liquidOpsTVL: Quantity.__add(
+            acc.liquidOpsTVL,
+            Quantity.__mul(data.protocolBalance, tokenPrice)
+          ),
+          totalCollateral: Quantity.__add(acc.totalCollateral, data.unLent),
+          totalBorrows: Quantity.__add(acc.totalBorrows, data.borrows),
         };
       },
       {
-        liquidOpsTVL: 0,
-        totalCollateral: 0,
-        totalBorrows: 0,
+        liquidOpsTVL: new Quantity(0n, 12n),
+        totalCollateral: new Quantity(0n, 12n),
+        totalBorrows: new Quantity(0n, 12n),
       },
     );
   };
@@ -73,10 +76,10 @@ const Markets = () => {
               const data = isLoading
                 ? {
                     apr: 0,
-                    protocolBalance: 0,
-                    unLent: "0",
-                    borrows: "0",
-                    utilizationRate: 0,
+                    protocolBalance: new Quantity(0n, 12n),
+                    unLent: new Quantity(0n, 12n),
+                    borrows: new Quantity(0n, 12n),
+                    utilizationRate: new Quantity(0n, 12n),
                   }
                 : stats.data;
 
@@ -150,7 +153,7 @@ const Markets = () => {
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          {data.utilizationRate.toFixed(2)}%
+                          {data.utilizationRate.toNumber().toFixed(2)}%
                         </p>
                         <p className={styles.metricLabel}>Utilization</p>
                       </div>

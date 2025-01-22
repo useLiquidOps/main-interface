@@ -120,7 +120,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode, tokens }) => {
                     <div className={styles.nameAmount}>
                       <p className={styles.name}>{asset.name}</p>
                       <p className={styles.amount}>
-                        {isLoading ? "0.00" : formatTMB(balance ?? 0)}{" "}
+                        {isLoading || !balance ? "0.00" : formatTMB(balance)}{" "}
                         {asset?.symbol}
                         {mode === "borrow" &&
                           (isLoading

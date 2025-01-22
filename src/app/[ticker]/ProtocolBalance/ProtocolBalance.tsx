@@ -54,7 +54,7 @@ const ProtocolBalance: React.FC<{
           <p className={styles.amount}>
             {isLoading
               ? "0.00"
-              : protocolStats?.protocolBalance.toLocaleString()}
+              : protocolStats?.protocolBalance?.toLocaleString()}
           </p>
           <p className={styles.currency}>{tokenData.ticker}</p>
         </div>
@@ -101,7 +101,7 @@ const ProtocolBalance: React.FC<{
                 ? "0.00"
                 : hoverData
                   ? `${hoverData.value}%`
-                  : `${protocolStats?.apr}%`}
+                  : `${protocolStats?.apr || 0}%`}
             </p>
           </div>
         </div>

@@ -11,8 +11,9 @@ import {
 import styles from "./ProtocolBalance.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { graphDummyData, headerTokensData } from "@/app/data";
+import { headerTokensData } from "@/app/data";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useHistoricalAPR } from "@/hooks/data/useHistoricalAPR";
 
 const ProtocolBalance: React.FC<{
   ticker: string;
@@ -21,6 +22,8 @@ const ProtocolBalance: React.FC<{
   const { data: protocolStats, isLoading } = useProtocolStats(
     ticker.toUpperCase(),
   );
+  const { data: historicalData, isLoading: isLoadingHistorical } =
+    useHistoricalAPR(ticker.toUpperCase());
   const [hoverData, setHoverData] = useState<{
     date: string;
     value: number;
@@ -34,9 +37,7 @@ const ProtocolBalance: React.FC<{
     router.push(`/${ticker}/${type}`);
   };
 
-  if (!tokenData) {
-    return null;
-  }
+  if (!tokenData) return null;
 
   return (
     <div className={styles.protocolBalance}>
@@ -97,10 +98,10 @@ const ProtocolBalance: React.FC<{
               />
             )}
             <p className={styles.aprText}>
-              {isLoading
+              {isLoadingHistorical
                 ? "0.00"
                 : hoverData
-                  ? `${hoverData.value}%`
+                  ? `${hoverData.value.toFixed(2)}%`
                   : `${protocolStats?.apr}%`}
             </p>
           </div>
@@ -108,7 +109,7 @@ const ProtocolBalance: React.FC<{
         <div className={styles.graph}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
-              data={graphDummyData}
+              data={historicalData}
               margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
               onMouseMove={(data) => {
                 if (data.activePayload) {

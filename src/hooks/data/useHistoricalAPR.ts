@@ -1,27 +1,29 @@
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 
-interface GetHistoricalAPRParams {
-  token: string;
+interface HistoricalAPRData {
+  date: string;
+  value: number;
 }
 
-export function useHistoricalAPR() {
-  const historicalAPRMutation = useMutation({
-    mutationFn: async ({ token }: GetHistoricalAPRParams) => {
-      try {
-        return await LiquidOpsClient.getHistoricalAPR({
-          token,
-        });
-      } catch (error) {
-        throw error;
-      }
-    },
-  });
+export function useHistoricalAPR(token: string) {
+  return useQuery({
+    queryKey: ["historical-apr", token],
+    queryFn: async (): Promise<HistoricalAPRData[]> => {
+      const data = await LiquidOpsClient.getHistoricalAPR({
+        token,
+      });
 
-  return {
-    getHistoricalAPR: historicalAPRMutation.mutate,
-    isGettingHistoricalAPR: historicalAPRMutation.isPending,
-    historicalAPRError: historicalAPRMutation.error,
-    reset: historicalAPRMutation.reset,
-  };
+      return data
+        .map((item) => ({
+          date: new Date(item.timestamp).toLocaleDateString(),
+          value: item.apr,
+        }))
+        .sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+        );
+    },
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
+  });
 }

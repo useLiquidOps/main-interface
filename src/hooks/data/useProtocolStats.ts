@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { Token, Quantity } from "ao-tokens";
+import { tokenInput } from "liquidops";
 
 interface ProtocolStats {
   unLent: Quantity;
@@ -15,6 +16,8 @@ interface ProtocolStats {
 }
 
 export function useProtocolStats(token: string) {
+  const { tokenAddress } = tokenInput(token);
+
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
@@ -22,7 +25,7 @@ export function useProtocolStats(token: string) {
         LiquidOpsClient.getReserves({ token }),
         LiquidOpsClient.getAPR({ token }),
         LiquidOpsClient.getHistoricalAPR({ token }),
-        await Token(token),
+        await Token(tokenAddress),
       ]);
 
       const available = t.Quantity.fromString(reserves.available);

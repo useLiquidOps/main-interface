@@ -376,12 +376,12 @@ const LiquidationsContent = () => {
                       <p className={styles.metricLabel}>Available</p>
                     </div>
 
-                    <div className={styles.metricBox}>
+                    {/* <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
                         ${formatTMB(liquidation.fromToken.price)}
                       </p>
                       <p className={styles.metricLabel}>Price</p>
-                    </div>
+                    </div> */}
                   </div>
                   <button
                     className={styles.liquidateButton}
@@ -431,7 +431,7 @@ const LiquidationsContent = () => {
                 toToken={assetData.toToken}
                 offMarketPrice={assetData.offMarketPrice}
                 conversionRate={assetData.conversionRate}
-                targetUserAddress={["ADD HERE WHEN KNOWN"]} // TODO: add target user address'
+                targetUserAddress={[""]} // TODO: add target user address'
               />
             </motion.div>
           </motion.div>

@@ -6,7 +6,7 @@ import { useModal } from "../PopUp/PopUp";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
-import { Quantity } from "ao-tokens";
+// import { Quantity } from "ao-tokens";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";
@@ -22,8 +22,8 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode, tokens }) => {
   const [showAll, setShowAll] = useState(false);
   const { openModal } = useModal();
 
-  // TODO: find actual data and replace this
-  const extraAmount = new Quantity(0n, 12n).fromNumber(1);
+  // // TODO: find actual data and replace this
+  // const extraAmount = new Quantity(0n, 12n).fromNumber(1);
 
   const displayedAssets = showAll ? tokens : tokens.slice(0, 4);
 
@@ -99,6 +99,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode, tokens }) => {
             );
             const { data: balance, isLoading } = useUserBalance(
               asset.symbol.toUpperCase(),
+              mode === "borrow",
             );
 
             return (

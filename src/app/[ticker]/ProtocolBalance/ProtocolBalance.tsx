@@ -39,6 +39,15 @@ const ProtocolBalance: React.FC<{
 
   if (!tokenData) return null;
 
+  const getOutcomeIcon = () => {
+    if (!protocolStats || protocolStats.apr === 0) {
+      return "/icons/APRUp.svg";
+    }
+    return protocolStats.percentChange.outcome
+      ? "/icons/APRUp.svg"
+      : "/icons/APRDown.svg";
+  };
+
   return (
     <div className={styles.protocolBalance}>
       <div className={styles.mainContent}>
@@ -84,13 +93,11 @@ const ProtocolBalance: React.FC<{
           <div className={styles.aprValue}>
             {!hoverData && (
               <Image
-                src={
-                  tokenData.percentChange.outcome
-                    ? "/icons/APRUp.svg"
-                    : "/icons/APRDown.svg"
-                }
+                src={getOutcomeIcon()}
                 alt={
-                  tokenData.percentChange.outcome ? "Up Arrow" : "Down Arrow"
+                  protocolStats?.percentChange.outcome
+                    ? "Up Arrow"
+                    : "Down Arrow"
                 }
                 width={0}
                 height={16}

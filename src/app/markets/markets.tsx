@@ -132,7 +132,9 @@ const Markets = () => {
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
                           $
-                          {formatTMB(Quantity.__mul(data.protocolBalance, tokenPrice))}{" "}
+                          {formatTMB(
+                            Quantity.__mul(data.protocolBalance, tokenPrice),
+                          )}{" "}
                         </p>
                         <p className={styles.metricLabel}>TVL</p>
                       </div>

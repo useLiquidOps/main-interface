@@ -28,10 +28,20 @@ export const formatTMB = (value: Quantity): string => {
   const billions = new Quantity(0, value.denomination).fromNumber(1000000000);
   const millions = new Quantity(0, value.denomination).fromNumber(1000000);
   if (Quantity.le(billions, value)) {
-    return Quantity.__div(value, billions).toLocaleString("en-US", { maximumFractionDigits: 2 }) + "B";
+    return (
+      Quantity.__div(value, billions).toLocaleString("en-US", {
+        maximumFractionDigits: 2,
+      }) + "B"
+    );
   } else if (Quantity.le(millions, value)) {
-    return Quantity.__div(value, millions).toLocaleString("en-US", { maximumFractionDigits: 2 }) + "M";
-  } else if (Quantity.le(new Quantity(0, value.denomination).fromNumber(1000), value)) {
+    return (
+      Quantity.__div(value, millions).toLocaleString("en-US", {
+        maximumFractionDigits: 2,
+      }) + "M"
+    );
+  } else if (
+    Quantity.le(new Quantity(0, value.denomination).fromNumber(1000), value)
+  ) {
     return value.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,

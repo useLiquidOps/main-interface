@@ -4,7 +4,7 @@ import { formatTMB } from "../../../components/utils/utils";
 import { headerTokensData } from "@/app/data";
 import Image from "next/image";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
-import { Quantity } from "ao-tokens"
+import { Quantity } from "ao-tokens";
 
 // TODO: Replace these with real data
 const PLACEHOLDER_EXTRA_DATA = {

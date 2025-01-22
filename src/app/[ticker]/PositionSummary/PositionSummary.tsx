@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import { tokens, headerTokensData } from "@/app/data";
-import { Quantity } from "ao-tokens"
+import { Quantity } from "ao-tokens";
 
 interface PositionData {
   collateralValue: Quantity;
@@ -34,22 +34,31 @@ const PositionSummary: React.FC<{
 
   const denomination = 12n;
   const maxBorrow = useMemo(
-    () =>  Quantity.__div(
-      Quantity.__mul(
-        positionData.collateralValue,
-        new Quantity(0n, denomination).fromNumber(3)
+    () =>
+      Quantity.__div(
+        Quantity.__mul(
+          positionData.collateralValue,
+          new Quantity(0n, denomination).fromNumber(3),
+        ),
+        new Quantity(0n, denomination).fromNumber(4),
       ),
-      new Quantity(0n, denomination).fromNumber(4)
-    ),
-    [positionData]
+    [positionData],
   );
 
   const getProgressWidth = (value: Quantity): string => {
-    const currentBorrow = Quantity.__sub(maxBorrow, positionData.availableToBorrow);
-    return Quantity.__div(
-      Quantity.__mul(currentBorrow, new Quantity(0n, denomination).fromNumber(100)),
-      maxBorrow
-    ).toLocaleString(undefined, { maximumFractionDigits: 2 }) + "%"
+    const currentBorrow = Quantity.__sub(
+      maxBorrow,
+      positionData.availableToBorrow,
+    );
+    return (
+      Quantity.__div(
+        Quantity.__mul(
+          currentBorrow,
+          new Quantity(0n, denomination).fromNumber(100),
+        ),
+        maxBorrow,
+      ).toLocaleString(undefined, { maximumFractionDigits: 2 }) + "%"
+    );
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -57,13 +66,16 @@ const PositionSummary: React.FC<{
     const x = e.clientX - rect.left;
     const percentage = (x / rect.width) * 100;
 
-    const currentBorrow = Quantity.__sub(maxBorrow, positionData.availableToBorrow);
+    const currentBorrow = Quantity.__sub(
+      maxBorrow,
+      positionData.availableToBorrow,
+    );
     const currentBorrowPercentage = Quantity.__div(
       Quantity.__mul(
         currentBorrow,
-        new Quantity(0n, denomination).fromNumber(100)
+        new Quantity(0n, denomination).fromNumber(100),
       ),
-      maxBorrow
+      maxBorrow,
     ).toNumber();
 
     let tooltipText = "";

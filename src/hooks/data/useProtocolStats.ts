@@ -36,18 +36,23 @@ export function useProtocolStats(token: string) {
           )
         : zero;
 
-      
       const currentAPR = Number(apr.toFixed(2));
-      
+
       // Get yesterday's timestamp
-      const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
-      
+      const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+
       // Find APR entry closest to 24 hours ago
       const yesterdayEntry = historicalAPRList.reduce((prev, curr) => {
-        return Math.abs(curr.timestamp - oneDayAgo) < Math.abs(prev.timestamp - oneDayAgo) ? curr : prev;
+        return Math.abs(curr.timestamp - oneDayAgo) <
+          Math.abs(prev.timestamp - oneDayAgo)
+          ? curr
+          : prev;
       });
 
-      const change = ((currentAPR - yesterdayEntry.apr) / yesterdayEntry.apr * 100).toFixed(2);
+      const change = (
+        ((currentAPR - yesterdayEntry.apr) / yesterdayEntry.apr) *
+        100
+      ).toFixed(2);
 
       return {
         unLent: available,
@@ -57,7 +62,7 @@ export function useProtocolStats(token: string) {
         apr: currentAPR,
         percentChange: {
           outcome: currentAPR >= yesterdayEntry.apr,
-          change
+          change,
         },
       };
     },

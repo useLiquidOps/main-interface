@@ -6,7 +6,7 @@ import { useModal } from "../PopUp/PopUp";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
-import { Quantity } from "ao-tokens"
+import { Quantity } from "ao-tokens";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";

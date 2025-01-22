@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { useWalletAddress } from "./useWalletAddress";
+import { tokenOperations } from "./tempGetBalance";
 
 export function useUserBalance(token: string) {
   const { data: walletAddress } = useWalletAddress();
@@ -10,18 +10,15 @@ export function useUserBalance(token: string) {
     queryFn: async () => {
       if (!walletAddress) throw new Error("Wallet address not available");
 
-      return Number(
-        await LiquidOpsClient.getBalance({
-          token,
-          walletAddress,
-        }),
-      );
+      const balance = await tokenOperations.getBalance({
+        token,
+        walletAddress,
+      });
+
+      return Number(balance);
     },
-    // Only fetch when we have a wallet address
     enabled: !!walletAddress,
-    // Add stale time to prevent too frequent refetches
     staleTime: 30 * 1000, // 30 seconds
-    // Add cache time to keep data for
     gcTime: 5 * 60 * 1000, // 5 minutes
   });
 }

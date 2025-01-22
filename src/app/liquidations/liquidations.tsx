@@ -96,7 +96,7 @@ const LiquidationsContent = () => {
         liquidation.fromToken.symbol === selectedSendToken.symbol;
       return receiveMatches && sendMatches;
     });
-  }, [selectedReceiveToken.symbol, selectedSendToken.symbol]);
+  }, [selectedReceiveToken.symbol, selectedSendToken.symbol, liquidationsData]);
 
   const stats = useMemo(
     () => calculateLiquidationStats(filteredLiquidations),

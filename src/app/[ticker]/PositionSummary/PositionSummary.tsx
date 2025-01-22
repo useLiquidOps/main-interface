@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import { tokens, headerTokensData } from "@/app/data";
+import { Quantity } from "ao-tokens"
 
 interface PositionData {
-  collateralValue: number;
-  borrowCapacity: number;
-  liquidationPoint: number;
-  availableToBorrow: number;
-  liquidationRisk?: number;
+  collateralValue: Quantity;
+  borrowCapacity: Quantity;
+  liquidationPoint: Quantity;
+  availableToBorrow: Quantity;
+  liquidationRisk?: Quantity;
 }
 
 const PositionSummary: React.FC<{
@@ -24,17 +25,31 @@ const PositionSummary: React.FC<{
   );
 
   const positionData: PositionData = {
-    collateralValue: 9413.37,
-    borrowCapacity: 4813.93,
-    liquidationPoint: 1470.5,
-    availableToBorrow: 2406.51,
-    liquidationRisk: 44,
+    collateralValue: new Quantity(0n, 12n).fromNumber(9413.37),
+    borrowCapacity: new Quantity(0n, 12n).fromNumber(4813.93),
+    liquidationPoint: new Quantity(0n, 12n).fromNumber(1470.5),
+    availableToBorrow: new Quantity(0n, 12n).fromNumber(2406.51),
+    liquidationRisk: new Quantity(0n, 12n).fromNumber(44),
   };
 
-  const getProgressWidth = (value: number): string => {
-    const maxBorrow = positionData.collateralValue * 0.75;
-    const currentBorrow = maxBorrow - positionData.availableToBorrow;
-    return `${(currentBorrow / maxBorrow) * 100}%`;
+  const denomination = 12n;
+  const maxBorrow = useMemo(
+    () =>  Quantity.__div(
+      Quantity.__mul(
+        positionData.collateralValue,
+        new Quantity(0n, denomination).fromNumber(3)
+      ),
+      new Quantity(0n, denomination).fromNumber(4)
+    ),
+    [positionData]
+  );
+
+  const getProgressWidth = (value: Quantity): string => {
+    const currentBorrow = Quantity.__sub(maxBorrow, positionData.availableToBorrow);
+    return Quantity.__div(
+      Quantity.__mul(currentBorrow, new Quantity(0n, denomination).fromNumber(100)),
+      maxBorrow
+    ).toLocaleString(undefined, { maximumFractionDigits: 2 }) + "%"
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -42,9 +57,14 @@ const PositionSummary: React.FC<{
     const x = e.clientX - rect.left;
     const percentage = (x / rect.width) * 100;
 
-    const maxBorrow = positionData.collateralValue * 0.75;
-    const currentBorrow = maxBorrow - positionData.availableToBorrow;
-    const currentBorrowPercentage = (currentBorrow / maxBorrow) * 100;
+    const currentBorrow = Quantity.__sub(maxBorrow, positionData.availableToBorrow);
+    const currentBorrowPercentage = Quantity.__div(
+      Quantity.__mul(
+        currentBorrow,
+        new Quantity(0n, denomination).fromNumber(100)
+      ),
+      maxBorrow
+    ).toNumber();
 
     let tooltipText = "";
     if (percentage <= currentBorrowPercentage) {

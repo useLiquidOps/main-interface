@@ -23,13 +23,13 @@ const Markets = () => {
       (acc, { stats, price }) => {
         if (stats.isLoading || !stats.data) return acc;
 
-        const tokenPrice = new Quantity(0n, 12n).fromNumber(price?.price || 0);
+        const tokenPrice = price?.price || new Quantity(0n, 12n);
         const data = stats.data;
 
         return {
           liquidOpsTVL: Quantity.__add(
             acc.liquidOpsTVL,
-            Quantity.__mul(data.protocolBalance, tokenPrice)
+            Quantity.__mul(data.protocolBalance, tokenPrice),
           ),
           totalCollateral: Quantity.__add(acc.totalCollateral, data.unLent),
           totalBorrows: Quantity.__add(acc.totalBorrows, data.borrows),
@@ -132,21 +132,21 @@ const Markets = () => {
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
                           $
-                          {formatTMB(Number(data.protocolBalance) * tokenPrice)}{" "}
+                          {formatTMB(Quantity.__mul(data.protocolBalance, tokenPrice))}{" "}
                         </p>
                         <p className={styles.metricLabel}>TVL</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          ${formatTMB(Number(data.unLent))}
+                          ${formatTMB(data.unLent)}
                         </p>
                         <p className={styles.metricLabel}>Collateral</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          ${formatTMB(Number(data.borrows))}
+                          ${formatTMB(data.borrows)}
                         </p>
                         <p className={styles.metricLabel}>Borrowed</p>
                       </div>

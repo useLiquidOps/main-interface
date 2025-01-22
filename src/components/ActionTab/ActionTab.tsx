@@ -10,7 +10,7 @@ import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
-import { Quantity } from "ao-tokens"
+import { Quantity } from "ao-tokens";
 
 interface ActionTabProps {
   ticker: string;
@@ -58,10 +58,12 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
-      setInputValue(maxAmount.toLocaleString("en-US", {
-      maximumFractionDigits: 8,
-      useGrouping: true,
-    }));
+    setInputValue(
+      maxAmount.toLocaleString("en-US", {
+        maximumFractionDigits: 8,
+        useGrouping: true,
+      }),
+    );
   };
 
   const handleSubmit = () => {
@@ -71,7 +73,9 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
     const params = {
       token: ticker.toUpperCase(),
-      quantity: new Quantity(0n, walletBalance.denomination).fromString(inputValue).raw,
+      quantity: new Quantity(0n, walletBalance.denomination).fromString(
+        inputValue,
+      ).raw,
     };
 
     const callbacks = {
@@ -120,7 +124,11 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         setIsFocused={setIsFocused}
         ticker={ticker}
         tokenPrice={tokenPrice}
-        walletBalance={isLoadingBalance || !walletBalance ? new Quantity(0n, 12n) : walletBalance}
+        walletBalance={
+          isLoadingBalance || !walletBalance
+            ? new Quantity(0n, 12n)
+            : walletBalance
+        }
         onMaxClick={handleMaxClick}
       />
 

@@ -4,11 +4,12 @@ import { formatTMB } from "../../../components/utils/utils";
 import { headerTokensData } from "@/app/data";
 import Image from "next/image";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { Quantity } from "ao-tokens"
 
 // TODO: Replace these with real data
 const PLACEHOLDER_EXTRA_DATA = {
-  extraTotalSupply: 6000,
-  extraLent: 1000,
+  extraTotalSupply: new Quantity(0n, 12n).fromNumber(6000),
+  extraLent: new Quantity(0n, 12n).fromNumber(1000),
 };
 
 const Market: React.FC<{
@@ -107,7 +108,7 @@ const Market: React.FC<{
             <p className={styles.label}>Total Supply</p>
             <div className={styles.flexDisplay}>
               <p className={styles.value}>
-                {`${formatTMB(protocolStats?.protocolBalance || 0)} ${tokenData.ticker}`}
+                {`${formatTMB(protocolStats?.protocolBalance || new Quantity(0n, 12n))} ${tokenData.ticker}`}
               </p>
               {extraData && (
                 <p className={styles.extraData}>
@@ -122,7 +123,7 @@ const Market: React.FC<{
             <p className={styles.label}>Available Lent Tokens</p>
             <div className={styles.valueWithIndicator}>
               <p className={styles.value}>
-                {`${formatTMB(Number(protocolStats?.unLent || 0))} ${tokenData.ticker}`}
+                {`${formatTMB(protocolStats?.unLent || new Quantity(0n, 12n))} ${tokenData.ticker}`}
               </p>
               <div className={styles.indicatorGreen}></div>
               {extraData && (
@@ -138,7 +139,7 @@ const Market: React.FC<{
             <p className={styles.label}>Total Borrows</p>
             <div className={styles.valueWithIndicator}>
               <p className={styles.value}>
-                {`${formatTMB(Number(protocolStats?.borrows || 0))} ${tokenData.ticker}`}
+                {`${formatTMB(protocolStats?.borrows || new Quantity(0n, 12n))} ${tokenData.ticker}`}
               </p>
               <div className={styles.indicatorBlue}></div>
             </div>

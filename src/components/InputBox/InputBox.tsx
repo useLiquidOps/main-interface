@@ -7,7 +7,7 @@ import {
   calculateUsdValue,
   formatNumberWithCommas,
 } from "../utils/utils";
-import { Quantity } from "ao-tokens"
+import { Quantity } from "ao-tokens";
 
 interface InputBoxProps {
   inputValue: string;
@@ -74,14 +74,14 @@ const useLiquidationCalculations = (
   inputValue: string,
   liquidationDiscount: number = 0,
   formatTokenValue: (value: Quantity) => string,
-  denomination: bigint
+  denomination: bigint,
 ) => {
   const getBonusAmount = () => {
     if (!inputValue || !liquidationDiscount) return "0";
     const currentValue = new Quantity(0n, denomination).fromString(inputValue);
     const bonusAmount = Quantity.__mul(
       currentValue,
-      new Quantity(0n, denomination).fromNumber(1 + liquidationDiscount / 100)
+      new Quantity(0n, denomination).fromNumber(1 + liquidationDiscount / 100),
     );
     return formatTokenValue(bonusAmount);
   };
@@ -89,7 +89,9 @@ const useLiquidationCalculations = (
   const getProfit = () => {
     if (!inputValue || !liquidationDiscount) return "0";
     const baseAmount = new Quantity(0n, denomination).fromString(inputValue);
-    const bonusAmount = new Quantity(0n, denomination).fromString(getBonusAmount());
+    const bonusAmount = new Quantity(0n, denomination).fromString(
+      getBonusAmount(),
+    );
     return formatTokenValue(Quantity.__sub(bonusAmount, baseAmount));
   };
 
@@ -108,7 +110,7 @@ const InputBox: React.FC<InputBoxProps> = ({
   disabled = false,
   liquidationMode = false,
   liquidationDiscount = 0,
-  denomination
+  denomination,
 }) => {
   const { showError, validateInput } = useInputValidation(walletBalance);
   const { formatTokenValue, formatDisplayValue } = useTokenFormatting(ticker);
@@ -116,7 +118,7 @@ const InputBox: React.FC<InputBoxProps> = ({
     inputValue,
     liquidationDiscount,
     (value: Quantity) => formatTokenValue(value, liquidationMode),
-    denomination
+    denomination,
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +128,9 @@ const InputBox: React.FC<InputBoxProps> = ({
     const numberValue = Number(formattedValue.replace(/,/g, ""));
 
     if (!isNaN(numberValue)) {
-      if (validateInput(new Quantity(0n, denomination).fromString(formattedValue))) {
+      if (
+        validateInput(new Quantity(0n, denomination).fromString(formattedValue))
+      ) {
         setInputValue(formattedValue);
       }
     } else if (formattedValue === "") {
@@ -214,7 +218,9 @@ const InputBox: React.FC<InputBoxProps> = ({
       <div className={styles.walletInfo}>
         <Image src="/icons/wallet.svg" height={14} width={14} alt="Wallet" />
         <span className={styles.balanceAmount}>
-          {Quantity.eq(walletBalance, new Quantity(0n, denomination)) ? "0.00" : formatNumberWithCommas(walletBalance)}{" "}
+          {Quantity.eq(walletBalance, new Quantity(0n, denomination))
+            ? "0.00"
+            : formatNumberWithCommas(walletBalance)}{" "}
           {ticker}
         </span>
         <span className={styles.separator}>|</span>

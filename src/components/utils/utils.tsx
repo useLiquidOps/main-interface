@@ -24,18 +24,20 @@ export const useClickOutside = <T extends HTMLElement>(
 };
 
 // format thousands, millions, billions
-export const formatTMB = (value: number): string => {
-  if (value >= 1000000000) {
-    return `${(value / 1000000000).toFixed(2)}B`;
-  } else if (value >= 1000000) {
-    return `${(value / 1000000).toFixed(2)}M`;
-  } else if (value >= 1000) {
+export const formatTMB = (value: Quantity): string => {
+  const billions = new Quantity(0, value.denomination).fromNumber(1000000000);
+  const millions = new Quantity(0, value.denomination).fromNumber(1000000);
+  if (Quantity.le(billions, value)) {
+    return Quantity.__div(value, billions).toLocaleString("en-US", { maximumFractionDigits: 2 }) + "B";
+  } else if (Quantity.le(millions, value)) {
+    return Quantity.__div(value, millions).toLocaleString("en-US", { maximumFractionDigits: 2 }) + "M";
+  } else if (Quantity.le(new Quantity(0, value.denomination).fromNumber(1000), value)) {
     return value.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
   } else {
-    return value.toFixed(2);
+    return value.toLocaleString("en-US", { maximumFractionDigits: 2 });
   }
 };
 
@@ -69,7 +71,7 @@ export const calculateUsdValue = (value: string, rate: Quantity): string => {
   if (numValue === 0) return "0";
   const preciseValue = Quantity.__mul(
     new Quantity(0n, 12n).fromString(value),
-    rate
+    rate,
   );
   return preciseValue.toLocaleString("en-US", {
     style: "currency",
@@ -77,7 +79,7 @@ export const calculateUsdValue = (value: string, rate: Quantity): string => {
   });
 };
 
-export const formatMaxAmount = (amount: number): string => {
+export const formatMaxAmount = (amount: number | Quantity): string => {
   return amount.toLocaleString("en-US", {
     maximumFractionDigits: 8,
     useGrouping: true,

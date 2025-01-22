@@ -15,13 +15,10 @@ export function useUserBalance(token: string) {
           token,
           walletAddress,
         }),
-        await Token(token)
+        await Token(token),
       ]);
 
-      return new Quantity(
-        rawBalance as bigint,
-        t.info.Denomination
-      );
+      return new Quantity(rawBalance as bigint, t.info.Denomination);
     },
     // Only fetch when we have a wallet address
     enabled: !!walletAddress,

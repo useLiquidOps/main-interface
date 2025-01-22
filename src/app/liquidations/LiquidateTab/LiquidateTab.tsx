@@ -62,7 +62,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
 
   const fromDenomination = useMemo(
     () => fromToken?.available?.denomination || 12n,
-    [fromToken]
+    [fromToken],
   );
 
   useEffect(() => {
@@ -70,11 +70,11 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
       setToInputValue("");
       return;
     }
-    
+
     if (!isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) {
       const convertedAmount = Quantity.__mul(
         new Quantity(0n, fromDenomination).fromString(fromInputValue),
-        conversionRate
+        conversionRate,
       );
       setToInputValue(
         convertedAmount.toLocaleString("en-US", {
@@ -104,9 +104,9 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
     const amount = Quantity.__div(
       Quantity.__mul(
         fromToken.available,
-        new Quantity(0n, fromDenomination).fromNumber(percentage)
+        new Quantity(0n, fromDenomination).fromNumber(percentage),
       ),
-      new Quantity(0n, fromDenomination).fromNumber(100)
+      new Quantity(0n, fromDenomination).fromNumber(100),
     );
     setFromInputValue(
       amount.toLocaleString("en-US", {
@@ -118,18 +118,22 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   };
 
   const getCurrentPercentage = () => {
-    if (!fromInputValue || Quantity.eq(fromToken.available, new Quantity(0n, fromDenomination))) return 0;
+    if (
+      !fromInputValue ||
+      Quantity.eq(fromToken.available, new Quantity(0n, fromDenomination))
+    )
+      return 0;
 
     if (isNaN(Number(fromInputValue.replace(/,/g, "")))) return 0;
 
     const percentage = Quantity.__div(
       Quantity.__mul(
         new Quantity(0n, fromDenomination).fromString(fromInputValue),
-        new Quantity(0n, fromDenomination).fromNumber(100)
+        new Quantity(0n, fromDenomination).fromNumber(100),
       ),
-      fromToken.available
+      fromToken.available,
     ).toNumber();
-    
+
     return Math.min(100, Math.max(0, percentage));
   };
 
@@ -144,7 +148,8 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
       token: fromToken.symbol.toUpperCase(),
       rewardToken: toToken.symbol.toUpperCase(),
       targetUserAddress: targetUserAddress[0],
-      quantity: new Quantity(0n, fromDenomination).fromString(fromInputValue).raw,
+      quantity: new Quantity(0n, fromDenomination).fromString(fromInputValue)
+        .raw,
     };
 
     liquidate(params, {

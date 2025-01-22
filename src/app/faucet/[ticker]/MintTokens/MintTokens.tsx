@@ -6,8 +6,8 @@ import { formatInputNumber } from "../../../../components/utils/utils";
 import { headerTokensData } from "@/app/data";
 import { useFaucet } from "@/hooks/actions/useFaucet";
 import { useWalletAddress } from "@/hooks/data/useWalletAddress";
-import { Quantity, Token } from "ao-tokens"
-import { tokens } from "liquidops"
+import { Quantity, Token } from "ao-tokens";
+import { tokens } from "liquidops";
 
 interface MintTokensProps {
   ticker: string;

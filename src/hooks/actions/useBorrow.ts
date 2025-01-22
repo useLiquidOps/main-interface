@@ -30,6 +30,9 @@ export function useBorrow() {
       queryClient.invalidateQueries({
         queryKey: ["user-balance", token],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["global-position", token]
+      });
     },
   });
 

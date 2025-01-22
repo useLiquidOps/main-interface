@@ -11,7 +11,7 @@ interface FaucetResponse {
 interface FaucetParams {
   ticker: string;
   walletAddress: string;
-  amount: string;
+  amount: bigint;
 }
 
 interface UseFaucetOptions {
@@ -37,11 +37,10 @@ export function useFaucet(options: UseFaucetOptions = {}) {
       }
 
       try {
-        const cleanAmount = amount.replace(/,/g, "");
         const response = await api.post("/faucet", {
           tokenAddress,
           walletAddress,
-          amount: cleanAmount,
+          amount: amount.toString(),
         });
         return response.data;
       } catch (error) {

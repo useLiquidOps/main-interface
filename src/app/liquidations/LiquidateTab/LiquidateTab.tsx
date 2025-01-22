@@ -135,7 +135,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
 
   const handleSubmit = () => {
     if (!fromInputValue || !targetUserAddress.length) return;
-    if (Number.isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) return;
+    if (isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) return;
 
     setSubmitStatus("loading");
 

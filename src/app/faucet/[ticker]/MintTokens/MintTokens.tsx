@@ -6,6 +6,8 @@ import { formatInputNumber } from "../../../../components/utils/utils";
 import { headerTokensData } from "@/app/data";
 import { useFaucet } from "@/hooks/actions/useFaucet";
 import { useWalletAddress } from "@/hooks/data/useWalletAddress";
+import { Quantity, Token } from "ao-tokens"
+import { tokens } from "liquidops"
 
 interface MintTokensProps {
   ticker: string;
@@ -38,13 +40,15 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
     setInputValue(formattedValue);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!walletAddress || !tokenData || !inputValue) return;
+    if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
+    const t = await Token(tokens[ticker.toUpperCase()]);
 
     claim({
       ticker: tokenData.ticker,
       walletAddress,
-      amount: inputValue,
+      amount: new Quantity(0n, t.info.Denomination).fromString(inputValue).raw,
     });
   };
 

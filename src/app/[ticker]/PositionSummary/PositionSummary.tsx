@@ -63,14 +63,17 @@ const PositionSummary: React.FC<{
       globalPosition?.availableToBorrow ||
         new Quantity(0n, maxBorrow.denomination),
     );
-    const currentBorrowPercentage = (!Quantity.eq(maxBorrow, new Quantity(0n, maxBorrow.denomination)) ?
-      Quantity.__div(
-        Quantity.__mul(
-          currentBorrow,
-          new Quantity(0n, denomination).fromNumber(100),
-        ),
-        maxBorrow,
-      ) : new Quantity(0n, maxBorrow.denomination)).toNumber();
+    const currentBorrowPercentage = (
+      !Quantity.eq(maxBorrow, new Quantity(0n, maxBorrow.denomination))
+        ? Quantity.__div(
+            Quantity.__mul(
+              currentBorrow,
+              new Quantity(0n, denomination).fromNumber(100),
+            ),
+            maxBorrow,
+          )
+        : new Quantity(0n, maxBorrow.denomination)
+    ).toNumber();
 
     let tooltipText = "";
     if (percentage <= currentBorrowPercentage) {

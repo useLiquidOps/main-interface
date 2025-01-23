@@ -79,8 +79,7 @@ const AssetRow: React.FC<AssetRowProps> = ({
           <div className={styles.nameAmount}>
             <p className={styles.name}>{asset.name}</p>
             <p className={styles.amount}>
-              {isLoading ? "0.00" : formatTMB(currentBalance)}{" "}
-              {asset?.ticker}
+              {isLoading ? "0.00" : formatTMB(currentBalance)} {asset?.ticker}
             </p>
           </div>
         </div>
@@ -126,21 +125,22 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const { openModal } = useModal();
   const { data: supportedTokens = [] } = useSupportedTokens();
 
-  const displayText: DisplayText = mode === "lend"
-    ? {
-        title: "Yielding assets",
-        emptyTitle: "No assets supplied yet",
-        emptyText: "Providing collateral can earn you APY.",
-        actionButton: "Withdraw",
-        actionIcon: "/icons/withdraw.svg",
-      }
-    : {
-        title: "Borrowed assets",
-        emptyTitle: "No borrows yet",
-        emptyText: "You can take out a loan using your supplied collateral.",
-        actionButton: "Repay",
-        actionIcon: "/icons/repay.svg",
-      };
+  const displayText: DisplayText =
+    mode === "lend"
+      ? {
+          title: "Yielding assets",
+          emptyTitle: "No assets supplied yet",
+          emptyText: "Providing collateral can earn you APY.",
+          actionButton: "Withdraw",
+          actionIcon: "/icons/withdraw.svg",
+        }
+      : {
+          title: "Borrowed assets",
+          emptyTitle: "No borrows yet",
+          emptyText: "You can take out a loan using your supplied collateral.",
+          actionButton: "Repay",
+          actionIcon: "/icons/repay.svg",
+        };
 
   const containerClass = `${styles.container} ${
     mode === "lend" ? styles.lendContainer : styles.borrowContainer
@@ -156,15 +156,15 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
     : supportedTokens.slice(0, 4);
 
   const handleHasBalance = React.useCallback((hasBalance: boolean) => {
-    setVisibleAssets(prev => hasBalance ? prev + 1 : prev);
+    setVisibleAssets((prev) => (hasBalance ? prev + 1 : prev));
   }, []);
 
   return (
     <div className={containerClass}>
       <div className={styles.header}>
         <h2 className={styles.title}>{displayText.title}</h2>
-        {visibleAssets > 4 && (
-          showAll ? (
+        {visibleAssets > 4 &&
+          (showAll ? (
             <button
               onClick={() => setShowAll(false)}
               className={styles.closeButton}
@@ -175,8 +175,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
             <button onClick={() => setShowAll(true)} className={styles.viewAll}>
               View all
             </button>
-          )
-        )}
+          ))}
       </div>
 
       {visibleAssets === 0 ? (

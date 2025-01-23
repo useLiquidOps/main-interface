@@ -8,6 +8,7 @@ import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLiquidation } from "@/hooks/actions/useLiquidation";
 import { Quantity } from "ao-tokens";
+import { tokenInput } from "liquidops";
 
 interface TokenData {
   name: string;
@@ -51,9 +52,10 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
 
   const { liquidate, isLiquidating, liquidationError } = useLiquidation();
 
-  const { data: walletBalance, isLoading: isLoadingBalance } = useUserBalance(
-    toToken.symbol.toUpperCase(),
-  );
+  const { tokenAddress } = tokenInput(fromToken.symbol.toUpperCase());
+
+  const { data: walletBalance, isLoading: isLoadingBalance } =
+    useUserBalance(tokenAddress);
 
   const { price: fromTokenPrice } = useTokenPrice(
     fromToken.symbol.toUpperCase(),

@@ -3,6 +3,7 @@ import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { useGlobalPosition } from "@/hooks/data/useGlobalPosition";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 
 const PositionSummary: React.FC<{
   ticker: string;

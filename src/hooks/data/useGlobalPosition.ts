@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { tokens } from "liquidops";
-import { Quantity } from "ao-tokens";
+import { Quantity, Token } from "ao-tokens";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { useWalletAddress } from "./useWalletAddress";
 import { tickerToGeckoMap, usePrices } from "./useTokenPrice";
@@ -14,7 +14,7 @@ export function useGlobalPosition(marketTokenTicker?: string) {
     queryFn: async () => {
       // empty position (on loading or no wallet connection)
       if (!marketTokenTicker) return {
-        collaterals: [],
+        collateralLogos: [],
         collateralValue: new Quantity(0n, 12n),
         borrowCapacity: new Quantity(0n, 12n),
         liquidationPoint: new Quantity(0n, 12n),
@@ -22,11 +22,12 @@ export function useGlobalPosition(marketTokenTicker?: string) {
       };
 
       // fetch positions from all oTokens
-      const positions = await Promise.all(
-        Object.values(tokens).map((token) =>
+      const [positions, tokenInfos] = await Promise.all([
+        Promise.all(Object.values(tokens).map((token) =>
           LiquidOpsClient.getPosition({ token, recipient: walletAddress }),
-        ),
-      );
+        )),
+        Promise.all(Object.values(tokens).map(async (token) => (await Token(token)).info))
+      ]);
 
       // current market data
       const marketGeckoId = tickerToGeckoMap[marketTokenTicker.toUpperCase()];
@@ -90,17 +91,21 @@ export function useGlobalPosition(marketTokenTicker?: string) {
         }),
       );
 
-      // find the tokens that the user has as collateral in liquidops
-      const collaterals = inMarketValue
+      // find the logos of the tokens that the user has as collateral in liquidops
+      const collateralLogos = inMarketValue
         .filter((market) =>
           Quantity.lt(new Quantity(0n, 12n), market.collateralValue),
         )
-        .map((market) => market.collateral);
+        .map((market) => 
+          tokenInfos.find(
+            (info) => info.Ticker?.toUpperCase() === market.collateral.toUpperCase()
+          )?.Logo
+        ).filter((logo) => !!logo);
 
       // add together the converted market values
       return inMarketValue.reduce(
         (acc, curr) => ({
-          collaterals,
+          collateralLogos,
           collateralValue: Quantity.__add(
             acc.collateralValue,
             curr.collateralValue,
@@ -119,7 +124,7 @@ export function useGlobalPosition(marketTokenTicker?: string) {
           ),
         }),
         {
-          collaterals,
+          collateralLogos,
           collateralValue: new Quantity(0n, 12n),
           borrowCapacity: new Quantity(0n, 12n),
           liquidationPoint: new Quantity(0n, 12n),

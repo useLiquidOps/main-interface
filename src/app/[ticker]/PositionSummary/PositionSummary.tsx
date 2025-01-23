@@ -112,15 +112,15 @@ const PositionSummary: React.FC<{
               >{`${globalPosition ? formatTMB(globalPosition.collateralValue) : "0"} ${tokenData.ticker}`}</p>
             </div>
             <div className={styles.tokens}>
-              {/**{globalPosition &&globalPosition.collaterals.map((token, index) => (
+              {globalPosition && globalPosition.collateralLogos.map((logo, i) => (
                 <img
-                  key={token}
-                  src={tokenData[]}
-                  alt={token.symbol}
+                  key={i}
+                  src={`https://arweave.net/${logo}`}
+                  alt="collateral logo"
                   className={styles.token}
-                  style={{ zIndex: tokens.length - index }}
+                  style={{ zIndex: globalPosition.collateralLogos.length - i }}
                 />
-              ))}**/}
+              ))}
             </div>
           </div>
 

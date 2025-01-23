@@ -5,13 +5,13 @@ interface Prices {
   [key: string]: { usd: number };
 }
 
-const tickerToGeckoMap: Record<string, string> = {
+export const tickerToGeckoMap: Record<string, string> = {
   QAR: "arweave",
   USDC: "usd-coin",
   STETH: "staked-ether",
 };
 
-function usePrices() {
+export function usePrices() {
   return useQuery({
     queryKey: ["prices"],
     queryFn: async (): Promise<Prices> => {

@@ -2,15 +2,7 @@ import React, { useMemo, useState } from "react";
 import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import { Quantity } from "ao-tokens";
-import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
-
-interface PositionData {
-  collateralValue: Quantity;
-  borrowCapacity: Quantity;
-  liquidationPoint: Quantity;
-  availableToBorrow: Quantity;
-  liquidationRisk?: Quantity;
-}
+import { useGlobalPosition } from "@/hooks/data/useGlobalPosition";
 
 const PositionSummary: React.FC<{
   ticker: string;
@@ -26,32 +18,30 @@ const PositionSummary: React.FC<{
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
-  const positionData: PositionData = {
-    collateralValue: new Quantity(0n, 12n).fromNumber(9413.37),
-    borrowCapacity: new Quantity(0n, 12n).fromNumber(4813.93),
-    liquidationPoint: new Quantity(0n, 12n).fromNumber(1470.5),
-    availableToBorrow: new Quantity(0n, 12n).fromNumber(2406.51),
-    liquidationRisk: new Quantity(0n, 12n).fromNumber(44),
-  };
+  const { data: globalPosition } = useGlobalPosition(tokenData?.ticker);
 
   const denomination = 12n;
   const maxBorrow = useMemo(
     () =>
-      Quantity.__div(
-        Quantity.__mul(
-          positionData.collateralValue,
-          new Quantity(0n, denomination).fromNumber(3),
-        ),
-        new Quantity(0n, denomination).fromNumber(4),
-      ),
-    [positionData],
+      !globalPosition
+        ? new Quantity(0n, 12n)
+        : Quantity.__div(
+            Quantity.__mul(
+              globalPosition.collateralValue,
+              new Quantity(0n, denomination).fromNumber(3),
+            ),
+            new Quantity(0n, denomination).fromNumber(4),
+          ),
+    [globalPosition],
   );
 
   const getProgressWidth = (value: Quantity): string => {
     const currentBorrow = Quantity.__sub(
       maxBorrow,
-      positionData.availableToBorrow,
+      globalPosition?.availableToBorrow ||
+        new Quantity(0n, maxBorrow.denomination),
     );
+    if (maxBorrow.toNumber() === 0) return "0%";
     return (
       Quantity.__div(
         Quantity.__mul(
@@ -70,15 +60,17 @@ const PositionSummary: React.FC<{
 
     const currentBorrow = Quantity.__sub(
       maxBorrow,
-      positionData.availableToBorrow,
+      globalPosition?.availableToBorrow ||
+        new Quantity(0n, maxBorrow.denomination),
     );
-    const currentBorrowPercentage = Quantity.__div(
-      Quantity.__mul(
-        currentBorrow,
-        new Quantity(0n, denomination).fromNumber(100),
-      ),
-      maxBorrow,
-    ).toNumber();
+    const currentBorrowPercentage = (!Quantity.eq(maxBorrow, new Quantity(0n, maxBorrow.denomination)) ?
+      Quantity.__div(
+        Quantity.__mul(
+          currentBorrow,
+          new Quantity(0n, denomination).fromNumber(100),
+        ),
+        maxBorrow,
+      ) : new Quantity(0n, maxBorrow.denomination)).toNumber();
 
     let tooltipText = "";
     if (percentage <= currentBorrowPercentage) {
@@ -96,8 +88,25 @@ const PositionSummary: React.FC<{
     setShowTooltip(false);
   };
 
+  const liquidationRisk = useMemo(() => {
+    if (!globalPosition || globalPosition.liquidationPoint.toNumber() === 0)
+      return 0;
+    return Quantity.__div(
+      Quantity.__mul(
+        Quantity.__sub(
+          globalPosition.borrowCapacity,
+          globalPosition.availableToBorrow,
+        ),
+        new Quantity(0n, globalPosition.borrowCapacity.denomination).fromNumber(
+          100,
+        ),
+      ),
+      globalPosition.liquidationPoint,
+    ).toNumber();
+  }, [globalPosition]);
+
   if (!tokenData) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -111,18 +120,21 @@ const PositionSummary: React.FC<{
               <p className={styles.label}>Collateral Value</p>
               <p
                 className={styles.value}
-              >{`${formatTMB(positionData.collateralValue)} ${tokenData.ticker}`}</p>
+              >{`${globalPosition ? formatTMB(globalPosition.collateralValue) : "0"} ${tokenData.ticker}`}</p>
             </div>
             <div className={styles.tokens}>
-              {supportedTokens.map((token, index) => (
-                <img
-                  key={token.ticker}
-                  src={token.icon}
-                  alt={token.ticker}
-                  className={styles.token}
-                  style={{ zIndex: supportedTokens.length - index }}
-                />
-              ))}
+              {globalPosition &&
+                globalPosition.collateralLogos.map((logo, i) => (
+                  <img
+                    key={i}
+                    src={`https://arweave.net/${logo}`}
+                    alt="collateral logo"
+                    className={styles.token}
+                    style={{
+                      zIndex: globalPosition.collateralLogos.length - i,
+                    }}
+                  />
+                ))}
             </div>
           </div>
 
@@ -132,7 +144,7 @@ const PositionSummary: React.FC<{
               <div className={styles.valueContainer}>
                 <p
                   className={styles.value}
-                >{`${formatTMB(positionData.borrowCapacity)} ${tokenData.ticker}`}</p>
+                >{`${globalPosition ? formatTMB(globalPosition.borrowCapacity) : "0"} ${tokenData.ticker}`}</p>
                 {extraData && <div className={styles.redDot} />}
               </div>
             </div>
@@ -143,7 +155,11 @@ const PositionSummary: React.FC<{
             >
               <div
                 className={styles.progressPrimary}
-                style={{ width: getProgressWidth(positionData.borrowCapacity) }}
+                style={{
+                  width: getProgressWidth(
+                    globalPosition?.borrowCapacity || new Quantity(0n, 12n),
+                  ),
+                }}
               />
               <div className={styles.progressBackground} />
             </div>
@@ -154,7 +170,7 @@ const PositionSummary: React.FC<{
               <p className={styles.label}>Liquidation Point</p>
               <p
                 className={styles.value}
-              >{`${formatTMB(positionData.liquidationPoint)} ${tokenData.ticker}`}</p>
+              >{`${globalPosition ? formatTMB(globalPosition?.liquidationPoint) : "0"} ${tokenData.ticker}`}</p>
             </div>
           </div>
 
@@ -163,26 +179,24 @@ const PositionSummary: React.FC<{
               <p className={styles.label}>Available to Borrow</p>
               <p
                 className={styles.value}
-              >{`${formatTMB(positionData.availableToBorrow)} ${tokenData.ticker}`}</p>
+              >{`${globalPosition ? formatTMB(globalPosition.availableToBorrow) : "0"} ${tokenData.ticker}`}</p>
             </div>
           </div>
 
-          {extraData && positionData.liquidationRisk && (
+          {extraData && globalPosition && (
             <div className={styles.metric}>
               <div className={styles.metricInfo}>
                 <p className={styles.label}>Liquidation Risk</p>
                 <div className={styles.riskContainer}>
-                  <p
-                    className={styles.value}
-                  >{`${positionData.liquidationRisk}%`}</p>
+                  <p className={styles.value}>{`${liquidationRisk}%`}</p>
                   <div className={styles.riskProgressContainer}>
                     <div
                       className={styles.riskProgress}
-                      style={{ width: `${positionData.liquidationRisk}%` }}
+                      style={{ width: `${liquidationRisk}%` }}
                     />
                     <div
                       className={styles.riskIndicator}
-                      style={{ left: `${positionData.liquidationRisk}%` }}
+                      style={{ left: `${liquidationRisk}%` }}
                     />
                   </div>
                 </div>

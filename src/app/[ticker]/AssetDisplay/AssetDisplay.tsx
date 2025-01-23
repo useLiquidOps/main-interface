@@ -30,6 +30,7 @@ interface AssetRowProps {
   mode: "lend" | "borrow";
   displayText: DisplayText;
   onClick: (asset: SupportedToken, e?: React.MouseEvent) => void;
+  onHasBalance: (hasBalance: boolean) => void;
 }
 
 const AssetRow: React.FC<AssetRowProps> = ({
@@ -37,6 +38,7 @@ const AssetRow: React.FC<AssetRowProps> = ({
   mode,
   displayText,
   onClick,
+  onHasBalance,
 }) => {
   const { tokenAddress, oTokenAddress } = tokenInput(
     asset.ticker.toUpperCase(),
@@ -47,6 +49,16 @@ const AssetRow: React.FC<AssetRowProps> = ({
 
   const currentBalance = mode === "lend" ? lentBalance : positionBalance;
   const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
+
+  React.useEffect(() => {
+    if (!isLoading) {
+      onHasBalance(Boolean(currentBalance && Number(currentBalance) > 0));
+    }
+  }, [currentBalance, isLoading, onHasBalance]);
+
+  if (!currentBalance || Number(currentBalance) === 0) {
+    return null;
+  }
 
   const handleClick = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -67,9 +79,7 @@ const AssetRow: React.FC<AssetRowProps> = ({
           <div className={styles.nameAmount}>
             <p className={styles.name}>{asset.name}</p>
             <p className={styles.amount}>
-              {isLoading || !currentBalance
-                ? "0.00"
-                : formatTMB(currentBalance)}{" "}
+              {isLoading ? "0.00" : formatTMB(currentBalance)}{" "}
               {asset?.ticker}
             </p>
           </div>
@@ -112,25 +122,25 @@ const AssetRow: React.FC<AssetRowProps> = ({
 
 const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const [showAll, setShowAll] = useState(false);
+  const [visibleAssets, setVisibleAssets] = useState(0);
   const { openModal } = useModal();
   const { data: supportedTokens = [] } = useSupportedTokens();
 
-  const displayText: DisplayText =
-    mode === "lend"
-      ? {
-          title: "Yielding assets",
-          emptyTitle: "No assets supplied yet",
-          emptyText: "Providing collateral can earn you APY.",
-          actionButton: "Withdraw",
-          actionIcon: "/icons/withdraw.svg",
-        }
-      : {
-          title: "Borrowed assets",
-          emptyTitle: "No borrows yet",
-          emptyText: "You can take out a loan using your supplied collateral.",
-          actionButton: "Repay",
-          actionIcon: "/icons/repay.svg",
-        };
+  const displayText: DisplayText = mode === "lend"
+    ? {
+        title: "Yielding assets",
+        emptyTitle: "No assets supplied yet",
+        emptyText: "Providing collateral can earn you APY.",
+        actionButton: "Withdraw",
+        actionIcon: "/icons/withdraw.svg",
+      }
+    : {
+        title: "Borrowed assets",
+        emptyTitle: "No borrows yet",
+        emptyText: "You can take out a loan using your supplied collateral.",
+        actionButton: "Repay",
+        actionIcon: "/icons/repay.svg",
+      };
 
   const containerClass = `${styles.container} ${
     mode === "lend" ? styles.lendContainer : styles.borrowContainer
@@ -145,12 +155,16 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
     ? supportedTokens
     : supportedTokens.slice(0, 4);
 
+  const handleHasBalance = React.useCallback((hasBalance: boolean) => {
+    setVisibleAssets(prev => hasBalance ? prev + 1 : prev);
+  }, []);
+
   return (
     <div className={containerClass}>
       <div className={styles.header}>
         <h2 className={styles.title}>{displayText.title}</h2>
-        {supportedTokens.length > 4 &&
-          (showAll ? (
+        {visibleAssets > 4 && (
+          showAll ? (
             <button
               onClick={() => setShowAll(false)}
               className={styles.closeButton}
@@ -161,10 +175,11 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
             <button onClick={() => setShowAll(true)} className={styles.viewAll}>
               View all
             </button>
-          ))}
+          )
+        )}
       </div>
 
-      {supportedTokens.length === 0 ? (
+      {visibleAssets === 0 ? (
         <div className={styles.emptyState}>
           <Image
             src="/icons/noAssets.svg"
@@ -185,6 +200,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
               mode={mode}
               displayText={displayText}
               onClick={handleActionClick}
+              onHasBalance={handleHasBalance}
             />
           ))}
         </div>

@@ -128,7 +128,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const displayText: DisplayText =
     mode === "lend"
       ? {
-          title: "Yielding assets",
+          title: "Lent assets",
           emptyTitle: "No assets supplied yet",
           emptyText: "Providing collateral can earn you APY.",
           actionButton: "Withdraw",

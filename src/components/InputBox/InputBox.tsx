@@ -2,11 +2,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./InputBox.module.css";
-import {
-  formatInputNumber,
-  calculateUsdValue,
-  formatNumberWithCommas,
-} from "../utils/utils";
+import { formatInputNumber, calculateUsdValue } from "../utils/utils";
+import { formatTMB } from "../utils/utils";
 import { Quantity } from "ao-tokens";
 
 interface InputBoxProps {
@@ -220,7 +217,7 @@ const InputBox: React.FC<InputBoxProps> = ({
         <span className={styles.balanceAmount}>
           {Quantity.eq(walletBalance, new Quantity(0n, denomination))
             ? "0.00"
-            : formatNumberWithCommas(walletBalance)}{" "}
+            : formatTMB(walletBalance)}{" "}
           {ticker}
         </span>
         <span className={styles.separator}>|</span>

@@ -6,7 +6,8 @@ import { useModal } from "../PopUp/PopUp";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
-// import { Quantity } from "ao-tokens";
+import { tokenInput } from "liquidops";
+import { useGetPosition } from "@/hooks/data/useGetPosition";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";
@@ -97,10 +98,18 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode, tokens }) => {
             const { data: protocolStats } = useProtocolStats(
               asset.symbol.toUpperCase(),
             );
-            const { data: balance, isLoading } = useUserBalance(
+            const { tokenAddress, oTokenAddress } = tokenInput(
               asset.symbol.toUpperCase(),
-              mode === "borrow",
             );
+            const { data: positionBalance, isLoading: isLoadingPosition } =
+              useGetPosition(tokenAddress);
+            const { data: lentBalance, isLoading: isLoadingBalance } =
+              useUserBalance(oTokenAddress);
+
+            const currentBalance =
+              mode === "lend" ? lentBalance : positionBalance;
+            const isLoading =
+              mode === "lend" ? isLoadingBalance : isLoadingPosition;
 
             return (
               <div
@@ -122,12 +131,10 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode, tokens }) => {
                     <div className={styles.nameAmount}>
                       <p className={styles.name}>{asset.name}</p>
                       <p className={styles.amount}>
-                        {isLoading || !balance ? "0.00" : formatTMB(balance)}{" "}
+                        {isLoading || !currentBalance
+                          ? "0.00"
+                          : formatTMB(currentBalance)}{" "}
                         {asset?.symbol}
-                        {/* {mode === "borrow" &&
-                          (isLoading
-                            ? ` + 0.00 ${asset?.symbol}`
-                            : ` + ${formatTMB(extraAmount)} ${asset?.symbol}`)} */}
                       </p>
                     </div>
                   </div>

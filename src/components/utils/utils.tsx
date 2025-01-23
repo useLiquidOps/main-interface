@@ -23,9 +23,31 @@ export const useClickOutside = <T extends HTMLElement>(
   return { ref };
 };
 
+type DigitType =
+  | 0
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14
+  | 15
+  | 16
+  | 17
+  | 18
+  | 19
+  | 20;
+
 // format thousands, millions, billions
 export const formatTMB = (value: Quantity): string => {
-  console.log(value);
   const billions = new Quantity(0, value.denomination).fromNumber(1000000000);
   const millions = new Quantity(0, value.denomination).fromNumber(1000000);
   if (Quantity.le(billions, value)) {
@@ -48,7 +70,9 @@ export const formatTMB = (value: Quantity): string => {
       maximumFractionDigits: 2,
     });
   } else {
-    return value.toLocaleString("en-US", { maximumFractionDigits: 2 });
+    return value.toLocaleString("en-US", {
+      maximumFractionDigits: Number(value.denomination) as DigitType,
+    });
   }
 };
 

@@ -1,22 +1,23 @@
-import { Token } from "ao-tokens";
-import { TokenInput, tokenInput } from "liquidops";
+import { Token, Quantity } from "ao-tokens";
 
 export interface GetBalance {
-  token: TokenInput | string;
+  tokenAddress: string;
   walletAddress: string;
 }
 
 export const tokenOperations = {
-  async getBalance({ token, walletAddress }: GetBalance): Promise<BigInt> {
-    if (!token || !walletAddress) {
-      throw new Error("Please specify a token and walletAddress.");
+  async getBalance({
+    tokenAddress,
+    walletAddress,
+  }: GetBalance): Promise<Quantity> {
+    if (!tokenAddress || !walletAddress) {
+      throw new Error("Please specify a tokenAddress and walletAddress.");
     }
 
     try {
-      const { tokenAddress } = tokenInput(token);
       const tokenInstance = await Token(tokenAddress);
       const balance = await tokenInstance.getBalance(walletAddress);
-      return balance.raw;
+      return new Quantity(balance.raw, tokenInstance.info.Denomination);
     } catch (error) {
       throw new Error("Error fetching balance: " + error);
     }

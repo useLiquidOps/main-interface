@@ -20,11 +20,12 @@ export function useTransactions() {
       }
 
       const allTransactions = [];
-      for (const token of supportedTokens) {
-        for (const action of ACTIONS) {
+      for (let token of supportedTokens) {
+        for (let action of ACTIONS) {
+          let ticker = token["ticker"];
           try {
             const result = await LiquidOpsClient.getTransactions({
-              token: token["ticker"],
+              token: ticker.toUpperCase(),
               action,
               walletAddress,
             });

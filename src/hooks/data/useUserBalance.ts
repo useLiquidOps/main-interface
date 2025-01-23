@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
-import { tokenOperations } from "./tempGetBalance";
+import { LiquidOpsClient } from "@/utils/LiquidOps";
 
 export function useUserBalance(tokenAddress: string) {
   const { data: walletAddress } = useWalletAddress();
@@ -11,7 +11,7 @@ export function useUserBalance(tokenAddress: string) {
       if (!walletAddress) throw new Error("Wallet address not available");
 
       const [balance] = await Promise.all([
-        tokenOperations.getBalance({
+        LiquidOpsClient.getBalance({
           tokenAddress,
           walletAddress,
         }),

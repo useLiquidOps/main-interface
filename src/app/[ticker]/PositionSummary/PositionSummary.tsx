@@ -22,21 +22,23 @@ const PositionSummary: React.FC<{
   const denomination = 12n;
   const maxBorrow = useMemo(
     () =>
-      !globalPosition ? new Quantity(0n, 12n) :
-        Quantity.__div(
-          Quantity.__mul(
-            globalPosition.collateralValue,
-            new Quantity(0n, denomination).fromNumber(3),
+      !globalPosition
+        ? new Quantity(0n, 12n)
+        : Quantity.__div(
+            Quantity.__mul(
+              globalPosition.collateralValue,
+              new Quantity(0n, denomination).fromNumber(3),
+            ),
+            new Quantity(0n, denomination).fromNumber(4),
           ),
-          new Quantity(0n, denomination).fromNumber(4),
-        ),
     [globalPosition],
   );
 
   const getProgressWidth = (value: Quantity): string => {
     const currentBorrow = Quantity.__sub(
       maxBorrow,
-      globalPosition?.availableToBorrow || new Quantity(0n, maxBorrow.denomination),
+      globalPosition?.availableToBorrow ||
+        new Quantity(0n, maxBorrow.denomination),
     );
     if (maxBorrow.toNumber() === 0) return "0%";
     return (
@@ -57,15 +59,17 @@ const PositionSummary: React.FC<{
 
     const currentBorrow = Quantity.__sub(
       maxBorrow,
-      globalPosition?.availableToBorrow || new Quantity(0n, maxBorrow.denomination),
+      globalPosition?.availableToBorrow ||
+        new Quantity(0n, maxBorrow.denomination),
     );
-    const currentBorrowPercentage = Quantity.__div(
-      Quantity.__mul(
-        currentBorrow,
-        new Quantity(0n, denomination).fromNumber(100),
-      ),
-      maxBorrow,
-    ).toNumber();
+    const currentBorrowPercentage = (!Quantity.eq(maxBorrow, new Quantity(0n, maxBorrow.denomination)) ?
+      Quantity.__div(
+        Quantity.__mul(
+          currentBorrow,
+          new Quantity(0n, denomination).fromNumber(100),
+        ),
+        maxBorrow,
+      ) : new Quantity(0n, maxBorrow.denomination)).toNumber();
 
     let tooltipText = "";
     if (percentage <= currentBorrowPercentage) {
@@ -84,13 +88,19 @@ const PositionSummary: React.FC<{
   };
 
   const liquidationRisk = useMemo(() => {
-    if (!globalPosition || globalPosition.liquidationPoint.toNumber() === 0) return 0;
+    if (!globalPosition || globalPosition.liquidationPoint.toNumber() === 0)
+      return 0;
     return Quantity.__div(
       Quantity.__mul(
-        Quantity.__sub(globalPosition.borrowCapacity, globalPosition.availableToBorrow),
-        new Quantity(0n, globalPosition.borrowCapacity.denomination).fromNumber(100)
+        Quantity.__sub(
+          globalPosition.borrowCapacity,
+          globalPosition.availableToBorrow,
+        ),
+        new Quantity(0n, globalPosition.borrowCapacity.denomination).fromNumber(
+          100,
+        ),
       ),
-      globalPosition.liquidationPoint
+      globalPosition.liquidationPoint,
     ).toNumber();
   }, [globalPosition]);
 
@@ -112,15 +122,18 @@ const PositionSummary: React.FC<{
               >{`${globalPosition ? formatTMB(globalPosition.collateralValue) : "0"} ${tokenData.ticker}`}</p>
             </div>
             <div className={styles.tokens}>
-              {globalPosition && globalPosition.collateralLogos.map((logo, i) => (
-                <img
-                  key={i}
-                  src={`https://arweave.net/${logo}`}
-                  alt="collateral logo"
-                  className={styles.token}
-                  style={{ zIndex: globalPosition.collateralLogos.length - i }}
-                />
-              ))}
+              {globalPosition &&
+                globalPosition.collateralLogos.map((logo, i) => (
+                  <img
+                    key={i}
+                    src={`https://arweave.net/${logo}`}
+                    alt="collateral logo"
+                    className={styles.token}
+                    style={{
+                      zIndex: globalPosition.collateralLogos.length - i,
+                    }}
+                  />
+                ))}
             </div>
           </div>
 
@@ -141,7 +154,11 @@ const PositionSummary: React.FC<{
             >
               <div
                 className={styles.progressPrimary}
-                style={{ width: getProgressWidth(globalPosition?.borrowCapacity || new Quantity(0n, 12n)) }}
+                style={{
+                  width: getProgressWidth(
+                    globalPosition?.borrowCapacity || new Quantity(0n, 12n),
+                  ),
+                }}
               />
               <div className={styles.progressBackground} />
             </div>
@@ -170,9 +187,7 @@ const PositionSummary: React.FC<{
               <div className={styles.metricInfo}>
                 <p className={styles.label}>Liquidation Risk</p>
                 <div className={styles.riskContainer}>
-                  <p
-                    className={styles.value}
-                  >{`${liquidationRisk}%`}</p>
+                  <p className={styles.value}>{`${liquidationRisk}%`}</p>
                   <div className={styles.riskProgressContainer}>
                     <div
                       className={styles.riskProgress}

@@ -13,20 +13,25 @@ export function useGlobalPosition(marketTokenTicker?: string) {
     queryKey: ["global-position", walletAddress, prices, marketTokenTicker],
     queryFn: async () => {
       // empty position (on loading or no wallet connection)
-      if (!marketTokenTicker) return {
-        collateralLogos: [],
-        collateralValue: new Quantity(0n, 12n),
-        borrowCapacity: new Quantity(0n, 12n),
-        liquidationPoint: new Quantity(0n, 12n),
-        availableToBorrow: new Quantity(0n, 12n),
-      };
+      if (!marketTokenTicker)
+        return {
+          collateralLogos: [],
+          collateralValue: new Quantity(0n, 12n),
+          borrowCapacity: new Quantity(0n, 12n),
+          liquidationPoint: new Quantity(0n, 12n),
+          availableToBorrow: new Quantity(0n, 12n),
+        };
 
       // fetch positions from all oTokens
       const [positions, tokenInfos] = await Promise.all([
-        Promise.all(Object.values(tokens).map((token) =>
-          LiquidOpsClient.getPosition({ token, recipient: walletAddress }),
-        )),
-        Promise.all(Object.values(tokens).map(async (token) => (await Token(token)).info))
+        Promise.all(
+          Object.values(tokens).map((token) =>
+            LiquidOpsClient.getPosition({ token, recipient: walletAddress }),
+          ),
+        ),
+        Promise.all(
+          Object.values(tokens).map(async (token) => (await Token(token)).info),
+        ),
       ]);
 
       // current market data
@@ -96,11 +101,14 @@ export function useGlobalPosition(marketTokenTicker?: string) {
         .filter((market) =>
           Quantity.lt(new Quantity(0n, 12n), market.collateralValue),
         )
-        .map((market) => 
-          tokenInfos.find(
-            (info) => info.Ticker?.toUpperCase() === market.collateral.toUpperCase()
-          )?.Logo
-        ).filter((logo) => !!logo);
+        .map(
+          (market) =>
+            tokenInfos.find(
+              (info) =>
+                info.Ticker?.toUpperCase() === market.collateral.toUpperCase(),
+            )?.Logo,
+        )
+        .filter((logo) => !!logo);
 
       // add together the converted market values
       return inMarketValue.reduce(

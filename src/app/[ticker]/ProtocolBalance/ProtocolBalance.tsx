@@ -112,11 +112,11 @@ const ProtocolBalance: React.FC<{
               />
             )}
             <p className={styles.aprText}>
-              {isLoadingHistorical
-                ? "0.00"
+              {isLoadingHistorical || !protocolStats
+                ? "0.00%"
                 : hoverData
                   ? `${hoverData.value.toFixed(2)}%`
-                  : `${protocolStats?.apr}%`}
+                  : `${protocolStats.apr}%`}
             </p>
           </div>
         </div>

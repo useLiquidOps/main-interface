@@ -110,12 +110,12 @@ const Market: React.FC<{
               <p className={styles.value}>
                 {`${formatTMB(protocolStats?.protocolBalance || new Quantity(0n, 12n))} ${tokenData.ticker}`}
               </p>
-              {extraData && (
+              {/* {extraData && (
                 <p className={styles.extraData}>
                   +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraTotalSupply)}{" "}
                   {tokenData.ticker}
                 </p>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -126,12 +126,12 @@ const Market: React.FC<{
                 {`${formatTMB(protocolStats?.unLent || new Quantity(0n, 12n))} ${tokenData.ticker}`}
               </p>
               <div className={styles.indicatorGreen}></div>
-              {extraData && (
+              {/* {extraData && (
                 <p className={styles.extraData}>
                   +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraLent)}{" "}
                   {tokenData.ticker}
                 </p>
-              )}
+              )} */}
             </div>
           </div>
 

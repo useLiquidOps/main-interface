@@ -13,6 +13,7 @@ import {
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
 import { formatTMB } from "@/components/utils/utils";
+import { Quantity } from "ao-tokens";
 // import { useGetLiquidations } from "@/hooks/data/useGetLiquidations";
 
 interface TokenInfo {
@@ -25,9 +26,14 @@ const calculateLiquidationStats = (liquidations: any[]) => {
   return liquidations.reduce(
     (acc, liquidation) => {
       return {
-        availableLiquidations:
-          acc.availableLiquidations + liquidation.toToken.available,
-        totalProfit: acc.totalProfit + liquidation.toToken.available,
+        availableLiquidations: Quantity.__add(
+          acc.availableLiquidations,
+          liquidation.toToken.available,
+        ),
+        totalProfit: Quantity.__add(
+          acc.totalProfit,
+          liquidation.toToken.available,
+        ),
         markets: new Set([
           ...acc.markets,
           liquidation.fromToken.symbol,
@@ -36,8 +42,8 @@ const calculateLiquidationStats = (liquidations: any[]) => {
       };
     },
     {
-      availableLiquidations: 0,
-      totalProfit: 0,
+      availableLiquidations: new Quantity(0n, 12n),
+      totalProfit: new Quantity(0n, 12n),
       markets: new Set<string>(),
     },
   );

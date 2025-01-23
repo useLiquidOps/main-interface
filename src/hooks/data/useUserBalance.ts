@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 import { Token, Quantity } from "ao-tokens";
 import { tokenOperations } from "./tempGetBalance";
+import { tokenInput } from "liquidops";
 
 export function useUserBalance(token: string) {
+  const { tokenAddress } = tokenInput(token);
   const { data: walletAddress } = useWalletAddress();
 
   return useQuery({
@@ -15,7 +17,7 @@ export function useUserBalance(token: string) {
           token,
           walletAddress,
         }),
-        await Token(token),
+        await Token(tokenAddress),
       ]);
 
       return new Quantity(rawBalance as bigint, t.info.Denomination);

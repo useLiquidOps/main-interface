@@ -3,18 +3,18 @@ import styles from "./markets.module.css";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
 import Link from "next/link";
-import { tokens, headerTokensData } from "../data";
+import { AssetDisplayData } from "../data";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 
 const Markets = () => {
-  const statsQueries = tokens.map((token) => ({
+  const statsQueries = AssetDisplayData.map((token) => ({
     symbol: token.symbol,
     stats: useProtocolStats(token.symbol.toUpperCase()),
     icon: token.imagePath,
-    headerData: headerTokensData.find((h) => h.ticker === token.symbol),
+    headerData: AssetDisplayData.find((h) => h.ticker === token.symbol),
     price: useTokenPrice(token.symbol.toUpperCase()),
   }));
 

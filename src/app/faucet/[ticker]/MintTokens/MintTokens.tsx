@@ -3,7 +3,7 @@ import Image from "next/image";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import styles from "./MintTokens.module.css";
 import { formatInputNumber } from "../../../../components/utils/utils";
-import { headerTokensData } from "@/app/data";
+import { AssetDisplayData } from "@/app/data";
 import { useFaucet } from "@/hooks/actions/useFaucet";
 import { useWalletAddress } from "@/hooks/data/useWalletAddress";
 import { Quantity, Token } from "ao-tokens";
@@ -19,7 +19,7 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
 
   const { data: walletAddress } = useWalletAddress();
 
-  const tokenData = headerTokensData.find(
+  const tokenData = AssetDisplayData.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 

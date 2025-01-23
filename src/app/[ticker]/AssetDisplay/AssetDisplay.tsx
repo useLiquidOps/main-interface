@@ -8,58 +8,67 @@ import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/data/useGetPosition";
+import { AssetDisplayData } from "@/app/data";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";
-  tokens: Array<{
-    icon: string;
-    oIcon: string;
-    name: string;
-    symbol: string;
-  }>;
 }
 
-const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode, tokens }) => {
+const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const [showAll, setShowAll] = useState(false);
   const { openModal } = useModal();
 
-  // // TODO: find actual data and replace this
-  // const extraAmount = new Quantity(0n, 12n).fromNumber(1);
-
-  const displayedAssets = showAll ? tokens : tokens.slice(0, 4);
-
-  const getDisplayText = () => {
-    if (mode === "lend") {
-      return {
-        title: "Yielding assets",
-        emptyTitle: "No assets supplied yet",
-        emptyText: `Providing collateral can earn you APY.`,
-        actionButton: "Withdraw",
-        actionIcon: "/icons/withdraw.svg",
-      };
-    }
-    return {
-      title: "Borrowed assets",
-      emptyTitle: "No borrows yet",
-      emptyText: "You can take out a loan using your supplied collateral.",
-      actionButton: "Repay",
-      actionIcon: "/icons/repay.svg",
-    };
-  };
-
-  const displayText = getDisplayText();
+  const displayText =
+    mode === "lend"
+      ? {
+          title: "Yielding assets",
+          emptyTitle: "No assets supplied yet",
+          emptyText: `Providing collateral can earn you APY.`,
+          actionButton: "Withdraw",
+          actionIcon: "/icons/withdraw.svg",
+        }
+      : {
+          title: "Borrowed assets",
+          emptyTitle: "No borrows yet",
+          emptyText: "You can take out a loan using your supplied collateral.",
+          actionButton: "Repay",
+          actionIcon: "/icons/repay.svg",
+        };
 
   const containerClass = `${styles.container} ${
     mode === "lend" ? styles.lendContainer : styles.borrowContainer
   } ${showAll ? styles.expanded : ""}`;
 
   const handleActionClick = (
-    asset: (typeof tokens)[0],
+    asset: (typeof AssetDisplayData)[0],
     e?: React.MouseEvent,
   ) => {
     if (e) e.stopPropagation();
     openModal(mode === "lend" ? "withdraw" : "repay", asset);
   };
+
+  const tokens = AssetDisplayData.map((asset) => {
+    const { tokenAddress, oTokenAddress } = tokenInput(
+      asset.symbol.toUpperCase(),
+    );
+    const { data: positionBalance } = useGetPosition(tokenAddress);
+    const { data: lentBalance } = useUserBalance(oTokenAddress);
+    const { data: protocolStats } = useProtocolStats(
+      asset.symbol.toUpperCase(),
+    );
+
+    const currentBalance = mode === "lend" ? lentBalance : positionBalance;
+    const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
+
+    return {
+      ...asset,
+      currentBalance,
+      isLoading,
+      protocolStats,
+    };
+  }).filter((token) => token.currentBalance && token.currentBalance.raw !== 0n);
+
+  const displayedAssets = showAll ? tokens : tokens.slice(0, 4);
 
   return (
     <div className={containerClass}>
@@ -94,90 +103,72 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode, tokens }) => {
         </div>
       ) : (
         <div className={styles.assetsList}>
-          {displayedAssets.map((asset, index) => {
-            const { data: protocolStats } = useProtocolStats(
-              asset.symbol.toUpperCase(),
-            );
-            const { tokenAddress, oTokenAddress } = tokenInput(
-              asset.symbol.toUpperCase(),
-            );
-            const { data: positionBalance, isLoading: isLoadingPosition } =
-              useGetPosition(tokenAddress);
-            const { data: lentBalance, isLoading: isLoadingBalance } =
-              useUserBalance(oTokenAddress);
-
-            const currentBalance =
-              mode === "lend" ? lentBalance : positionBalance;
-            const isLoading =
-              mode === "lend" ? isLoadingBalance : isLoadingPosition;
-
-            return (
-              <div
-                key={`${mode}-${asset.name}-${index}`}
-                className={styles.assetRowWrapper}
-                onClick={() => handleActionClick(asset)}
-                style={{ cursor: "pointer" }}
-              >
-                <div className={styles.assetRow}>
-                  <div className={styles.assetInfo}>
-                    <div className={styles.iconWrapper}>
-                      <Image
-                        src={asset.icon}
-                        alt={asset.name}
-                        width={40}
-                        height={40}
-                      />
-                    </div>
-                    <div className={styles.nameAmount}>
-                      <p className={styles.name}>{asset.name}</p>
-                      <p className={styles.amount}>
-                        {isLoading || !currentBalance
-                          ? "0.00"
-                          : formatTMB(currentBalance)}{" "}
-                        {asset?.symbol}
-                      </p>
-                    </div>
+          {displayedAssets.map((asset, index) => (
+            <div
+              key={`${mode}-${asset.name}-${index}`}
+              className={styles.assetRowWrapper}
+              onClick={() => handleActionClick(asset)}
+              style={{ cursor: "pointer" }}
+            >
+              <div className={styles.assetRow}>
+                <div className={styles.assetInfo}>
+                  <div className={styles.iconWrapper}>
+                    <Image
+                      src={asset.icon}
+                      alt={asset.name}
+                      width={40}
+                      height={40}
+                    />
                   </div>
-
-                  <div className={styles.aprInfo}>
-                    <p className={styles.apr}>
-                      APR {protocolStats?.apr ?? "0.00"}%
+                  <div className={styles.nameAmount}>
+                    <p className={styles.name}>{asset.name}</p>
+                    <p className={styles.amount}>
+                      {asset.isLoading || !asset.currentBalance
+                        ? "0.00"
+                        : formatTMB(asset.currentBalance)}{" "}
+                      {asset?.symbol}
                     </p>
-                    <div className={styles.changeInfo}>
-                      <Image
-                        src={
-                          protocolStats?.percentChange
-                            ? protocolStats.percentChange.outcome
-                              ? "/icons/APRUp.svg"
-                              : "/icons/APRDown.svg"
-                            : "/icons/APRUp.svg"
-                        }
-                        alt="APR change indicator"
-                        width={16}
-                        height={16}
-                      />
-                      <p className={styles.change}>
-                        {protocolStats?.percentChange?.change ?? "0.00"}%
-                      </p>
-                    </div>
                   </div>
                 </div>
-                <button
-                  className={styles.withdrawButton}
-                  onClick={(e) => handleActionClick(asset, e)}
-                >
-                  <Image
-                    src={displayText.actionIcon}
-                    alt={displayText.actionButton}
-                    width={14}
-                    height={14}
-                    className={styles.withdrawIcon}
-                  />
-                  <span>{displayText.actionButton}</span>
-                </button>
+
+                <div className={styles.aprInfo}>
+                  <p className={styles.apr}>
+                    APR {asset.protocolStats?.apr ?? "0.00"}%
+                  </p>
+                  <div className={styles.changeInfo}>
+                    <Image
+                      src={
+                        asset.protocolStats?.percentChange
+                          ? asset.protocolStats.percentChange.outcome
+                            ? "/icons/APRUp.svg"
+                            : "/icons/APRDown.svg"
+                          : "/icons/APRUp.svg"
+                      }
+                      alt="APR change indicator"
+                      width={16}
+                      height={16}
+                    />
+                    <p className={styles.change}>
+                      {asset.protocolStats?.percentChange?.change ?? "0.00"}%
+                    </p>
+                  </div>
+                </div>
               </div>
-            );
-          })}
+              <button
+                className={styles.withdrawButton}
+                onClick={(e) => handleActionClick(asset, e)}
+              >
+                <Image
+                  src={displayText.actionIcon}
+                  alt={displayText.actionButton}
+                  width={14}
+                  height={14}
+                  className={styles.withdrawIcon}
+                />
+                <span>{displayText.actionButton}</span>
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>

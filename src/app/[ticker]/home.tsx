@@ -6,7 +6,6 @@ import ProtocolBalance from "./ProtocolBalance/ProtocolBalance";
 import Market from "./Market/Market";
 import PositionSummary from "./PositionSummary/PositionSummary";
 import AssetDisplay from "./AssetDisplay/AssetDisplay";
-import { AssetDisplayData } from "../data";
 import WithdrawRepay from "@/components/WithdrawRepay/WithdrawRepay";
 import { useModal, ModalProvider } from "./PopUp/PopUp";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,8 +31,8 @@ const HomeContent = ({
           <div className={styles.grid}>
             <Market ticker={ticker} />
             <PositionSummary ticker={ticker} />
-            <AssetDisplay mode="lend" tokens={AssetDisplayData} />
-            <AssetDisplay mode="borrow" tokens={AssetDisplayData} />
+            <AssetDisplay mode="lend" />
+            <AssetDisplay mode="borrow" />
           </div>
         </div>
       </div>

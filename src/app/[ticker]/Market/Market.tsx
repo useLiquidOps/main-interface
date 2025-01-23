@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Market.module.css";
 import { formatTMB } from "../../../components/utils/utils";
-import { headerTokensData } from "@/app/data";
+import { AssetDisplayData } from "@/app/data";
 import Image from "next/image";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { Quantity } from "ao-tokens";
@@ -20,7 +20,7 @@ const Market: React.FC<{
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const tokenData = headerTokensData.find(
+  const tokenData = AssetDisplayData.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 

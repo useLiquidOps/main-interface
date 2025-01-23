@@ -7,6 +7,8 @@ export const AssetDisplayData = [
     name: "Quantum Arweave",
     symbol: "qAR",
     extraAmount: "1",
+    ticker: "qAR",
+    imagePath: "/tokens/qAR.svg",
   },
   {
     icon: "/tokens/USDC.svg",
@@ -14,6 +16,8 @@ export const AssetDisplayData = [
     name: "USD Circle",
     symbol: "USDC",
     extraAmount: "1",
+    ticker: "USDC",
+    imagePath: "/tokens/USDC.svg",
   },
   {
     icon: "/tokens/stETH.svg",
@@ -21,39 +25,11 @@ export const AssetDisplayData = [
     name: "Staked Ethereum",
     symbol: "stETH",
     extraAmount: "1",
-  },
-];
-
-interface TokenData {
-  name: string;
-  ticker: string;
-}
-
-export const headerTokensData: TokenData[] = [
-  {
-    name: "Quantum Arweave",
-    ticker: "qAR",
-  },
-  {
-    name: "USD Circle",
-    ticker: "USDC",
-  },
-  {
-    name: "Staked Ethereum",
     ticker: "stETH",
+    imagePath: "/tokens/stETH.svg",
   },
 ];
 
-interface Token {
-  symbol: string;
-  imagePath: string;
-}
-
-export const tokens: Token[] = [
-  { symbol: "USDC", imagePath: "/tokens/USDC.svg" },
-  { symbol: "stETH", imagePath: "/tokens/stETH.svg" },
-  { symbol: "qAR", imagePath: "/tokens/qAR.svg" },
-];
 export const liquidationsData = [
   {
     fromToken: {

@@ -3,7 +3,7 @@ import styles from "./liquidations.module.css";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
-import { liquidationsData, tokens } from "../data";
+import { liquidationsData, AssetDisplayData } from "../data";
 import DropdownButton from "@/components/DropDown/DropDown";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
 import LiquidateTab from "./LiquidateTab/LiquidateTab";
@@ -83,12 +83,18 @@ const LiquidationsContent = () => {
   };
 
   const receiveTokens = useMemo(
-    () => [{ symbol: "All tokens", imagePath: "/icons/list.svg" }, ...tokens],
+    () => [
+      { symbol: "All tokens", imagePath: "/icons/list.svg" },
+      ...AssetDisplayData,
+    ],
     [],
   );
 
   const sendTokens = useMemo(
-    () => [{ symbol: "All tokens", imagePath: "/icons/list.svg" }, ...tokens],
+    () => [
+      { symbol: "All tokens", imagePath: "/icons/list.svg" },
+      ...AssetDisplayData,
+    ],
     [],
   );
 

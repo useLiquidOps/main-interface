@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Connect from "../Connect/Connect";
 import { useClickOutside } from "../utils/utils";
-import { headerTokensData } from "../../app/data";
+import { AssetDisplayData } from "../../app/data";
 import DropdownButton from "../DropDown/DropDown";
 import { motion, AnimatePresence } from "framer-motion";
 import { overlayVariants } from "@/components/DropDown/FramerMotion";
@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
     setIsDropdownOpen(false);
   });
 
-  const sortedTokens = [...headerTokensData].sort((a, b) =>
+  const sortedTokens = [...AssetDisplayData].sort((a, b) =>
     a.name.localeCompare(b.name),
   );
 
@@ -67,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
   }
 
   const currentTokenData = currentToken
-    ? headerTokensData.find(
+    ? AssetDisplayData.find(
         (token) => token.ticker.toLowerCase() === currentToken.toLowerCase(),
       )
     : null;

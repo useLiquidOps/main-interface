@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { Token, Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
+import { useHistoricalAPR } from "./useHistoricalAPR";
 
 interface ProtocolStats {
+  denomination: bigint;
   unLent: Quantity;
   borrows: Quantity;
   protocolBalance: Quantity;
@@ -16,62 +18,55 @@ interface ProtocolStats {
 }
 
 export function useProtocolStats(token: string) {
-  const { tokenAddress } = tokenInput(token);
+  const { oTokenAddress } = tokenInput(token);
+  const { data: historicalAPR } = useHistoricalAPR(token);
 
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
-      const [reserves, apr, historicalAPRList, t] = await Promise.all([
+      const [reserves, tokenInstance] = await Promise.all([
         LiquidOpsClient.getReserves({ token }),
-        LiquidOpsClient.getAPR({ token }),
-        LiquidOpsClient.getHistoricalAPR({ token }),
-        await Token(tokenAddress),
+        Token(oTokenAddress),
       ]);
 
-      const available = t.Quantity.fromString(reserves.available);
-      const lent = t.Quantity.fromString(reserves.lent);
+      const denomination = tokenInstance.info.Denomination;
+      const available = tokenInstance.Quantity.fromString(reserves.available);
+      const lent = tokenInstance.Quantity.fromString(reserves.lent);
       const protocolBalance = Quantity.__add(available, lent);
-      const zero = t.Quantity.fromNumber(0);
+      const zero = tokenInstance.Quantity.fromNumber(0);
+
       const utilizationRate = Quantity.lt(zero, protocolBalance)
         ? Quantity.__div(
-            Quantity.__mul(lent, t.Quantity.fromNumber(100)),
+            Quantity.__mul(lent, tokenInstance.Quantity.fromNumber(100)),
             protocolBalance,
           )
         : zero;
 
-      const currentAPR = Number(apr.toFixed(2));
-
-      // Get yesterday's timestamp
-      const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-
-      // Find APR entry closest to 24 hours ago
-      const yesterdayEntry = historicalAPRList.reduce((prev, curr) => {
-        return Math.abs(curr.timestamp - oneDayAgo) <
-          Math.abs(prev.timestamp - oneDayAgo)
-          ? curr
-          : prev;
-      });
+      // Use the latest APR from historical data
+      const currentAPR = historicalAPR?.[historicalAPR.length - 1]?.value ?? 0;
+      const yesterdayAPR =
+        historicalAPR?.[historicalAPR.length - 2]?.value ?? currentAPR;
 
       const change = (
-        ((currentAPR - yesterdayEntry.apr) / yesterdayEntry.apr) *
+        ((currentAPR - yesterdayAPR) / yesterdayAPR) *
         100
       ).toFixed(2);
 
       return {
+        denomination,
         unLent: available,
         borrows: lent,
         protocolBalance,
         utilizationRate,
         apr: currentAPR,
         percentChange: {
-          outcome: currentAPR >= yesterdayEntry.apr,
+          outcome: currentAPR >= yesterdayAPR,
           change,
         },
       };
     },
-    // Add stale time to prevent too frequent refetches
-    staleTime: 30 * 1000, // 30 seconds
-    // Add cache time to keep data for
-    gcTime: 5 * 60 * 1000, // 5 minutes
+    enabled: !!historicalAPR,
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 }

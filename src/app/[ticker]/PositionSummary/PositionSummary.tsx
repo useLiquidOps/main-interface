@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
-import { headerTokensData } from "@/app/data";
 import { Quantity } from "ao-tokens";
 import { useGlobalPosition } from "@/hooks/data/useGlobalPosition";
 
@@ -13,7 +12,9 @@ const PositionSummary: React.FC<{
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const tokenData = headerTokensData.find(
+  const { data: supportedTokens = [] } = useSupportedTokens();
+
+  const tokenData = supportedTokens.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 

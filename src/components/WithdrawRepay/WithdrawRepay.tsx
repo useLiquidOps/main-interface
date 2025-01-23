@@ -11,6 +11,8 @@ import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
+import { tokenInput } from "liquidops";
+import { useGetPosition } from "@/hooks/data/useGetPosition";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -24,16 +26,23 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   onClose,
 }) => {
   const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
-  const { data: walletBalance, isLoading: isLoadingBalance } = useUserBalance(
-    ticker.toUpperCase(),
-  );
+
+  const { tokenAddress, oTokenAddress } = tokenInput(ticker.toUpperCase());
+  const { data: positionBalance, isLoading: isLoadingPosition } =
+    useGetPosition(tokenAddress);
+  const { data: lentBalance, isLoading: isLoadingBalance } =
+    useUserBalance(oTokenAddress);
+
+  const currentBalance = mode === "withdraw" ? lentBalance : positionBalance;
+  const isLoadingCurrentBalance =
+    mode === "withdraw" ? isLoadingBalance : isLoadingPosition;
 
   const { unlend, isUnlending, unlendError } = useLend();
   const { repay, isRepaying, repayError } = useBorrow();
 
   // TODO: fill in with real data
   const networkFee = 0;
-  const interestOwed = 10;
+  const interestOwed = 0.01;
   const utilizationRate = 0.75;
 
   const [inputValue, setInputValue] = useState("");
@@ -56,13 +65,14 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   }, [submitStatus]);
 
   const calculateMaxAmount = () => {
-    if (isLoadingBalance || !walletBalance) return new Quantity(0n, 12n);
+    if (isLoadingCurrentBalance || !currentBalance)
+      return new Quantity(0n, 12n);
     if (mode === "withdraw") {
-      return walletBalance;
+      return currentBalance;
     } else {
       return Quantity.__mul(
-        walletBalance,
-        new Quantity(0n, walletBalance.denomination || 12n).fromNumber(
+        currentBalance,
+        new Quantity(0n, currentBalance.denomination || 12n).fromNumber(
           utilizationRate,
         ),
       );
@@ -168,12 +178,12 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         ticker={ticker}
         tokenPrice={tokenPrice}
         walletBalance={
-          isLoadingBalance || !walletBalance
+          isLoadingCurrentBalance || !currentBalance
             ? new Quantity(0n, 12n)
-            : walletBalance
+            : currentBalance
         }
         onMaxClick={handleMaxClick}
-        denomination={walletBalance?.denomination || 12n}
+        denomination={currentBalance?.denomination || 12n}
       />
 
       <PercentagePicker
@@ -184,9 +194,9 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         interestOwed={interestOwed}
         onInterestClick={handleInterestClick}
         walletBalance={
-          isLoadingBalance || !walletBalance
+          isLoadingCurrentBalance || !currentBalance
             ? new Quantity(0n, 12n)
-            : walletBalance
+            : currentBalance
         }
       />
 

@@ -1,29 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
-import { Token, Quantity } from "ao-tokens";
 import { tokenOperations } from "./tempGetBalance";
-import { tokenInput } from "liquidops";
 
-export function useUserBalance(token: string) {
-  const { tokenAddress } = tokenInput(token);
+export function useUserBalance(tokenAddress: string) {
   const { data: walletAddress } = useWalletAddress();
 
   return useQuery({
-    queryKey: ["user-balance", token, walletAddress],
+    queryKey: ["user-balance", tokenAddress, walletAddress],
     queryFn: async () => {
       if (!walletAddress) throw new Error("Wallet address not available");
-      const [rawBalance, t] = await Promise.all([
-        await tokenOperations.getBalance({
-          token,
+
+      const [balance] = await Promise.all([
+        tokenOperations.getBalance({
+          tokenAddress,
           walletAddress,
         }),
-        await Token(tokenAddress),
       ]);
 
-      return new Quantity(rawBalance as bigint, t.info.Denomination);
+      return balance;
     },
     enabled: !!walletAddress,
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 }

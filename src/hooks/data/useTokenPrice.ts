@@ -7,7 +7,7 @@ interface Prices {
 
 export const tickerToGeckoMap: Record<string, string> = {
   QAR: "arweave",
-  DAI: "dai",
+  USDC: "usd-coin",
   STETH: "staked-ether",
 };
 
@@ -16,7 +16,7 @@ export function usePrices() {
     queryKey: ["prices"],
     queryFn: async (): Promise<Prices> => {
       const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=arweave,dai,staked-ether,&vs_currencies=usd",
+        "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,staked-ether,&vs_currencies=usd",
       );
       return response.json();
     },

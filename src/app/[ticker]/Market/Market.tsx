@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styles from "./Market.module.css";
 import { formatTMB } from "../../../components/utils/utils";
-import { headerTokensData } from "@/app/data";
 import Image from "next/image";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { Quantity } from "ao-tokens";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 
 // TODO: Replace these with real data
 const PLACEHOLDER_EXTRA_DATA = {
@@ -20,7 +20,9 @@ const Market: React.FC<{
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const tokenData = headerTokensData.find(
+  const { data: supportedTokens = [] } = useSupportedTokens();
+
+  const tokenData = supportedTokens.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
@@ -110,12 +112,12 @@ const Market: React.FC<{
               <p className={styles.value}>
                 {`${formatTMB(protocolStats?.protocolBalance || new Quantity(0n, 12n))} ${tokenData.ticker}`}
               </p>
-              {extraData && (
+              {/* {extraData && (
                 <p className={styles.extraData}>
                   +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraTotalSupply)}{" "}
                   {tokenData.ticker}
                 </p>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -126,12 +128,12 @@ const Market: React.FC<{
                 {`${formatTMB(protocolStats?.unLent || new Quantity(0n, 12n))} ${tokenData.ticker}`}
               </p>
               <div className={styles.indicatorGreen}></div>
-              {extraData && (
+              {/* {extraData && (
                 <p className={styles.extraData}>
                   +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraLent)}{" "}
                   {tokenData.ticker}
                 </p>
-              )}
+              )} */}
             </div>
           </div>
 

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import styles from "./MintTokens.module.css";
-import { formatInputNumber } from "../../../../components/utils/utils";
-import { headerTokensData } from "@/app/data";
+import { formatInputNumber } from "../utils/utils";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useFaucet } from "@/hooks/actions/useFaucet";
 import { useWalletAddress } from "@/hooks/data/useWalletAddress";
 import { Quantity, Token } from "ao-tokens";
@@ -19,7 +19,9 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
 
   const { data: walletAddress } = useWalletAddress();
 
-  const tokenData = headerTokensData.find(
+  const { data: supportedTokens = [] } = useSupportedTokens();
+
+  const tokenData = supportedTokens.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 

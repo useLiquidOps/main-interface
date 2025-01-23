@@ -11,9 +11,11 @@ import {
 import styles from "./ProtocolBalance.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { headerTokensData } from "@/app/data";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useHistoricalAPR } from "@/hooks/data/useHistoricalAPR";
+import { Quantity } from "ao-tokens";
+import { formatTMB } from "@/components/utils/utils";
 
 const ProtocolBalance: React.FC<{
   ticker: string;
@@ -29,7 +31,8 @@ const ProtocolBalance: React.FC<{
     value: number;
   } | null>(null);
 
-  const tokenData = headerTokensData.find(
+  const { data: supportedTokens = [] } = useSupportedTokens();
+  const tokenData = supportedTokens.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
@@ -64,7 +67,12 @@ const ProtocolBalance: React.FC<{
           <p className={styles.amount}>
             {isLoading
               ? "0.00"
-              : protocolStats?.protocolBalance?.toLocaleString()}
+              : formatTMB(
+                  new Quantity(
+                    protocolStats?.protocolBalance,
+                    protocolStats?.denomination,
+                  ),
+                )}
           </p>
           <p className={styles.currency}>{tokenData.ticker}</p>
         </div>
@@ -105,11 +113,11 @@ const ProtocolBalance: React.FC<{
               />
             )}
             <p className={styles.aprText}>
-              {isLoadingHistorical
-                ? "0.00"
+              {isLoadingHistorical || !protocolStats
+                ? "0.00%"
                 : hoverData
                   ? `${hoverData.value.toFixed(2)}%`
-                  : `${protocolStats?.apr}%`}
+                  : `${protocolStats.apr}%`}
             </p>
           </div>
         </div>

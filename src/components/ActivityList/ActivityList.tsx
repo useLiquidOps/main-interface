@@ -37,21 +37,13 @@ const ActivityList: React.FC<ActivityListProps> = ({
     const tokenTicker =
       Object.entries(tokens)
         .find(([_, address]) => address === tokenAddress)?.[0]
-        ?.toLowerCase() || "unknown";
+        ?.toLowerCase() || "Unknown";
     return `/tokens/${tokenTicker}.svg`;
   };
 
   const formatTimestamp = (timestamp: number) => {
-    const now = Date.now();
-    const diff = now - timestamp * 1000;
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-    if (minutes > 0) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-    return "Just now";
+    const date = new Date(timestamp);
+    return date.toLocaleString();
   };
 
   const renderContent = () => {
@@ -84,7 +76,6 @@ const ActivityList: React.FC<ActivityListProps> = ({
                 <div className={styles.actionDetails}>
                   <p className={styles.action}>{getTransactionType(tx.tags)}</p>
                   <p className={styles.amount}>
-                    {/** this is hardcoded, fix it with the proper denomination */}
                     {formatTMB(new Quantity(tx.tags["Quantity"], 12n))}
                   </p>
                 </div>

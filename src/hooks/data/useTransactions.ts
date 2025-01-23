@@ -28,7 +28,7 @@ export function useTransactions() {
               action,
               walletAddress,
             });
-              allTransactions.push(...result.transactions);
+            allTransactions.push(...result.transactions);
           } catch (error) {
             console.error(
               `Error fetching transactions for ${token} ${action}:`,

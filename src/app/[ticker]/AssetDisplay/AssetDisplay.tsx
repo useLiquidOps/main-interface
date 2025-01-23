@@ -10,21 +10,12 @@ interface AssetDisplayProps {
   mode: "lend" | "borrow";
 }
 
-interface DisplayText {
-  title: string;
-  emptyTitle: string;
-  emptyText: string;
-  actionButton: string;
-  actionIcon: string;
-}
-
 const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const [showAll, setShowAll] = useState(false);
-  const [visibleAssets, setVisibleAssets] = useState(0);
   const { openModal } = useModal();
   const { data: supportedTokens = [] } = useSupportedTokens();
 
-  const displayText: DisplayText =
+  const displayText =
     mode === "lend"
       ? {
           title: "Lent assets",
@@ -54,15 +45,11 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
     ? supportedTokens
     : supportedTokens.slice(0, 4);
 
-  const handleHasBalance = React.useCallback((hasBalance: boolean) => {
-    setVisibleAssets((prev) => (hasBalance ? prev + 1 : prev));
-  }, []);
-
   return (
     <div className={containerClass}>
       <div className={styles.header}>
         <h2 className={styles.title}>{displayText.title}</h2>
-        {visibleAssets > 4 &&
+        {supportedTokens.length > 4 &&
           (showAll ? (
             <button
               onClick={() => setShowAll(false)}
@@ -77,7 +64,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
           ))}
       </div>
 
-      {visibleAssets === 0 ? (
+      {supportedTokens.length === 0 ? (
         <div className={styles.emptyState}>
           <Image
             src="/icons/noAssets.svg"
@@ -91,14 +78,13 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
         </div>
       ) : (
         <div className={styles.assetsList}>
-          {displayedAssets.map((asset, index) => (
+          {displayedAssets.map((asset) => (
             <AssetRow
-              key={`${mode}-${asset.name}-${index}`}
+              key={`${mode}-${asset.ticker}`}
               asset={asset}
               mode={mode}
               displayText={displayText}
               onClick={handleActionClick}
-              onHasBalance={handleHasBalance}
             />
           ))}
         </div>

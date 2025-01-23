@@ -7,6 +7,7 @@ import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/data/useGetPosition";
 import { SupportedToken } from "@/hooks/data/useSupportedTokens";
+import { Quantity } from "ao-tokens";
 
 interface AssetRowProps {
   asset: SupportedToken;
@@ -16,7 +17,6 @@ interface AssetRowProps {
     actionIcon: string;
   };
   onClick: (asset: SupportedToken, e?: React.MouseEvent) => void;
-  onHasBalance: (hasBalance: boolean) => void;
 }
 
 const AssetRow: React.FC<AssetRowProps> = ({
@@ -24,10 +24,9 @@ const AssetRow: React.FC<AssetRowProps> = ({
   mode,
   displayText,
   onClick,
-  onHasBalance,
 }) => {
   const { tokenAddress, oTokenAddress } = tokenInput(
-    asset.ticker.toUpperCase()
+    asset.ticker.toUpperCase(),
   );
   const { data: positionBalance } = useGetPosition(tokenAddress);
   const { data: lentBalance } = useUserBalance(oTokenAddress);
@@ -36,20 +35,12 @@ const AssetRow: React.FC<AssetRowProps> = ({
   const currentBalance = mode === "lend" ? lentBalance : positionBalance;
   const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
 
-  React.useEffect(() => {
-    if (!isLoading) {
-      onHasBalance(Boolean(currentBalance && Number(currentBalance) > 0));
-    }
-  }, [currentBalance, isLoading, onHasBalance]);
-
-  if (!currentBalance || Number(currentBalance) === 0) {
-    return null;
-  }
-
   const handleClick = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     onClick(asset, e);
   };
+
+  const formattedBalance = currentBalance ? formatTMB(currentBalance) : "0.00";
 
   return (
     <div
@@ -65,7 +56,7 @@ const AssetRow: React.FC<AssetRowProps> = ({
           <div className={styles.nameAmount}>
             <p className={styles.name}>{asset.name}</p>
             <p className={styles.amount}>
-              {isLoading ? "0.00" : formatTMB(currentBalance)} {asset?.ticker}
+              {isLoading ? "0.00" : formattedBalance} {asset?.ticker}
             </p>
           </div>
         </div>
@@ -75,11 +66,9 @@ const AssetRow: React.FC<AssetRowProps> = ({
           <div className={styles.changeInfo}>
             <Image
               src={
-                protocolStats?.percentChange
-                  ? protocolStats.percentChange.outcome
-                    ? "/icons/APRUp.svg"
-                    : "/icons/APRDown.svg"
-                  : "/icons/APRUp.svg"
+                protocolStats?.percentChange?.outcome
+                  ? "/icons/APRUp.svg"
+                  : "/icons/APRDown.svg"
               }
               alt="APR change indicator"
               width={16}

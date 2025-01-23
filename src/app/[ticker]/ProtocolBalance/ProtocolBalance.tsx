@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { headerTokensData } from "@/app/data";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useHistoricalAPR } from "@/hooks/data/useHistoricalAPR";
+import { Quantity } from "ao-tokens";
+import { formatTMB } from "@/components/utils/utils";
 
 const ProtocolBalance: React.FC<{
   ticker: string;
@@ -64,7 +66,12 @@ const ProtocolBalance: React.FC<{
           <p className={styles.amount}>
             {isLoading
               ? "0.00"
-              : protocolStats?.protocolBalance?.toLocaleString()}
+              : formatTMB(
+                  new Quantity(
+                    protocolStats?.protocolBalance,
+                    protocolStats?.denomination,
+                  ),
+                )}
           </p>
           <p className={styles.currency}>{tokenData.ticker}</p>
         </div>

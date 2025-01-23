@@ -4,6 +4,7 @@ import { Token, Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
 
 interface ProtocolStats {
+  denomination: bigint;
   unLent: Quantity;
   borrows: Quantity;
   protocolBalance: Quantity;
@@ -16,25 +17,28 @@ interface ProtocolStats {
 }
 
 export function useProtocolStats(token: string) {
-  const { tokenAddress } = tokenInput(token);
+  const { oTokenAddress } = tokenInput(token);
 
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
-      const [reserves, apr, historicalAPRList, t] = await Promise.all([
-        LiquidOpsClient.getReserves({ token }),
-        LiquidOpsClient.getAPR({ token }),
-        LiquidOpsClient.getHistoricalAPR({ token }),
-        await Token(tokenAddress),
-      ]);
+      const [reserves, apr, historicalAPRList, tokenInstance] =
+        await Promise.all([
+          LiquidOpsClient.getReserves({ token }),
+          LiquidOpsClient.getAPR({ token }),
+          LiquidOpsClient.getHistoricalAPR({ token }),
+          await Token(oTokenAddress),
+        ]);
 
-      const available = t.Quantity.fromString(reserves.available);
-      const lent = t.Quantity.fromString(reserves.lent);
+      const denomination = tokenInstance.info.Denomination;
+
+      const available = tokenInstance.Quantity.fromString(reserves.available);
+      const lent = tokenInstance.Quantity.fromString(reserves.lent);
       const protocolBalance = Quantity.__add(available, lent);
-      const zero = t.Quantity.fromNumber(0);
+      const zero = tokenInstance.Quantity.fromNumber(0);
       const utilizationRate = Quantity.lt(zero, protocolBalance)
         ? Quantity.__div(
-            Quantity.__mul(lent, t.Quantity.fromNumber(100)),
+            Quantity.__mul(lent, tokenInstance.Quantity.fromNumber(100)),
             protocolBalance,
           )
         : zero;
@@ -58,6 +62,7 @@ export function useProtocolStats(token: string) {
       ).toFixed(2);
 
       return {
+        denomination,
         unLent: available,
         borrows: lent,
         protocolBalance,

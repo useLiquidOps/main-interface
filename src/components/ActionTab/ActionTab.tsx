@@ -11,6 +11,7 @@ import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
+import { tokenInput } from "liquidops";
 
 interface ActionTabProps {
   ticker: string;
@@ -21,9 +22,9 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
   const { data: protocolStats, isLoading: isLoadingProtocolStats } =
     useProtocolStats(ticker.toUpperCase());
-  const { data: walletBalance, isLoading: isLoadingBalance } = useUserBalance(
-    ticker.toUpperCase(),
-  );
+  const { tokenAddress } = tokenInput(ticker.toUpperCase());
+  const { data: walletBalance, isLoading: isLoadingBalance } =
+    useUserBalance(tokenAddress);
 
   const { lend, isLending, lendError } = useLend();
   const { borrow, isBorrowing, borrowError } = useBorrow();

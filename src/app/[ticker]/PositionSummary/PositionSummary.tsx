@@ -1,17 +1,9 @@
 import React, { useMemo, useState } from "react";
 import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
-import { tokens, headerTokensData } from "@/app/data";
+import { headerTokensData } from "@/app/data";
 import { Quantity } from "ao-tokens";
 import { useGlobalPosition } from "@/hooks/data/useGlobalPosition";
-
-interface PositionData {
-  collateralValue: Quantity;
-  borrowCapacity: Quantity;
-  liquidationPoint: Quantity;
-  availableToBorrow: Quantity;
-  liquidationRisk?: Quantity;
-}
 
 const PositionSummary: React.FC<{
   ticker: string;

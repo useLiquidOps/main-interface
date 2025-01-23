@@ -17,8 +17,8 @@ import { Quantity } from "ao-tokens";
 // import { useGetLiquidations } from "@/hooks/data/useGetLiquidations";
 
 interface TokenInfo {
-  symbol: string;
-  imagePath: string;
+  ticker: string;
+  icon: string;
 }
 
 const calculateLiquidationStats = (liquidations: any[]) => {
@@ -53,13 +53,13 @@ const LiquidationsContent = () => {
   const [mounted, setMounted] = useState(false);
   const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
   const [showSendDropdown, setShowSendDropdown] = useState(false);
-  const [selectedReceiveToken, setSelectedReceiveToken] = useState<TokenInfo>({
-    symbol: "All tokens",
-    imagePath: "/icons/list.svg",
+  const [selectedReceiveToken, setSelectedReceiveToken] = useState({
+    ticker: "All tokens",
+    icon: "/icons/list.svg",
   });
-  const [selectedSendToken, setSelectedSendToken] = useState<TokenInfo>({
-    symbol: "All tokens",
-    imagePath: "/icons/list.svg",
+  const [selectedSendToken, setSelectedSendToken] = useState({
+    ticker: "All tokens",
+    icon: "/icons/list.svg",
   });
   const { modalType, assetData, openModal, closeModal } = useModal();
 
@@ -84,7 +84,7 @@ const LiquidationsContent = () => {
 
   const receiveTokens = useMemo(
     () => [
-      { symbol: "All tokens", imagePath: "/icons/list.svg" },
+      { ticker: "All tokens", icon: "/icons/list.svg" },
       ...AssetDisplayData,
     ],
     [],
@@ -92,7 +92,7 @@ const LiquidationsContent = () => {
 
   const sendTokens = useMemo(
     () => [
-      { symbol: "All tokens", imagePath: "/icons/list.svg" },
+      { ticker: "All tokens", icon: "/icons/list.svg" },
       ...AssetDisplayData,
     ],
     [],
@@ -101,14 +101,14 @@ const LiquidationsContent = () => {
   const filteredLiquidations = useMemo(() => {
     return liquidationsData.filter((liquidation) => {
       const receiveMatches =
-        selectedReceiveToken.symbol === "All tokens" ||
-        liquidation.toToken.symbol === selectedReceiveToken.symbol;
+        selectedReceiveToken.ticker === "All tokens" ||
+        liquidation.toToken.symbol === selectedReceiveToken.ticker;
       const sendMatches =
-        selectedSendToken.symbol === "All tokens" ||
-        liquidation.fromToken.symbol === selectedSendToken.symbol;
+        selectedSendToken.ticker === "All tokens" ||
+        liquidation.fromToken.symbol === selectedSendToken.ticker;
       return receiveMatches && sendMatches;
     });
-  }, [selectedReceiveToken.symbol, selectedSendToken.symbol, liquidationsData]);
+  }, [selectedReceiveToken.ticker, selectedSendToken.ticker, liquidationsData]);
 
   const stats = useMemo(
     () => calculateLiquidationStats(filteredLiquidations),
@@ -202,12 +202,12 @@ const LiquidationsContent = () => {
               >
                 <button className={styles.filterButton}>
                   <Image
-                    src={selectedSendToken.imagePath}
-                    alt={selectedSendToken.symbol}
+                    src={selectedSendToken.icon}
+                    alt={selectedSendToken.ticker}
                     width={16}
                     height={16}
                   />
-                  <span>{selectedSendToken.symbol}</span>
+                  <span>{selectedSendToken.ticker}</span>
                   <DropdownButton
                     isOpen={showSendDropdown}
                     onToggle={toggleSendDropdown}
@@ -224,7 +224,7 @@ const LiquidationsContent = () => {
                     >
                       {sendTokens.map((token) => (
                         <div
-                          key={token.symbol}
+                          key={token.ticker}
                           className={styles.dropdownItem}
                           onClick={() => {
                             setSelectedSendToken(token);
@@ -232,12 +232,12 @@ const LiquidationsContent = () => {
                           }}
                         >
                           <Image
-                            src={token.imagePath}
-                            alt={token.symbol}
+                            src={token.icon}
+                            alt={token.ticker}
                             width={16}
                             height={16}
                           />
-                          <span>{token.symbol}</span>
+                          <span>{token.ticker}</span>
                         </div>
                       ))}
                     </motion.div>
@@ -256,12 +256,12 @@ const LiquidationsContent = () => {
               >
                 <button className={styles.filterButton}>
                   <Image
-                    src={selectedReceiveToken.imagePath}
-                    alt={selectedReceiveToken.symbol}
+                    src={selectedReceiveToken.icon}
+                    alt={selectedReceiveToken.ticker}
                     width={16}
                     height={16}
                   />
-                  <span>{selectedReceiveToken.symbol}</span>
+                  <span>{selectedReceiveToken.ticker}</span>
                   <DropdownButton
                     isOpen={showReceiveDropdown}
                     onToggle={toggleReceiveDropdown}
@@ -278,7 +278,7 @@ const LiquidationsContent = () => {
                     >
                       {receiveTokens.map((token) => (
                         <div
-                          key={token.symbol}
+                          key={token.ticker}
                           className={styles.dropdownItem}
                           onClick={() => {
                             setSelectedReceiveToken(token);
@@ -286,12 +286,12 @@ const LiquidationsContent = () => {
                           }}
                         >
                           <Image
-                            src={token.imagePath}
-                            alt={token.symbol}
+                            src={token.icon}
+                            alt={token.ticker}
                             width={16}
                             height={16}
                           />
-                          <span>{token.symbol}</span>
+                          <span>{token.ticker}</span>
                         </div>
                       ))}
                     </motion.div>

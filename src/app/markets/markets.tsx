@@ -11,11 +11,11 @@ import { Quantity } from "ao-tokens";
 
 const Markets = () => {
   const statsQueries = AssetDisplayData.map((token) => ({
-    symbol: token.symbol,
-    stats: useProtocolStats(token.symbol.toUpperCase()),
-    icon: token.imagePath,
-    headerData: AssetDisplayData.find((h) => h.ticker === token.symbol),
-    price: useTokenPrice(token.symbol.toUpperCase()),
+    symbol: token.ticker,
+    stats: useProtocolStats(token.ticker.toUpperCase()),
+    icon: token.icon,
+    headerData: AssetDisplayData.find((h) => h.ticker === token.ticker),
+    price: useTokenPrice(token.ticker.toUpperCase()),
   }));
 
   const calculateTotals = () => {

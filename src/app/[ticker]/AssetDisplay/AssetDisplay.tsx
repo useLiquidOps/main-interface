@@ -49,12 +49,12 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
 
   const tokens = AssetDisplayData.map((asset) => {
     const { tokenAddress, oTokenAddress } = tokenInput(
-      asset.symbol.toUpperCase(),
+      asset.ticker.toUpperCase(),
     );
     const { data: positionBalance } = useGetPosition(tokenAddress);
     const { data: lentBalance } = useUserBalance(oTokenAddress);
     const { data: protocolStats } = useProtocolStats(
-      asset.symbol.toUpperCase(),
+      asset.ticker.toUpperCase(),
     );
 
     const currentBalance = mode === "lend" ? lentBalance : positionBalance;
@@ -126,7 +126,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
                       {asset.isLoading || !asset.currentBalance
                         ? "0.00"
                         : formatTMB(asset.currentBalance)}{" "}
-                      {asset?.symbol}
+                      {asset?.ticker}
                     </p>
                   </div>
                 </div>

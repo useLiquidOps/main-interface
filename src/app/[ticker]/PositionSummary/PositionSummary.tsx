@@ -114,9 +114,9 @@ const PositionSummary: React.FC<{
             <div className={styles.tokens}>
               {AssetDisplayData.map((token, index) => (
                 <img
-                  key={token.symbol}
-                  src={token.imagePath}
-                  alt={token.symbol}
+                  key={token.ticker}
+                  src={token.icon}
+                  alt={token.ticker}
                   className={styles.token}
                   style={{ zIndex: AssetDisplayData.length - index }}
                 />

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styles from "./Market.module.css";
 import { formatTMB } from "../../../components/utils/utils";
-import { AssetDisplayData } from "@/app/data";
 import Image from "next/image";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { Quantity } from "ao-tokens";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 
 // TODO: Replace these with real data
 const PLACEHOLDER_EXTRA_DATA = {
@@ -20,7 +20,9 @@ const Market: React.FC<{
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const tokenData = AssetDisplayData.find(
+  const { data: supportedTokens = [] } = useSupportedTokens();
+
+  const tokenData = supportedTokens.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 

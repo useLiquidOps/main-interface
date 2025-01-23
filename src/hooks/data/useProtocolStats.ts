@@ -34,7 +34,7 @@ export function useProtocolStats(token: string) {
       const lent = tokenInstance.Quantity.fromString(reserves.lent);
       const protocolBalance = Quantity.__add(available, lent);
       const zero = tokenInstance.Quantity.fromNumber(0);
-      
+
       const utilizationRate = Quantity.lt(zero, protocolBalance)
         ? Quantity.__div(
             Quantity.__mul(lent, tokenInstance.Quantity.fromNumber(100)),
@@ -44,7 +44,8 @@ export function useProtocolStats(token: string) {
 
       // Use the latest APR from historical data
       const currentAPR = historicalAPR?.[historicalAPR.length - 1]?.value ?? 0;
-      const yesterdayAPR = historicalAPR?.[historicalAPR.length - 2]?.value ?? currentAPR;
+      const yesterdayAPR =
+        historicalAPR?.[historicalAPR.length - 2]?.value ?? currentAPR;
 
       const change = (
         ((currentAPR - yesterdayAPR) / yesterdayAPR) *

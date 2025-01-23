@@ -2,7 +2,7 @@
 import styles from "./faucet.module.css";
 import Header from "../../../components/Header/Header";
 import Market from "../../[ticker]/Market/Market";
-import MintTokens from "./MintTokens/MintTokens";
+import MintTokens from "@/components/MintTokens/MintTokens";
 
 const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
   const ticker = params.ticker as string;

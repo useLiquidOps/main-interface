@@ -3,10 +3,11 @@ import styles from "./liquidations.module.css";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
-import { liquidationsData, AssetDisplayData } from "../data";
+import { liquidationsData } from "../data";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import DropdownButton from "@/components/DropDown/DropDown";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
-import LiquidateTab from "./LiquidateTab/LiquidateTab";
+import LiquidateTab from "../../components/LiquidateTab/LiquidateTab";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   overlayVariants,
@@ -63,6 +64,8 @@ const LiquidationsContent = () => {
   });
   const { modalType, assetData, openModal, closeModal } = useModal();
 
+  const { data: supportedTokens = [] } = useSupportedTokens();
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -85,7 +88,7 @@ const LiquidationsContent = () => {
   const receiveTokens = useMemo(
     () => [
       { ticker: "All tokens", icon: "/icons/list.svg" },
-      ...AssetDisplayData,
+      ...supportedTokens,
     ],
     [],
   );
@@ -93,7 +96,7 @@ const LiquidationsContent = () => {
   const sendTokens = useMemo(
     () => [
       { ticker: "All tokens", icon: "/icons/list.svg" },
-      ...AssetDisplayData,
+      ...supportedTokens,
     ],
     [],
   );

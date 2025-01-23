@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
-import { AssetDisplayData } from "@/app/data";
 import { Quantity } from "ao-tokens";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 
 interface PositionData {
   collateralValue: Quantity;
@@ -20,7 +20,9 @@ const PositionSummary: React.FC<{
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const tokenData = AssetDisplayData.find(
+  const { data: supportedTokens = [] } = useSupportedTokens();
+
+  const tokenData = supportedTokens.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
@@ -112,13 +114,13 @@ const PositionSummary: React.FC<{
               >{`${formatTMB(positionData.collateralValue)} ${tokenData.ticker}`}</p>
             </div>
             <div className={styles.tokens}>
-              {AssetDisplayData.map((token, index) => (
+              {supportedTokens.map((token, index) => (
                 <img
                   key={token.ticker}
                   src={token.icon}
                   alt={token.ticker}
                   className={styles.token}
-                  style={{ zIndex: AssetDisplayData.length - index }}
+                  style={{ zIndex: supportedTokens.length - index }}
                 />
               ))}
             </div>

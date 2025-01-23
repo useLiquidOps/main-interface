@@ -11,7 +11,7 @@ import {
 import styles from "./ProtocolBalance.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { AssetDisplayData } from "@/app/data";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useHistoricalAPR } from "@/hooks/data/useHistoricalAPR";
 import { Quantity } from "ao-tokens";
@@ -31,7 +31,8 @@ const ProtocolBalance: React.FC<{
     value: number;
   } | null>(null);
 
-  const tokenData = AssetDisplayData.find(
+  const { data: supportedTokens = [] } = useSupportedTokens();
+  const tokenData = supportedTokens.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 

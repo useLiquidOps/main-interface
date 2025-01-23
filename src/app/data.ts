@@ -1,29 +1,5 @@
 import { Quantity } from "ao-tokens";
 
-export const AssetDisplayData = [
-  {
-    icon: "/tokens/qAR.svg",
-    oIcon: "/tokens/oQAR.svg",
-    name: "Quantum Arweave",
-    ticker: "qAR",
-    extraAmount: "1",
-  },
-  {
-    icon: "/tokens/USDC.svg",
-    oIcon: "/tokens/oUSDC.svg",
-    name: "USD Circle",
-    ticker: "USDC",
-    extraAmount: "1",
-  },
-  {
-    icon: "/tokens/stETH.svg",
-    oIcon: "/tokens/oSTETH.svg",
-    name: "Staked Ethereum",
-    ticker: "stETH",
-    extraAmount: "1",
-  },
-];
-
 export const liquidationsData = [
   {
     fromToken: {
@@ -40,7 +16,7 @@ export const liquidationsData = [
       available: new Quantity(0n, 12n).fromNumber(0),
       price: new Quantity(0n, 12n).fromNumber(1),
     },
-    offMarketPrice: 8,
+    offMarketPrice: 0,
   },
   {
     fromToken: {
@@ -57,7 +33,7 @@ export const liquidationsData = [
       available: new Quantity(0n, 12n).fromNumber(0),
       price: new Quantity(0n, 12n).fromNumber(15.5),
     },
-    offMarketPrice: 12,
+    offMarketPrice: 0,
   },
   {
     fromToken: {
@@ -74,6 +50,6 @@ export const liquidationsData = [
       available: new Quantity(0n, 12n).fromNumber(0),
       price: new Quantity(0n, 12n).fromNumber(1850.93),
     },
-    offMarketPrice: 10,
+    offMarketPrice: 0,
   },
 ];

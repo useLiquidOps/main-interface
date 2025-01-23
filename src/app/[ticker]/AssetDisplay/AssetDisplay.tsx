@@ -8,22 +8,119 @@ import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/data/useGetPosition";
-import { AssetDisplayData } from "@/app/data";
+import {
+  useSupportedTokens,
+  SupportedToken,
+} from "@/hooks/data/useSupportedTokens";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";
 }
 
+interface DisplayText {
+  title: string;
+  emptyTitle: string;
+  emptyText: string;
+  actionButton: string;
+  actionIcon: string;
+}
+
+interface AssetRowProps {
+  asset: SupportedToken;
+  mode: "lend" | "borrow";
+  displayText: DisplayText;
+  onClick: (asset: SupportedToken, e?: React.MouseEvent) => void;
+}
+
+const AssetRow: React.FC<AssetRowProps> = ({
+  asset,
+  mode,
+  displayText,
+  onClick,
+}) => {
+  const { tokenAddress, oTokenAddress } = tokenInput(
+    asset.ticker.toUpperCase(),
+  );
+  const { data: positionBalance } = useGetPosition(tokenAddress);
+  const { data: lentBalance } = useUserBalance(oTokenAddress);
+  const { data: protocolStats } = useProtocolStats(asset.ticker.toUpperCase());
+
+  const currentBalance = mode === "lend" ? lentBalance : positionBalance;
+  const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
+
+  const handleClick = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    onClick(asset, e);
+  };
+
+  return (
+    <div
+      className={styles.assetRowWrapper}
+      onClick={handleClick}
+      style={{ cursor: "pointer" }}
+    >
+      <div className={styles.assetRow}>
+        <div className={styles.assetInfo}>
+          <div className={styles.iconWrapper}>
+            <Image src={asset.icon} alt={asset.name} width={40} height={40} />
+          </div>
+          <div className={styles.nameAmount}>
+            <p className={styles.name}>{asset.name}</p>
+            <p className={styles.amount}>
+              {isLoading || !currentBalance
+                ? "0.00"
+                : formatTMB(currentBalance)}{" "}
+              {asset?.ticker}
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.aprInfo}>
+          <p className={styles.apr}>APR {protocolStats?.apr ?? "0.00"}%</p>
+          <div className={styles.changeInfo}>
+            <Image
+              src={
+                protocolStats?.percentChange
+                  ? protocolStats.percentChange.outcome
+                    ? "/icons/APRUp.svg"
+                    : "/icons/APRDown.svg"
+                  : "/icons/APRUp.svg"
+              }
+              alt="APR change indicator"
+              width={16}
+              height={16}
+            />
+            <p className={styles.change}>
+              {protocolStats?.percentChange?.change ?? "0.00"}%
+            </p>
+          </div>
+        </div>
+      </div>
+      <button className={styles.withdrawButton} onClick={handleClick}>
+        <Image
+          src={displayText.actionIcon}
+          alt={displayText.actionButton}
+          width={14}
+          height={14}
+          className={styles.withdrawIcon}
+        />
+        <span>{displayText.actionButton}</span>
+      </button>
+    </div>
+  );
+};
+
 const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const [showAll, setShowAll] = useState(false);
   const { openModal } = useModal();
+  const { data: supportedTokens = [] } = useSupportedTokens();
 
-  const displayText =
+  const displayText: DisplayText =
     mode === "lend"
       ? {
           title: "Yielding assets",
           emptyTitle: "No assets supplied yet",
-          emptyText: `Providing collateral can earn you APY.`,
+          emptyText: "Providing collateral can earn you APY.",
           actionButton: "Withdraw",
           actionIcon: "/icons/withdraw.svg",
         }
@@ -39,42 +136,20 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
     mode === "lend" ? styles.lendContainer : styles.borrowContainer
   } ${showAll ? styles.expanded : ""}`;
 
-  const handleActionClick = (
-    asset: (typeof AssetDisplayData)[0],
-    e?: React.MouseEvent,
-  ) => {
+  const handleActionClick = (asset: SupportedToken, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     openModal(mode === "lend" ? "withdraw" : "repay", asset);
   };
 
-  const tokens = AssetDisplayData.map((asset) => {
-    const { tokenAddress, oTokenAddress } = tokenInput(
-      asset.ticker.toUpperCase(),
-    );
-    const { data: positionBalance } = useGetPosition(tokenAddress);
-    const { data: lentBalance } = useUserBalance(oTokenAddress);
-    const { data: protocolStats } = useProtocolStats(
-      asset.ticker.toUpperCase(),
-    );
-
-    const currentBalance = mode === "lend" ? lentBalance : positionBalance;
-    const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
-
-    return {
-      ...asset,
-      currentBalance,
-      isLoading,
-      protocolStats,
-    };
-  }).filter((token) => token.currentBalance && token.currentBalance.raw !== 0n);
-
-  const displayedAssets = showAll ? tokens : tokens.slice(0, 4);
+  const displayedAssets = showAll
+    ? supportedTokens
+    : supportedTokens.slice(0, 4);
 
   return (
     <div className={containerClass}>
       <div className={styles.header}>
         <h2 className={styles.title}>{displayText.title}</h2>
-        {tokens.length > 4 &&
+        {supportedTokens.length > 4 &&
           (showAll ? (
             <button
               onClick={() => setShowAll(false)}
@@ -89,7 +164,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
           ))}
       </div>
 
-      {tokens.length === 0 ? (
+      {supportedTokens.length === 0 ? (
         <div className={styles.emptyState}>
           <Image
             src="/icons/noAssets.svg"
@@ -104,70 +179,13 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
       ) : (
         <div className={styles.assetsList}>
           {displayedAssets.map((asset, index) => (
-            <div
+            <AssetRow
               key={`${mode}-${asset.name}-${index}`}
-              className={styles.assetRowWrapper}
-              onClick={() => handleActionClick(asset)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className={styles.assetRow}>
-                <div className={styles.assetInfo}>
-                  <div className={styles.iconWrapper}>
-                    <Image
-                      src={asset.icon}
-                      alt={asset.name}
-                      width={40}
-                      height={40}
-                    />
-                  </div>
-                  <div className={styles.nameAmount}>
-                    <p className={styles.name}>{asset.name}</p>
-                    <p className={styles.amount}>
-                      {asset.isLoading || !asset.currentBalance
-                        ? "0.00"
-                        : formatTMB(asset.currentBalance)}{" "}
-                      {asset?.ticker}
-                    </p>
-                  </div>
-                </div>
-
-                <div className={styles.aprInfo}>
-                  <p className={styles.apr}>
-                    APR {asset.protocolStats?.apr ?? "0.00"}%
-                  </p>
-                  <div className={styles.changeInfo}>
-                    <Image
-                      src={
-                        asset.protocolStats?.percentChange
-                          ? asset.protocolStats.percentChange.outcome
-                            ? "/icons/APRUp.svg"
-                            : "/icons/APRDown.svg"
-                          : "/icons/APRUp.svg"
-                      }
-                      alt="APR change indicator"
-                      width={16}
-                      height={16}
-                    />
-                    <p className={styles.change}>
-                      {asset.protocolStats?.percentChange?.change ?? "0.00"}%
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <button
-                className={styles.withdrawButton}
-                onClick={(e) => handleActionClick(asset, e)}
-              >
-                <Image
-                  src={displayText.actionIcon}
-                  alt={displayText.actionButton}
-                  width={14}
-                  height={14}
-                  className={styles.withdrawIcon}
-                />
-                <span>{displayText.actionButton}</span>
-              </button>
-            </div>
+              asset={asset}
+              mode={mode}
+              displayText={displayText}
+              onClick={handleActionClick}
+            />
           ))}
         </div>
       )}

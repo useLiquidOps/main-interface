@@ -4,7 +4,7 @@ import { tokenData, TokenData } from "liquidops";
 export interface SupportedToken
   extends Omit<
     TokenData,
-    "oTicker" | "oAddress" | "controllerAddress" | "cleanTicker"
+    "oTicker" | "oAddress" | "controllerAddress" | "cleanTicker" | "address"
   > {
   extraAmount: string;
 }
@@ -13,8 +13,7 @@ export function useSupportedTokens() {
   return useQuery({
     queryKey: ["supported-tokens"],
     queryFn: (): SupportedToken[] => {
-      return Object.entries(tokenData).map(([address, data]) => ({
-        address,
+      return Object.entries(tokenData).map(([_, data]) => ({
         icon: `/tokens/${data.ticker}.svg`,
         name: data.name,
         ticker: data.cleanTicker,

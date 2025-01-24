@@ -72,7 +72,7 @@ const Market: React.FC<{
   return (
     <div className={styles.body}>
       <div className={styles.container}>
-        <h2 className={styles.title}>{tokenData.name} Market</h2>
+        <h2 className={styles.title}>{tokenData.name} market</h2>
 
         <div className={styles.metricsContainer}>
           {extraData && (

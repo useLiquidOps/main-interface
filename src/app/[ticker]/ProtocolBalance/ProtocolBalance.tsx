@@ -78,7 +78,7 @@ const ProtocolBalance: React.FC<{
   return (
     <div className={styles.protocolBalance}>
       <div className={styles.mainContent}>
-        <h2 className={styles.title}>Protocol balance</h2>
+        <h2 className={styles.title}>Pool balance</h2>
         <div className={styles.balance}>
           <div className={styles.balanceIcon}>
             <Image

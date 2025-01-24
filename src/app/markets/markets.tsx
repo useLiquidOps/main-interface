@@ -4,35 +4,43 @@ import Header from "../../components/Header/Header";
 import Image from "next/image";
 import Link from "next/link";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
-import { useTokenPrice } from "@/hooks/data/useTokenPrice";
+import { usePrices } from "@/hooks/data/useTokenPrice";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
 
 const Markets = () => {
   const { data: supportedTokens = [] } = useSupportedTokens();
-  const statsQueries = supportedTokens.map((token) => ({
-    symbol: token.ticker,
-    stats: useProtocolStats(token.ticker.toUpperCase()),
-    icon: token.icon,
-    headerData: supportedTokens.find((h) => h.ticker === token.ticker),
-    price: useTokenPrice(token.ticker.toUpperCase()),
-  }));
+  const { data: prices } = usePrices();
+
+  const statsQueries = supportedTokens.map((token) => {
+    const geckoId = tickerToGeckoMap[token.ticker.toUpperCase()];
+    return {
+      symbol: token.ticker,
+      stats: useProtocolStats(token.ticker.toUpperCase()),
+      icon: token.icon,
+      headerData: supportedTokens.find((h) => h.ticker === token.ticker),
+      price: new Quantity(0n, 12n).fromNumber(prices?.[geckoId]?.usd ?? 0),
+    };
+  });
 
   const calculateTotals = () => {
     return statsQueries.reduce(
       (acc, { stats, price }) => {
         if (stats.isLoading || !stats.data) return acc;
 
-        const tokenPrice = price?.price || new Quantity(0n, 12n);
         const data = stats.data;
 
         return {
           liquidOpsTVL: Quantity.__add(
             acc.liquidOpsTVL,
-            Quantity.__mul(data.protocolBalance, tokenPrice),
+            Quantity.__mul(data.protocolBalance, price),
           ),
-          totalCollateral: Quantity.__add(acc.totalCollateral, data.unLent),
+          totalCollateral: Quantity.__add(
+            acc.totalCollateral,
+            Quantity.__mul(data.unLent, price),
+          ),
           totalBorrows: Quantity.__add(acc.totalBorrows, data.borrows),
         };
       },
@@ -45,6 +53,7 @@ const Markets = () => {
   };
 
   const { liquidOpsTVL, totalCollateral, totalBorrows } = calculateTotals();
+  const firstTokenPrice = statsQueries[0]?.price || new Quantity(0n, 12n);
 
   return (
     <div className={styles.page}>
@@ -73,9 +82,12 @@ const Markets = () => {
             <div className={styles.marketStat}>
               <p className={styles.marketStatValue}>
                 $
-                {totalBorrows.toLocaleString("en-US", {
-                  maximumFractionDigits: 2,
-                })}
+                {Quantity.__mul(totalBorrows, firstTokenPrice).toLocaleString(
+                  "en-US",
+                  {
+                    maximumFractionDigits: 2,
+                  },
+                )}{" "}
               </p>
               <p className={styles.marketStatTitle}>Total borrows</p>
             </div>
@@ -92,8 +104,6 @@ const Markets = () => {
                     utilizationRate: new Quantity(0n, 12n),
                   }
                 : stats.data;
-
-              const tokenPrice = price?.price || 0;
 
               return (
                 <Link
@@ -144,7 +154,7 @@ const Markets = () => {
                           $
                           {Quantity.__mul(
                             data.protocolBalance,
-                            tokenPrice,
+                            price,
                           ).toLocaleString("en-US", {
                             maximumFractionDigits: 2,
                           })}{" "}
@@ -155,9 +165,12 @@ const Markets = () => {
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
                           $
-                          {data.unLent.toLocaleString("en-US", {
-                            maximumFractionDigits: 2,
-                          })}
+                          {Quantity.__mul(data.unLent, price).toLocaleString(
+                            "en-US",
+                            {
+                              maximumFractionDigits: 2,
+                            },
+                          )}{" "}
                         </p>
                         <p className={styles.metricLabel}>Collateral</p>
                       </div>
@@ -165,9 +178,12 @@ const Markets = () => {
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
                           $
-                          {data.borrows.toLocaleString("en-US", {
-                            maximumFractionDigits: 2,
-                          })}
+                          {Quantity.__mul(data.borrows, price).toLocaleString(
+                            "en-US",
+                            {
+                              maximumFractionDigits: 2,
+                            },
+                          )}{" "}
                         </p>
                         <p className={styles.metricLabel}>Borrowed</p>
                       </div>

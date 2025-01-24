@@ -23,7 +23,7 @@ interface LiquidateTabProps {
   fromToken: TokenData;
   toToken: TokenData;
   offMarketPrice: number;
-  conversionRate: Quantity;
+  conversionRate: number | Quantity;
   targetUserAddress: string[];
 }
 
@@ -74,10 +74,13 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
     }
 
     if (!isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) {
-      const convertedAmount = Quantity.__mul(
-        new Quantity(0n, fromDenomination).fromString(fromInputValue),
-        conversionRate,
-      );
+      const inputQuantity = new Quantity(0n, fromDenomination).fromString(fromInputValue);
+      const rate = typeof conversionRate === 'number' ? 
+        new Quantity(0n, fromDenomination).fromNumber(conversionRate) : 
+        conversionRate;
+      
+      const convertedAmount = Quantity.__mul(inputQuantity, rate);
+      
       setToInputValue(
         convertedAmount.toLocaleString("en-US", {
           maximumFractionDigits: 6,
@@ -85,7 +88,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         }),
       );
     }
-  }, [fromInputValue, conversionRate]);
+  }, [fromInputValue, conversionRate, fromDenomination]);
 
   // Reset submit status after success or error
   useEffect(() => {
@@ -98,10 +101,16 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   }, [submitStatus]);
 
   const handleFromMaxClick = () => {
-    setFromInputValue(fromToken.available.toString());
+    if (!walletBalance) return;
+    
+    setFromInputValue(
+      walletBalance.toLocaleString("en-US", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      })
+    );
     setSelectedPercentage(100);
   };
-
   const handlePercentageClick = (percentage: number) => {
     const amount = Quantity.__div(
       Quantity.__mul(
@@ -145,7 +154,6 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
 
     setSubmitStatus("loading");
 
-    // TODO: Add proper handling for multiple target addresses instead of just using the first one
     const params = {
       token: fromToken.symbol.toUpperCase(),
       rewardToken: toToken.symbol.toUpperCase(),
@@ -225,7 +233,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         setIsFocused={setIsToFocused}
         ticker={toToken.symbol}
         tokenPrice={toTokenPrice}
-        walletBalance={new Quantity(0n, 12n)} // we do not display balance for the second token
+        walletBalance={new Quantity(0n, 12n)}
         onMaxClick={() => {}}
         disabled={true}
         liquidationMode={true}

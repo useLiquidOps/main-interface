@@ -38,7 +38,10 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
 
   const handleActionClick = (asset: any, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    openModal(mode === "lend" ? "withdraw" : "repay", asset);
+    openModal(mode === "lend" ? "withdraw" : "repay", {
+      ...asset,
+      ticker: asset.ticker,
+    });
   };
 
   const displayedAssets = showAll

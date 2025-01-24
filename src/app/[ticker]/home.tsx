@@ -56,7 +56,7 @@ const HomeContent = ({
             >
               <WithdrawRepay
                 mode={modalType as "withdraw" | "repay"}
-                ticker={assetData?.symbol || ticker}
+                ticker={assetData?.ticker || ticker}
                 onClose={closeModal}
               />
             </motion.div>

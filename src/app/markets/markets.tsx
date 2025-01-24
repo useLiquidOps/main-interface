@@ -54,19 +54,28 @@ const Markets = () => {
           <div className={styles.marketStats}>
             <div className={styles.marketStat}>
               <p className={styles.marketStatValue}>
-                ${formatTMB(liquidOpsTVL)}
+                $
+                {liquidOpsTVL.toLocaleString("en-US", {
+                  maximumFractionDigits: 2,
+                })}
               </p>
               <p className={styles.marketStatTitle}>LiquidOps TVL</p>
             </div>
             <div className={styles.marketStat}>
               <p className={styles.marketStatValue}>
-                ${formatTMB(totalCollateral)}
+                $
+                {totalCollateral.toLocaleString("en-US", {
+                  maximumFractionDigits: 2,
+                })}
               </p>
               <p className={styles.marketStatTitle}>Total collateral</p>
             </div>
             <div className={styles.marketStat}>
               <p className={styles.marketStatValue}>
-                ${formatTMB(totalBorrows)}
+                $
+                {totalBorrows.toLocaleString("en-US", {
+                  maximumFractionDigits: 2,
+                })}
               </p>
               <p className={styles.marketStatTitle}>Total borrows</p>
             </div>
@@ -133,23 +142,32 @@ const Markets = () => {
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
                           $
-                          {formatTMB(
-                            Quantity.__mul(data.protocolBalance, tokenPrice),
-                          )}{" "}
+                          {Quantity.__mul(
+                            data.protocolBalance,
+                            tokenPrice,
+                          ).toLocaleString("en-US", {
+                            maximumFractionDigits: 2,
+                          })}{" "}
                         </p>
                         <p className={styles.metricLabel}>TVL</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          ${formatTMB(data.unLent)}
+                          $
+                          {data.unLent.toLocaleString("en-US", {
+                            maximumFractionDigits: 2,
+                          })}
                         </p>
                         <p className={styles.metricLabel}>Collateral</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          ${formatTMB(data.borrows)}
+                          $
+                          {data.borrows.toLocaleString("en-US", {
+                            maximumFractionDigits: 2,
+                          })}
                         </p>
                         <p className={styles.metricLabel}>Borrowed</p>
                       </div>

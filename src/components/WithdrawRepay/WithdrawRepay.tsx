@@ -121,11 +121,11 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     setSubmitStatus("loading");
 
     const params = {
-          token: ticker.toUpperCase(),
-          quantity: new Quantity(0n, currentBalance?.denomination).fromString(
-            inputValue,
-          ).raw,
-        };
+      token: ticker.toUpperCase(),
+      quantity: new Quantity(0n, currentBalance?.denomination).fromString(
+        inputValue,
+      ).raw,
+    };
 
     const callbacks = {
       onSuccess: (result: any) => {

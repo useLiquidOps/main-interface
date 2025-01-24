@@ -13,6 +13,7 @@ import {
   overlayVariants,
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
+import Banner from "@/components/Banner/Banner";
 
 const HomeContent = ({
   params,
@@ -24,6 +25,7 @@ const HomeContent = ({
 
   return (
     <div className={styles.page}>
+      <Banner />
       <Header mode="home" currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>

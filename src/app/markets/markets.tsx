@@ -1,5 +1,5 @@
 "use client";
-import styles from "./Markets.module.css";
+import styles from "./markets.module.css";
 import Header from "../../components/Header/Header";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";

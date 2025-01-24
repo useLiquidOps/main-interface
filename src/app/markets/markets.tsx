@@ -75,13 +75,8 @@ const Markets = () => {
             </div>
             <div className={styles.marketStat}>
               <p className={styles.marketStatValue}>
-                $
-                {Quantity.__mul(totalBorrows, firstTokenPrice).toLocaleString(
-                  "en-US",
-                  {
-                    maximumFractionDigits: 2,
-                  },
-                )}{" "}
+                
+                ${formatTMB(totalBorrows)}{" "}
               </p>
               <p className={styles.marketStatTitle}>Total borrows</p>
             </div>

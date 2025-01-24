@@ -119,12 +119,13 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     if (!inputValue) return;
 
     setSubmitStatus("loading");
-    const quantityBigInt = BigInt(Math.floor(parseFloat(inputValue) * 1)); // TODO: Add proper decimal handling
 
     const params = {
-      token: ticker.toUpperCase(),
-      quantity: quantityBigInt,
-    };
+          token: ticker.toUpperCase(),
+          quantity: new Quantity(0n, currentBalance?.denomination).fromString(
+            inputValue,
+          ).raw,
+        };
 
     const callbacks = {
       onSuccess: (result: any) => {

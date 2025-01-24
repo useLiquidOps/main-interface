@@ -74,13 +74,16 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
     }
 
     if (!isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) {
-      const inputQuantity = new Quantity(0n, fromDenomination).fromString(fromInputValue);
-      const rate = typeof conversionRate === 'number' ? 
-        new Quantity(0n, fromDenomination).fromNumber(conversionRate) : 
-        conversionRate;
-      
+      const inputQuantity = new Quantity(0n, fromDenomination).fromString(
+        fromInputValue,
+      );
+      const rate =
+        typeof conversionRate === "number"
+          ? new Quantity(0n, fromDenomination).fromNumber(conversionRate)
+          : conversionRate;
+
       const convertedAmount = Quantity.__mul(inputQuantity, rate);
-      
+
       setToInputValue(
         convertedAmount.toLocaleString("en-US", {
           maximumFractionDigits: 6,
@@ -102,12 +105,12 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
 
   const handleFromMaxClick = () => {
     if (!walletBalance) return;
-    
+
     setFromInputValue(
       walletBalance.toLocaleString("en-US", {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
-      })
+      }),
     );
     setSelectedPercentage(100);
   };

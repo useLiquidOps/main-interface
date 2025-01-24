@@ -11,7 +11,7 @@ interface FaucetResponse {
 interface FaucetParams {
   ticker: string;
   walletAddress: string;
-  amount: bigint;
+  amount: string;
 }
 
 interface UseFaucetOptions {

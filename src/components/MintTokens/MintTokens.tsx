@@ -50,7 +50,7 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
     claim({
       ticker: tokenData.ticker,
       walletAddress,
-      amount: new Quantity(0n, t.info.Denomination).fromString(inputValue).raw,
+      amount: inputValue,
     });
   };
 

@@ -15,7 +15,8 @@ import {
 } from "@/components/DropDown/FramerMotion";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
-// import { useGetLiquidations } from "@/hooks/data/useGetLiquidations";
+import { usePrices } from "@/hooks/data/useTokenPrice";
+import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
 
 interface TokenInfo {
   ticker: string;
@@ -23,7 +24,6 @@ interface TokenInfo {
 }
 
 const calculateLiquidationStats = (liquidations: any[]) => {
-  // TODO: correct stats when real data is here
   return liquidations.reduce(
     (acc, liquidation) => {
       return {
@@ -63,24 +63,33 @@ const LiquidationsContent = () => {
     icon: "/icons/list.svg",
   });
   const { modalType, assetData, openModal, closeModal } = useModal();
-
   const { data: supportedTokens = [] } = useSupportedTokens();
+  const { data: prices } = usePrices();
+
+  const getTokenPrice = (symbol: string) => {
+    const geckoId = tickerToGeckoMap[symbol.toUpperCase()];
+    return new Quantity(0n, 12n).fromNumber(prices?.[geckoId]?.usd ?? 0);
+  };
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const getConversionRate = (fromPrice: number, toPrice: number) => {
-    return fromPrice / toPrice;
-  };
-
   const handleLiquidate = (liquidation: any) => {
+    const fromPrice = getTokenPrice(liquidation.fromToken.symbol);
+    const toPrice = getTokenPrice(liquidation.toToken.symbol);
+
     const enhancedLiquidation = {
       ...liquidation,
-      conversionRate: getConversionRate(
-        liquidation.fromToken.price,
-        liquidation.toToken.price,
-      ),
+      fromToken: {
+        ...liquidation.fromToken,
+        price: fromPrice,
+      },
+      toToken: {
+        ...liquidation.toToken,
+        price: toPrice,
+      },
+      conversionRate: fromPrice.toNumber() / toPrice.toNumber(),
     };
     openModal("liquidate", enhancedLiquidation);
   };
@@ -90,7 +99,7 @@ const LiquidationsContent = () => {
       { ticker: "All tokens", icon: "/icons/list.svg" },
       ...supportedTokens,
     ],
-    [],
+    [supportedTokens],
   );
 
   const sendTokens = useMemo(
@@ -98,7 +107,7 @@ const LiquidationsContent = () => {
       { ticker: "All tokens", icon: "/icons/list.svg" },
       ...supportedTokens,
     ],
-    [],
+    [supportedTokens],
   );
 
   const filteredLiquidations = useMemo(() => {
@@ -129,27 +138,6 @@ const LiquidationsContent = () => {
   };
 
   if (!mounted) return null;
-
-  // const { getLiquidations, isGettingLiquidations } = useGetLiquidations();
-
-  // useEffect(() => {
-  //   getLiquidations(
-  //     {
-  //       token:
-  //         selectedSendToken.symbol === "All tokens"
-  //           ? ""
-  //           : selectedSendToken.symbol,
-  //     },
-  //     {
-  //       onSuccess: (result) => {
-  //         console.log("Available liquidations:", result);
-  //       },
-  //       onError: (error) => {
-  //         console.error("Error fetching liquidations:", error);
-  //       },
-  //     },
-  //   );
-  // }, [selectedSendToken.symbol, getLiquidations]);
 
   return (
     <div className={styles.page}>
@@ -385,12 +373,17 @@ const LiquidationsContent = () => {
                       <p className={styles.metricLabel}>Available</p>
                     </div>
 
-                    {/* <div className={styles.metricBox}>
+                    <div className={styles.metricBox}>
                       <p className={styles.metricValue}>
-                        ${formatTMB(liquidation.fromToken.price)}
+                        $
+                        {getTokenPrice(
+                          liquidation.fromToken.symbol,
+                        ).toLocaleString("en-US", {
+                          maximumFractionDigits: 2,
+                        })}
                       </p>
                       <p className={styles.metricLabel}>Price</p>
-                    </div> */}
+                    </div>
                   </div>
                   <button
                     className={styles.liquidateButton}
@@ -440,7 +433,7 @@ const LiquidationsContent = () => {
                 toToken={assetData.toToken}
                 offMarketPrice={assetData.offMarketPrice}
                 conversionRate={assetData.conversionRate}
-                targetUserAddress={[""]} // TODO: add target user address'
+                targetUserAddress={[""]}
               />
             </motion.div>
           </motion.div>

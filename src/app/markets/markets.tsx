@@ -63,19 +63,13 @@ const Markets = () => {
           <div className={styles.marketStats}>
             <div className={styles.marketStat}>
               <p className={styles.marketStatValue}>
-                $
-                {liquidOpsTVL.toLocaleString("en-US", {
-                  maximumFractionDigits: 2,
-                })}
+                ${formatTMB(liquidOpsTVL)}
               </p>
               <p className={styles.marketStatTitle}>LiquidOps TVL</p>
             </div>
             <div className={styles.marketStat}>
               <p className={styles.marketStatValue}>
-                $
-                {totalCollateral.toLocaleString("en-US", {
-                  maximumFractionDigits: 2,
-                })}
+                ${formatTMB(totalCollateral)}
               </p>
               <p className={styles.marketStatTitle}>Total collateral</p>
             </div>
@@ -152,25 +146,16 @@ const Markets = () => {
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
                           $
-                          {Quantity.__mul(
-                            data.protocolBalance,
-                            price,
-                          ).toLocaleString("en-US", {
-                            maximumFractionDigits: 2,
-                          })}{" "}
+                          {formatTMB(
+                            Quantity.__mul(data.protocolBalance, price),
+                          )}
                         </p>
                         <p className={styles.metricLabel}>TVL</p>
                       </div>
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          $
-                          {Quantity.__mul(data.unLent, price).toLocaleString(
-                            "en-US",
-                            {
-                              maximumFractionDigits: 2,
-                            },
-                          )}{" "}
+                          ${formatTMB(Quantity.__mul(data.unLent, price))}
                         </p>
                         <p className={styles.metricLabel}>Collateral</p>
                       </div>

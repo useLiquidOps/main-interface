@@ -23,7 +23,7 @@ export function useGlobalPosition(marketTokenTicker?: string) {
         };
 
       // fetch positions from all oTokens
-      const [positions, tokenInfos] = await Promise.all([
+      const [positions, tokenInfosUnfiltered] = await Promise.all([
         Promise.all(
           Object.values(tokens).map((token) =>
             LiquidOpsClient.getPosition({ token, recipient: walletAddress }),
@@ -33,6 +33,11 @@ export function useGlobalPosition(marketTokenTicker?: string) {
           Object.values(tokens).map(async (token) => (await Token(token)).info),
         ),
       ]);
+
+      const tokenInfos = tokenInfosUnfiltered.map((info) => ({
+        ...info,
+        Ticker: info.Ticker === "AR" ? "qAR" : info.Ticker,
+      }));
 
       // current market data
       const marketGeckoId = tickerToGeckoMap[marketTokenTicker.toUpperCase()];
@@ -50,7 +55,10 @@ export function useGlobalPosition(marketTokenTicker?: string) {
 
           // market data in the original (collateral) unit
           const marketData = {
-            collateral: position.collateralTicker,
+            collateral:
+              position.collateralTicker === "AR"
+                ? "qAR"
+                : position.collateralTicker,
             collateralValue: new Quantity(
               position.totalCollateral,
               denomination,
@@ -87,7 +95,10 @@ export function useGlobalPosition(marketTokenTicker?: string) {
 
           // convert market values
           return {
-            collateral: position.collateralTicker,
+            collateral:
+              position.collateralTicker === "AR"
+                ? "qAR"
+                : position.collateralTicker,
             collateralValue: qtyToMarketValue(marketData.collateralValue),
             borrowCapacity: qtyToMarketValue(marketData.borrowCapacity),
             liquidationPoint: qtyToMarketValue(marketData.liquidationPoint),

@@ -9,6 +9,7 @@ import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
+import Banner from "@/components/Banner/Banner";
 
 const Markets = () => {
   const { data: supportedTokens = [] } = useSupportedTokens();
@@ -60,6 +61,7 @@ const Markets = () => {
 
   return (
     <div className={styles.page}>
+      <Banner />
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>

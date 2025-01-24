@@ -17,6 +17,7 @@ import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
+import Banner from "@/components/Banner/Banner";
 
 interface TokenInfo {
   ticker: string;
@@ -156,6 +157,7 @@ const LiquidationsContent = () => {
           />
         )}
       </AnimatePresence>
+      <Banner />
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>

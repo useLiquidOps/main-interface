@@ -75,7 +75,6 @@ const Markets = () => {
             </div>
             <div className={styles.marketStat}>
               <p className={styles.marketStatValue}>
-                
                 ${formatTMB(totalBorrows)}{" "}
               </p>
               <p className={styles.marketStatTitle}>Total borrows</p>
@@ -157,13 +156,7 @@ const Markets = () => {
 
                       <div className={styles.metricBox}>
                         <p className={styles.metricValue}>
-                          $
-                          {Quantity.__mul(data.borrows, price).toLocaleString(
-                            "en-US",
-                            {
-                              maximumFractionDigits: 2,
-                            },
-                          )}{" "}
+                          ${formatTMB(Quantity.__mul(data.borrows, price))}{" "}
                         </p>
                         <p className={styles.metricLabel}>Borrowed</p>
                       </div>

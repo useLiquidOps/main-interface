@@ -47,7 +47,7 @@ const TokenItem: React.FC<{ token: Token }> = ({ token }) => {
         </div>
       </div>
       <div className={styles.tokenMetrics}>
-        <p className={styles.tokenAPR}>APR {protocolStats?.apr ?? 0.0}%</p>
+        <p className={styles.tokenAPR}>APR {protocolStats?.apr.toFixed(2) ?? 0.0}%</p>
         <div className={styles.percentChangeContainer}>
           <Image
             src={getOutcomeIcon()}

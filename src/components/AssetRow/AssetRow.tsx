@@ -62,7 +62,9 @@ const AssetRow: React.FC<AssetRowProps> = ({
         </div>
 
         <div className={styles.aprInfo}>
-          <p className={styles.apr}>APR {protocolStats?.apr ?? "0.00"}%</p>
+          <p className={styles.apr}>
+            APR {protocolStats?.apr.toFixed(2) ?? "0.00"}%
+          </p>
           <div className={styles.changeInfo}>
             <Image
               src={

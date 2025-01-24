@@ -42,15 +42,15 @@ const ProtocolBalance: React.FC<{
 
     const result = [];
     const today = new Date();
-    
+
     // Add 6 days of zero values
     for (let i = 6; i > 0; i--) {
       const pastDate = new Date(today);
       pastDate.setDate(today.getDate() - i);
-      const dateStr = pastDate.toISOString().split('T')[0];
+      const dateStr = pastDate.toISOString().split("T")[0];
       result.push({
         date: dateStr,
-        value: 0
+        value: 0,
       });
     }
 
@@ -141,7 +141,7 @@ const ProtocolBalance: React.FC<{
                 ? "0.00%"
                 : hoverData
                   ? `${hoverData.value.toFixed(2)}%`
-                  : `${protocolStats.apr}%`}
+                  : `${protocolStats.apr.toFixed(2)}%`}
             </p>
           </div>
         </div>

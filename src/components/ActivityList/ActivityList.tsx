@@ -5,6 +5,7 @@ import styles from "./ActivityList.module.css";
 import { formatTMB } from "../utils/utils";
 import { tokens } from "liquidops";
 import { Quantity } from "ao-tokens";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 
 export interface Transaction {
   id: string;
@@ -23,6 +24,18 @@ const ActivityList: React.FC<ActivityListProps> = ({
   transactions,
   isLoading,
 }) => {
+  const { data: supportedTokens } = useSupportedTokens();
+
+  const getTokenDenomination = (tokenAddress: string) => {
+    const token = supportedTokens?.find(
+      (t) =>
+        Object.entries(tokens)
+          .find(([_, addr]) => addr === tokenAddress)?.[0]
+          ?.toLowerCase() === t.ticker.toLowerCase(),
+    );
+    return token?.denomination ?? 0n;
+  };
+
   const getTransactionType = (tags: Transaction["tags"]) => {
     if (tags["Analytics-Tag"] === "Borrow") return "Borrowed";
     if (tags["Analytics-Tag"] === "Repay") return "Repaid";
@@ -76,7 +89,12 @@ const ActivityList: React.FC<ActivityListProps> = ({
                 <div className={styles.actionDetails}>
                   <p className={styles.action}>{getTransactionType(tx.tags)}</p>
                   <p className={styles.amount}>
-                    {formatTMB(new Quantity(tx.tags["Quantity"], 12n))}
+                    {formatTMB(
+                      new Quantity(
+                        tx.tags["Quantity"],
+                        getTokenDenomination(tx.tags["token"]),
+                      ),
+                    )}
                   </p>
                 </div>
               </div>

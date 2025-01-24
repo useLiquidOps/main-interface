@@ -7,6 +7,7 @@ export interface SupportedToken
     "oTicker" | "oAddress" | "controllerAddress" | "cleanTicker" | "address"
   > {
   extraAmount: string;
+  denomination: bigint;
 }
 
 export function useSupportedTokens() {
@@ -18,6 +19,7 @@ export function useSupportedTokens() {
         name: data.name,
         ticker: data.cleanTicker,
         extraAmount: "1",
+        denomination: data.denomination,
       }));
     },
     staleTime: 5 * 60 * 1000,

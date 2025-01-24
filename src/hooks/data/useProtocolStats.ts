@@ -30,8 +30,8 @@ export function useProtocolStats(token: string) {
       ]);
 
       const denomination = tokenInstance.info.Denomination;
-      const available = tokenInstance.Quantity.fromString(reserves.available);
-      const lent = tokenInstance.Quantity.fromString(reserves.lent);
+      const available = new Quantity(reserves.available, denomination);
+      const lent = new Quantity(reserves.lent, denomination);
       const protocolBalance = Quantity.__add(available, lent);
       const zero = tokenInstance.Quantity.fromNumber(0);
 

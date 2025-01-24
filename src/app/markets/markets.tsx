@@ -41,7 +41,10 @@ const Markets = () => {
             acc.totalCollateral,
             Quantity.__mul(data.unLent, price),
           ),
-          totalBorrows: Quantity.__add(acc.totalBorrows, data.borrows),
+          totalBorrows: Quantity.__add(
+            acc.totalBorrows,
+            Quantity.__mul(data.borrows, price),
+          ),
         };
       },
       {

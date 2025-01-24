@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -35,6 +35,30 @@ const ProtocolBalance: React.FC<{
   const tokenData = supportedTokens.find(
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
+
+  const processedHistoricalData = useMemo(() => {
+    if (!historicalData || historicalData.length === 0) return [];
+    if (historicalData.length > 1) return historicalData;
+
+    const result = [];
+    const today = new Date();
+    
+    // Add 6 days of zero values
+    for (let i = 6; i > 0; i--) {
+      const pastDate = new Date(today);
+      pastDate.setDate(today.getDate() - i);
+      const dateStr = pastDate.toISOString().split('T')[0];
+      result.push({
+        date: dateStr,
+        value: 0
+      });
+    }
+
+    // Add the current data point
+    result.push(historicalData[0]);
+
+    return result;
+  }, [historicalData]);
 
   const handleNavigate = (type: "supply" | "borrow") => {
     router.push(`/${ticker}/${type}`);
@@ -124,7 +148,7 @@ const ProtocolBalance: React.FC<{
         <div className={styles.graph}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
-              data={historicalData}
+              data={processedHistoricalData}
               margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
               onMouseMove={(data) => {
                 if (data.activePayload) {

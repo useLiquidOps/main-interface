@@ -111,6 +111,7 @@ export const calculateUsdValue = (value: string, rate: Quantity): string => {
   return preciseValue.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
+    maximumFractionDigits: 2,
   });
 };
 

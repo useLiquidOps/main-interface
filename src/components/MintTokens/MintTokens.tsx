@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import styles from "./MintTokens.module.css";
 import { formatInputNumber } from "../utils/utils";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useFaucet } from "@/hooks/actions/useFaucet";
 import { useWalletAddress } from "@/hooks/data/useWalletAddress";
-import { Quantity, Token } from "ao-tokens";
-import { tokens } from "liquidops";
+import GoogleCaptchaWrapper from "@/utils/CaptchaWrapper";
 
 interface MintTokensProps {
   ticker: string;
 }
 
-const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
+const MintTokensContent: React.FC<MintTokensProps> = ({ ticker }) => {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const { data: walletAddress } = useWalletAddress();
-
   const { data: supportedTokens = [] } = useSupportedTokens();
 
   const tokenData = supportedTokens.find(
@@ -43,20 +43,25 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
   };
 
   const handleSubmit = async () => {
-    if (!walletAddress || !tokenData || !inputValue) return;
-    if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
-    const t = await Token(tokens[ticker.toUpperCase()]);
+    if (!walletAddress || !tokenData || !inputValue || !executeRecaptcha)
+      return;
+    if (isNaN(Number(inputValue.replace(/,/g, "")))) return;
 
-    claim({
-      ticker: tokenData.ticker,
-      walletAddress,
-      amount: inputValue,
-    });
+    try {
+      const token = await executeRecaptcha("mintTokens");
+
+      claim({
+        ticker: tokenData.ticker,
+        walletAddress,
+        amount: inputValue,
+        token,
+      });
+    } catch (error) {
+      console.error("ReCaptcha error:", error);
+    }
   };
 
-  if (!tokenData) {
-    return null;
-  }
+  if (!tokenData) return null;
 
   return (
     <div className={styles.mintTokens}>
@@ -101,5 +106,11 @@ const MintTokens: React.FC<MintTokensProps> = ({ ticker }) => {
     </div>
   );
 };
+
+const MintTokens: React.FC<MintTokensProps> = (props) => (
+  <GoogleCaptchaWrapper>
+    <MintTokensContent {...props} />
+  </GoogleCaptchaWrapper>
+);
 
 export default MintTokens;

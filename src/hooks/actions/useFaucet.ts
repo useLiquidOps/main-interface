@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
-import { tokens } from "liquidops";
 
 interface FaucetResponse {
   status: boolean;
@@ -9,9 +8,8 @@ interface FaucetResponse {
 }
 
 interface FaucetParams {
-  ticker: string;
+  tokenAddress: string;
   walletAddress: string;
-  amount: string;
   token: string;
 }
 
@@ -27,22 +25,14 @@ export function useFaucet(options: UseFaucetOptions = {}) {
 
   const claimMutation = useMutation({
     mutationFn: async ({
-      ticker,
+      tokenAddress,
       walletAddress,
-      amount,
       token,
     }: FaucetParams): Promise<FaucetResponse> => {
-      const tokenAddress = tokens[ticker.toUpperCase()];
-
-      if (!tokenAddress) {
-        throw new Error(`No token address found for ${ticker}`);
-      }
-
       try {
         const response = await api.post("/faucet", {
           tokenAddress,
           walletAddress,
-          amount: amount.toString(),
           token,
         });
         return response.data;
@@ -53,16 +43,13 @@ export function useFaucet(options: UseFaucetOptions = {}) {
     },
     onSuccess: async (data, variables) => {
       if (data.status) {
-        // First invalidate the balance query
-        await queryClient.invalidateQueries({
-          queryKey: ["user-balance", variables.ticker],
-        });
+        // Directly update the user balance in cache by adding 10
+        queryClient.setQueryData(
+          ["user-balance", variables.tokenAddress, variables.walletAddress],
+          (oldBalance: number | undefined) => (oldBalance || 0) + 10,
+        );
 
-        // Let the UI update first with success state
         setTimeout(() => {
-          alert(
-            `Successfully claimed ${variables.amount} ${variables.ticker} tokens`,
-          );
           options.onSuccess?.(data);
         }, 500);
       } else if (data.error) {
@@ -74,11 +61,7 @@ export function useFaucet(options: UseFaucetOptions = {}) {
       }
     },
     onError: (error) => {
-      // Let the UI update first with error state
       setTimeout(() => {
-        alert(
-          error instanceof Error ? error.message : "Failed to claim tokens",
-        );
         options.onError?.(error as Error);
       }, 500);
     },

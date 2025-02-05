@@ -8,6 +8,7 @@ interface SubmitButtonProps {
   disabled?: boolean;
   error?: Error | null;
   status: "idle" | "loading" | "success" | "error" | "pending";
+  submitText?: string;
 }
 
 const SubmitButton: React.FC<SubmitButtonProps> = ({
@@ -16,6 +17,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   disabled = false,
   error = null,
   status,
+  submitText = "Submit",
 }) => {
   const getButtonContent = () => {
     switch (status) {
@@ -70,7 +72,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
           </>
         );
       default:
-        return "Submit";
+        return submitText;
     }
   };
 

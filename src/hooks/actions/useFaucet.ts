@@ -12,6 +12,7 @@ interface FaucetParams {
   ticker: string;
   walletAddress: string;
   amount: string;
+  token: string;
 }
 
 interface UseFaucetOptions {
@@ -29,6 +30,7 @@ export function useFaucet(options: UseFaucetOptions = {}) {
       ticker,
       walletAddress,
       amount,
+      token,
     }: FaucetParams): Promise<FaucetResponse> => {
       const tokenAddress = tokens[ticker.toUpperCase()];
 
@@ -41,6 +43,7 @@ export function useFaucet(options: UseFaucetOptions = {}) {
           tokenAddress,
           walletAddress,
           amount: amount.toString(),
+          token,
         });
         return response.data;
       } catch (error) {

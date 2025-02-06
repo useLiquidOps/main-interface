@@ -36,7 +36,7 @@ export function useFaucet(options: UseFaucetOptions = {}) {
           token,
         });
         if (!response.data.status) {
-          alert("Faucuet limit reached, please try again later.");
+          alert("Faucet limit reached, please try again later.");
         }
         return response.data;
       } catch (error) {

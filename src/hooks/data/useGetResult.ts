@@ -7,7 +7,6 @@ export function useGetResult(
   tokenAddress: string,
   action: "lend" | "unLend" | "borrow" | "repay",
 ) {
-  console.log(action);
   return useQuery({
     queryKey: ["result", transferID, tokenAddress, action],
     queryFn: async (): Promise<GetResultRes> => {

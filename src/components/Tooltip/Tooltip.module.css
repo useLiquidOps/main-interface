@@ -6,8 +6,8 @@
 .tooltip {
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  transform: none;
   background-color: var(--secondary-periwinkle);
   color: white;
   padding: 5px 10px;
@@ -21,8 +21,8 @@
   content: "";
   position: absolute;
   top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 10px;
+  transform: none;
   border-width: 0 5px 5px;
   border-style: solid;
   border-color: transparent transparent var(--secondary-periwinkle);

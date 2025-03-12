@@ -29,12 +29,16 @@ const ActivityList: React.FC<ActivityListProps> = ({
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        if (entry.isIntersecting && !isLoading && transactions.length > displayLimit) {
+        if (
+          entry.isIntersecting &&
+          !isLoading &&
+          transactions.length > displayLimit
+        ) {
           // Load 5 more transactions when the user scrolls to the bottom
-          setDisplayLimit(prevLimit => prevLimit + 5);
+          setDisplayLimit((prevLimit) => prevLimit + 5);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     if (observerRef.current) {
@@ -66,12 +70,17 @@ const ActivityList: React.FC<ActivityListProps> = ({
           {displayedTransactions.map((tx: Transaction) => (
             <TransactionItem key={tx.id} tx={tx} />
           ))}
-          
+
           {/* Observer element at the bottom of the scrollable area */}
           {transactions.length > displayLimit && (
-            <div 
-              ref={observerRef} 
-              style={{ padding: '10px 0', textAlign: 'center', fontSize: '12px', color: 'var(--secondary-periwinkle)' }}
+            <div
+              ref={observerRef}
+              style={{
+                padding: "10px 0",
+                textAlign: "center",
+                fontSize: "12px",
+                color: "var(--secondary-periwinkle)",
+              }}
             >
               {isLoading ? "Loading more..." : ""}
             </div>

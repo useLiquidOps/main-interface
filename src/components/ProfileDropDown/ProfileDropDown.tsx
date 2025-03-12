@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { dropdownVariants } from "@/components/DropDown/FramerMotion";
-import styles from './ProfileDropDown.module.css'
+import styles from "./ProfileDropDown.module.css";
 import ActivityList from "../ActivityList/ActivityList";
 import { useTransactions } from "@/hooks/data/useTransactions";
 

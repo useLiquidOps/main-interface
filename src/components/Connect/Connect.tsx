@@ -5,7 +5,7 @@ import { useClickOutside } from "../utils/utils";
 import DropdownButton from "../DropDown/DropDown";
 import { motion, AnimatePresence } from "framer-motion";
 import { overlayVariants } from "@/components/DropDown/FramerMotion";
-import ProfileDropDown from "./ProfileDropDown";
+import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
 
 declare global {
@@ -75,7 +75,7 @@ const Connect: React.FC = () => {
   const handleConnect = async () => {
     if (typeof window === "undefined" || !window.arweaveWallet) {
       alert(
-        `Please ensure you have the ArConnect wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to arconnect.io/download`,
+        `Please ensure you have the Wander wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to wander.app/download`,
       );
       return;
     }

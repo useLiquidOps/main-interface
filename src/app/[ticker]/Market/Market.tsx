@@ -6,11 +6,11 @@ import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 
-// TODO: Replace these with real data
-const PLACEHOLDER_EXTRA_DATA = {
-  extraTotalSupply: new Quantity(0n, 12n).fromNumber(6000),
-  extraLent: new Quantity(0n, 12n).fromNumber(1000),
-};
+// // TODO: Replace these with real data
+// const PLACEHOLDER_EXTRA_DATA = {
+//   extraTotalSupply: new Quantity(0n, 12n).fromNumber(6000),
+//   extraLent: new Quantity(0n, 12n).fromNumber(1000),
+// };
 
 const Market: React.FC<{
   ticker: string;

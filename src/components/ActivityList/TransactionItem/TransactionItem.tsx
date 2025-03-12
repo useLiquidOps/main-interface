@@ -7,6 +7,7 @@ import { GetResultRes } from "liquidops";
 import Spinner from "@/components/Spinner/Spinner";
 import Image from "next/image";
 import styles from "./TransactionItem.module.css";
+import Tooltip from "@/components/Tooltip/Tooltip";
 
 export interface Transaction {
   id: string;
@@ -95,6 +96,17 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
   const resultStatus = resultIsLoading ? undefined : resultData;
   const statusIcon = getResultStatusIcon(resultStatus);
 
+  let toolTipText;
+  if (resultStatus) {
+    toolTipText = "Success";
+  } else if (resultStatus === false) {
+    toolTipText = "Failed";
+  } else if (resultStatus === "pending") {
+    toolTipText = "Pending";
+  } else {
+    toolTipText = "Loading";
+  }
+
   return (
     <a
       key={tx.id}
@@ -105,16 +117,18 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
     >
       <div className={styles.activityItemContainer}>
         <div className={styles.actionContainer}>
-          {statusIcon ? (
-            <Image
-              src={statusIcon}
-              alt={`Status: ${resultStatus}`}
-              width={18}
-              height={18}
-            />
-          ) : (
-            <Spinner />
-          )}
+          <Tooltip text={toolTipText} fontSize="12px">
+            {statusIcon ? (
+              <Image
+                src={statusIcon}
+                alt={`Status: ${resultStatus}`}
+                width={18}
+                height={18}
+              />
+            ) : (
+              <Spinner />
+            )}
+          </Tooltip>
           <div className={styles.actionDetails}>
             <p>{display}</p>
             <p>

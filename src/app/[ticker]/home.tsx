@@ -14,6 +14,8 @@ import {
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
 import Banner from "@/components/Banner/Banner";
+import { tokens } from "liquidops";
+import { redirect } from "next/navigation";
 
 const HomeContent = ({
   params,
@@ -22,6 +24,12 @@ const HomeContent = ({
 }) => {
   const { modalType, assetData, closeModal } = useModal();
   const ticker = params.ticker as string;
+
+  const tokenTickers = Object.keys(tokens);
+
+  if (!tokenTickers.includes(ticker.toUpperCase())) {
+    redirect("/qAR");
+  }
 
   return (
     <div className={styles.page}>

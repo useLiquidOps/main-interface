@@ -7,7 +7,7 @@ import Arweave from "arweave";
 
 export function useAOProfile() {
   const { data: walletAddress } = useWalletAddress();
-  const ao = connect();
+  const ao = connect({ MODE: "legacy" });
   const signer = createDataItemSigner(window.arweaveWallet);
   const { getProfileByWalletAddress } = AOProfile.init({
     ao,

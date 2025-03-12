@@ -1,19 +1,12 @@
-"use client";
 import React from "react";
 import Image from "next/image";
 import styles from "./ActivityList.module.css";
-import { formatTMB } from "../utils/utils";
-import { tokens } from "liquidops";
-import { Quantity } from "ao-tokens";
+import {
+  TransactionItem,
+  Transaction,
+} from "./TransactionItem/TransactionItem";
+import { exportTransactionsAsCSV } from "@/utils/CSVExport";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
-
-export interface Transaction {
-  id: string;
-  tags: Record<string, string>;
-  block: {
-    timestamp: number;
-  };
-}
 
 interface ActivityListProps {
   transactions: Transaction[];
@@ -26,37 +19,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
 }) => {
   const { data: supportedTokens } = useSupportedTokens();
 
-  const getTokenDenomination = (tokenAddress: string) => {
-    const token = supportedTokens?.find(
-      (t) =>
-        Object.entries(tokens)
-          .find(([_, addr]) => addr === tokenAddress)?.[0]
-          ?.toLowerCase() === t.ticker.toLowerCase(),
-    );
-    return token?.denomination ?? 0n;
-  };
-
-  const getTransactionType = (tags: Transaction["tags"]) => {
-    if (tags["Analytics-Tag"] === "Borrow") return "Borrowed";
-    if (tags["Analytics-Tag"] === "Repay") return "Repaid";
-    if (tags["Analytics-Tag"] === "Lend") return "Lent";
-    if (tags["Analytics-Tag"] === "UnLend") return "Unlent";
-    return "Unknown";
-  };
-
-  const getActivityIcon = (tags: Transaction["tags"]) => {
-    // Find the token ticker by looking up the address in the tokens object
-    const tokenAddress = tags["token"];
-    const tokenTicker =
-      Object.entries(tokens)
-        .find(([_, address]) => address === tokenAddress)?.[0]
-        ?.toLowerCase() || "Unknown";
-    return `/tokens/${tokenTicker}.svg`;
-  };
-
-  const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
+  const handleExport = () => {
+    exportTransactionsAsCSV(transactions, supportedTokens);
   };
 
   const renderContent = () => {
@@ -71,38 +35,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
     return (
       <div className={styles.transactionsList}>
         {transactions.map((tx: Transaction) => (
-          <a
-            key={tx.id}
-            target="_blank"
-            href={`https://www.ao.link/#/message/${tx.id}`}
-            className={styles.activityLink}
-            rel="noopener noreferrer"
-          >
-            <div className={styles.activityItemContainer}>
-              <div className={styles.actionContainer}>
-                <Image
-                  src={getActivityIcon(tx.tags)}
-                  alt="activity"
-                  width={18}
-                  height={18}
-                />
-                <div className={styles.actionDetails}>
-                  <p className={styles.action}>{getTransactionType(tx.tags)}</p>
-                  <p className={styles.amount}>
-                    {formatTMB(
-                      new Quantity(
-                        tx.tags["Quantity"],
-                        getTokenDenomination(tx.tags["token"]),
-                      ),
-                    )}
-                  </p>
-                </div>
-              </div>
-              <p className={styles.timestamp}>
-                {formatTimestamp(Number(tx.tags["timestamp"]))}
-              </p>
-            </div>
-          </a>
+          <TransactionItem key={tx.id} tx={tx} />
         ))}
       </div>
     );
@@ -110,7 +43,18 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   return (
     <div className={styles.activityContainer}>
-      <p className={styles.activityTitle}>Activity</p>
+      <div className={styles.activityTitleContainer}>
+        <p className={styles.activityTitle}>Activity</p>
+        <div onClick={handleExport} style={{ cursor: "pointer" }}>
+          <Image
+            src="/icons/csv-export.svg"
+            alt="CSV export"
+            width={9}
+            height={9}
+          />
+        </div>
+      </div>
+
       <div className={styles.activity}>{renderContent()}</div>
     </div>
   );

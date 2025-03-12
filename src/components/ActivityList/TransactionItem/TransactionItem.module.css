@@ -1,0 +1,50 @@
+.activityLink {
+  width: 100%;
+  text-decoration: none;
+  display: block;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.activityLink:hover {
+  background-color: var(--primary-ghost-white);
+}
+
+.activityItemContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.actionContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actionDetails {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+}
+
+.actionDetails p {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  color: var(--secondary-slate-blue);
+  font-weight: 600;
+  margin: 0;
+}
+
+.timestamp {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
+  margin: 0;
+  text-align: right;
+}

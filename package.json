@@ -9,14 +9,14 @@
     "link": "bun link liquidops"
   },
   "dependencies": {
-    "@permaweb/aoconnect": "^0.0.62",
+    "@permaweb/aoconnect": "^0.0.77",
     "@permaweb/aoprofile": "^0.0.9",
     "@tanstack/react-query": "^5.62.11",
     "@tanstack/react-query-devtools": "^5.62.11",
     "ao-tokens": "^0.0.5",
     "axios": "^1.7.7",
     "framer-motion": "^11.15.0",
-    "liquidops": "^0.1.30",
+    "liquidops": "^0.1.32",
     "lucide-react": "^0.474.0",
     "next": "14.2.15",
     "react": "^18",

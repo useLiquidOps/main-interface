@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { overlayVariants } from "@/components/DropDown/FramerMotion";
 import SearchDropDown from "./SearchDropDown";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import MoreDropdown from "./MoreDropdown/MoreDropdown";
 
 interface HeaderProps {
   currentToken?: string;
@@ -30,6 +31,15 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
   });
 
   const { data: supportedTokens = [] } = useSupportedTokens();
+
+  const moreMenuItems = [
+    {
+      label: "Developers",
+      href: "https://github.com/useLiquidOps/LiquidOps-JS?tab=readme-ov-file#liquidops-js",
+    },
+    { label: "Blog", href: "https://labs.liquidops.io/blog" },
+    { label: "Company", href: "https://labs.liquidops.io" },
+  ];
 
   const sortedTokens = [...supportedTokens].sort((a, b) =>
     a.name.localeCompare(b.name),
@@ -183,20 +193,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
             >
               <p>Faucet</p>
             </Link>
-            <Link
-              href="https://labs.liquidops.io"
-              target="_blank"
-              className={isLinkActive("/Company") ? styles.activeLink : ""}
-            >
-              <p>Company</p>
-            </Link>
-            <div className={styles.moreDropDown}>
-              <p>More</p>
-              <DropdownButton
-                isOpen={isDropdownOpen}
-                onToggle={() => setIsDropdownOpen(!isDropdownOpen)}
-              />
-            </div>
+            <MoreDropdown items={moreMenuItems} />
           </nav>
         </div>
         <Connect />

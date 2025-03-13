@@ -63,21 +63,6 @@
   font-weight: 500;
 }
 
-.moreDropDown {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  padding: 10px 15px;
-  border-radius: 9px;
-  transition: all 0.18s ease;
-  cursor: default;
-}
-
-.moreDropDown:hover {
-  background-color: var(--primary-ghost-white);
-}
-
 .favicon {
   margin-right: 7px;
   height: 32px;

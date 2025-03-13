@@ -12,7 +12,7 @@ const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
     <div className={styles.page}>
       <Banner />
       <Header mode="faucet" currentToken={ticker} />
-      <div className={styles.body}>
+      {/* <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <div className={styles.content}>
             <div className={styles.leftColumn}>
@@ -25,7 +25,7 @@ const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
 
           <div />
         </div>
-      </div>
+      </div> */}
       <Footer />
     </div>
   );

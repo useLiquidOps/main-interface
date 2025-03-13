@@ -45,8 +45,11 @@
   gap: 1.5rem;
 }
 
+.navLinks a:hover {
+  background-color: var(--primary-ghost-white);
+}
+
 .navLinks a {
-  color: black;
   text-decoration: none;
   font-weight: 500;
   padding: 10px 15px;
@@ -60,6 +63,21 @@
   font-weight: 500;
 }
 
+.moreDropDown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  border-radius: 9px;
+  transition: all 0.18s ease;
+  cursor: default;
+}
+
+.moreDropDown:hover {
+  background-color: var(--primary-ghost-white);
+}
+
 .favicon {
   margin-right: 7px;
   height: 32px;
@@ -67,10 +85,6 @@
 }
 
 .activeLink {
-  background-color: var(--primary-ghost-white);
-}
-
-.navLinks a:hover {
   background-color: var(--primary-ghost-white);
 }
 

@@ -190,6 +190,13 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
             >
               <p>Company</p>
             </Link>
+            <div className={styles.moreDropDown}>
+              <p>More</p>
+              <DropdownButton
+                isOpen={isDropdownOpen}
+                onToggle={() => setIsDropdownOpen(!isDropdownOpen)}
+              />
+            </div>
           </nav>
         </div>
         <Connect />

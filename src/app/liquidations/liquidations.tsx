@@ -18,6 +18,7 @@ import { Quantity } from "ao-tokens";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
 import Banner from "@/components/Banner/Banner";
+import Footer from "@/components/Footer/Footer";
 
 interface TokenInfo {
   ticker: string;
@@ -441,6 +442,7 @@ const LiquidationsContent = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      <Footer />
     </div>
   );
 };

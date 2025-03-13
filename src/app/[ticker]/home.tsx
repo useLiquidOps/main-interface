@@ -16,6 +16,7 @@ import {
 import Banner from "@/components/Banner/Banner";
 import { tokens } from "liquidops";
 import { redirect } from "next/navigation";
+import Footer from "@/components/Footer/Footer";
 
 const HomeContent = ({
   params,
@@ -73,6 +74,7 @@ const HomeContent = ({
           </motion.div>
         )}
       </AnimatePresence>
+      <Footer />
     </div>
   );
 };

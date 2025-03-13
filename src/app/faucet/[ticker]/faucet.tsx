@@ -4,6 +4,7 @@ import Header from "../../../components/Header/Header";
 import Market from "../../[ticker]/Market/Market";
 import MintTokens from "@/components/MintTokens/MintTokens";
 import Banner from "@/components/Banner/Banner";
+import Footer from "@/components/Footer/Footer";
 
 const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
   const ticker = params.ticker as string;
@@ -25,6 +26,7 @@ const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
           <div />
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

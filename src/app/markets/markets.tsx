@@ -6,6 +6,7 @@ import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import Banner from "@/components/Banner/Banner";
 import { MarketStats } from "./MarketStats/MarketStats";
 import { MarketRow } from "./MarketRow/MarketRow";
+import Footer from "@/components/Footer/Footer";
 
 interface Token {
   ticker: string;
@@ -31,6 +32,7 @@ const Markets: React.FC = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

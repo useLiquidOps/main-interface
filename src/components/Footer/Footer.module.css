@@ -1,0 +1,25 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  padding: 20px 22px;
+  width: 100%;
+  background-color: white;
+}
+
+.socials {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.socials > a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+  width: fit-content;
+}

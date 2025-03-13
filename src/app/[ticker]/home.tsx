@@ -29,7 +29,7 @@ const HomeContent = ({
   const tokenTickers = Object.keys(tokens);
 
   if (!tokenTickers.includes(ticker.toUpperCase())) {
-    redirect("/qAR");
+    redirect("/404");
   }
 
   return (

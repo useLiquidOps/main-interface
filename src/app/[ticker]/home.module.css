@@ -12,9 +12,9 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  flex-grow: 1;
   background-color: var(--background);
   overflow-y: auto;
+  min-height: calc(100vh - 150px);
 }
 
 .bodyContainer {

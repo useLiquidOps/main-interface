@@ -14,6 +14,9 @@ import {
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
 import Banner from "@/components/Banner/Banner";
+import { tokens } from "liquidops";
+import { redirect } from "next/navigation";
+import Footer from "@/components/Footer/Footer";
 
 const HomeContent = ({
   params,
@@ -22,6 +25,12 @@ const HomeContent = ({
 }) => {
   const { modalType, assetData, closeModal } = useModal();
   const ticker = params.ticker as string;
+
+  const tokenTickers = Object.keys(tokens);
+
+  if (!tokenTickers.includes(ticker.toUpperCase())) {
+    redirect("/404");
+  }
 
   return (
     <div className={styles.page}>
@@ -65,6 +74,7 @@ const HomeContent = ({
           </motion.div>
         )}
       </AnimatePresence>
+      <Footer />
     </div>
   );
 };

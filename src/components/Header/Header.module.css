@@ -2,8 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  height: auto;
-  min-height: 10vh;
+  height: 150px;
   padding: 2rem 3rem;
   box-sizing: border-box;
   width: 100%;
@@ -13,9 +12,10 @@
 
 .leftSection {
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: flex-start;
-  gap: 30px;
+  justify-content: space-between;
 }
 
 .titleAndDropdown {
@@ -45,8 +45,11 @@
   gap: 1.5rem;
 }
 
+.navLinks a:hover {
+  background-color: var(--primary-ghost-white);
+}
+
 .navLinks a {
-  color: black;
   text-decoration: none;
   font-weight: 500;
   padding: 10px 15px;
@@ -67,10 +70,6 @@
 }
 
 .activeLink {
-  background-color: var(--primary-ghost-white);
-}
-
-.navLinks a:hover {
   background-color: var(--primary-ghost-white);
 }
 

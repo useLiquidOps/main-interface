@@ -34,8 +34,8 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
 
   const moreMenuItems = [
     {
-      label: "Developers",
-      href: "https://github.com/useLiquidOps/LiquidOps-JS?tab=readme-ov-file#liquidops-js",
+      label: "Docs",
+      href: "https://docs.liquidops.io",
     },
     { label: "Blog", href: "https://labs.liquidops.io/blog" },
     { label: "Company", href: "https://labs.liquidops.io" },

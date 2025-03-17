@@ -5,12 +5,20 @@ import Market from "../../[ticker]/Market/Market";
 import MintTokens from "@/components/MintTokens/MintTokens";
 import Banner from "@/components/Banner/Banner";
 import Footer from "@/components/Footer/Footer";
+import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 
 const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
   const ticker = params.ticker as string;
   return (
     <div className={styles.page}>
-      <Banner />
+      <LoadingScreen
+        loadingState="loading"
+        action="lending"
+        tokenTicker="qAR"
+        amount="132"
+        txId="12121"
+      />
+      {/* <Banner />
       <Header mode="faucet" currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
@@ -26,7 +34,7 @@ const Faucet = ({ params }: { params: { ticker: string; tab: string } }) => {
           <div />
         </div>
       </div>
-      <Footer />
+      <Footer /> */}
     </div>
   );
 };

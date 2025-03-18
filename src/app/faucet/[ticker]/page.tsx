@@ -3,11 +3,17 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "LiquidOps | Faucet",
-  icons: {
-    icon: "/favicon.svg",
-  },
   description:
-    "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
+    "Claim testnet tokens on LiquidOps' testnet, built on Arweave's L2 AO.",
+  alternates: {
+    canonical: "https://liquidops.io/faucet",
+  },
+  openGraph: {
+    title: "LiquidOps | Faucet",
+    description:
+      "Claim testnet tokens on LiquidOps' testnet, built on Arweave's L2 AO.",
+    url: "https://liquidops.io/faucet",
+  },
 };
 
 const Page = ({ params }: any) => {

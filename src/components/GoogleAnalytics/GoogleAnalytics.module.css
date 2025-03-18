@@ -1,0 +1,59 @@
+.consentBanner {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 320px;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 24px;
+}
+
+.consentTitle {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.consentText {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.consentButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.consentButton {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  font-family: "DM Sans", sans-serif;
+}
+
+.acceptButton {
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+}
+
+.acceptButton:hover {
+  opacity: 0.87;
+}
+
+.declineButton {
+  background-color: white;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+.declineButton:hover {
+  opacity: 0.87;
+}

@@ -3,11 +3,17 @@ import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
   title: "LiquidOps | Markets",
-  icons: {
-    icon: "/favicon.svg",
-  },
   description:
-    "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
+    "Explore all available lending and borrowing markets on LiquidOps with real-time rates and liquidity information.",
+  alternates: {
+    canonical: "https://liquidops.io/markets",
+  },
+  openGraph: {
+    title: "LiquidOps | Markets",
+    description:
+      "Explore all available lending and borrowing markets on LiquidOps with real-time rates and liquidity information.",
+    url: "https://liquidops.io/markets",
+  },
 };
 
 // Dynamically import with SSR disabled, fix window error

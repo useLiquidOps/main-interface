@@ -6,7 +6,8 @@
     "dev": "bun run prettier && next dev",
     "build": "next build",
     "prettier": "prettier --write .",
-    "link": "bun link liquidops"
+    "link": "bun link liquidops",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@permaweb/aoconnect": "^0.0.77",
@@ -19,6 +20,7 @@
     "liquidops": "^0.1.32",
     "lucide-react": "^0.474.0",
     "next": "14.2.15",
+    "next-sitemap": "^4.2.3",
     "react": "^18",
     "react-dom": "^18",
     "react-google-recaptcha-v3": "^1.10.1",

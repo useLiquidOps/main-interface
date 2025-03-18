@@ -1,0 +1,74 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 500px;
+  background-color: white;
+  border-radius: 24px;
+  padding: 24px;
+  /* TODO */
+  border: 1px solid black;
+}
+
+.closeContainer {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.closeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: var(--primary-ghost-white);
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+}
+
+.statusContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loadingState {
+  color: var(--primary-ultramarine);
+  font-weight: 700;
+  font-size: 30px;
+  margin: 0;
+}
+
+.stateMessage {
+  color: var(--secondary-periwinkle);
+  font-weight: 500;
+  font-size: 15px;
+  margin: 0;
+  text-align: center;
+  width: 75%;
+}
+
+.actionContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.actionContainer p {
+  margin: 0;
+  color: var(--secondary-slate-blue);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.viewLink {
+  color: black;
+  font-size: 10px;
+}

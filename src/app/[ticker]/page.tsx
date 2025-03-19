@@ -1,5 +1,5 @@
-import Home from "./home";
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 export async function generateMetadata({
   params,
@@ -21,6 +21,11 @@ export async function generateMetadata({
     },
   };
 }
+
+// Dynamically import with SSR disabled, fix window error
+const Home = dynamic(() => import("./home"), {
+  ssr: false,
+});
 
 const Page = ({ params }: any) => {
   const { ticker, tab } = params;

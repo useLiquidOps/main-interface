@@ -12,42 +12,10 @@
   border: none;
   cursor: pointer;
   transition: all 0.18s ease;
-}
-
-.submitButton.pending {
-  background-color: var(--secondary-lavender);
-  color: black;
-}
-
-.idle {
   background-color: var(--primary-palatinate-blue);
   color: white;
 }
 
-.idle:hover {
+.submitButton:hover {
   opacity: 0.87;
-}
-
-.loading {
-  background-color: var(--secondary-lavender);
-  color: var(--primary-palatinate-blue);
-}
-
-.success {
-  background-color: var(--secondary-tea-green);
-  color: var(--submit-green);
-}
-
-.error {
-  background-color: var(--failed-red);
-  color: var(--failed-red-text);
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

@@ -181,14 +181,12 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
       <SubmitButton
         onSubmit={handleSubmit}
-        isLoading={mode === "withdraw" ? isUnlending : isRepaying}
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
           loadingScreenState.submitStatus === "loading"
         }
-        error={mode === "withdraw" ? unlendError : repayError}
-        status={loadingScreenState.submitStatus}
+        submitText={mode === "withdraw" ? "Withdraw" : "Repay"}
       />
 
       {/* Loading Screen Modal */}

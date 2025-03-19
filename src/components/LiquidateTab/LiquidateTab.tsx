@@ -243,14 +243,12 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
 
       <SubmitButton
         onSubmit={handleSubmit}
-        isLoading={isLiquidating}
         disabled={
           !fromInputValue ||
           parseFloat(fromInputValue.replace(/,/g, "")) <= 0 ||
           loadingScreenState.submitStatus === "loading"
         }
-        error={liquidationError}
-        status={loadingScreenState.submitStatus}
+        submitText="Liquidate"
       />
 
       {/* Loading Screen Modal */}

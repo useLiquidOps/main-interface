@@ -134,14 +134,12 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
       <SubmitButton
         onSubmit={handleSubmit}
-        isLoading={mode === "supply" ? isLending : isBorrowing}
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
           loadingScreenState.submitStatus === "loading"
         }
-        error={mode === "supply" ? lendError : borrowError}
-        status={loadingScreenState.submitStatus}
+        submitText={mode === "supply" ? "Deposit" : "Borrow"}
       />
 
       {/* Loading Screen Modal */}

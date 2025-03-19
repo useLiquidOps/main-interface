@@ -6,8 +6,8 @@
   background-color: white;
   border-radius: 24px;
   padding: 24px;
-  /* TODO */
-  border: 1px solid black;
+  z-index: 1001;
+  position: relative;
 }
 
 .closeContainer {
@@ -45,6 +45,14 @@
   margin: 0;
 }
 
+.signingContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
 .stateMessage {
   color: var(--secondary-periwinkle);
   font-weight: 500;
@@ -71,4 +79,17 @@
 .viewLink {
   color: black;
   font-size: 10px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

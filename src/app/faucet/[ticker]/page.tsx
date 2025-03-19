@@ -1,5 +1,5 @@
-import Faucet from "./faucet";
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
   title: "LiquidOps | Faucet",
@@ -15,6 +15,11 @@ export const metadata: Metadata = {
     url: "https://liquidops.io/faucet",
   },
 };
+
+// Dynamically import with SSR disabled, fix window error
+const Faucet = dynamic(() => import("./faucet"), {
+  ssr: false,
+});
 
 const Page = ({ params }: any) => {
   const { ticker, tab } = params;

@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./SubmitButton.module.css";
+import Spinner from "../Spinner/Spinner";
 
 interface SubmitButtonProps {
   onSubmit: () => void;
@@ -24,13 +25,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       case "loading":
         return (
           <>
-            <Image
-              src="/icons/loadingSubmit.svg"
-              alt="Loading"
-              width={12}
-              height={12}
-              className={styles.loadingIcon}
-            />
+            <Spinner size="12px" />
             <span>Loading</span>
           </>
         );
@@ -38,7 +33,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         return (
           <>
             <Image
-              src="/icons/loadingSubmit.svg"
+              src="/icons/activity/pending.svg"
               alt="Pending"
               width={12}
               height={12}
@@ -51,7 +46,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         return (
           <>
             <Image
-              src="/icons/submitted.svg"
+              src="/icons/activity/true.svg"
               alt="Success"
               width={13}
               height={13}
@@ -63,7 +58,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         return (
           <>
             <Image
-              src="/icons/failedSubmit.svg"
+              src="/icons/activity/false.svg"
               alt="Error"
               width={13}
               height={13}

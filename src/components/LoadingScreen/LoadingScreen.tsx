@@ -1,9 +1,12 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import styles from "./LoadingScreen.module.css";
 import Spinner from "../Spinner/Spinner";
+import { motion, AnimatePresence } from "framer-motion";
+import { overlayVariants, dropdownVariants } from "../DropDown/FramerMotion";
 
-type LoadingState = "pending" | "success" | "failed" | "loading";
+type LoadingState = "signing" | "pending" | "success" | "failed" | "loading";
 type Action =
   | "lending"
   | "unLending"
@@ -17,6 +20,8 @@ interface LoadingScreenProps {
   tokenTicker: string;
   amount: string;
   txId: string;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
@@ -25,52 +30,91 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
   tokenTicker,
   amount,
   txId,
+  isOpen,
+  onClose,
 }) => {
   return (
-    <div className={styles.screen}>
-      <div className={styles.closeContainer}>
-        <button className={styles.closeButton}>
-          <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
-        </button>
-      </div>
-      <div className={styles.statusContainer}>
-        {loadingState === "loading" ? (
-          <Spinner size="80px" />
-        ) : (
-          <Image
-            src={`/icons/activity/${formatStateImage(loadingState)}.svg`}
-            width={100}
-            height={100}
-            alt="Loading State"
-          />
-        )}
-        <p className={styles.loadingState}>{formatState(loadingState)}</p>
-        {loadingState !== "success" && (
-          <p className={styles.stateMessage}>
-            {formatStateMessage(loadingState)}
-          </p>
-        )}
-        <div className={styles.actionContainer}>
-          <p>{formatAction(action)}</p>
-          <p>{amount}</p>
-          <Image
-            src={`/tokens/${tokenTicker}.svg`}
-            height={15}
-            width={15}
-            alt={tokenTicker}
-          />
-        </div>
-        {loadingState !== "loading" && (
-          <a
-            className={styles.viewLink}
-            href={`https://www.ao.link/#/message/${txId}`}
-            target="_blank"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className={styles.overlay}
+          variants={overlayVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          onClick={onClose}
+        >
+          <motion.div
+            className={styles.screen}
+            variants={dropdownVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={(e) => e.stopPropagation()}
           >
-            View on ao.link
-          </a>
-        )}
-      </div>
-    </div>
+            <div className={styles.closeContainer}>
+              <button className={styles.closeButton} onClick={onClose}>
+                <Image
+                  src="/icons/close.svg"
+                  height={9}
+                  width={9}
+                  alt="Close"
+                />
+              </button>
+            </div>
+            <div className={styles.statusContainer}>
+              {loadingState === "loading" ? (
+                <Spinner size="80px" />
+              ) : (
+                <Image
+                  src={formatStateImage(loadingState)}
+                  width={100}
+                  height={100}
+                  alt="Loading State"
+                />
+              )}
+
+              {loadingState === "signing" ? (
+                <div className={styles.signingContainer}>
+                  <p className={styles.loadingState}>Signing</p>
+                  <Spinner size="20px" />
+                </div>
+              ) : (
+                <p className={styles.loadingState}>
+                  {formatState(loadingState)}
+                </p>
+              )}
+
+              {loadingState !== "success" && (
+                <p className={styles.stateMessage}>
+                  {formatStateMessage(loadingState)}
+                </p>
+              )}
+              <div className={styles.actionContainer}>
+                <p>{formatAction(action)}</p>
+                <p>{amount}</p>
+                <Image
+                  src={`/tokens/${tokenTicker}.svg`}
+                  height={15}
+                  width={15}
+                  alt={tokenTicker}
+                />
+              </div>
+              {loadingState !== "loading" && loadingState !== "signing" && (
+                <a
+                  className={styles.viewLink}
+                  href={`https://www.ao.link/#/message/${txId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View on ao.link
+                </a>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -89,6 +133,7 @@ const formatAction = (action: Action): string => {
 
 const formatState = (state: LoadingState): string => {
   const stateMap: Record<LoadingState, string> = {
+    signing: "Signing",
     pending: "Unconfirmed",
     success: "Success",
     failed: "Failed",
@@ -100,6 +145,7 @@ const formatState = (state: LoadingState): string => {
 type LoadingStateWithoutSuccess = Exclude<LoadingState, "success">;
 const formatStateMessage = (state: LoadingStateWithoutSuccess): string => {
   const stateMap: Record<LoadingStateWithoutSuccess, string> = {
+    signing: "Please sign the transaction in your wallet.",
     pending: "We couldn't confirm your transaction, please check later.",
     failed: "Transaction failed, please check status.",
     loading: "Please wait while we confirm your transaction.",
@@ -110,9 +156,10 @@ const formatStateMessage = (state: LoadingStateWithoutSuccess): string => {
 type LoadingStateWithoutLoading = Exclude<LoadingState, "loading">;
 const formatStateImage = (state: LoadingStateWithoutLoading): string => {
   const stateMap: Record<LoadingStateWithoutLoading, string> = {
-    pending: "pending",
-    success: "true",
-    failed: "false",
+    signing: "/partners/wander.svg",
+    pending: "/icons/activity/pending.svg",
+    success: "/icons/activity/true.svg",
+    failed: "/icons/activity/false.svg",
   };
   return stateMap[state];
 };

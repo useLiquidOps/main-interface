@@ -1,5 +1,5 @@
-import Borrow from "./Borrow";
 import { Metadata } from "next";
+import Borrow from "./Borrow";
 
 export const metadata: Metadata = {
   title: "LiquidOps | Borrow",

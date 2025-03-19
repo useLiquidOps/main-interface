@@ -1,5 +1,5 @@
-import Supply from "./Supply";
 import { Metadata } from "next";
+import Supply from "./Supply";
 
 export const metadata: Metadata = {
   title: "LiquidOps | Supply",

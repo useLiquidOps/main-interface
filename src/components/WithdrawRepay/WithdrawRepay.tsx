@@ -198,6 +198,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         txId={loadingScreenState.transactionId}
         isOpen={loadingScreenState.isOpen}
         onClose={loadingScreenActions.closeLoadingScreen}
+        error={loadingScreenState.error}
       />
     </div>
   );

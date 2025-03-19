@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { UseMutateFunction } from "@tanstack/react-query";
 
@@ -19,15 +20,18 @@ export const useLoadingScreen = (
   const [transactionAmount, setTransactionAmount] = useState("");
   const [transactionId, setTransactionId] = useState("");
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
+  const [error, setError] = useState<Error | null>(null);
 
   // Watch for mutation state changes
   useEffect(() => {
     if (isMutating) {
       setSubmitStatus("loading");
       setState("loading");
+      setError(null);
     } else if (mutationError) {
       setSubmitStatus("error");
       setState("failed");
+      setError(mutationError);
     }
   }, [isMutating, mutationError]);
 
@@ -45,6 +49,7 @@ export const useLoadingScreen = (
     setIsOpen(true);
     setState("loading");
     setSubmitStatus("loading");
+    setError(null);
 
     mutate({
       ...params,
@@ -68,7 +73,24 @@ export const useLoadingScreen = (
           if (data.transferID) {
             setTransactionId(data.transferID);
           }
+          // @ts-ignore, TODO: add SDK error message when ready
+          if (data.error) {
+            setError(
+              new Error(
+                // @ts-ignore
+                typeof data.error === "string"
+                  ? // @ts-ignore
+                    data.error
+                  : "Transaction failed, please check status in profile tab.",
+              ),
+            );
+          }
         }
+      },
+      onError: (err: Error) => {
+        setSubmitStatus("error");
+        setState("failed");
+        setError(err);
       },
     });
   };
@@ -84,6 +106,7 @@ export const useLoadingScreen = (
       transactionAmount,
       transactionId,
       submitStatus,
+      error,
     },
     actions: {
       executeTransaction,

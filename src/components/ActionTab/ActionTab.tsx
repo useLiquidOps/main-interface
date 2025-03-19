@@ -151,6 +151,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         txId={loadingScreenState.transactionId}
         isOpen={loadingScreenState.isOpen}
         onClose={loadingScreenActions.closeLoadingScreen}
+        error={loadingScreenState.error}
       />
     </div>
   );

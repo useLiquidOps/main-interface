@@ -22,6 +22,7 @@ interface LoadingScreenProps {
   txId: string;
   isOpen: boolean;
   onClose: () => void;
+  error?: Error | null;
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
@@ -32,6 +33,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
   txId,
   isOpen,
   onClose,
+  error,
 }) => {
   return (
     <AnimatePresence>
@@ -85,11 +87,16 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                 </p>
               )}
 
-              {loadingState !== "success" && (
-                <p className={styles.stateMessage}>
-                  {formatStateMessage(loadingState)}
-                </p>
+              {loadingState === "failed" && error?.message ? (
+                <p className={styles.stateMessage}>{error.message}</p>
+              ) : (
+                loadingState !== "success" && (
+                  <p className={styles.stateMessage}>
+                    {formatStateMessage(loadingState)}
+                  </p>
+                )
               )}
+
               <div className={styles.actionContainer}>
                 <p>{formatAction(action)}</p>
                 <p>{amount}</p>

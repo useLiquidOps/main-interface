@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import styles from "./WithdrawRepay.module.css";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import PercentagePicker from "../PercentagePicker/PercentagePicker";
 import InputBox from "../InputBox/InputBox";
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import Image from "next/image";
 import { formatMaxAmount } from "../utils/utils";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
@@ -13,6 +14,7 @@ import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/data/useGetPosition";
+import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -40,7 +42,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { unlend, isUnlending, unlendError } = useLend();
   const { repay, isRepaying, repayError } = useBorrow();
 
-  // TODO: fill in with real data
   const networkFee = 0;
   const interestOwed = 0.01;
   const utilizationRate = 0.75;
@@ -50,19 +51,20 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
     null,
   );
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "loading" | "success" | "error" | "pending"
-  >("idle");
 
-  // Reset submit status after success or error
-  useEffect(() => {
-    if (submitStatus === "success" || submitStatus === "error") {
-      const timer = setTimeout(() => {
-        setSubmitStatus("idle");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [submitStatus]);
+  // Reset input callback
+  const resetInput = useCallback(() => {
+    setInputValue("");
+    setSelectedPercentage(null);
+  }, []);
+
+  // Initialize loading screen hook
+  const { state: loadingScreenState, actions: loadingScreenActions } =
+    useLoadingScreen(
+      mode === "withdraw" ? isUnlending : isRepaying,
+      mode === "withdraw" ? unlendError : repayError,
+      resetInput,
+    );
 
   const calculateMaxAmount = () => {
     if (isLoadingCurrentBalance || !currentBalance)
@@ -118,8 +120,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const handleSubmit = () => {
     if (!inputValue) return;
 
-    setSubmitStatus("loading");
-
     const params = {
       token: ticker.toUpperCase(),
       quantity: new Quantity(0n, currentBalance?.denomination).fromString(
@@ -127,36 +127,10 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
       ).raw,
     };
 
-    const callbacks = {
-      onSuccess: (result: any) => {
-        console.log(`LiquidOps ${mode} Response:`, result);
-
-        if (result.status === "pending") {
-          setSubmitStatus("pending");
-          setInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        } else if (result.status === true) {
-          setSubmitStatus("success");
-          setInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        } else {
-          setSubmitStatus("error");
-          setInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        }
-      },
-      onError: (error: any) => {
-        console.error(`LiquidOps ${mode} Error:`, error);
-        setSubmitStatus("error");
-        setInputValue("");
-        setTimeout(() => setSubmitStatus("idle"), 2000);
-      },
-    };
-
     if (mode === "withdraw") {
-      unlend(params, callbacks);
+      loadingScreenActions.executeTransaction(inputValue, params, unlend);
     } else {
-      repay(params, callbacks);
+      loadingScreenActions.executeTransaction(inputValue, params, repay);
     }
   };
 
@@ -208,9 +182,24 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
       <SubmitButton
         onSubmit={handleSubmit}
         isLoading={mode === "withdraw" ? isUnlending : isRepaying}
-        disabled={!inputValue || parseFloat(inputValue) <= 0}
+        disabled={
+          !inputValue ||
+          parseFloat(inputValue) <= 0 ||
+          loadingScreenState.submitStatus === "loading"
+        }
         error={mode === "withdraw" ? unlendError : repayError}
-        status={submitStatus}
+        status={loadingScreenState.submitStatus}
+      />
+
+      {/* Loading Screen Modal */}
+      <LoadingScreen
+        loadingState={loadingScreenState.state}
+        action={mode === "withdraw" ? "unLending" : "repaying"}
+        tokenTicker={ticker}
+        amount={loadingScreenState.transactionAmount}
+        txId={loadingScreenState.transactionId}
+        isOpen={loadingScreenState.isOpen}
+        onClose={loadingScreenActions.closeLoadingScreen}
       />
     </div>
   );

@@ -100,16 +100,18 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                   alt={tokenTicker}
                 />
               </div>
-              {loadingState !== "loading" && loadingState !== "signing" && (
-                <a
-                  className={styles.viewLink}
-                  href={`https://www.ao.link/#/message/${txId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View on ao.link
-                </a>
-              )}
+              {loadingState !== "loading" &&
+                loadingState !== "signing" &&
+                loadingState !== "failed" && (
+                  <a
+                    className={styles.viewLink}
+                    href={`https://www.ao.link/#/message/${txId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View on ao.link
+                  </a>
+                )}
             </div>
           </motion.div>
         </motion.div>
@@ -147,7 +149,7 @@ const formatStateMessage = (state: LoadingStateWithoutSuccess): string => {
   const stateMap: Record<LoadingStateWithoutSuccess, string> = {
     signing: "Please sign the transaction in your wallet.",
     pending: "We couldn't confirm your transaction, please check later.",
-    failed: "Transaction failed, please check status.",
+    failed: "Transaction failed, please check status in profile tab.",
     loading: "Please wait while we confirm your transaction.",
   };
   return stateMap[state];

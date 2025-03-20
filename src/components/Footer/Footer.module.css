@@ -8,6 +8,26 @@
   background-color: white;
 }
 
+.left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.feedback {
+  font-size: 12px;
+  margin: 0;
+  color: var(--secondary-slate-blue);
+}
+
 .version {
   display: flex;
   justify-content: center;

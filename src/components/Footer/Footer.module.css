@@ -12,14 +12,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
 }
 
 .right {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
+}
+
+.manageAnalytics {
+  font-size: 12px;
+  margin: 0;
+  color: var(--secondary-slate-blue);
 }
 
 .feedback {
@@ -32,7 +38,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
 }
 
 .version p {

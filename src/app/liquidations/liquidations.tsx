@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import styles from "./LiquidateTab.module.css";
+import styles from '../../components/LiquidateTab/LiquidateTab.module.css'
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import Image from "next/image";
 import InputBox from "@/components/InputBox/InputBox";

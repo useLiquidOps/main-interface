@@ -18,9 +18,39 @@
   z-index: 2;
 }
 
+/* Add animation for the indicator */
+@keyframes showWithdrawButton {
+  0% {
+    transform: translateX(0);
+    background: white;
+  }
+  30% {
+    transform: translateX(-63px);
+    background: white;
+  }
+  70% {
+    transform: translateX(-63px);
+    background: white;
+  }
+  100% {
+    transform: translateX(0);
+    background: white;
+  }
+}
+
+.assetRowWrapper.showIndicator .assetRow {
+  animation: showWithdrawButton 1s ease-in-out;
+}
+
+/* Hover styles */
 .assetRowWrapper:hover .assetRow {
   transform: translateX(-63px);
   background: var(--primary-ghost-white);
+}
+
+/* Animation takes precedence while active */
+.assetRowWrapper.showIndicator .assetRow {
+  animation: showWithdrawButton 1s ease-in-out;
 }
 
 .assetInfo {

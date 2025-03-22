@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./AssetDisplay.module.css";
 import Image from "next/image";
 import { useModal } from "../PopUp/PopUp";
@@ -12,8 +12,83 @@ interface AssetDisplayProps {
 
 const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const [showAll, setShowAll] = useState(false);
+  const [animateOnScroll, setAnimateOnScroll] = useState(false);
   const { openModal } = useModal();
   const { data: supportedTokens = [] } = useSupportedTokens();
+  const componentRef = useRef<HTMLDivElement>(null);
+  const animationShownRef = useRef(false);
+
+  useEffect(() => {
+    // Check localStorage to see if hint has been shown before
+    try {
+      const hintShown = localStorage.getItem("site_hints");
+      if (hintShown === "true") {
+        // Already shown, don't animate
+        animationShownRef.current = true;
+      }
+    } catch (error) {
+      // If localStorage is not available, we'll still show the animation
+      console.error("Error accessing localStorage:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (animationShownRef.current) {
+      // Skip animation if already shown
+      return;
+    }
+
+    // Create an IntersectionObserver to detect when the component is visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (
+          entry.isIntersecting &&
+          !animationShownRef.current &&
+          supportedTokens.length > 0
+        ) {
+          // Element is in view, trigger animation
+          setAnimateOnScroll(true);
+
+          // Mark as shown to prevent future animations
+          animationShownRef.current = true;
+
+          // Save to localStorage that we've shown the hint
+          try {
+            localStorage.setItem("site_hints", "true");
+          } catch (error) {
+            console.error("Error setting localStorage:", error);
+          }
+
+          // Reset animation after it completes
+          setTimeout(() => {
+            setAnimateOnScroll(false);
+          }, 1000);
+
+          // Stop observing once animation has triggered
+          if (componentRef.current) {
+            observer.unobserve(componentRef.current);
+          }
+        }
+      },
+      {
+        // Trigger when the element is 50% visible
+        threshold: 0.5,
+        // Small negative margin to delay the trigger until more of component is visible
+        rootMargin: "-100px 0px",
+      },
+    );
+
+    if (componentRef.current) {
+      observer.observe(componentRef.current);
+    }
+
+    return () => {
+      if (componentRef.current) {
+        observer.unobserve(componentRef.current);
+      }
+    };
+  }, [supportedTokens]);
 
   const displayText =
     mode === "lend"
@@ -49,7 +124,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
     : supportedTokens.slice(0, 4);
 
   return (
-    <div className={containerClass}>
+    <div className={containerClass} ref={componentRef}>
       <div className={styles.header}>
         <h2 className={styles.title}>{displayText.title}</h2>
         {supportedTokens.length > 4 &&
@@ -81,13 +156,14 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
         </div>
       ) : (
         <div className={styles.assetsList}>
-          {displayedAssets.map((asset) => (
+          {displayedAssets.map((asset, index) => (
             <AssetRow
               key={`${mode}-${asset.ticker}`}
               asset={asset}
               mode={mode}
               displayText={displayText}
               onClick={handleActionClick}
+              showIndicator={index === 0 && animateOnScroll}
             />
           ))}
         </div>

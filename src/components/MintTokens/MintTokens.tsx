@@ -59,10 +59,7 @@ const MintTokensContent: React.FC<MintTokensProps> = ({ ticker }) => {
 
       <SubmitButton
         onSubmit={handleSubmit}
-        isLoading={status === "pending"}
         disabled={!walletAddress}
-        error={error}
-        status={status}
         submitText="Claim"
       />
     </div>

@@ -84,10 +84,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <GoogleAnalytics />
       <ModalProvider>
         <body className={dmSans.className} style={{ margin: 0, padding: 0 }}>
           <Providers>{children}</Providers>
+          <GoogleAnalytics />
         </body>
       </ModalProvider>
     </html>

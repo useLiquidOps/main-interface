@@ -1,458 +1,269 @@
-"use client";
-import styles from "./liquidations.module.css";
-import Header from "../../components/Header/Header";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import styles from "./LiquidateTab.module.css";
+import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import Image from "next/image";
-import { useState, useMemo, useEffect } from "react";
-import { liquidationsData } from "../data";
-import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
-import DropdownButton from "@/components/DropDown/DropDown";
-import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
-import LiquidateTab from "../../components/LiquidateTab/LiquidateTab";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  overlayVariants,
-  dropdownVariants,
-} from "@/components/DropDown/FramerMotion";
-import { formatTMB } from "@/components/utils/utils";
+import InputBox from "@/components/InputBox/InputBox";
+import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
+import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
+import { useTokenPrice } from "@/hooks/data/useTokenPrice";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
+import { useLiquidation } from "@/hooks/actions/useLiquidation";
 import { Quantity } from "ao-tokens";
-import { usePrices } from "@/hooks/data/useTokenPrice";
-import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
-import Banner from "@/components/Banner/Banner";
-import Footer from "@/components/Footer/Footer";
+import { tokenInput } from "liquidops";
+import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 
-interface TokenInfo {
-  ticker: string;
+interface TokenData {
+  name: string;
+  symbol: string;
   icon: string;
+  available: Quantity;
+  price: Quantity;
 }
 
-const calculateLiquidationStats = (liquidations: any[]) => {
-  return liquidations.reduce(
-    (acc, liquidation) => {
-      return {
-        availableLiquidations: Quantity.__add(
-          acc.availableLiquidations,
-          liquidation.toToken.available,
-        ),
-        totalProfit: Quantity.__add(
-          acc.totalProfit,
-          liquidation.toToken.available,
-        ),
-        markets: new Set([
-          ...acc.markets,
-          liquidation.fromToken.symbol,
-          liquidation.toToken.symbol,
-        ]),
-      };
-    },
-    {
-      availableLiquidations: new Quantity(0n, 12n),
-      totalProfit: new Quantity(0n, 12n),
-      markets: new Set<string>(),
-    },
+interface LiquidateTabProps {
+  onClose: () => void;
+  fromToken: TokenData;
+  toToken: TokenData;
+  offMarketPrice: number;
+  conversionRate: number | Quantity;
+  targetUserAddress: string[];
+}
+
+const LiquidateTab: React.FC<LiquidateTabProps> = ({
+  onClose,
+  fromToken,
+  toToken,
+  offMarketPrice,
+  conversionRate,
+  targetUserAddress,
+}) => {
+  // Input states for the first (from) token
+  const [fromInputValue, setFromInputValue] = useState<string>("");
+  const [isFromFocused, setIsFromFocused] = useState<boolean>(false);
+  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
+    null,
   );
-};
 
-const LiquidationsContent = () => {
-  const [mounted, setMounted] = useState(false);
-  const [showReceiveDropdown, setShowReceiveDropdown] = useState(false);
-  const [showSendDropdown, setShowSendDropdown] = useState(false);
-  const [selectedReceiveToken, setSelectedReceiveToken] = useState({
-    ticker: "All tokens",
-    icon: "/icons/list.svg",
-  });
-  const [selectedSendToken, setSelectedSendToken] = useState({
-    ticker: "All tokens",
-    icon: "/icons/list.svg",
-  });
-  const { modalType, assetData, openModal, closeModal } = useModal();
-  const { data: supportedTokens = [] } = useSupportedTokens();
-  const { data: prices } = usePrices();
+  // Input states for the second (to) token
+  const [toInputValue, setToInputValue] = useState<string>("");
+  const [isToFocused, setIsToFocused] = useState<boolean>(false);
 
-  const getTokenPrice = (symbol: string) => {
-    const geckoId = tickerToGeckoMap[symbol.toUpperCase()];
-    return new Quantity(0n, 12n).fromNumber(prices?.[geckoId]?.usd ?? 0);
-  };
+  const { liquidate, isLiquidating, liquidationError } = useLiquidation();
 
-  useEffect(() => {
-    setMounted(true);
+  const { tokenAddress } = tokenInput(fromToken.symbol.toUpperCase());
+
+  const { data: walletBalance, isLoading: isLoadingBalance } =
+    useUserBalance(tokenAddress);
+
+  const { price: fromTokenPrice } = useTokenPrice(
+    fromToken.symbol.toUpperCase(),
+  );
+  const { price: toTokenPrice } = useTokenPrice(toToken.symbol.toUpperCase());
+
+  const fromDenomination = useMemo(
+    () => fromToken?.available?.denomination || 12n,
+    [fromToken],
+  );
+
+  // Reset input callback
+  const resetInput = useCallback(() => {
+    setFromInputValue("");
+    setSelectedPercentage(null);
   }, []);
 
-  const handleLiquidate = (liquidation: any) => {
-    const fromPrice = getTokenPrice(liquidation.fromToken.symbol);
-    const toPrice = getTokenPrice(liquidation.toToken.symbol);
+  // Initialize loading screen hook
+  const { state: loadingScreenState, actions: loadingScreenActions } =
+    useLoadingScreen(isLiquidating, liquidationError, resetInput);
 
-    const enhancedLiquidation = {
-      ...liquidation,
-      fromToken: {
-        ...liquidation.fromToken,
-        price: fromPrice,
-      },
-      toToken: {
-        ...liquidation.toToken,
-        price: toPrice,
-      },
-      conversionRate: fromPrice.toNumber() / toPrice.toNumber(),
+  useEffect(() => {
+    if (fromInputValue === "") {
+      setToInputValue("");
+      return;
+    }
+
+    if (!isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) {
+      const inputQuantity = new Quantity(0n, fromDenomination).fromString(
+        fromInputValue,
+      );
+      const rate =
+        typeof conversionRate === "number"
+          ? new Quantity(0n, fromDenomination).fromNumber(conversionRate)
+          : conversionRate;
+
+      const convertedAmount = Quantity.__mul(inputQuantity, rate);
+
+      setToInputValue(
+        convertedAmount.toLocaleString("en-US", {
+          maximumFractionDigits: 6,
+          minimumFractionDigits: 2,
+        }),
+      );
+    }
+  }, [fromInputValue, conversionRate, fromDenomination]);
+
+  const handleFromMaxClick = () => {
+    if (!walletBalance) return;
+
+    setFromInputValue(
+      walletBalance.toLocaleString("en-US", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }),
+    );
+    setSelectedPercentage(100);
+  };
+
+  const handlePercentageClick = (percentage: number) => {
+    const amount = Quantity.__div(
+      Quantity.__mul(
+        fromToken.available,
+        new Quantity(0n, fromDenomination).fromNumber(percentage),
+      ),
+      new Quantity(0n, fromDenomination).fromNumber(100),
+    );
+    setFromInputValue(
+      amount.toLocaleString("en-US", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }),
+    );
+    setSelectedPercentage(percentage);
+  };
+
+  const getCurrentPercentage = () => {
+    if (
+      !fromInputValue ||
+      Quantity.eq(fromToken.available, new Quantity(0n, fromDenomination))
+    )
+      return 0;
+
+    if (isNaN(Number(fromInputValue.replace(/,/g, "")))) return 0;
+
+    const percentage = Quantity.__div(
+      Quantity.__mul(
+        new Quantity(0n, fromDenomination).fromString(fromInputValue),
+        new Quantity(0n, fromDenomination).fromNumber(100),
+      ),
+      fromToken.available,
+    ).toNumber();
+
+    return Math.min(100, Math.max(0, percentage));
+  };
+
+  const handleSubmit = () => {
+    if (!fromInputValue || !targetUserAddress.length) return;
+    if (isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) return;
+
+    const params = {
+      token: fromToken.symbol.toUpperCase(),
+      rewardToken: toToken.symbol.toUpperCase(),
+      targetUserAddress: targetUserAddress[0],
+      quantity: new Quantity(0n, fromDenomination).fromString(fromInputValue)
+        .raw,
     };
-    openModal("liquidate", enhancedLiquidation);
+
+    loadingScreenActions.executeTransaction(fromInputValue, params, liquidate);
   };
-
-  const receiveTokens = useMemo(
-    () => [
-      { ticker: "All tokens", icon: "/icons/list.svg" },
-      ...supportedTokens,
-    ],
-    [supportedTokens],
-  );
-
-  const sendTokens = useMemo(
-    () => [
-      { ticker: "All tokens", icon: "/icons/list.svg" },
-      ...supportedTokens,
-    ],
-    [supportedTokens],
-  );
-
-  const filteredLiquidations = useMemo(() => {
-    return liquidationsData.filter((liquidation) => {
-      const receiveMatches =
-        selectedReceiveToken.ticker === "All tokens" ||
-        liquidation.toToken.symbol === selectedReceiveToken.ticker;
-      const sendMatches =
-        selectedSendToken.ticker === "All tokens" ||
-        liquidation.fromToken.symbol === selectedSendToken.ticker;
-      return receiveMatches && sendMatches;
-    });
-  }, [selectedReceiveToken.ticker, selectedSendToken.ticker, liquidationsData]);
-
-  const stats = useMemo(
-    () => calculateLiquidationStats(filteredLiquidations),
-    [filteredLiquidations],
-  );
-
-  const toggleReceiveDropdown = () => {
-    setShowReceiveDropdown(!showReceiveDropdown);
-    setShowSendDropdown(false);
-  };
-
-  const toggleSendDropdown = () => {
-    setShowSendDropdown(!showSendDropdown);
-    setShowReceiveDropdown(false);
-  };
-
-  if (!mounted) return null;
 
   return (
-    <div className={styles.page}>
-      <AnimatePresence>
-        {(showReceiveDropdown || showSendDropdown) && (
-          <motion.div
-            className={styles.modalOverlay}
-            variants={overlayVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            onClick={() => {
-              setShowReceiveDropdown(false);
-              setShowSendDropdown(false);
-            }}
-          />
-        )}
-      </AnimatePresence>
-      <Banner />
-      <Header />
-      <div className={styles.body}>
-        <div className={styles.bodyContainer}>
-          <div className={styles.liquidationStats}>
-            <div className={styles.liquidationStat}>
-              <p className={styles.liquidationStatValue}>
-                ${formatTMB(stats.availableLiquidations)}
-              </p>
-              <p className={styles.liquidationStatTitle}>
-                Available liquidations
-              </p>
-            </div>
-            <div className={styles.liquidationStat}>
-              <p className={styles.liquidationStatValue}>
-                ${formatTMB(stats.totalProfit)}
-              </p>
-              <p className={styles.liquidationStatTitle}>Total profit</p>
-            </div>
-            <div className={styles.liquidationStat}>
-              <p className={styles.liquidationStatValue}>
-                {stats.markets.size}
-              </p>
-              <p className={styles.liquidationStatTitle}>Markets</p>
-            </div>
-          </div>
-          <div className={styles.filterContainer}>
-            <div className={styles.filterGroup}>
-              <span className={styles.filterLabel}>Send</span>
-              <div
-                className={styles.dropdownContainer}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleSendDropdown();
-                }}
-              >
-                <button className={styles.filterButton}>
-                  <Image
-                    src={selectedSendToken.icon}
-                    alt={selectedSendToken.ticker}
-                    width={16}
-                    height={16}
-                  />
-                  <span>{selectedSendToken.ticker}</span>
-                  <DropdownButton
-                    isOpen={showSendDropdown}
-                    onToggle={toggleSendDropdown}
-                  />
-                </button>
-                <AnimatePresence>
-                  {showSendDropdown && (
-                    <motion.div
-                      className={styles.dropdown}
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      {sendTokens.map((token) => (
-                        <div
-                          key={token.ticker}
-                          className={styles.dropdownItem}
-                          onClick={() => {
-                            setSelectedSendToken(token);
-                            setShowSendDropdown(false);
-                          }}
-                        >
-                          <Image
-                            src={token.icon}
-                            alt={token.ticker}
-                            width={16}
-                            height={16}
-                          />
-                          <span>{token.ticker}</span>
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-            <div className={styles.filterGroup}>
-              <span className={styles.filterLabel}>Receive</span>
-              <div
-                className={styles.dropdownContainer}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleReceiveDropdown();
-                }}
-              >
-                <button className={styles.filterButton}>
-                  <Image
-                    src={selectedReceiveToken.icon}
-                    alt={selectedReceiveToken.ticker}
-                    width={16}
-                    height={16}
-                  />
-                  <span>{selectedReceiveToken.ticker}</span>
-                  <DropdownButton
-                    isOpen={showReceiveDropdown}
-                    onToggle={toggleReceiveDropdown}
-                  />
-                </button>
-                <AnimatePresence>
-                  {showReceiveDropdown && (
-                    <motion.div
-                      className={styles.dropdown}
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      {receiveTokens.map((token) => (
-                        <div
-                          key={token.ticker}
-                          className={styles.dropdownItem}
-                          onClick={() => {
-                            setSelectedReceiveToken(token);
-                            setShowReceiveDropdown(false);
-                          }}
-                        >
-                          <Image
-                            src={token.icon}
-                            alt={token.ticker}
-                            width={16}
-                            height={16}
-                          />
-                          <span>{token.ticker}</span>
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.liquidationsList}>
-            {filteredLiquidations.length > 0 ? (
-              filteredLiquidations.map((liquidation, index) => (
-                <div key={index} className={styles.liquidationRowWrapper}>
-                  <div
-                    className={styles.liquidationRow}
-                    onClick={() => handleLiquidate(liquidation)}
-                  >
-                    <div className={styles.tokenInfo}>
-                      <div className={styles.iconWrapper}>
-                        <Image
-                          src={liquidation.fromToken.icon}
-                          alt={liquidation.fromToken.name}
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className={styles.nameSymbol}>
-                        <h2 className={styles.name}>
-                          {liquidation.fromToken.name}
-                        </h2>
-                        <p className={styles.symbol}>
-                          {liquidation.fromToken.symbol}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className={styles.arrowContainer}>
-                      <Image
-                        src="/icons/arrow-right.svg"
-                        alt="arrow"
-                        width={20}
-                        height={20}
-                      />
-                    </div>
-
-                    <div className={styles.tokenInfo}>
-                      <div className={styles.iconWrapper}>
-                        <Image
-                          src={liquidation.toToken.icon}
-                          alt={liquidation.toToken.name}
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className={styles.nameSymbol}>
-                        <h2 className={styles.name}>
-                          {liquidation.toToken.name}
-                        </h2>
-                        <p className={styles.symbol}>
-                          {liquidation.toToken.symbol}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className={styles.metricBox}>
-                      <div className={styles.metricValue}>
-                        <p style={{ paddingRight: "2px", margin: "0px" }}>
-                          {formatTMB(liquidation.toToken.available)}
-                        </p>
-                        <p style={{ paddingLeft: "2px", margin: "0px" }}>
-                          {liquidation.toToken.symbol}
-                        </p>
-                      </div>
-                      <p className={styles.metricLabel}>Profit</p>
-                    </div>
-
-                    <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>
-                        <p className={styles.metricValue}>
-                          <span style={{ paddingRight: "2px", margin: "0px" }}>
-                            {formatTMB(liquidation.toToken.available)}
-                          </span>
-                          <span style={{ paddingLeft: "2px", margin: "0px" }}>
-                            {liquidation.toToken.symbol}
-                          </span>
-                        </p>
-                      </p>
-                      <p className={styles.metricLabel}>Available</p>
-                    </div>
-
-                    <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>
-                        $
-                        {getTokenPrice(
-                          liquidation.fromToken.symbol,
-                        ).toLocaleString("en-US", {
-                          maximumFractionDigits: 2,
-                        })}
-                      </p>
-                      <p className={styles.metricLabel}>Price</p>
-                    </div>
-                  </div>
-                  <button
-                    className={styles.liquidateButton}
-                    onClick={() => handleLiquidate(liquidation)}
-                  >
-                    <Image
-                      src="/icons/liquidate.svg"
-                      alt="Liquidate"
-                      width={20}
-                      height={20}
-                      className={styles.liquidateIcon}
-                    />
-                    <span>Liquidate</span>
-                  </button>
-                </div>
-              ))
-            ) : (
-              <div className={styles.noLiquidations}>
-                <p>No liquidations found</p>
-              </div>
-            )}
-          </div>
-        </div>
+    <div className={styles.liquidateTab}>
+      <div className={styles.titleContainer}>
+        <p className={styles.title}>
+          Liquidate {toToken.symbol}/{fromToken.symbol}
+        </p>
+        <button className={styles.close} onClick={onClose}>
+          <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
+        </button>
       </div>
 
-      <AnimatePresence>
-        {modalType === "liquidate" && assetData && (
-          <motion.div
-            className={styles.modalOverlay}
-            variants={overlayVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            onClick={closeModal}
-          >
-            <motion.div
-              className={styles.modalContent}
-              variants={dropdownVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <LiquidateTab
-                onClose={closeModal}
-                fromToken={assetData.fromToken}
-                toToken={assetData.toToken}
-                offMarketPrice={assetData.offMarketPrice}
-                conversionRate={assetData.conversionRate}
-                targetUserAddress={[""]}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <Footer />
+      <InputBox
+        inputValue={fromInputValue}
+        setInputValue={setFromInputValue}
+        isFocused={isFromFocused}
+        setIsFocused={setIsFromFocused}
+        ticker={fromToken.symbol}
+        tokenPrice={fromTokenPrice}
+        walletBalance={
+          isLoadingBalance || !walletBalance
+            ? new Quantity(0n, 12n)
+            : walletBalance
+        }
+        onMaxClick={handleFromMaxClick}
+        denomination={walletBalance?.denomination || 12n}
+      />
+
+      <div className={styles.arrowContainer}>
+        <Image
+          src="/icons/arrow-down.svg"
+          height={20}
+          width={20}
+          alt="Arrow"
+          className={styles.arrow}
+        />
+      </div>
+
+      <InputBox
+        inputValue={toInputValue}
+        setInputValue={setToInputValue}
+        isFocused={isToFocused}
+        setIsFocused={setIsToFocused}
+        ticker={toToken.symbol}
+        tokenPrice={toTokenPrice}
+        walletBalance={new Quantity(0n, 12n)}
+        onMaxClick={() => {}}
+        disabled={true}
+        liquidationMode={true}
+        liquidationDiscount={offMarketPrice}
+        denomination={walletBalance?.denomination || 12n}
+      />
+
+      <PercentagePicker
+        mode="withdraw"
+        selectedPercentage={selectedPercentage}
+        currentPercentage={getCurrentPercentage()}
+        onPercentageClick={handlePercentageClick}
+        walletBalance={
+          isLoadingBalance || !walletBalance
+            ? new Quantity(0n, 12n)
+            : walletBalance
+        }
+      />
+
+      <div className={styles.offMarketPriceContiner}>
+        <Image
+          src="/icons/percentIcon.svg"
+          height={16}
+          width={16}
+          alt="percentIcon"
+        />
+        <p className={styles.offMarketPriceText}>
+          {offMarketPrice}% off market price
+        </p>
+      </div>
+
+      <SubmitButton
+        onSubmit={handleSubmit}
+        disabled={
+          !fromInputValue ||
+          parseFloat(fromInputValue.replace(/,/g, "")) <= 0 ||
+          loadingScreenState.submitStatus === "loading"
+        }
+        submitText="Liquidate"
+      />
+
+      {/* Loading Screen Modal */}
+      <LoadingScreen
+        loadingState={loadingScreenState.state}
+        action="liquidating"
+        tokenTicker={fromToken.symbol}
+        amount={loadingScreenState.transactionAmount}
+        txId={loadingScreenState.transactionId}
+        isOpen={loadingScreenState.isOpen}
+        onClose={loadingScreenActions.closeLoadingScreen}
+        error={loadingScreenState.error}
+      />
     </div>
   );
 };
 
-const Liquidations = () => {
-  return (
-    <ModalProvider>
-      <LiquidationsContent />
-    </ModalProvider>
-  );
-};
-
-export default Liquidations;
+export default LiquidateTab;

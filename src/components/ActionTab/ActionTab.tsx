@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import InputBox from "../InputBox/InputBox";
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import styles from "./ActionTab.module.css";
-import { formatMaxAmount } from "../utils/utils";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
@@ -12,6 +12,7 @@ import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
+import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
 
 interface ActionTabProps {
   ticker: string;
@@ -34,19 +35,19 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "loading" | "success" | "error" | "pending"
-  >("idle");
 
-  // Reset submit status after success or error
-  useEffect(() => {
-    if (submitStatus === "success" || submitStatus === "error") {
-      const timer = setTimeout(() => {
-        setSubmitStatus("idle");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [submitStatus]);
+  // Reset input callback
+  const resetInput = useCallback(() => {
+    setInputValue("");
+  }, []);
+
+  // Initialize loading screen hook
+  const { state: loadingScreenState, actions: loadingScreenActions } =
+    useLoadingScreen(
+      mode === "supply" ? isLending : isBorrowing,
+      mode === "supply" ? lendError : borrowError,
+      resetInput,
+    );
 
   const calculateMaxAmount = () => {
     if (isLoadingBalance || !walletBalance) return new Quantity(0n, 12n);
@@ -70,8 +71,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   const handleSubmit = () => {
     if (!inputValue || !walletBalance) return;
 
-    setSubmitStatus("loading");
-
+    // Create params for the transaction
     const params = {
       token: ticker.toUpperCase(),
       quantity: new Quantity(0n, walletBalance.denomination).fromString(
@@ -79,36 +79,11 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
       ).raw,
     };
 
-    const callbacks = {
-      onSuccess: (result: any) => {
-        console.log(`LiquidOps ${mode} Response:`, result);
-
-        if (result.status === "pending") {
-          setSubmitStatus("pending");
-          setInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        } else if (result.status === true) {
-          setSubmitStatus("success");
-          setInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        } else {
-          setSubmitStatus("error");
-          setInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        }
-      },
-      onError: (error: any) => {
-        console.error(`LiquidOps ${mode} Error:`, error);
-        setSubmitStatus("error");
-        setInputValue("");
-        setTimeout(() => setSubmitStatus("idle"), 2000);
-      },
-    };
-
+    // Execute appropriate action based on mode
     if (mode === "supply") {
-      lend(params, callbacks);
+      loadingScreenActions.executeTransaction(inputValue, params, lend);
     } else {
-      borrow(params, callbacks);
+      loadingScreenActions.executeTransaction(inputValue, params, borrow);
     }
   };
 
@@ -159,10 +134,24 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
       <SubmitButton
         onSubmit={handleSubmit}
-        isLoading={mode === "supply" ? isLending : isBorrowing}
-        disabled={!inputValue || parseFloat(inputValue) <= 0}
-        error={mode === "supply" ? lendError : borrowError}
-        status={submitStatus}
+        disabled={
+          !inputValue ||
+          parseFloat(inputValue) <= 0 ||
+          loadingScreenState.submitStatus === "loading"
+        }
+        submitText={mode === "supply" ? "Deposit" : "Borrow"}
+      />
+
+      {/* Loading Screen Modal */}
+      <LoadingScreen
+        loadingState={loadingScreenState.state}
+        action={mode === "supply" ? "lending" : "borrowing"}
+        tokenTicker={ticker}
+        amount={loadingScreenState.transactionAmount}
+        txId={loadingScreenState.transactionId}
+        isOpen={loadingScreenState.isOpen}
+        onClose={loadingScreenActions.closeLoadingScreen}
+        error={loadingScreenState.error}
       />
     </div>
   );

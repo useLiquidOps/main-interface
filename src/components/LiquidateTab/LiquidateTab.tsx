@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import styles from "./LiquidateTab.module.css";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import Image from "next/image";
 import InputBox from "@/components/InputBox/InputBox";
 import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
+import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLiquidation } from "@/hooks/actions/useLiquidation";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
+import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
 
 interface TokenData {
   name: string;
@@ -26,8 +28,6 @@ interface LiquidateTabProps {
   conversionRate: number | Quantity;
   targetUserAddress: string[];
 }
-
-type SubmitStatus = "idle" | "loading" | "success" | "error" | "pending";
 
 const LiquidateTab: React.FC<LiquidateTabProps> = ({
   onClose,
@@ -48,8 +48,6 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
   const [toInputValue, setToInputValue] = useState<string>("");
   const [isToFocused, setIsToFocused] = useState<boolean>(false);
 
-  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
-
   const { liquidate, isLiquidating, liquidationError } = useLiquidation();
 
   const { tokenAddress } = tokenInput(fromToken.symbol.toUpperCase());
@@ -66,6 +64,16 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
     () => fromToken?.available?.denomination || 12n,
     [fromToken],
   );
+
+  // Reset input callback
+  const resetInput = useCallback(() => {
+    setFromInputValue("");
+    setSelectedPercentage(null);
+  }, []);
+
+  // Initialize loading screen hook
+  const { state: loadingScreenState, actions: loadingScreenActions } =
+    useLoadingScreen(isLiquidating, liquidationError, resetInput);
 
   useEffect(() => {
     if (fromInputValue === "") {
@@ -93,16 +101,6 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
     }
   }, [fromInputValue, conversionRate, fromDenomination]);
 
-  // Reset submit status after success or error
-  useEffect(() => {
-    if (submitStatus === "success" || submitStatus === "error") {
-      const timer = setTimeout(() => {
-        setSubmitStatus("idle");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [submitStatus]);
-
   const handleFromMaxClick = () => {
     if (!walletBalance) return;
 
@@ -114,6 +112,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
     );
     setSelectedPercentage(100);
   };
+
   const handlePercentageClick = (percentage: number) => {
     const amount = Quantity.__div(
       Quantity.__mul(
@@ -155,8 +154,6 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
     if (!fromInputValue || !targetUserAddress.length) return;
     if (isNaN(parseFloat(fromInputValue.replace(/,/g, "")))) return;
 
-    setSubmitStatus("loading");
-
     const params = {
       token: fromToken.symbol.toUpperCase(),
       rewardToken: toToken.symbol.toUpperCase(),
@@ -165,31 +162,7 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
         .raw,
     };
 
-    liquidate(params, {
-      onSuccess: (result: any) => {
-        console.log("LiquidOps liquidate Response:", result);
-
-        if (result.status === "pending") {
-          setSubmitStatus("pending");
-          setFromInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        } else if (result.status === true) {
-          setSubmitStatus("success");
-          setFromInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        } else {
-          setSubmitStatus("error");
-          setFromInputValue("");
-          setTimeout(() => setSubmitStatus("idle"), 2000);
-        }
-      },
-      onError: (error: any) => {
-        console.error("LiquidOps liquidate Error:", error);
-        setSubmitStatus("error");
-        setFromInputValue("");
-        setTimeout(() => setSubmitStatus("idle"), 2000);
-      },
-    });
+    loadingScreenActions.executeTransaction(fromInputValue, params, liquidate);
   };
 
   return (
@@ -270,12 +243,23 @@ const LiquidateTab: React.FC<LiquidateTabProps> = ({
 
       <SubmitButton
         onSubmit={handleSubmit}
-        isLoading={isLiquidating}
         disabled={
-          !fromInputValue || parseFloat(fromInputValue.replace(/,/g, "")) <= 0
+          !fromInputValue ||
+          parseFloat(fromInputValue.replace(/,/g, "")) <= 0 ||
+          loadingScreenState.submitStatus === "loading"
         }
-        error={liquidationError}
-        status={submitStatus}
+        submitText="Liquidate"
+      />
+
+      {/* Loading Screen Modal */}
+      <LoadingScreen
+        loadingState={loadingScreenState.state}
+        action="liquidating"
+        tokenTicker={fromToken.symbol}
+        amount={loadingScreenState.transactionAmount}
+        txId={loadingScreenState.transactionId}
+        isOpen={loadingScreenState.isOpen}
+        onClose={loadingScreenActions.closeLoadingScreen}
       />
     </div>
   );

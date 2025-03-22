@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import styles from "./LiquidateTab.module.css";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";

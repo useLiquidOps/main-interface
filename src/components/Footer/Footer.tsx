@@ -49,7 +49,12 @@ const Footer = () => {
 
           <div className={styles.version}>
             <p>v0.1.0</p>
-            <p>{gitHash}</p>
+            <a
+              href={`https://github.com/useLiquidOps/main-interface/commit/${gitHash}`}
+              target="_blank"
+            >
+              {gitHash}
+            </a>
           </div>
         </div>
         <div className={styles.right}>

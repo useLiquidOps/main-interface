@@ -12,6 +12,7 @@ export function useGetPosition(tokenAddress: string) {
       const tokenInstance = await Token(tokenAddress);
       const data = await LiquidOpsClient.getPosition({
         token: tokenAddress,
+        // @ts-ignore
         recipient: walletAddress,
       });
       return new Quantity(data.borrowBalance, tokenInstance.info.Denomination);

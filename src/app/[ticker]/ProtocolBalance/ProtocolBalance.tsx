@@ -16,6 +16,7 @@ import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { useHistoricalAPR } from "@/hooks/data/useHistoricalAPR";
 import { Quantity } from "ao-tokens";
 import { formatTMB } from "@/components/utils/utils";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 const ProtocolBalance: React.FC<{
   ticker: string;
@@ -88,16 +89,18 @@ const ProtocolBalance: React.FC<{
               height={50}
             />
           </div>
-          <p className={styles.amount}>
-            {isLoading
-              ? "0.00"
-              : formatTMB(
-                  new Quantity(
-                    protocolStats?.protocolBalance,
-                    protocolStats?.denomination,
-                  ),
-                )}
-          </p>
+          {isLoading || !protocolStats ? (
+            <SkeletonLoading className={styles.amount} style={{ width: "160px", height: "42px" }} />
+          ) : (
+            <p className={styles.amount}>
+              {formatTMB(
+                new Quantity(
+                  protocolStats.protocolBalance,
+                  protocolStats.denomination,
+                ),
+              )}
+            </p>
+          )}
           <p className={styles.currency}>{tokenData.ticker}</p>
         </div>
         <div className={styles.actions}>
@@ -123,74 +126,80 @@ const ProtocolBalance: React.FC<{
             {hoverData ? hoverData.date : "APR"}
           </p>
           <div className={styles.aprValue}>
-            {!hoverData && (
-              <Image
-                src={getOutcomeIcon()}
-                alt={
-                  protocolStats?.percentChange.outcome
-                    ? "Up Arrow"
-                    : "Down Arrow"
-                }
-                width={0}
-                height={16}
-                style={{ width: "auto", height: "16px" }}
-              />
+            {isLoadingHistorical || !protocolStats ? (
+              <SkeletonLoading className={styles.aprText} style={{ width: "100px", height: "24px" }} />
+            ) : (
+              <>
+                <Image
+                  src={getOutcomeIcon()}
+                  alt={
+                    protocolStats.percentChange.outcome
+                      ? "Up Arrow"
+                      : "Down Arrow"
+                  }
+                  width={0}
+                  height={16}
+                  style={{ width: "auto", height: "16px" }}
+                />
+                <p className={styles.aprText}>
+                  {hoverData
+                    ? `${hoverData.value.toFixed(2)}%`
+                    : `${protocolStats.apr.toFixed(2)}%`}
+                </p>
+              </>
             )}
-            <p className={styles.aprText}>
-              {isLoadingHistorical || !protocolStats
-                ? "0.00%"
-                : hoverData
-                  ? `${hoverData.value.toFixed(2)}%`
-                  : `${protocolStats.apr.toFixed(2)}%`}
-            </p>
           </div>
         </div>
         <div className={styles.graph}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={processedHistoricalData}
-              margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
-              onMouseMove={(data) => {
-                if (data.activePayload) {
-                  setHoverData({
-                    date: data.activeLabel as string,
-                    value: data.activePayload[0].value as number,
-                  });
-                }
-              }}
-              onMouseLeave={() => setHoverData(null)}
-            >
-              <defs>
-                <linearGradient
-                  id="graphBackground"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity={1} />
-                  <stop offset="100%" stopColor="#F6F6FE" stopOpacity={1} />
-                </linearGradient>
-              </defs>
-              <rect
-                x="0"
-                y="0"
-                width="100%"
-                height="100%"
-                fill="url(#graphBackground)"
-              />
-              <YAxis domain={["dataMin - 0.5", "dataMax + 0.5"]} hide={true} />
-              <XAxis dataKey="date" hide />
-              <Line
-                type="linear"
-                dataKey="value"
-                stroke="var(--secondary-slate-blue)"
-                strokeWidth={3}
-                dot={false}
-              />
-              <Tooltip content={<></>} cursor={false} />
-            </LineChart>
-          </ResponsiveContainer>
+          {isLoadingHistorical || !protocolStats ? (
+            <SkeletonLoading style={{ width: "100%", height: "100%", borderRadius: "8px" }} />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={processedHistoricalData}
+                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+                onMouseMove={(data) => {
+                  if (data.activePayload) {
+                    setHoverData({
+                      date: data.activeLabel as string,
+                      value: data.activePayload[0].value as number,
+                    });
+                  }
+                }}
+                onMouseLeave={() => setHoverData(null)}
+              >
+                <defs>
+                  <linearGradient
+                    id="graphBackground"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity={1} />
+                    <stop offset="100%" stopColor="#F6F6FE" stopOpacity={1} />
+                  </linearGradient>
+                </defs>
+                <rect
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="100%"
+                  fill="url(#graphBackground)"
+                />
+                <YAxis domain={["dataMin - 0.5", "dataMax + 0.5"]} hide={true} />
+                <XAxis dataKey="date" hide />
+                <Line
+                  type="linear"
+                  dataKey="value"
+                  stroke="var(--secondary-slate-blue)"
+                  strokeWidth={3}
+                  dot={false}
+                />
+                <Tooltip content={<></>} cursor={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
     </div>

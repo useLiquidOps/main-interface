@@ -133,3 +133,8 @@
     margin-bottom: 2px;
     margin-left: 15px;
   }
+  .disabledButton {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--secondary-periwinkle);
+  }

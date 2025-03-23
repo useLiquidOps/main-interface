@@ -33,6 +33,13 @@ const Footer = () => {
       <div className={styles.footer}>
         <div className={styles.left}>
           <a
+            href="https://discord.gg/GMzWYZA9KJ"
+            className={styles.support}
+            target="_blank"
+          >
+            Support
+          </a>
+          <a
             href="https://forms.gle/nzErNbwpq1w4gPEt8"
             className={styles.feedback}
             target="_blank"

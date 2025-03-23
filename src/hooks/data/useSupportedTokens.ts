@@ -21,7 +21,7 @@ export function useSupportedTokens() {
         ticker: data.cleanTicker,
         extraAmount: "1",
         denomination: data.denomination,
-        collateralEnabled: data.collateralEnabled
+        collateralEnabled: data.collateralEnabled,
       }));
     },
     staleTime: 5 * 60 * 1000,

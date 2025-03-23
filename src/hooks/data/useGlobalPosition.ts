@@ -26,6 +26,7 @@ export function useGlobalPosition(marketTokenTicker?: string) {
       const [positions, tokenInfosUnfiltered] = await Promise.all([
         Promise.all(
           Object.values(tokens).map((token) =>
+          // @ts-ignore
             LiquidOpsClient.getPosition({ token, recipient: walletAddress }),
           ),
         ),

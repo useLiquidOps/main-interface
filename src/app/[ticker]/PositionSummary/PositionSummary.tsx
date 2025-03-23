@@ -4,6 +4,7 @@ import { formatTMB } from "../../../components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { useGlobalPosition } from "@/hooks/data/useGlobalPosition";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 const PositionSummary: React.FC<{
   ticker: string;
@@ -20,6 +21,7 @@ const PositionSummary: React.FC<{
   );
 
   const { data: globalPosition } = useGlobalPosition(tokenData?.ticker);
+  const isLoadingPosition = !globalPosition;
 
   const denomination = 12n;
   const maxBorrow = useMemo(
@@ -122,12 +124,14 @@ const PositionSummary: React.FC<{
           <div className={styles.metric}>
             <div className={styles.metricInfo}>
               <p className={styles.label}>Collateral Value</p>
-              <p
-                className={styles.value}
-              >{`${globalPosition ? formatTMB(globalPosition.collateralValue) : "0"} ${tokenData.ticker}`}</p>
+              {isLoadingPosition || !globalPosition ? (
+                <SkeletonLoading className={styles.value} style={{ width: "140px", height: "24px" }} />
+              ) : (
+                <p className={styles.value}>{`${formatTMB(globalPosition.collateralValue)} ${tokenData.ticker}`}</p>
+              )}
             </div>
             <div className={styles.tokens}>
-              {globalPosition &&
+              {!isLoadingPosition && globalPosition &&
                 globalPosition.collateralLogos.map((logo, i) => (
                   <img
                     key={i}
@@ -139,6 +143,9 @@ const PositionSummary: React.FC<{
                     }}
                   />
                 ))}
+              {isLoadingPosition && (
+                <SkeletonLoading className={styles.token} style={{ width: "32px", height: "32px", borderRadius: "50%" }} />
+              )}
             </div>
           </div>
 
@@ -146,10 +153,12 @@ const PositionSummary: React.FC<{
             <div className={styles.metricInfo}>
               <p className={styles.label}>Borrow Capacity</p>
               <div className={styles.valueContainer}>
-                <p
-                  className={styles.value}
-                >{`${globalPosition ? formatTMB(globalPosition.borrowCapacity) : "0"} ${tokenData.ticker}`}</p>
-                {extraData && <div className={styles.redDot} />}
+                {isLoadingPosition || !globalPosition ? (
+                  <SkeletonLoading className={styles.value} style={{ width: "140px", height: "24px" }} />
+                ) : (
+                  <p className={styles.value}>{`${formatTMB(globalPosition.borrowCapacity)} ${tokenData.ticker}`}</p>
+                )}
+                {extraData && !isLoadingPosition && <div className={styles.redDot} />}
               </div>
             </div>
             <div
@@ -157,53 +166,67 @@ const PositionSummary: React.FC<{
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
-              <div
-                className={styles.progressPrimary}
-                style={{
-                  width: getProgressWidth(
-                    globalPosition?.borrowCapacity || new Quantity(0n, 12n),
-                  ),
-                }}
-              />
-              <div className={styles.progressBackground} />
+              {isLoadingPosition ? (
+                <SkeletonLoading className={styles.progressBackground} style={{ width: "100%" }} />
+              ) : (
+                <>
+                  <div
+                    className={styles.progressPrimary}
+                    style={{
+                      width: getProgressWidth(
+                        globalPosition?.borrowCapacity || new Quantity(0n, 12n),
+                      ),
+                    }}
+                  />
+                  <div className={styles.progressBackground} />
+                </>
+              )}
             </div>
           </div>
 
           <div className={styles.metric}>
             <div className={styles.metricInfo}>
               <p className={styles.label}>Liquidation Point</p>
-              <p
-                className={styles.value}
-              >{`${globalPosition ? formatTMB(globalPosition?.liquidationPoint) : "0"} ${tokenData.ticker}`}</p>
+              {isLoadingPosition || !globalPosition ? (
+                <SkeletonLoading className={styles.value} style={{ width: "140px", height: "24px" }} />
+              ) : (
+                <p className={styles.value}>{`${formatTMB(globalPosition.liquidationPoint)} ${tokenData.ticker}`}</p>
+              )}
             </div>
           </div>
 
           <div className={styles.metric}>
             <div className={styles.metricInfo}>
               <p className={styles.label}>Available to Borrow</p>
-              <p
-                className={styles.value}
-              >{`${globalPosition ? formatTMB(globalPosition.availableToBorrow) : "0"} ${tokenData.ticker}`}</p>
+              {isLoadingPosition || !globalPosition ? (
+                <SkeletonLoading className={styles.value} style={{ width: "140px", height: "24px" }} />
+              ) : (
+                <p className={styles.value}>{`${formatTMB(globalPosition.availableToBorrow)} ${tokenData.ticker}`}</p>
+              )}
             </div>
           </div>
 
-          {extraData && globalPosition && (
+          {extraData && (
             <div className={styles.metric}>
               <div className={styles.metricInfo}>
                 <p className={styles.label}>Liquidation Risk</p>
-                <div className={styles.riskContainer}>
-                  <p className={styles.value}>{`${liquidationRisk}%`}</p>
-                  <div className={styles.riskProgressContainer}>
-                    <div
-                      className={styles.riskProgress}
-                      style={{ width: `${liquidationRisk}%` }}
-                    />
-                    <div
-                      className={styles.riskIndicator}
-                      style={{ left: `${liquidationRisk}%` }}
-                    />
+                {isLoadingPosition || !globalPosition ? (
+                  <SkeletonLoading style={{ width: "100%", height: "24px" }} />
+                ) : (
+                  <div className={styles.riskContainer}>
+                    <p className={styles.value}>{`${liquidationRisk}%`}</p>
+                    <div className={styles.riskProgressContainer}>
+                      <div
+                        className={styles.riskProgress}
+                        style={{ width: `${liquidationRisk}%` }}
+                      />
+                      <div
+                        className={styles.riskIndicator}
+                        style={{ left: `${liquidationRisk}%` }}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           )}

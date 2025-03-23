@@ -1,9 +1,9 @@
-import React from 'react';
-import styles from './TokenFilter.module.css';
-import Image from 'next/image';
-import DropdownButton from '@/components/DropDown/DropDown';
-import { motion, AnimatePresence } from 'framer-motion';
-import { dropdownVariants } from '@/components/DropDown/FramerMotion';
+import React from "react";
+import styles from "./TokenFilter.module.css";
+import Image from "next/image";
+import DropdownButton from "@/components/DropDown/DropDown";
+import { motion, AnimatePresence } from "framer-motion";
+import { dropdownVariants } from "@/components/DropDown/FramerMotion";
 
 interface TokenInfo {
   ticker: string;
@@ -45,10 +45,7 @@ const TokenFilter: React.FC<TokenFilterProps> = ({
             height={16}
           />
           <span>{selectedToken.ticker}</span>
-          <DropdownButton
-            isOpen={showDropdown}
-            onToggle={toggleDropdown}
-          />
+          <DropdownButton isOpen={showDropdown} onToggle={toggleDropdown} />
         </button>
         <AnimatePresence>
           {showDropdown && (

@@ -1,20 +1,20 @@
 .liquidationsList {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    background-color: white;
-    padding: 24px;
-    border-radius: 24px;
-  }
-  
-  .noLiquidations {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-    color: var(--secondary-periwinkle);
-    font-size: 15px;
-    font-weight: 500;
-  }
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: white;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.noLiquidations {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: var(--secondary-periwinkle);
+  font-size: 15px;
+  font-weight: 500;
+}

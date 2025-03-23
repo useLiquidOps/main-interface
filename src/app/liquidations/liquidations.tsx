@@ -7,7 +7,10 @@ import { liquidationsData } from "../data";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
 import LiquidateTab from "./LiquidateTab/LiquidateTab";
-import { overlayVariants, dropdownVariants } from "@/components/DropDown/FramerMotion";
+import {
+  overlayVariants,
+  dropdownVariants,
+} from "@/components/DropDown/FramerMotion";
 import { Quantity } from "ao-tokens";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
@@ -133,7 +136,7 @@ const LiquidationsContent = () => {
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <LiquidationStats stats={stats} />
-          
+
           <TokenFiltersContainer
             receiveTokens={receiveTokens}
             sendTokens={sendTokens}

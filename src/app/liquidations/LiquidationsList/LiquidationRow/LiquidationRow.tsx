@@ -1,9 +1,9 @@
-import React from 'react';
-import styles from './LiquidationRow.module.css';
-import Image from 'next/image';
-import { formatTMB } from '@/components/utils/utils';
-import { Quantity } from 'ao-tokens';
-import { SkeletonLoading } from '@/components/SkeletonLoading/SkeletonLoading';
+import React from "react";
+import styles from "./LiquidationRow.module.css";
+import Image from "next/image";
+import { formatTMB } from "@/components/utils/utils";
+import { Quantity } from "ao-tokens";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface TokenData {
   name: string;
@@ -27,9 +27,13 @@ const LiquidationRow: React.FC<LiquidationRowProps> = ({
   getTokenPrice,
 }) => {
   // Determine loading state based on data availability
-  const isLoading = !fromToken || !toToken || 
-                    !fromToken.price || !toToken.price || 
-                    fromToken.price.toNumber() === 0 || toToken.price.toNumber() === 0;
+  const isLoading =
+    !fromToken ||
+    !toToken ||
+    !fromToken.price ||
+    !toToken.price ||
+    fromToken.price.toNumber() === 0 ||
+    toToken.price.toNumber() === 0;
 
   if (isLoading) {
     return (
@@ -84,7 +88,10 @@ const LiquidationRow: React.FC<LiquidationRowProps> = ({
             <p className={styles.metricLabel}>Price</p>
           </div>
         </div>
-        <button className={`${styles.liquidateButton} ${styles.disabledButton}`} disabled>
+        <button
+          className={`${styles.liquidateButton} ${styles.disabledButton}`}
+          disabled
+        >
           <Image
             src="/icons/liquidate.svg"
             alt="Liquidate"
@@ -100,10 +107,7 @@ const LiquidationRow: React.FC<LiquidationRowProps> = ({
 
   return (
     <div className={styles.liquidationRowWrapper}>
-      <div
-        className={styles.liquidationRow}
-        onClick={onLiquidate}
-      >
+      <div className={styles.liquidationRow} onClick={onLiquidate}>
         <div className={styles.tokenInfo}>
           <div className={styles.iconWrapper}>
             <Image
@@ -177,10 +181,7 @@ const LiquidationRow: React.FC<LiquidationRowProps> = ({
           <p className={styles.metricLabel}>Price</p>
         </div>
       </div>
-      <button
-        className={styles.liquidateButton}
-        onClick={onLiquidate}
-      >
+      <button className={styles.liquidateButton} onClick={onLiquidate}>
         <Image
           src="/icons/liquidate.svg"
           alt="Liquidate"

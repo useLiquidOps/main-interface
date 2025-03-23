@@ -1,4 +1,4 @@
-import { Quantity } from 'ao-tokens';
+import { Quantity } from "ao-tokens";
 
 interface Liquidation {
   fromToken: {

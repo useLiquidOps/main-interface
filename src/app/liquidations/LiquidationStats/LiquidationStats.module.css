@@ -1,36 +1,36 @@
 .liquidationStats {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    width: 100%;
-    padding: 24px;
-    border-radius: 24px;
-    gap: 5px;
-  }
-  
-  .liquidationStat {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    gap: 5px;
-    padding: 50px;
-    padding-top: 0;
-    padding-bottom: 0;
-    width: fit-content;
-  }
-  
-  .liquidationStatValue {
-    margin: 0;
-    color: var(--primary-ultramarine);
-    font-weight: 600;
-    font-size: 30px;
-  }
-  
-  .liquidationStatTitle {
-    margin: 0;
-    color: var(--secondary-periwinkle);
-    font-weight: 600;
-    font-size: 0.5rem;
-    font-size: 12px;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  width: 100%;
+  padding: 24px;
+  border-radius: 24px;
+  gap: 5px;
+}
+
+.liquidationStat {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 50px;
+  padding-top: 0;
+  padding-bottom: 0;
+  width: fit-content;
+}
+
+.liquidationStatValue {
+  margin: 0;
+  color: var(--primary-ultramarine);
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.liquidationStatTitle {
+  margin: 0;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
+  font-size: 0.5rem;
+  font-size: 12px;
+}

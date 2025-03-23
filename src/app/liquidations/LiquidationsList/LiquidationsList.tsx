@@ -1,7 +1,7 @@
-import React from 'react';
-import styles from './LiquidationsList.module.css';
-import LiquidationRow from './LiquidationRow/LiquidationRow';
-import { Quantity } from 'ao-tokens';
+import React from "react";
+import styles from "./LiquidationsList.module.css";
+import LiquidationRow from "./LiquidationRow/LiquidationRow";
+import { Quantity } from "ao-tokens";
 
 interface TokenData {
   name: string;

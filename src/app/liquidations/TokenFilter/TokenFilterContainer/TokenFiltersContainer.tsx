@@ -1,6 +1,6 @@
-import React from 'react';
-import styles from './TokenFiltersContainer.module.css';
-import TokenFilter from '../TokenFilter';
+import React from "react";
+import styles from "./TokenFiltersContainer.module.css";
+import TokenFilter from "../TokenFilter";
 
 interface TokenInfo {
   ticker: string;

@@ -10,7 +10,7 @@ import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLiquidation } from "@/hooks/actions/useLiquidation";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
-import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
+import { useLoadingScreen } from "../../../components/LoadingScreen/useLoadingScreen";
 
 interface TokenData {
   name: string;

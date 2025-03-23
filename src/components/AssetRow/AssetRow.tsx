@@ -58,7 +58,10 @@ const AssetRow: React.FC<AssetRowProps> = ({
           <div className={styles.nameAmount}>
             <p className={styles.name}>{asset.name}</p>
             {isLoading ? (
-              <SkeletonLoading className={styles.amount} style={{ width: "120px", height: "20px" }} />
+              <SkeletonLoading
+                className={styles.amount}
+                style={{ width: "120px", height: "20px" }}
+              />
             ) : (
               <p className={styles.amount}>
                 {formattedBalance} {asset?.ticker}
@@ -69,11 +72,11 @@ const AssetRow: React.FC<AssetRowProps> = ({
 
         <div className={styles.aprInfo}>
           {isProtocolStatsLoading ? (
-            <SkeletonLoading style={{ width: "80px", height: "20px", marginBottom: "8px" }} />
+            <SkeletonLoading
+              style={{ width: "80px", height: "20px", marginBottom: "8px" }}
+            />
           ) : (
-            <p className={styles.apr}>
-              APR {protocolStats.apr.toFixed(2)}%
-            </p>
+            <p className={styles.apr}>APR {protocolStats.apr.toFixed(2)}%</p>
           )}
           {isProtocolStatsLoading ? (
             <SkeletonLoading style={{ width: "60px", height: "16px" }} />

@@ -32,7 +32,7 @@ interface TokenConfig {
 const DECIMAL_PLACES: TokenConfig = {
   stETH: 4,
   qAR: 3,
-  USDC: 2
+  USDC: 2,
 };
 
 const useInputValidation = (walletBalance: Quantity) => {
@@ -212,23 +212,25 @@ const InputBox: React.FC<InputBoxProps> = ({
   );
 
   const renderWalletInfo = () =>
-  !disabled && (
-    <div className={styles.walletInfo}>
-      <Image src="/icons/wallet.svg" height={14} width={14} alt="Wallet" />
-      {!walletBalance || Quantity.eq(walletBalance, new Quantity(0n, 0n)) ? (
-        <SkeletonLoading className={styles.balanceAmount} style={{ width: "80px", height: "16px" }} />
-      ) : (
-        <span className={styles.balanceAmount}>
-          {formatTMB(walletBalance)}{" "}
-          {ticker}
-        </span>
-      )}
-      <span className={styles.separator}>|</span>
-      <button className={styles.maxButton} onClick={onMaxClick}>
-        Max
-      </button>
-    </div>
-  );
+    !disabled && (
+      <div className={styles.walletInfo}>
+        <Image src="/icons/wallet.svg" height={14} width={14} alt="Wallet" />
+        {!walletBalance || Quantity.eq(walletBalance, new Quantity(0n, 0n)) ? (
+          <SkeletonLoading
+            className={styles.balanceAmount}
+            style={{ width: "80px", height: "16px" }}
+          />
+        ) : (
+          <span className={styles.balanceAmount}>
+            {formatTMB(walletBalance)} {ticker}
+          </span>
+        )}
+        <span className={styles.separator}>|</span>
+        <button className={styles.maxButton} onClick={onMaxClick}>
+          Max
+        </button>
+      </div>
+    );
 
   return (
     <div

@@ -83,7 +83,10 @@ const Market: React.FC<{
 
               <div className={styles.APRContainer}>
                 {isLoading ? (
-                  <SkeletonLoading className={styles.value} style={{ width: "120px", height: "24px" }} />
+                  <SkeletonLoading
+                    className={styles.value}
+                    style={{ width: "120px", height: "24px" }}
+                  />
                 ) : (
                   <div className={styles.flexDisplay}>
                     <p className={styles.value}>
@@ -115,7 +118,10 @@ const Market: React.FC<{
           <div className={styles.metric}>
             <p className={styles.label}>Total Supply</p>
             {isLoading ? (
-              <SkeletonLoading className={styles.value} style={{ width: "160px", height: "24px" }} />
+              <SkeletonLoading
+                className={styles.value}
+                style={{ width: "160px", height: "24px" }}
+              />
             ) : (
               <div className={styles.flexDisplay}>
                 <p className={styles.value}>
@@ -134,7 +140,10 @@ const Market: React.FC<{
           <div className={styles.metric}>
             <p className={styles.label}>Available Lent Tokens</p>
             {isLoading ? (
-              <SkeletonLoading className={styles.valueWithIndicator} style={{ width: "160px", height: "24px" }} />
+              <SkeletonLoading
+                className={styles.valueWithIndicator}
+                style={{ width: "160px", height: "24px" }}
+              />
             ) : (
               <div className={styles.valueWithIndicator}>
                 <p className={styles.value}>
@@ -154,7 +163,10 @@ const Market: React.FC<{
           <div className={styles.metric}>
             <p className={styles.label}>Total Borrows</p>
             {isLoading ? (
-              <SkeletonLoading className={styles.valueWithIndicator} style={{ width: "160px", height: "24px" }} />
+              <SkeletonLoading
+                className={styles.valueWithIndicator}
+                style={{ width: "160px", height: "24px" }}
+              />
             ) : (
               <div className={styles.valueWithIndicator}>
                 <p className={styles.value}>
@@ -183,7 +195,9 @@ const Market: React.FC<{
                 <div
                   className={styles.progressBlue}
                   style={{
-                    width: getProgressWidth(Number(protocolStats?.borrows || 0)),
+                    width: getProgressWidth(
+                      Number(protocolStats?.borrows || 0),
+                    ),
                   }}
                 />
               </>

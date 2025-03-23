@@ -90,7 +90,10 @@ const ProtocolBalance: React.FC<{
             />
           </div>
           {isLoading || !protocolStats ? (
-            <SkeletonLoading className={styles.amount} style={{ width: "160px", height: "42px" }} />
+            <SkeletonLoading
+              className={styles.amount}
+              style={{ width: "160px", height: "42px" }}
+            />
           ) : (
             <p className={styles.amount}>
               {formatTMB(
@@ -127,7 +130,10 @@ const ProtocolBalance: React.FC<{
           </p>
           <div className={styles.aprValue}>
             {isLoadingHistorical || !protocolStats ? (
-              <SkeletonLoading className={styles.aprText} style={{ width: "100px", height: "24px" }} />
+              <SkeletonLoading
+                className={styles.aprText}
+                style={{ width: "100px", height: "24px" }}
+              />
             ) : (
               <>
                 <Image
@@ -152,7 +158,9 @@ const ProtocolBalance: React.FC<{
         </div>
         <div className={styles.graph}>
           {isLoadingHistorical || !protocolStats ? (
-            <SkeletonLoading style={{ width: "100%", height: "100%", borderRadius: "8px" }} />
+            <SkeletonLoading
+              style={{ width: "100%", height: "100%", borderRadius: "8px" }}
+            />
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
@@ -187,7 +195,10 @@ const ProtocolBalance: React.FC<{
                   height="100%"
                   fill="url(#graphBackground)"
                 />
-                <YAxis domain={["dataMin - 0.5", "dataMax + 0.5"]} hide={true} />
+                <YAxis
+                  domain={["dataMin - 0.5", "dataMax + 0.5"]}
+                  hide={true}
+                />
                 <XAxis dataKey="date" hide />
                 <Line
                   type="linear"

@@ -125,13 +125,19 @@ const PositionSummary: React.FC<{
             <div className={styles.metricInfo}>
               <p className={styles.label}>Collateral Value</p>
               {isLoadingPosition || !globalPosition ? (
-                <SkeletonLoading className={styles.value} style={{ width: "140px", height: "24px" }} />
+                <SkeletonLoading
+                  className={styles.value}
+                  style={{ width: "140px", height: "24px" }}
+                />
               ) : (
-                <p className={styles.value}>{`${formatTMB(globalPosition.collateralValue)} ${tokenData.ticker}`}</p>
+                <p
+                  className={styles.value}
+                >{`${formatTMB(globalPosition.collateralValue)} ${tokenData.ticker}`}</p>
               )}
             </div>
             <div className={styles.tokens}>
-              {!isLoadingPosition && globalPosition &&
+              {!isLoadingPosition &&
+                globalPosition &&
                 globalPosition.collateralLogos.map((logo, i) => (
                   <img
                     key={i}
@@ -144,7 +150,10 @@ const PositionSummary: React.FC<{
                   />
                 ))}
               {isLoadingPosition && (
-                <SkeletonLoading className={styles.token} style={{ width: "32px", height: "32px", borderRadius: "50%" }} />
+                <SkeletonLoading
+                  className={styles.token}
+                  style={{ width: "32px", height: "32px", borderRadius: "50%" }}
+                />
               )}
             </div>
           </div>
@@ -154,11 +163,18 @@ const PositionSummary: React.FC<{
               <p className={styles.label}>Borrow Capacity</p>
               <div className={styles.valueContainer}>
                 {isLoadingPosition || !globalPosition ? (
-                  <SkeletonLoading className={styles.value} style={{ width: "140px", height: "24px" }} />
+                  <SkeletonLoading
+                    className={styles.value}
+                    style={{ width: "140px", height: "24px" }}
+                  />
                 ) : (
-                  <p className={styles.value}>{`${formatTMB(globalPosition.borrowCapacity)} ${tokenData.ticker}`}</p>
+                  <p
+                    className={styles.value}
+                  >{`${formatTMB(globalPosition.borrowCapacity)} ${tokenData.ticker}`}</p>
                 )}
-                {extraData && !isLoadingPosition && <div className={styles.redDot} />}
+                {extraData && !isLoadingPosition && (
+                  <div className={styles.redDot} />
+                )}
               </div>
             </div>
             <div
@@ -167,7 +183,10 @@ const PositionSummary: React.FC<{
               onMouseLeave={handleMouseLeave}
             >
               {isLoadingPosition ? (
-                <SkeletonLoading className={styles.progressBackground} style={{ width: "100%" }} />
+                <SkeletonLoading
+                  className={styles.progressBackground}
+                  style={{ width: "100%" }}
+                />
               ) : (
                 <>
                   <div
@@ -188,9 +207,14 @@ const PositionSummary: React.FC<{
             <div className={styles.metricInfo}>
               <p className={styles.label}>Liquidation Point</p>
               {isLoadingPosition || !globalPosition ? (
-                <SkeletonLoading className={styles.value} style={{ width: "140px", height: "24px" }} />
+                <SkeletonLoading
+                  className={styles.value}
+                  style={{ width: "140px", height: "24px" }}
+                />
               ) : (
-                <p className={styles.value}>{`${formatTMB(globalPosition.liquidationPoint)} ${tokenData.ticker}`}</p>
+                <p
+                  className={styles.value}
+                >{`${formatTMB(globalPosition.liquidationPoint)} ${tokenData.ticker}`}</p>
               )}
             </div>
           </div>
@@ -199,9 +223,14 @@ const PositionSummary: React.FC<{
             <div className={styles.metricInfo}>
               <p className={styles.label}>Available to Borrow</p>
               {isLoadingPosition || !globalPosition ? (
-                <SkeletonLoading className={styles.value} style={{ width: "140px", height: "24px" }} />
+                <SkeletonLoading
+                  className={styles.value}
+                  style={{ width: "140px", height: "24px" }}
+                />
               ) : (
-                <p className={styles.value}>{`${formatTMB(globalPosition.availableToBorrow)} ${tokenData.ticker}`}</p>
+                <p
+                  className={styles.value}
+                >{`${formatTMB(globalPosition.availableToBorrow)} ${tokenData.ticker}`}</p>
               )}
             </div>
           </div>

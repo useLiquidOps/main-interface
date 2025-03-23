@@ -12,19 +12,26 @@
   "dependencies": {
     "@permaweb/aoconnect": "^0.0.77",
     "@permaweb/aoprofile": "^0.0.9",
+    "@tailwindcss/postcss": "^4.0.15",
     "@tanstack/react-query": "^5.62.11",
     "@tanstack/react-query-devtools": "^5.62.11",
     "ao-tokens": "^0.0.5",
     "axios": "^1.7.7",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
     "liquidops": "^0.1.32",
-    "lucide-react": "^0.474.0",
+    "lucide-react": "^0.483.0",
     "next": "14.2.15",
     "next-sitemap": "^4.2.3",
+    "postcss": "^8.5.3",
     "react": "^18",
     "react-dom": "^18",
     "react-google-recaptcha-v3": "^1.10.1",
-    "recharts": "^2.15.0"
+    "recharts": "^2.15.0",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss": "^4.0.15",
+    "tw-animate-css": "^1.2.4"
   },
   "devDependencies": {
     "typescript": "^5",

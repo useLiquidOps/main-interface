@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 // // TODO: Replace these with real data
 // const PLACEHOLDER_EXTRA_DATA = {
@@ -27,6 +28,7 @@ const Market: React.FC<{
   );
 
   const { data: protocolStats } = useProtocolStats(ticker.toUpperCase());
+  const isLoading = !protocolStats;
 
   const getProgressWidth = (value: number): string => {
     const total =
@@ -80,71 +82,87 @@ const Market: React.FC<{
               <p className={styles.label}>APR</p>
 
               <div className={styles.APRContainer}>
-                <div className={styles.flexDisplay}>
-                  <p className={styles.value}>
-                    {protocolStats?.apr || "0.00"}%
-                  </p>
-                  <Image
-                    src={
-                      protocolStats?.percentChange?.outcome === false
-                        ? "/icons/APRdown.svg"
-                        : "/icons/APRup.svg"
-                    }
-                    alt={
-                      protocolStats?.percentChange?.outcome === false
-                        ? "APR Down"
-                        : "APR Up"
-                    }
-                    width={24}
-                    height={24}
-                  />
-                  <p className={styles.extraData}>
-                    {protocolStats?.percentChange.change || "0.00"}%
-                  </p>
-                </div>
+                {isLoading ? (
+                  <SkeletonLoading className={styles.value} style={{ width: "120px", height: "24px" }} />
+                ) : (
+                  <div className={styles.flexDisplay}>
+                    <p className={styles.value}>
+                      {protocolStats?.apr || "0.00"}%
+                    </p>
+                    <Image
+                      src={
+                        protocolStats?.percentChange?.outcome === false
+                          ? "/icons/APRdown.svg"
+                          : "/icons/APRup.svg"
+                      }
+                      alt={
+                        protocolStats?.percentChange?.outcome === false
+                          ? "APR Down"
+                          : "APR Up"
+                      }
+                      width={24}
+                      height={24}
+                    />
+                    <p className={styles.extraData}>
+                      {protocolStats?.percentChange.change || "0.00"}%
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
           <div className={styles.metric}>
             <p className={styles.label}>Total Supply</p>
-            <div className={styles.flexDisplay}>
-              <p className={styles.value}>
-                {`${formatTMB(protocolStats?.protocolBalance || new Quantity(0n, 12n))} ${tokenData.ticker}`}
-              </p>
-              {/* {extraData && (
-                <p className={styles.extraData}>
-                  +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraTotalSupply)}{" "}
-                  {tokenData.ticker}
+            {isLoading ? (
+              <SkeletonLoading className={styles.value} style={{ width: "160px", height: "24px" }} />
+            ) : (
+              <div className={styles.flexDisplay}>
+                <p className={styles.value}>
+                  {`${formatTMB(protocolStats?.protocolBalance || new Quantity(0n, 12n))} ${tokenData.ticker}`}
                 </p>
-              )} */}
-            </div>
+                {/* {extraData && (
+                  <p className={styles.extraData}>
+                    +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraTotalSupply)}{" "}
+                    {tokenData.ticker}
+                  </p>
+                )} */}
+              </div>
+            )}
           </div>
 
           <div className={styles.metric}>
             <p className={styles.label}>Available Lent Tokens</p>
-            <div className={styles.valueWithIndicator}>
-              <p className={styles.value}>
-                {`${formatTMB(protocolStats?.unLent || new Quantity(0n, 12n))} ${tokenData.ticker}`}
-              </p>
-              <div className={styles.indicatorGreen}></div>
-              {/* {extraData && (
-                <p className={styles.extraData}>
-                  +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraLent)}{" "}
-                  {tokenData.ticker}
+            {isLoading ? (
+              <SkeletonLoading className={styles.valueWithIndicator} style={{ width: "160px", height: "24px" }} />
+            ) : (
+              <div className={styles.valueWithIndicator}>
+                <p className={styles.value}>
+                  {`${formatTMB(protocolStats?.unLent || new Quantity(0n, 12n))} ${tokenData.ticker}`}
                 </p>
-              )} */}
-            </div>
+                <div className={styles.indicatorGreen}></div>
+                {/* {extraData && (
+                  <p className={styles.extraData}>
+                    +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraLent)}{" "}
+                    {tokenData.ticker}
+                  </p>
+                )} */}
+              </div>
+            )}
           </div>
 
           <div className={styles.metric}>
             <p className={styles.label}>Total Borrows</p>
-            <div className={styles.valueWithIndicator}>
-              <p className={styles.value}>
-                {`${formatTMB(protocolStats?.borrows || new Quantity(0n, 12n))} ${tokenData.ticker}`}
-              </p>
-              <div className={styles.indicatorBlue}></div>
-            </div>
+            {isLoading ? (
+              <SkeletonLoading className={styles.valueWithIndicator} style={{ width: "160px", height: "24px" }} />
+            ) : (
+              <div className={styles.valueWithIndicator}>
+                <p className={styles.value}>
+                  {`${formatTMB(protocolStats?.borrows || new Quantity(0n, 12n))} ${tokenData.ticker}`}
+                </p>
+                <div className={styles.indicatorBlue}></div>
+              </div>
+            )}
           </div>
 
           <div
@@ -152,18 +170,24 @@ const Market: React.FC<{
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           >
-            <div
-              className={styles.progressGreen}
-              style={{
-                width: getProgressWidth(Number(protocolStats?.unLent || 0)),
-              }}
-            />
-            <div
-              className={styles.progressBlue}
-              style={{
-                width: getProgressWidth(Number(protocolStats?.borrows || 0)),
-              }}
-            />
+            {isLoading ? (
+              <SkeletonLoading style={{ width: "100%", height: "100%" }} />
+            ) : (
+              <>
+                <div
+                  className={styles.progressGreen}
+                  style={{
+                    width: getProgressWidth(Number(protocolStats?.unLent || 0)),
+                  }}
+                />
+                <div
+                  className={styles.progressBlue}
+                  style={{
+                    width: getProgressWidth(Number(protocolStats?.borrows || 0)),
+                  }}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>

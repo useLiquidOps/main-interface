@@ -21,6 +21,7 @@ interface PriceData {
 interface StatsHookResult {
   stats: ReturnType<typeof useProtocolStats>;
   price: Quantity;
+  isLoading: boolean;
 }
 
 const useTokenStats = (
@@ -30,7 +31,11 @@ const useTokenStats = (
   const stats = useProtocolStats(token.ticker.toUpperCase());
   const geckoId = tickerToGeckoMap[token.ticker.toUpperCase()];
   const price = new Quantity(0n, 12n).fromNumber(prices?.[geckoId]?.usd ?? 0);
-  return { stats, price };
+
+  // Consider data loading if stats.data isn't available yet
+  const isLoading = !stats.data;
+
+  return { stats, price, isLoading };
 };
 
 interface MarketStatsProps {
@@ -39,18 +44,22 @@ interface MarketStatsProps {
 }
 
 export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
-  // Track loading state
-  let isLoading = false;
   let totalTVL = new Quantity(0n, 12n);
   let totalCollateral = new Quantity(0n, 12n);
   let totalBorrows = new Quantity(0n, 12n);
 
   // Check if any token's stats are still loading
-  tokens.forEach((token) => {
-    const { stats, price } = useTokenStats(token, prices);
+  let isLoading = false;
 
-    // Only set isLoading if stats are actually loading
-    if (stats.isLoading) {
+  for (const token of tokens) {
+    const {
+      stats,
+      price,
+      isLoading: tokenIsLoading,
+    } = useTokenStats(token, prices);
+
+    // If any token is loading, set isLoading true
+    if (tokenIsLoading) {
       isLoading = true;
     } else if (stats.data) {
       totalTVL = Quantity.__add(
@@ -66,9 +75,14 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
         Quantity.__mul(stats.data.borrows, price),
       );
     }
-  });
+  }
 
-  // Render skeleton only for values if loading
+  // Also consider loading if prices aren't available yet
+  if (!prices) {
+    isLoading = true;
+  }
+
+  // Render skeleton when loading
   if (isLoading) {
     return (
       <div className={styles.marketStats}>

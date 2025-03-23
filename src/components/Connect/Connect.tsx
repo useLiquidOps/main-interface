@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { overlayVariants } from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 declare global {
   interface Window {
@@ -125,21 +126,27 @@ const Connect: React.FC = () => {
               isOpen={isOpen}
               onToggle={() => setIsOpen(!isOpen)}
             />
-            <img
-              src={
-                !isProfileLoading && profile?.thumbnail
-                  ? `https://arweave.net/${profile.thumbnail}`
-                  : "/icons/user.svg"
-              }
-              alt="Profile image"
-              width={32}
-              height={32}
-              className={styles.connectImage}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "/icons/user.svg";
-              }}
-            />
+            <div className={styles.profileImageWrapper}>
+              {isProfileLoading ? (
+                <SkeletonLoading className="h-full w-full rounded-full" />
+              ) : (
+                <img
+                  src={
+                    profile?.thumbnail
+                      ? `https://arweave.net/${profile.thumbnail}`
+                      : "/icons/user.svg"
+                  }
+                  alt="Profile image"
+                  width={32}
+                  height={32}
+                  className={styles.connectImage}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/icons/user.svg";
+                  }}
+                />
+              )}
+            </div>
             <ProfileDropDown
               isOpen={isOpen}
               address={address}

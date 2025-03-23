@@ -1,56 +1,29 @@
 "use client";
+import { useState, useMemo, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import styles from "./liquidations.module.css";
 import Header from "../../components/Header/Header";
-import Image from "next/image";
-import { useState, useMemo, useEffect } from "react";
 import { liquidationsData } from "../data";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
-import DropdownButton from "@/components/DropDown/DropDown";
 import { useModal, ModalProvider } from "../[ticker]/PopUp/PopUp";
-import LiquidateTab from "@/components/LiquidateTab/LiquidateTab";
-import { motion, AnimatePresence } from "framer-motion";
+import LiquidateTab from "./LiquidateTab/LiquidateTab";
 import {
   overlayVariants,
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
-import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
 import Banner from "@/components/Banner/Banner";
 import Footer from "@/components/Footer/Footer";
 
-interface TokenInfo {
-  ticker: string;
-  icon: string;
-}
+// Import components
+import LiquidationStats from "./LiquidationStats/LiquidationStats";
+import TokenFiltersContainer from "./TokenFilter/TokenFilterContainer/TokenFiltersContainer";
+import LiquidationsList from "./LiquidationsList/LiquidationsList";
 
-const calculateLiquidationStats = (liquidations: any[]) => {
-  return liquidations.reduce(
-    (acc, liquidation) => {
-      return {
-        availableLiquidations: Quantity.__add(
-          acc.availableLiquidations,
-          liquidation.toToken.available,
-        ),
-        totalProfit: Quantity.__add(
-          acc.totalProfit,
-          liquidation.toToken.available,
-        ),
-        markets: new Set([
-          ...acc.markets,
-          liquidation.fromToken.symbol,
-          liquidation.toToken.symbol,
-        ]),
-      };
-    },
-    {
-      availableLiquidations: new Quantity(0n, 12n),
-      totalProfit: new Quantity(0n, 12n),
-      markets: new Set<string>(),
-    },
-  );
-};
+// Import utils
+import { calculateLiquidationStats } from "./calculateLiquidationStats";
 
 const LiquidationsContent = () => {
   const [mounted, setMounted] = useState(false);
@@ -162,253 +135,28 @@ const LiquidationsContent = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
-          <div className={styles.liquidationStats}>
-            <div className={styles.liquidationStat}>
-              <p className={styles.liquidationStatValue}>
-                ${formatTMB(stats.availableLiquidations)}
-              </p>
-              <p className={styles.liquidationStatTitle}>
-                Available liquidations
-              </p>
-            </div>
-            <div className={styles.liquidationStat}>
-              <p className={styles.liquidationStatValue}>
-                ${formatTMB(stats.totalProfit)}
-              </p>
-              <p className={styles.liquidationStatTitle}>Total profit</p>
-            </div>
-            <div className={styles.liquidationStat}>
-              <p className={styles.liquidationStatValue}>
-                {stats.markets.size}
-              </p>
-              <p className={styles.liquidationStatTitle}>Markets</p>
-            </div>
-          </div>
-          <div className={styles.filterContainer}>
-            <div className={styles.filterGroup}>
-              <span className={styles.filterLabel}>Send</span>
-              <div
-                className={styles.dropdownContainer}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleSendDropdown();
-                }}
-              >
-                <button className={styles.filterButton}>
-                  <Image
-                    src={selectedSendToken.icon}
-                    alt={selectedSendToken.ticker}
-                    width={16}
-                    height={16}
-                  />
-                  <span>{selectedSendToken.ticker}</span>
-                  <DropdownButton
-                    isOpen={showSendDropdown}
-                    onToggle={toggleSendDropdown}
-                  />
-                </button>
-                <AnimatePresence>
-                  {showSendDropdown && (
-                    <motion.div
-                      className={styles.dropdown}
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      {sendTokens.map((token) => (
-                        <div
-                          key={token.ticker}
-                          className={styles.dropdownItem}
-                          onClick={() => {
-                            setSelectedSendToken(token);
-                            setShowSendDropdown(false);
-                          }}
-                        >
-                          <Image
-                            src={token.icon}
-                            alt={token.ticker}
-                            width={16}
-                            height={16}
-                          />
-                          <span>{token.ticker}</span>
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-            <div className={styles.filterGroup}>
-              <span className={styles.filterLabel}>Receive</span>
-              <div
-                className={styles.dropdownContainer}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleReceiveDropdown();
-                }}
-              >
-                <button className={styles.filterButton}>
-                  <Image
-                    src={selectedReceiveToken.icon}
-                    alt={selectedReceiveToken.ticker}
-                    width={16}
-                    height={16}
-                  />
-                  <span>{selectedReceiveToken.ticker}</span>
-                  <DropdownButton
-                    isOpen={showReceiveDropdown}
-                    onToggle={toggleReceiveDropdown}
-                  />
-                </button>
-                <AnimatePresence>
-                  {showReceiveDropdown && (
-                    <motion.div
-                      className={styles.dropdown}
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      {receiveTokens.map((token) => (
-                        <div
-                          key={token.ticker}
-                          className={styles.dropdownItem}
-                          onClick={() => {
-                            setSelectedReceiveToken(token);
-                            setShowReceiveDropdown(false);
-                          }}
-                        >
-                          <Image
-                            src={token.icon}
-                            alt={token.ticker}
-                            width={16}
-                            height={16}
-                          />
-                          <span>{token.ticker}</span>
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
+          <LiquidationStats stats={stats} />
 
-          <div className={styles.liquidationsList}>
-            {filteredLiquidations.length > 0 ? (
-              filteredLiquidations.map((liquidation, index) => (
-                <div key={index} className={styles.liquidationRowWrapper}>
-                  <div
-                    className={styles.liquidationRow}
-                    onClick={() => handleLiquidate(liquidation)}
-                  >
-                    <div className={styles.tokenInfo}>
-                      <div className={styles.iconWrapper}>
-                        <Image
-                          src={liquidation.fromToken.icon}
-                          alt={liquidation.fromToken.name}
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className={styles.nameSymbol}>
-                        <h2 className={styles.name}>
-                          {liquidation.fromToken.name}
-                        </h2>
-                        <p className={styles.symbol}>
-                          {liquidation.fromToken.symbol}
-                        </p>
-                      </div>
-                    </div>
+          <TokenFiltersContainer
+            receiveTokens={receiveTokens}
+            sendTokens={sendTokens}
+            selectedReceiveToken={selectedReceiveToken}
+            selectedSendToken={selectedSendToken}
+            showReceiveDropdown={showReceiveDropdown}
+            showSendDropdown={showSendDropdown}
+            toggleReceiveDropdown={toggleReceiveDropdown}
+            toggleSendDropdown={toggleSendDropdown}
+            setSelectedReceiveToken={setSelectedReceiveToken}
+            setSelectedSendToken={setSelectedSendToken}
+            setShowReceiveDropdown={setShowReceiveDropdown}
+            setShowSendDropdown={setShowSendDropdown}
+          />
 
-                    <div className={styles.arrowContainer}>
-                      <Image
-                        src="/icons/arrow-right.svg"
-                        alt="arrow"
-                        width={20}
-                        height={20}
-                      />
-                    </div>
-
-                    <div className={styles.tokenInfo}>
-                      <div className={styles.iconWrapper}>
-                        <Image
-                          src={liquidation.toToken.icon}
-                          alt={liquidation.toToken.name}
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className={styles.nameSymbol}>
-                        <h2 className={styles.name}>
-                          {liquidation.toToken.name}
-                        </h2>
-                        <p className={styles.symbol}>
-                          {liquidation.toToken.symbol}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className={styles.metricBox}>
-                      <div className={styles.metricValue}>
-                        <p style={{ paddingRight: "2px", margin: "0px" }}>
-                          {formatTMB(liquidation.toToken.available)}
-                        </p>
-                        <p style={{ paddingLeft: "2px", margin: "0px" }}>
-                          {liquidation.toToken.symbol}
-                        </p>
-                      </div>
-                      <p className={styles.metricLabel}>Profit</p>
-                    </div>
-
-                    <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>
-                        <p className={styles.metricValue}>
-                          <span style={{ paddingRight: "2px", margin: "0px" }}>
-                            {formatTMB(liquidation.toToken.available)}
-                          </span>
-                          <span style={{ paddingLeft: "2px", margin: "0px" }}>
-                            {liquidation.toToken.symbol}
-                          </span>
-                        </p>
-                      </p>
-                      <p className={styles.metricLabel}>Available</p>
-                    </div>
-
-                    <div className={styles.metricBox}>
-                      <p className={styles.metricValue}>
-                        $
-                        {getTokenPrice(
-                          liquidation.fromToken.symbol,
-                        ).toLocaleString("en-US", {
-                          maximumFractionDigits: 2,
-                        })}
-                      </p>
-                      <p className={styles.metricLabel}>Price</p>
-                    </div>
-                  </div>
-                  <button
-                    className={styles.liquidateButton}
-                    onClick={() => handleLiquidate(liquidation)}
-                  >
-                    <Image
-                      src="/icons/liquidate.svg"
-                      alt="Liquidate"
-                      width={20}
-                      height={20}
-                      className={styles.liquidateIcon}
-                    />
-                    <span>Liquidate</span>
-                  </button>
-                </div>
-              ))
-            ) : (
-              <div className={styles.noLiquidations}>
-                <p>No liquidations found</p>
-              </div>
-            )}
-          </div>
+          <LiquidationsList
+            liquidations={filteredLiquidations}
+            onLiquidate={handleLiquidate}
+            getTokenPrice={getTokenPrice}
+          />
         </div>
       </div>
 

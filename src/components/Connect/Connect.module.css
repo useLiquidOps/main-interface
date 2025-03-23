@@ -25,6 +25,8 @@
 .profileContainer {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 5px;
   cursor: pointer;
 }
 
@@ -46,4 +48,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.profileImageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }

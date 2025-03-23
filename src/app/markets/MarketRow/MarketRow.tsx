@@ -5,6 +5,7 @@ import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface Token {
   ticker: string;
@@ -43,6 +44,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
     <Link href={`/${token.ticker}`} className={styles.marketLink}>
       <div className={styles.marketRowWrapper}>
         <div className={styles.marketRow}>
+          {/* Asset Info */}
           <div className={styles.assetInfo}>
             <div className={styles.iconWrapper}>
               <Image
@@ -58,51 +60,99 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             </div>
           </div>
 
+          {/* APR Info */}
           <div className={styles.aprInfo}>
-            <div className={styles.aprValue}>
-              <p className={styles.apr}>{data.apr.toFixed(2)}%</p>
-              <Image
-                src={
-                  isLoading
-                    ? "/icons/APRUp.svg"
-                    : stats.data.percentChange.outcome
-                      ? "/icons/APRUp.svg"
-                      : "/icons/APRDown.svg"
-                }
-                alt="APR trend"
-                width={16}
-                height={16}
-              />
-            </div>
-            <p className={styles.aprLabel}>APY</p>
+            {isLoading ? (
+              <>
+                <SkeletonLoading className="h-6 w-16 mb-1" />
+                <p className={styles.aprLabel}>APY</p>
+              </>
+            ) : (
+              <>
+                <div className={styles.aprValue}>
+                  <p className={styles.apr}>{data.apr.toFixed(2)}%</p>
+                  <Image
+                    src={
+                      stats.data.percentChange.outcome
+                        ? "/icons/APRUp.svg"
+                        : "/icons/APRDown.svg"
+                    }
+                    alt="APR trend"
+                    width={16}
+                    height={16}
+                  />
+                </div>
+                <p className={styles.aprLabel}>APY</p>
+              </>
+            )}
           </div>
 
+          {/* TVL Metric */}
           <div className={styles.metricBox}>
-            <p className={styles.metricValue}>
-              ${formatTMB(Quantity.__mul(data.protocolBalance, price))}
-            </p>
-            <p className={styles.metricLabel}>TVL</p>
+            {isLoading ? (
+              <>
+                <SkeletonLoading className="h-6 w-20 mb-1" />
+                <p className={styles.metricLabel}>TVL</p>
+              </>
+            ) : (
+              <>
+                <p className={styles.metricValue}>
+                  ${formatTMB(Quantity.__mul(data.protocolBalance, price))}
+                </p>
+                <p className={styles.metricLabel}>TVL</p>
+              </>
+            )}
           </div>
 
+          {/* Collateral Metric */}
           <div className={styles.metricBox}>
-            <p className={styles.metricValue}>
-              ${formatTMB(Quantity.__mul(data.unLent, price))}
-            </p>
-            <p className={styles.metricLabel}>Collateral</p>
+            {isLoading ? (
+              <>
+                <SkeletonLoading className="h-6 w-20 mb-1" />
+                <p className={styles.metricLabel}>Collateral</p>
+              </>
+            ) : (
+              <>
+                <p className={styles.metricValue}>
+                  ${formatTMB(Quantity.__mul(data.unLent, price))}
+                </p>
+                <p className={styles.metricLabel}>Collateral</p>
+              </>
+            )}
           </div>
 
+          {/* Borrowed Metric */}
           <div className={styles.metricBox}>
-            <p className={styles.metricValue}>
-              ${formatTMB(Quantity.__mul(data.borrows, price))}
-            </p>
-            <p className={styles.metricLabel}>Borrowed</p>
+            {isLoading ? (
+              <>
+                <SkeletonLoading className="h-6 w-20 mb-1" />
+                <p className={styles.metricLabel}>Borrowed</p>
+              </>
+            ) : (
+              <>
+                <p className={styles.metricValue}>
+                  ${formatTMB(Quantity.__mul(data.borrows, price))}
+                </p>
+                <p className={styles.metricLabel}>Borrowed</p>
+              </>
+            )}
           </div>
 
+          {/* Utilization Metric */}
           <div className={styles.metricBox}>
-            <p className={styles.metricValue}>
-              {data.utilizationRate.toNumber().toFixed(2)}%
-            </p>
-            <p className={styles.metricLabel}>Utilization</p>
+            {isLoading ? (
+              <>
+                <SkeletonLoading className="h-6 w-16 mb-1" />
+                <p className={styles.metricLabel}>Utilization</p>
+              </>
+            ) : (
+              <>
+                <p className={styles.metricValue}>
+                  {data.utilizationRate.toNumber().toFixed(2)}%
+                </p>
+                <p className={styles.metricLabel}>Utilization</p>
+              </>
+            )}
           </div>
         </div>
       </div>

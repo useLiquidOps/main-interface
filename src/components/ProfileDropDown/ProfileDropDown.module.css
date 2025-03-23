@@ -103,3 +103,11 @@
   cursor: pointer;
   background: transparent;
 }
+
+.profileImageContainer {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}

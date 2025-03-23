@@ -4,6 +4,7 @@ import { useProtocolStats } from "@/hooks/data/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface Token {
   ticker: string;
@@ -38,13 +39,20 @@ interface MarketStatsProps {
 }
 
 export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
+  // Track loading state
+  let isLoading = false;
   let totalTVL = new Quantity(0n, 12n);
   let totalCollateral = new Quantity(0n, 12n);
   let totalBorrows = new Quantity(0n, 12n);
 
+  // Check if any token's stats are still loading
   tokens.forEach((token) => {
     const { stats, price } = useTokenStats(token, prices);
-    if (!stats.isLoading && stats.data) {
+
+    // Only set isLoading if stats are actually loading
+    if (stats.isLoading) {
+      isLoading = true;
+    } else if (stats.data) {
       totalTVL = Quantity.__add(
         totalTVL,
         Quantity.__mul(stats.data.protocolBalance, price),
@@ -59,6 +67,26 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
       );
     }
   });
+
+  // Render skeleton only for values if loading
+  if (isLoading) {
+    return (
+      <div className={styles.marketStats}>
+        <div className={styles.marketStat}>
+          <SkeletonLoading className="h-8 w-28 mb-2" />
+          <p className={styles.marketStatTitle}>LiquidOps TVL</p>
+        </div>
+        <div className={styles.marketStat}>
+          <SkeletonLoading className="h-8 w-28 mb-2" />
+          <p className={styles.marketStatTitle}>Total collateral</p>
+        </div>
+        <div className={styles.marketStat}>
+          <SkeletonLoading className="h-8 w-28 mb-2" />
+          <p className={styles.marketStatTitle}>Total borrows</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.marketStats}>

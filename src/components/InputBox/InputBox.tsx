@@ -5,6 +5,7 @@ import styles from "./InputBox.module.css";
 import { formatInputNumber, calculateUsdValue } from "../utils/utils";
 import { formatTMB } from "../utils/utils";
 import { Quantity } from "ao-tokens";
+import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";
 
 interface InputBoxProps {
   inputValue: string;
@@ -23,15 +24,15 @@ interface InputBoxProps {
 
 interface TokenConfig {
   [key: string]: number;
-  DAI: number;
   stETH: number;
   qAR: number;
+  USDC: number;
 }
 
 const DECIMAL_PLACES: TokenConfig = {
-  DAI: 2,
   stETH: 4,
   qAR: 3,
+  USDC: 2,
 };
 
 const useInputValidation = (walletBalance: Quantity) => {
@@ -214,12 +215,16 @@ const InputBox: React.FC<InputBoxProps> = ({
     !disabled && (
       <div className={styles.walletInfo}>
         <Image src="/icons/wallet.svg" height={14} width={14} alt="Wallet" />
-        <span className={styles.balanceAmount}>
-          {Quantity.eq(walletBalance, new Quantity(0n, denomination))
-            ? "0.00"
-            : formatTMB(walletBalance)}{" "}
-          {ticker}
-        </span>
+        {!walletBalance || Quantity.eq(walletBalance, new Quantity(0n, 0n)) ? (
+          <SkeletonLoading
+            className={styles.balanceAmount}
+            style={{ width: "80px", height: "16px" }}
+          />
+        ) : (
+          <span className={styles.balanceAmount}>
+            {formatTMB(walletBalance)} {ticker}
+          </span>
+        )}
         <span className={styles.separator}>|</span>
         <button className={styles.maxButton} onClick={onMaxClick}>
           Max

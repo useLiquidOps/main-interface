@@ -7,6 +7,8 @@ import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/data/useGetPosition";
 import { SupportedToken } from "@/hooks/data/useSupportedTokens";
+import { Quantity } from "ao-tokens";
+import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";
 
 interface AssetRowProps {
   asset: SupportedToken;
@@ -50,6 +52,7 @@ const AssetRow: React.FC<AssetRowProps> = ({
 
   const currentBalance = mode === "lend" ? lentBalance : positionBalance;
   const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
+  const isProtocolStatsLoading = !protocolStats;
 
   const handleClick = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -73,31 +76,46 @@ const AssetRow: React.FC<AssetRowProps> = ({
           </div>
           <div className={styles.nameAmount}>
             <p className={styles.name}>{asset.name}</p>
-            <p className={styles.amount}>
-              {isLoading ? "0.00" : formattedBalance} {asset?.ticker}
-            </p>
+            {isLoading ? (
+              <SkeletonLoading
+                className={styles.amount}
+                style={{ width: "120px", height: "20px" }}
+              />
+            ) : (
+              <p className={styles.amount}>
+                {formattedBalance} {asset?.ticker}
+              </p>
+            )}
           </div>
         </div>
 
         <div className={styles.aprInfo}>
-          <p className={styles.apr}>
-            APR {protocolStats?.apr.toFixed(2) ?? "0.00"}%
-          </p>
-          <div className={styles.changeInfo}>
-            <Image
-              src={
-                protocolStats?.percentChange?.outcome
-                  ? "/icons/APRUp.svg"
-                  : "/icons/APRDown.svg"
-              }
-              alt="APR change indicator"
-              width={16}
-              height={16}
+          {isProtocolStatsLoading ? (
+            <SkeletonLoading
+              style={{ width: "80px", height: "20px", marginBottom: "8px" }}
             />
-            <p className={styles.change}>
-              {protocolStats?.percentChange?.change ?? "0.00"}%
-            </p>
-          </div>
+          ) : (
+            <p className={styles.apr}>APR {protocolStats.apr.toFixed(2)}%</p>
+          )}
+          {isProtocolStatsLoading ? (
+            <SkeletonLoading style={{ width: "60px", height: "16px" }} />
+          ) : (
+            <div className={styles.changeInfo}>
+              <Image
+                src={
+                  protocolStats.percentChange?.outcome
+                    ? "/icons/APRUp.svg"
+                    : "/icons/APRDown.svg"
+                }
+                alt="APR change indicator"
+                width={16}
+                height={16}
+              />
+              <p className={styles.change}>
+                {protocolStats.percentChange?.change ?? "0.00"}%
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <button className={styles.withdrawButton} onClick={handleClick}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./AssetRow.module.css";
 import { useProtocolStats } from "@/hooks/data/useProtocolStats";
@@ -18,6 +18,7 @@ interface AssetRowProps {
     actionIcon: string;
   };
   onClick: (asset: SupportedToken, e?: React.MouseEvent) => void;
+  showIndicator?: boolean;
 }
 
 const AssetRow: React.FC<AssetRowProps> = ({
@@ -25,6 +26,7 @@ const AssetRow: React.FC<AssetRowProps> = ({
   mode,
   displayText,
   onClick,
+  showIndicator = false,
 }) => {
   const { tokenAddress, oTokenAddress } = tokenInput(
     asset.ticker.toUpperCase(),
@@ -32,6 +34,21 @@ const AssetRow: React.FC<AssetRowProps> = ({
   const { data: positionBalance } = useGetPosition(tokenAddress);
   const { data: lentBalance } = useUserBalance(oTokenAddress);
   const { data: protocolStats } = useProtocolStats(asset.ticker.toUpperCase());
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  // Handle the indicator animation
+  useEffect(() => {
+    if (showIndicator) {
+      setIsAnimating(true);
+
+      // Reset animation after it completes
+      const timer = setTimeout(() => {
+        setIsAnimating(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showIndicator]);
 
   const currentBalance = mode === "lend" ? lentBalance : positionBalance;
   const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
@@ -44,9 +61,11 @@ const AssetRow: React.FC<AssetRowProps> = ({
 
   const formattedBalance = currentBalance ? formatTMB(currentBalance) : "0.00";
 
+  const rowClass = `${styles.assetRowWrapper} ${isAnimating ? styles.showIndicator : ""}`;
+
   return (
     <div
-      className={styles.assetRowWrapper}
+      className={rowClass}
       onClick={handleClick}
       style={{ cursor: "pointer" }}
     >

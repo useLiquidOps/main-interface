@@ -32,13 +32,6 @@ const Footer = () => {
     <>
       <div className={styles.footer}>
         <div className={styles.left}>
-          <p
-            className={styles.manageAnalytics}
-            onClick={handleManageAnalytics}
-            style={{ cursor: "pointer" }}
-          >
-            Manage analytics
-          </p>
           <a
             href="https://forms.gle/nzErNbwpq1w4gPEt8"
             className={styles.feedback}
@@ -46,6 +39,13 @@ const Footer = () => {
           >
             Send feedback
           </a>
+          <p
+            className={styles.manageAnalytics}
+            onClick={handleManageAnalytics}
+            style={{ cursor: "pointer" }}
+          >
+            Manage analytics
+          </p>
 
           <div className={styles.version}>
             <p>v0.1.0</p>

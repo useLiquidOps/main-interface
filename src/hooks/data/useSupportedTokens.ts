@@ -8,6 +8,7 @@ export interface SupportedToken
   > {
   extraAmount: string;
   denomination: bigint;
+  collateralEnabled: boolean;
 }
 
 export function useSupportedTokens() {
@@ -20,6 +21,7 @@ export function useSupportedTokens() {
         ticker: data.cleanTicker,
         extraAmount: "1",
         denomination: data.denomination,
+        collateralEnabled: data.collateralEnabled
       }));
     },
     staleTime: 5 * 60 * 1000,

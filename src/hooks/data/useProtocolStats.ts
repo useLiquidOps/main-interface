@@ -24,6 +24,7 @@ export function useProtocolStats(token: string) {
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
+      // TODO: change to get info
       const [reserves, tokenInstance] = await Promise.all([
         LiquidOpsClient.getReserves({ token }),
         Token(oTokenAddress),

@@ -14,7 +14,7 @@ export function useGetPosition(tokenAddress: string) {
         token: tokenAddress,
         recipient: walletAddress,
       });
-      return new Quantity(data.usedCapacity, tokenInstance.info.Denomination);
+      return new Quantity(data.borrowBalance, tokenInstance.info.Denomination);
     },
     enabled: !!tokenAddress && !!walletAddress,
     staleTime: 30 * 1000,

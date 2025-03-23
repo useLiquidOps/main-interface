@@ -60,14 +60,14 @@ export function useGlobalPosition(marketTokenTicker?: string) {
                 ? "qAR"
                 : position.collateralTicker,
             collateralValue: new Quantity(
-              position.totalCollateral,
+              position.collateralization,
               denomination,
             ),
             borrowCapacity: new Quantity(position.capacity, denomination),
             // TODO: the below should be the liquidation minimal, but it needs to be fixed in the oToken process
             liquidationPoint: new Quantity(position.capacity, denomination),
             availableToBorrow: new Quantity(
-              BigInt(position.capacity) - BigInt(position.usedCapacity),
+              BigInt(position.capacity) - BigInt(position.borrowBalance),
               denomination,
             ),
           };

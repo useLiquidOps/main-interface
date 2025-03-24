@@ -8,7 +8,7 @@ export function useGetPosition(tokenAddress: string) {
 
   // return empty position, if the user has not connected their wallet address
   if (!walletAddress) {
-    return new Quantity(0n, 12n)
+    return new Quantity(0n, 12n);
   }
 
   return useQuery({

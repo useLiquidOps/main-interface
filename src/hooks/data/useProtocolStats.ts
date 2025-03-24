@@ -24,17 +24,14 @@ export function useProtocolStats(token: string) {
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
-      // TODO: change to get info
       const [reserves, tokenInstance] = await Promise.all([
-        // TODO: fix hooks
-        // @ts-ignore
-        LiquidOpsClient.getReserves({ token }),
+        LiquidOpsClient.getInfo({ token }),
         Token(oTokenAddress),
       ]);
 
       const denomination = tokenInstance.info.Denomination;
-      const available = new Quantity(reserves.available, denomination);
-      const lent = new Quantity(reserves.lent, denomination);
+      const available = new Quantity(reserves.cash, denomination);
+      const lent = new Quantity(reserves.totalBorrows, denomination);
       const protocolBalance = Quantity.__add(available, lent);
       const zero = tokenInstance.Quantity.fromNumber(0);
 

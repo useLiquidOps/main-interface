@@ -187,12 +187,6 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
             >
               <p>Liquidations</p>
             </Link>
-            <Link
-              href="/faucet/qAR"
-              className={isLinkActive("/faucet") ? styles.activeLink : ""}
-            >
-              <p>Faucet</p>
-            </Link>
             <MoreDropdown items={moreMenuItems} />
           </nav>
         </div>

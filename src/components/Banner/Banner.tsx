@@ -6,7 +6,7 @@ const Banner = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    const bannerState = localStorage.getItem("bannerVisible");
+    const bannerState = localStorage.getItem("betaBanner");
     if (bannerState !== null) {
       setIsVisible(bannerState === "true");
     }
@@ -14,14 +14,14 @@ const Banner = () => {
 
   const handleClose = () => {
     setIsVisible(false);
-    localStorage.setItem("bannerVisible", "false");
+    localStorage.setItem("betaBanner", "false");
   };
 
   if (!isVisible) return null;
 
   return (
     <div className={styles.banner}>
-      <p>All tokens are testnet, with no real-world value</p>
+      <p>LiquidOps is currently in its beta phase, please use with caution and be aware of potential risks or limitations.</p>
       <button
         onClick={handleClose}
         className={styles.closeButton}

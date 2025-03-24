@@ -6,7 +6,7 @@ import InputBox from "../InputBox/InputBox";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import styles from "./ActionTab.module.css";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";

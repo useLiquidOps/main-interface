@@ -1,6 +1,6 @@
 "use client";
 import styles from "./MarketStats.module.css";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";

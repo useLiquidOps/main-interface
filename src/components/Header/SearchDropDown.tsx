@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { dropdownVariants } from "@/components/DropDown/FramerMotion";
 import SearchInput from "../SearchInput/SearchInput";
 import styles from "./Header.module.css";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 
 interface Token {
   name: string;

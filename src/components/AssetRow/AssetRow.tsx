@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./AssetRow.module.css";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
-import { useGetPosition } from "@/hooks/data/useGetPosition";
+import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { SupportedToken } from "@/hooks/data/useSupportedTokens";
 import { Quantity } from "ao-tokens";
 import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";

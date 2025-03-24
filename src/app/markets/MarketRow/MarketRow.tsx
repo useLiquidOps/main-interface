@@ -1,7 +1,7 @@
 import styles from "./MarketRow.module.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";

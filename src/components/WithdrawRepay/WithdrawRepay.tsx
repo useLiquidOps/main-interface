@@ -13,7 +13,7 @@ import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
-import { useGetPosition } from "@/hooks/data/useGetPosition";
+import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
 
 interface WithdrawRepayProps {

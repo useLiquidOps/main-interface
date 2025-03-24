@@ -2,7 +2,7 @@ import { formatTMB } from "@/components/utils/utils";
 import { tokens } from "liquidops";
 import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
-import { useGetResult } from "@/hooks/data/useGetResult";
+import { useGetResult } from "@/hooks/LiquidOpsData/useGetResult";
 import { GetResultRes } from "liquidops";
 import Spinner from "@/components/Spinner/Spinner";
 import Image from "next/image";

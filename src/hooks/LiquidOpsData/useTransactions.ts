@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
-import { useWalletAddress } from "./useWalletAddress";
+import { useWalletAddress } from "../data/useWalletAddress";
 import { GetTransactions } from "liquidops";
-import { useSupportedTokens } from "./useSupportedTokens";
+import { useSupportedTokens } from "../data/useSupportedTokens";
 
 type TransactionAction = GetTransactions["action"];
 

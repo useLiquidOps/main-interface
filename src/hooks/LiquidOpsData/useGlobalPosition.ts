@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { tokens } from "liquidops";
 import { Quantity, Token } from "ao-tokens";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
-import { useWalletAddress } from "./useWalletAddress";
-import { tickerToGeckoMap, usePrices } from "./useTokenPrice";
+import { useWalletAddress } from "../data/useWalletAddress";
+import { tickerToGeckoMap, usePrices } from "../data/useTokenPrice";
 
 export function useGlobalPosition(marketTokenTicker?: string) {
   const { data: walletAddress } = useWalletAddress();

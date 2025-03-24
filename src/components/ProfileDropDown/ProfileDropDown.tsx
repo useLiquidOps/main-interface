@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { dropdownVariants } from "@/components/DropDown/FramerMotion";
 import styles from "./ProfileDropDown.module.css";
 import ActivityList from "../ActivityList/ActivityList";
-import { useTransactions } from "@/hooks/data/useTransactions";
+import { useTransactions } from "@/hooks/LiquidOpsData/useTransactions";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface ProfileDropdownProps {

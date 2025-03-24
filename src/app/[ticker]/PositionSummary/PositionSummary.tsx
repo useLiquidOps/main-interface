@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import styles from "./PositionSummary.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import { Quantity } from "ao-tokens";
-import { useGlobalPosition } from "@/hooks/data/useGlobalPosition";
+import { useGlobalPosition } from "@/hooks/LiquidOpsData/useGlobalPosition";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 

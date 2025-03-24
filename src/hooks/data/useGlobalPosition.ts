@@ -13,7 +13,7 @@ export function useGlobalPosition(marketTokenTicker?: string) {
     queryKey: ["global-position", walletAddress, prices, marketTokenTicker],
     queryFn: async () => {
       // empty position (on loading or no wallet connection)
-      if (!marketTokenTicker)
+      if (!marketTokenTicker || !walletAddress)
         return {
           collateralLogos: [],
           collateralValue: new Quantity(0n, 12n),
@@ -26,7 +26,6 @@ export function useGlobalPosition(marketTokenTicker?: string) {
       const [positions, tokenInfosUnfiltered] = await Promise.all([
         Promise.all(
           Object.values(tokens).map((token) =>
-            // @ts-ignore
             LiquidOpsClient.getPosition({ token, recipient: walletAddress }),
           ),
         ),

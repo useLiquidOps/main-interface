@@ -12,7 +12,7 @@ export function useGetPosition(tokenAddress: string) {
       if (!walletAddress) {
         return new Quantity(0n, 12n);
       }
-      
+
       const tokenInstance = await Token(tokenAddress);
       const data = await LiquidOpsClient.getPosition({
         token: tokenAddress,

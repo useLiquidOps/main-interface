@@ -21,7 +21,10 @@ const Banner = () => {
 
   return (
     <div className={styles.banner}>
-      <p>LiquidOps is currently in its beta phase, please use with caution and be aware of potential risks or limitations.</p>
+      <p>
+        LiquidOps is currently in its beta phase, please use with caution and be
+        aware of potential risks or limitations.
+      </p>
       <button
         onClick={handleClose}
         className={styles.closeButton}

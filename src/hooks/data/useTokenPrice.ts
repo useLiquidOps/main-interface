@@ -8,7 +8,7 @@ export interface Prices {
 
 export const tickerToGeckoMap: Record<string, string> = {
   QAR: "arweave",
-  USDC: "usd-coin",
+  WUSDC: "usd-coin",
 };
 
 export function usePrices() {

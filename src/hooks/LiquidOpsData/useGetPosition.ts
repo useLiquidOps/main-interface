@@ -5,12 +5,13 @@ import { Quantity } from "ao-tokens";
 import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
 import { GetPositionRes } from "liquidops";
 
-export type PositionCache = GetPositionRes
+export type PositionCache = GetPositionRes;
 
 export function useGetPosition(tokenAddress: string) {
   const { data: walletAddress } = useWalletAddress();
-  
-  const DATA_KEY = `user-position-${tokenAddress}-${walletAddress || ""}` as const;
+
+  const DATA_KEY =
+    `user-position-${tokenAddress}-${walletAddress || ""}` as const;
 
   return useQuery({
     queryKey: ["position", tokenAddress, walletAddress],
@@ -20,9 +21,9 @@ export function useGetPosition(tokenAddress: string) {
       }
 
       const cachedData = isDataCachedValid(DATA_KEY);
-      
+
       let positionData: PositionCache;
-      
+
       if (cachedData) {
         positionData = cachedData;
       } else {
@@ -30,16 +31,16 @@ export function useGetPosition(tokenAddress: string) {
           token: tokenAddress,
           recipient: walletAddress,
         });
-        
+
         cacheData({
           dataKey: DATA_KEY,
-          data: positionData
+          data: positionData,
         });
       }
-      
+
       return new Quantity(
-        positionData.borrowBalance, 
-        BigInt(positionData.collateralDenomination)
+        positionData.borrowBalance,
+        BigInt(positionData.collateralDenomination),
       );
     },
     enabled: !!tokenAddress,

@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
-import { Token, Quantity } from "ao-tokens";
-import { tokenInput } from "liquidops";
-import { useHistoricalAPR } from "./useHistoricalAPR";
+import { Quantity } from "ao-tokens";
+import { useHistoricalAPR, HistoricalAPRRes } from "./useHistoricalAPR";
+import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
+import { GetInfoRes } from "liquidops";
 
 interface ProtocolStats {
   denomination: bigint;
@@ -17,27 +18,59 @@ interface ProtocolStats {
   };
 }
 
+export type ProtocolStatsCache = GetInfoRes
+
 export function useProtocolStats(token: string) {
-  const { oTokenAddress } = tokenInput(token);
   const { data: historicalAPR } = useHistoricalAPR(token);
+
+  const DATA_KEY = 'protocol-stats' as const
 
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
-      const [reserves, tokenInstance] = await Promise.all([
-        LiquidOpsClient.getInfo({ token }),
-        Token(oTokenAddress),
-      ]);
 
-      const denomination = tokenInstance.info.Denomination;
-      const available = new Quantity(reserves.cash, denomination);
-      const lent = new Quantity(reserves.totalBorrows, denomination);
+      const checkCache = isDataCachedValid(DATA_KEY) 
+      const safeHistoricalAPR = historicalAPR ?? [];
+
+      if (checkCache) {
+        return getProtocolStatsData(checkCache, safeHistoricalAPR)
+      } else {
+        const [getInfoRes] = await Promise.all([
+          LiquidOpsClient.getInfo({ token }),
+        ]);
+        
+        const protocolStatsCache = {
+          dataKey: DATA_KEY,
+          data: getInfoRes
+        }
+        cacheData(protocolStatsCache)
+
+        return getProtocolStatsData(getInfoRes, safeHistoricalAPR) 
+
+      }
+
+    },
+    enabled: !!historicalAPR,
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
+  })
+}
+
+
+
+function getProtocolStatsData(getInfoRes: GetInfoRes, historicalAPR: HistoricalAPRRes) {
+
+  const denomination = BigInt(getInfoRes.denomination)
+      const available = new Quantity(getInfoRes.cash, denomination);
+      const lent = new Quantity(getInfoRes.totalBorrows, denomination);
       const protocolBalance = Quantity.__add(available, lent);
-      const zero = tokenInstance.Quantity.fromNumber(0);
+
+      const zero = new Quantity(0, denomination);
+      const oneHundred = new Quantity (0, denomination).fromNumber(100)
 
       const utilizationRate = Quantity.lt(zero, protocolBalance)
         ? Quantity.__div(
-            Quantity.__mul(lent, tokenInstance.Quantity.fromNumber(100)),
+            Quantity.__mul(lent, oneHundred),
             protocolBalance,
           )
         : zero;
@@ -64,9 +97,5 @@ export function useProtocolStats(token: string) {
           change,
         },
       };
-    },
-    enabled: !!historicalAPR,
-    staleTime: 30 * 1000,
-    gcTime: 5 * 60 * 1000,
-  });
+
 }

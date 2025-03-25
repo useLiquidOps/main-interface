@@ -24,15 +24,13 @@ interface InputBoxProps {
 
 interface TokenConfig {
   [key: string]: number;
-  stETH: number;
   qAR: number;
-  USDC: number;
+  wUSDC: number;
 }
 
 const DECIMAL_PLACES: TokenConfig = {
-  stETH: 4,
   qAR: 3,
-  USDC: 2,
+  wUSDC: 2,
 };
 
 const useInputValidation = (walletBalance: Quantity) => {

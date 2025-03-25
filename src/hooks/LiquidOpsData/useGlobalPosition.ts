@@ -9,7 +9,7 @@ export function useGlobalPosition() {
   return useQuery({
     queryKey: ["global-position", walletAddress],
     queryFn: async () => {
-      // empty position (on loading or no wallet connection)
+      // empty position (on no wallet connection)
       if (!walletAddress)
         return {
           collateralLogos: [],

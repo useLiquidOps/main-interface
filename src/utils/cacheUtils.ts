@@ -3,12 +3,14 @@ import { Prices } from "@/hooks/data/useTokenPrice";
 import { UserBalanceCache } from "@/hooks/data/useUserBalance";
 import { PositionCache } from "@/hooks/LiquidOpsData/useGetPosition";
 import { Quantity } from "ao-tokens";
+import { GlobalPositionCache } from "@/hooks/LiquidOpsData/useGlobalPosition";
 
 interface DataTypeMap {
   prices: Prices;
   [key: `protocol-stats-${string}`]: ProtocolStatsCache;
   [key: `user-balance-${string}`]: UserBalanceCache;
   [key: `user-position-${string}`]: PositionCache;
+  [key: `global-position-${string}`]: GlobalPositionCache;
 }
 
 type DataKeys = keyof DataTypeMap;

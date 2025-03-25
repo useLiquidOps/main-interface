@@ -100,11 +100,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         setIsFocused={setIsFocused}
         ticker={ticker}
         tokenPrice={tokenPrice}
-        walletBalance={
-          isLoadingBalance || !walletBalance
-            ? new Quantity(0n, 12n)
-            : walletBalance
-        }
+        // @ts-ignore, skeleton loading logic relies on this being undefined
+        walletBalance={walletBalance}
         onMaxClick={handleMaxClick}
         denomination={walletBalance?.denomination || 12n}
       />

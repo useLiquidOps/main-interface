@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Quantity } from "ao-tokens";
+import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
 
-interface Prices {
+export interface Prices {
   [key: string]: { usd: number };
 }
 
@@ -11,13 +12,34 @@ export const tickerToGeckoMap: Record<string, string> = {
 };
 
 export function usePrices() {
+
+  const DATA_KEY = 'prices' as const
+
   return useQuery({
     queryKey: ["prices"],
     queryFn: async (): Promise<Prices> => {
-      const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,&vs_currencies=usd",
-      );
-      return response.json();
+
+      const checkCache = isDataCachedValid(DATA_KEY) 
+      
+      if (checkCache) {
+        return checkCache
+      } else {
+
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,&vs_currencies=usd",
+        );
+        
+        const geckoResponse = await response.json();
+
+        cacheData({
+          dataKey: DATA_KEY,
+          data: geckoResponse
+        });
+
+        return geckoResponse;
+
+      }
+
     },
   });
 }

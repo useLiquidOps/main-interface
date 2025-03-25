@@ -1,28 +1,29 @@
 import { ProtocolStatsCache } from "@/hooks/LiquidOpsData/useProtocolStats";
+import { Prices } from "@/hooks/data/useTokenPrice";
 
-type DataKeys = "protocol-stats"
-
-type Data = ProtocolStatsCache;
-
-interface DataItem {
-    data: Data;
-    timestamp: number;
+interface DataTypeMap {
+  "protocol-stats": ProtocolStatsCache;
+  "prices": Prices;
 }
 
-type IsDataCachedValid = DataKeys
-type IsDataCachedValidRes = false | Data;
+type DataKeys = keyof DataTypeMap;
 
-export function isDataCachedValid(dataKey: IsDataCachedValid): IsDataCachedValidRes {
+interface DataItem<T> {
+  data: T;
+  timestamp: number;
+}
+
+export function isDataCachedValid<K extends DataKeys>(dataKey: K): false | DataTypeMap[K] {
   try {
     const storedItem = localStorage.getItem(dataKey);
     if (!storedItem) return false;
 
-    const dataItenm: DataItem = JSON.parse(storedItem);
+    const dataItem: DataItem<DataTypeMap[K]> = JSON.parse(storedItem);
     const now = Date.now();
-    const isDataValid = now - dataItenm.timestamp <= 5 * 60 * 1000;
+    const isDataValid = now - dataItem.timestamp <= 5 * 60 * 1000;
     
     if (isDataValid) {
-      return dataItenm.data;
+      return dataItem.data;
     } else {
       return false;
     }
@@ -32,14 +33,15 @@ export function isDataCachedValid(dataKey: IsDataCachedValid): IsDataCachedValid
   }
 }
 
-interface CacheData {
-  dataKey: DataKeys;
-  data: Data;
-}
-
-export function cacheData({ dataKey, data }: CacheData) {
+export function cacheData<K extends DataKeys>({ 
+  dataKey, 
+  data 
+}: {
+  dataKey: K;
+  data: DataTypeMap[K];
+}) {
   try {
-    const parsedDataItem: DataItem = {
+    const parsedDataItem: DataItem<DataTypeMap[K]> = {
       data,
       timestamp: Date.now(),
     };

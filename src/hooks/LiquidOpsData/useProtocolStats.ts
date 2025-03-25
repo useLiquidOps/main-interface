@@ -23,7 +23,7 @@ export type ProtocolStatsCache = GetInfoRes;
 export function useProtocolStats(token: string) {
   const { data: historicalAPR } = useHistoricalAPR(token);
 
-  const DATA_KEY = "protocol-stats" as const;
+  const DATA_KEY = `protocol-stats-${token}` as const;
 
   return useQuery({
     queryKey: ["protocol-stats", token],

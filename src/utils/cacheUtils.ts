@@ -4,6 +4,7 @@ import { Prices } from "@/hooks/data/useTokenPrice";
 interface DataTypeMap {
   "protocol-stats": ProtocolStatsCache;
   prices: Prices;
+  [key: `protocol-stats-${string}`]: ProtocolStatsCache;
 }
 
 type DataKeys = keyof DataTypeMap;
@@ -17,7 +18,7 @@ export function isDataCachedValid<K extends DataKeys>(
   dataKey: K,
 ): false | DataTypeMap[K] {
   try {
-    const storedItem = localStorage.getItem(dataKey);
+    const storedItem = localStorage.getItem(dataKey as string);
     if (!storedItem) return false;
 
     const dataItem: DataItem<DataTypeMap[K]> = JSON.parse(storedItem);
@@ -38,15 +39,15 @@ export function isDataCachedValid<K extends DataKeys>(
   }
 }
 
-export function cacheData<K extends DataKeys>({
+export function cacheData<K extends string>({
   dataKey,
   data,
 }: {
   dataKey: K;
-  data: DataTypeMap[K];
+  data: K extends keyof DataTypeMap ? DataTypeMap[K] : unknown;
 }) {
   try {
-    const parsedDataItem: DataItem<DataTypeMap[K]> = {
+    const parsedDataItem: DataItem<typeof data> = {
       data,
       timestamp: Date.now(),
     };

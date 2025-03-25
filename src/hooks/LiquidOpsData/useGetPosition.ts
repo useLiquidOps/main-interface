@@ -1,10 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "../data/useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
-import { Token, Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens";
+import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
+import { GetPositionRes } from "liquidops";
+
+export type PositionCache = GetPositionRes
 
 export function useGetPosition(tokenAddress: string) {
   const { data: walletAddress } = useWalletAddress();
+  
+  const DATA_KEY = `user-position-${tokenAddress}-${walletAddress || ""}` as const;
 
   return useQuery({
     queryKey: ["position", tokenAddress, walletAddress],
@@ -13,12 +19,28 @@ export function useGetPosition(tokenAddress: string) {
         return new Quantity(0n, 12n);
       }
 
-      const tokenInstance = await Token(tokenAddress);
-      const data = await LiquidOpsClient.getPosition({
-        token: tokenAddress,
-        recipient: walletAddress,
-      });
-      return new Quantity(data.borrowBalance, tokenInstance.info.Denomination);
+      const cachedData = isDataCachedValid(DATA_KEY);
+      
+      let positionData: PositionCache;
+      
+      if (cachedData) {
+        positionData = cachedData;
+      } else {
+        positionData = await LiquidOpsClient.getPosition({
+          token: tokenAddress,
+          recipient: walletAddress,
+        });
+        
+        cacheData({
+          dataKey: DATA_KEY,
+          data: positionData
+        });
+      }
+      
+      return new Quantity(
+        positionData.borrowBalance, 
+        BigInt(positionData.collateralDenomination)
+      );
     },
     enabled: !!tokenAddress,
     staleTime: 30 * 1000,

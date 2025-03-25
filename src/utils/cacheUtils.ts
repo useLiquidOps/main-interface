@@ -1,10 +1,13 @@
 import { ProtocolStatsCache } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { Prices } from "@/hooks/data/useTokenPrice";
+import { UserBalanceCache } from "@/hooks/data/useUserBalance";
+import { PositionCache } from "@/hooks/LiquidOpsData/useGetPosition";
 
 interface DataTypeMap {
-  "protocol-stats": ProtocolStatsCache;
   prices: Prices;
   [key: `protocol-stats-${string}`]: ProtocolStatsCache;
+  [key: `user-balance-${string}`]: UserBalanceCache;
+  [key: `user-position-${string}`]: PositionCache;
 }
 
 type DataKeys = keyof DataTypeMap;

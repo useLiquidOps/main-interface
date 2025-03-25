@@ -20,7 +20,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
-    "liquidops": "^0.1.43",
+    "liquidops": "^0.1.44",
     "lucide-react": "^0.483.0",
     "next": "14.2.15",
     "next-sitemap": "^4.2.3",

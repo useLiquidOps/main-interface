@@ -20,7 +20,7 @@ const PositionSummary: React.FC<{
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
-  const { data: globalPosition } = useGlobalPosition(tokenData?.ticker);
+  const { data: globalPosition } = useGlobalPosition();
   const isLoadingPosition = !globalPosition;
 
   const denomination = 12n;
@@ -30,7 +30,7 @@ const PositionSummary: React.FC<{
         ? new Quantity(0n, 12n)
         : Quantity.__div(
             Quantity.__mul(
-              globalPosition.collateralValue,
+              globalPosition.collateralValueUSD,
               new Quantity(0n, denomination).fromNumber(3),
             ),
             new Quantity(0n, denomination).fromNumber(4),
@@ -41,7 +41,7 @@ const PositionSummary: React.FC<{
   const getProgressWidth = (value: Quantity): string => {
     const currentBorrow = Quantity.__sub(
       maxBorrow,
-      globalPosition?.availableToBorrow ||
+      globalPosition?.availableToBorrowUSD ||
         new Quantity(0n, maxBorrow.denomination),
     );
     if (maxBorrow.toNumber() === 0) return "0%";
@@ -63,7 +63,7 @@ const PositionSummary: React.FC<{
 
     const currentBorrow = Quantity.__sub(
       maxBorrow,
-      globalPosition?.availableToBorrow ||
+      globalPosition?.availableToBorrowUSD ||
         new Quantity(0n, maxBorrow.denomination),
     );
     const currentBorrowPercentage = (
@@ -95,19 +95,20 @@ const PositionSummary: React.FC<{
   };
 
   const liquidationRisk = useMemo(() => {
-    if (!globalPosition || globalPosition.liquidationPoint.toNumber() === 0)
+    if (!globalPosition || globalPosition.liquidationPointUSD.toNumber() === 0)
       return 0;
     return Quantity.__div(
       Quantity.__mul(
         Quantity.__sub(
-          globalPosition.borrowCapacity,
-          globalPosition.availableToBorrow,
+          globalPosition.borrowCapacityUSD,
+          globalPosition.availableToBorrowUSD,
         ),
-        new Quantity(0n, globalPosition.borrowCapacity.denomination).fromNumber(
-          100,
-        ),
+        new Quantity(
+          0n,
+          globalPosition.borrowCapacityUSD.denomination,
+        ).fromNumber(100),
       ),
-      globalPosition.liquidationPoint,
+      globalPosition.liquidationPointUSD,
     ).toNumber();
   }, [globalPosition]);
 
@@ -132,7 +133,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`${formatTMB(globalPosition.collateralValue)} ${tokenData.ticker}`}</p>
+                >{`$${formatTMB(globalPosition.collateralValueUSD)}`}</p>
               )}
             </div>
             <div className={styles.tokens}>
@@ -170,7 +171,7 @@ const PositionSummary: React.FC<{
                 ) : (
                   <p
                     className={styles.value}
-                  >{`${formatTMB(globalPosition.borrowCapacity)} ${tokenData.ticker}`}</p>
+                  >{`$${formatTMB(globalPosition.borrowCapacityUSD)}`}</p>
                 )}
                 {extraData && !isLoadingPosition && (
                   <div className={styles.redDot} />
@@ -193,7 +194,8 @@ const PositionSummary: React.FC<{
                     className={styles.progressPrimary}
                     style={{
                       width: getProgressWidth(
-                        globalPosition?.borrowCapacity || new Quantity(0n, 12n),
+                        globalPosition?.borrowCapacityUSD ||
+                          new Quantity(0n, 12n),
                       ),
                     }}
                   />
@@ -214,7 +216,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`${formatTMB(globalPosition.liquidationPoint)} ${tokenData.ticker}`}</p>
+                >{`$${formatTMB(globalPosition.liquidationPointUSD)}`}</p>
               )}
             </div>
           </div>
@@ -230,7 +232,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`${formatTMB(globalPosition.availableToBorrow)} ${tokenData.ticker}`}</p>
+                >{`$${formatTMB(globalPosition.availableToBorrowUSD)}`}</p>
               )}
             </div>
           </div>

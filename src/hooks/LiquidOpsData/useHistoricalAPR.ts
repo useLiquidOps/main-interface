@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { GetHistoricalAPRRes } from "liquidops";
 
-export type HistoricalAPRRes = APR[]
+export type HistoricalAPRRes = APR[];
 
 interface APR {
   date: string;

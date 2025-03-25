@@ -12,34 +12,29 @@ export const tickerToGeckoMap: Record<string, string> = {
 };
 
 export function usePrices() {
-
-  const DATA_KEY = 'prices' as const
+  const DATA_KEY = "prices" as const;
 
   return useQuery({
     queryKey: ["prices"],
     queryFn: async (): Promise<Prices> => {
+      const checkCache = isDataCachedValid(DATA_KEY);
 
-      const checkCache = isDataCachedValid(DATA_KEY) 
-      
       if (checkCache) {
-        return checkCache
+        return checkCache;
       } else {
-
         const response = await fetch(
           "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,&vs_currencies=usd",
         );
-        
+
         const geckoResponse = await response.json();
 
         cacheData({
           dataKey: DATA_KEY,
-          data: geckoResponse
+          data: geckoResponse,
         });
 
         return geckoResponse;
-
       }
-
     },
   });
 }

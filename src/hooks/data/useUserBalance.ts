@@ -2,7 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
-import { Quantity } from "ao-tokens";
+import {
+  WrappedQuantity,
+  unWrapQuantity,
+  wrapQuantity,
+} from "@/utils/cacheUtils";
 
 export type UserBalanceCache = WrappedQuantity;
 
@@ -40,19 +44,4 @@ export function useUserBalance(tokenAddress: string) {
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,
   });
-}
-
-function wrapQuantity(quantity: Quantity): WrappedQuantity {
-  return {
-    v: quantity.integer.toString(),
-    d: quantity.denomination.toString(),
-  };
-}
-
-interface WrappedQuantity {
-  v: string;
-  d: string;
-}
-function unWrapQuantity(wrappedQuantity: WrappedQuantity): Quantity {
-  return new Quantity(BigInt(wrappedQuantity.v), BigInt(wrappedQuantity.d));
 }

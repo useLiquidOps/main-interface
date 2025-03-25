@@ -2,6 +2,7 @@ import { ProtocolStatsCache } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { Prices } from "@/hooks/data/useTokenPrice";
 import { UserBalanceCache } from "@/hooks/data/useUserBalance";
 import { PositionCache } from "@/hooks/LiquidOpsData/useGetPosition";
+import { Quantity } from "ao-tokens";
 
 interface DataTypeMap {
   prices: Prices;
@@ -59,4 +60,19 @@ export function cacheData<K extends string>({
     console.error("Error caching data in cacheData():", error);
     throw error;
   }
+}
+
+export function wrapQuantity(quantity: Quantity): WrappedQuantity {
+  return {
+    v: quantity.integer.toString(),
+    d: quantity.denomination.toString(),
+  };
+}
+
+export interface WrappedQuantity {
+  v: string;
+  d: string;
+}
+export function unWrapQuantity(wrappedQuantity: WrappedQuantity): Quantity {
+  return new Quantity(BigInt(wrappedQuantity.v), BigInt(wrappedQuantity.d));
 }

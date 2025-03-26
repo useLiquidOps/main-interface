@@ -97,7 +97,10 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             ) : (
               <>
                 <p className={styles.metricValue}>
-                  ${Number(formatTMB(Quantity.__mul(data.unLent, price))).toFixed(2)}
+                  $
+                  {Number(
+                    formatTMB(Quantity.__mul(data.unLent, price)),
+                  ).toFixed(2)}
                 </p>
                 <p className={styles.metricLabel}>Supplied</p>
               </>
@@ -114,7 +117,10 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             ) : (
               <>
                 <p className={styles.metricValue}>
-                  ${Number(formatTMB(Quantity.__mul(data.borrows, price))).toFixed(2)}
+                  $
+                  {Number(
+                    formatTMB(Quantity.__mul(data.borrows, price)),
+                  ).toFixed(2)}
                 </p>
                 <p className={styles.metricLabel}>Borrowed</p>
               </>

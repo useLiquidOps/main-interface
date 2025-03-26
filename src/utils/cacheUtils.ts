@@ -67,17 +67,17 @@ export function cacheData<K extends string>({
 
 export function wrapQuantity(quantity: Quantity): WrappedQuantity {
   return {
-    v: quantity.integer.toString(),
-    d: quantity.denomination.toString(),
+    value: quantity.integer.toString(),
+    denomination: quantity.denomination.toString(),
   };
 }
 
 export interface WrappedQuantity {
-  v: string;
-  d: string;
+  value: string;
+  denomination: string;
 }
 export function unWrapQuantity(wrappedQuantity: WrappedQuantity): Quantity {
-  return new Quantity(BigInt(wrappedQuantity.v), BigInt(wrappedQuantity.d));
+  return new Quantity(BigInt(wrappedQuantity.value), BigInt(wrappedQuantity.denomination));
 }
 
 export function getDenomination(address: string): bigint | undefined {

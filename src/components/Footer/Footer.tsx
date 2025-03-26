@@ -1,7 +1,7 @@
 "use client";
 import styles from "./Footer.module.css";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoogleAnalytics } from "../GoogleAnalytics/GoogleAnalytics";
 
 const Footer = () => {
@@ -12,21 +12,26 @@ const Footer = () => {
 
   // Function to show the analytics banner
   const handleManageAnalytics = () => {
-    // Remove the consent from localStorage
-    localStorage.removeItem("analytics-consent");
-
-    // If the component is already showing, hide it first to force a re-render
-    if (showAnalytics) {
-      setShowAnalytics(false);
-
-      // Use setTimeout to ensure state updates before showing again
-      setTimeout(() => {
-        setShowAnalytics(true);
-      }, 10);
-    } else {
-      setShowAnalytics(true);
-    }
+    // Toggle the analytics visibility state
+    setShowAnalytics(true);
   };
+
+  // Listen for the completion event for analytics
+  useEffect(() => {
+    const handleConsentComplete = () => {
+      setShowAnalytics(false);
+    };
+
+    window.addEventListener("analyticsConsentComplete", handleConsentComplete);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener(
+        "analyticsConsentComplete",
+        handleConsentComplete,
+      );
+    };
+  }, []);
 
   return (
     <>
@@ -101,8 +106,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Only show the GoogleAnalytics component when triggered */}
-      {showAnalytics && <GoogleAnalytics />}
+      <GoogleAnalytics forceShow={showAnalytics} />
     </>
   );
 };

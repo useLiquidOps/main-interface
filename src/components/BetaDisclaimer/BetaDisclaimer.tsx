@@ -21,12 +21,10 @@ const BetaDisclaimer = () => {
 
     localStorage.setItem("showAnalyticsConsent", "true");
 
-    setTimeout(() => {
-      const event = new CustomEvent("betaDisclaimerAccepted", {
-        detail: { accepted: true },
-      });
-      window.dispatchEvent(event);
-    }, 500);
+    const event = new CustomEvent("betaDisclaimerAccepted", {
+      detail: { accepted: true },
+    });
+    window.dispatchEvent(event);
   };
 
   if (!isVisible) return null;

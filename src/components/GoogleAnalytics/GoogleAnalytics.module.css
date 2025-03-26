@@ -9,6 +9,21 @@
   overflow: hidden;
   border-radius: 24px;
   padding: 24px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition:
+    transform 0.25s ease-out,
+    opacity 0.2s ease-out;
+}
+
+.consentVisible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.consentVisible {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .consentTitle {

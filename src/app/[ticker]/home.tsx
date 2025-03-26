@@ -13,10 +13,10 @@ import {
   overlayVariants,
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
-import Banner from "@/components/Banner/Banner";
 import { tokens } from "liquidops";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer/Footer";
+import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 
 const HomeContent = ({
   params,
@@ -34,7 +34,7 @@ const HomeContent = ({
 
   return (
     <div className={styles.page}>
-      <Banner />
+      <BetaDisclaimer />
       <Header mode="home" currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>

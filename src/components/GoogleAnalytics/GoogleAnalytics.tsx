@@ -5,51 +5,59 @@ import styles from "./GoogleAnalytics.module.css";
 
 export const GoogleAnalytics = () => {
   const [consent, setConsent] = useState<boolean | null>(null);
-  const [contentLoaded, setContentLoaded] = useState(false);
+  const [showConsent, setShowConsent] = useState(false);
 
   useEffect(() => {
-    // Check for saved consent
+    // Check for saved consent first
     const savedConsent = localStorage.getItem("analytics-consent");
     if (savedConsent !== null) {
       setConsent(savedConsent === "true");
     }
 
-    // Stop Google analytics tab loading before page is loaded
-    // Function to handle when content is loaded
-    const handleContentLoaded = () => {
-      setContentLoaded(true);
+    // Listen for the custom event from BetaDisclaimer
+    const handleBetaAccepted = () => {
+      if (consent === null) {
+        // Only show if user hasn't already made a choice
+        setShowConsent(true);
+      }
     };
 
-    // If document is already complete, set contentLoaded immediately
-    if (document.readyState === "complete") {
-      setContentLoaded(true);
-    } else {
-      // Otherwise wait for the load event
-      window.addEventListener("load", handleContentLoaded);
-
-      // Cleanup
-      return () => {
-        window.removeEventListener("load", handleContentLoaded);
-      };
+    // Also check if we should show analytics consent based on localStorage
+    if (
+      localStorage.getItem("showAnalyticsConsent") === "true" &&
+      consent === null
+    ) {
+      setShowConsent(true);
+      // Clear the flag once we've shown the consent
+      localStorage.removeItem("showAnalyticsConsent");
     }
-  }, []);
+
+    // Add event listener for the custom event
+    window.addEventListener("betaDisclaimerAccepted", handleBetaAccepted);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("betaDisclaimerAccepted", handleBetaAccepted);
+    };
+  }, [consent]);
 
   const acceptCookies = () => {
     localStorage.setItem("analytics-consent", "true");
     setConsent(true);
+    setShowConsent(false);
+    localStorage.removeItem("showAnalyticsConsent");
   };
 
   const declineCookies = () => {
     localStorage.setItem("analytics-consent", "false");
     setConsent(false);
+    setShowConsent(false);
+    localStorage.removeItem("showAnalyticsConsent");
   };
-
-  // Don't render anything until main content has loaded
-  if (!contentLoaded) return null;
 
   return (
     <>
-      {consent === null && (
+      {consent === null && showConsent && (
         <div className={styles.consentBanner}>
           <h4 className={styles.consentTitle}>We value your privacy</h4>
           <p className={styles.consentText}>

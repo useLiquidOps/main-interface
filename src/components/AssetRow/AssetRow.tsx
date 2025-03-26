@@ -50,8 +50,9 @@ const AssetRow: React.FC<AssetRowProps> = ({
     }
   }, [showIndicator]);
 
-  const currentBalance = mode === "lend" ? lentBalance : positionBalance;
-  const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
+  const scaledLentBalance = new Quantity(lentBalance, asset.denomination);
+  const currentBalance = mode === "lend" ? scaledLentBalance : positionBalance;
+  const isLoading = mode === "lend" ? !scaledLentBalance : !positionBalance;
   const isProtocolStatsLoading = !protocolStats;
 
   const handleClick = (e?: React.MouseEvent) => {
@@ -59,7 +60,10 @@ const AssetRow: React.FC<AssetRowProps> = ({
     onClick(asset, e);
   };
 
-  const formattedBalance = currentBalance ? formatTMB(currentBalance) : "0.00";
+  let formattedBalance
+  if (currentBalance) {
+    formattedBalance = formatTMB(currentBalance);
+  }
 
   const rowClass = `${styles.assetRowWrapper} ${isAnimating ? styles.showIndicator : ""}`;
 

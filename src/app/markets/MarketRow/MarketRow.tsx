@@ -60,12 +60,12 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             </div>
           </div>
 
-          {/* APR Info */}
+          {/* APY Info */}
           <div className={styles.aprInfo}>
             {isLoading ? (
               <>
                 <SkeletonLoading className="h-6 w-16 mb-1" />
-                <p className={styles.aprLabel}>APY</p>
+                <p className={styles.aprLabel}>Supply APY</p>
               </>
             ) : (
               <>
@@ -82,41 +82,24 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
                     height={16}
                   />
                 </div>
-                <p className={styles.aprLabel}>APY</p>
+                <p className={styles.aprLabel}>Supply APY</p>
               </>
             )}
           </div>
 
-          {/* TVL Metric */}
+          {/* Supplied Metric */}
           <div className={styles.metricBox}>
             {isLoading ? (
               <>
                 <SkeletonLoading className="h-6 w-20 mb-1" />
-                <p className={styles.metricLabel}>TVL</p>
+                <p className={styles.metricLabel}>Supplied</p>
               </>
             ) : (
               <>
                 <p className={styles.metricValue}>
-                  ${formatTMB(Quantity.__mul(data.protocolBalance, price))}
+                  ${Number(formatTMB(Quantity.__mul(data.unLent, price))).toFixed(2)}
                 </p>
-                <p className={styles.metricLabel}>TVL</p>
-              </>
-            )}
-          </div>
-
-          {/* Collateral Metric */}
-          <div className={styles.metricBox}>
-            {isLoading ? (
-              <>
-                <SkeletonLoading className="h-6 w-20 mb-1" />
-                <p className={styles.metricLabel}>Collateral</p>
-              </>
-            ) : (
-              <>
-                <p className={styles.metricValue}>
-                  ${formatTMB(Quantity.__mul(data.unLent, price))}
-                </p>
-                <p className={styles.metricLabel}>Collateral</p>
+                <p className={styles.metricLabel}>Supplied</p>
               </>
             )}
           </div>
@@ -131,7 +114,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             ) : (
               <>
                 <p className={styles.metricValue}>
-                  ${formatTMB(Quantity.__mul(data.borrows, price))}
+                  ${Number(formatTMB(Quantity.__mul(data.borrows, price))).toFixed(2)}
                 </p>
                 <p className={styles.metricLabel}>Borrowed</p>
               </>

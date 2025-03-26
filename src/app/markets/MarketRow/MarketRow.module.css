@@ -25,7 +25,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  width: 190px;
+  width: 205px;
   flex-shrink: 0;
 }
 
@@ -50,7 +50,6 @@
   font-weight: 600;
   margin: 0;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -60,7 +59,6 @@
   font-weight: 600;
   margin: 0;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -95,7 +93,7 @@
   flex-direction: column;
   gap: 4px;
   text-align: left;
-  width: 100px;
+  width: 80px;
 }
 
 .metricValue {
@@ -103,7 +101,7 @@
   font-size: 15px;
   font-weight: 600;
   margin: 0;
-  width: 100px;
+  width: 80px;
 }
 
 .metricLabel {

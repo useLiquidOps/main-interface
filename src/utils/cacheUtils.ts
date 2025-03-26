@@ -4,6 +4,7 @@ import { UserBalanceCache } from "@/hooks/data/useUserBalance";
 import { PositionCache } from "@/hooks/LiquidOpsData/useGetPosition";
 import { Quantity } from "ao-tokens";
 import { GlobalPositionCache } from "@/hooks/LiquidOpsData/useGlobalPosition";
+import { tokenData } from "liquidops";
 
 interface DataTypeMap {
   prices: Prices;
@@ -77,4 +78,24 @@ export interface WrappedQuantity {
 }
 export function unWrapQuantity(wrappedQuantity: WrappedQuantity): Quantity {
   return new Quantity(BigInt(wrappedQuantity.v), BigInt(wrappedQuantity.d));
+}
+
+export function getDenomination(address: string): bigint | undefined {
+  // Check if it's a regular token
+  for (const ticker in tokenData) {
+    const data = tokenData[ticker];
+    if (data.address === address) {
+      return data.denomination;
+    }
+  }
+
+  // Check if it's an oToken
+  for (const ticker in tokenData) {
+    const data = tokenData[ticker];
+    if (data.oAddress === address) {
+      return data.denomination;
+    }
+  }
+
+  return undefined;
 }

@@ -7,7 +7,6 @@ import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { SupportedToken } from "@/hooks/data/useSupportedTokens";
-import { Quantity } from "ao-tokens";
 import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";
 
 interface AssetRowProps {
@@ -50,9 +49,8 @@ const AssetRow: React.FC<AssetRowProps> = ({
     }
   }, [showIndicator]);
 
-  const scaledLentBalance = new Quantity(lentBalance, asset.denomination);
-  const currentBalance = mode === "lend" ? scaledLentBalance : positionBalance;
-  const isLoading = mode === "lend" ? !scaledLentBalance : !positionBalance;
+  const currentBalance = mode === "lend" ? lentBalance : positionBalance;
+  const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
   const isProtocolStatsLoading = !protocolStats;
 
   const handleClick = (e?: React.MouseEvent) => {

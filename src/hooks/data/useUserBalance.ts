@@ -7,6 +7,8 @@ import {
   unWrapQuantity,
   wrapQuantity,
 } from "@/utils/cacheUtils";
+import { getDenomination } from "@/utils/cacheUtils";
+import { Quantity } from "ao-tokens";
 
 export type UserBalanceCache = WrappedQuantity;
 
@@ -31,13 +33,21 @@ export function useUserBalance(tokenAddress: string) {
           walletAddress,
         });
 
+        const denomination = getDenomination(tokenAddress);
+        if (denomination === undefined) {
+          throw new Error(
+            "Cannot find token address denomination in useUserBalance.ts",
+          );
+        }
+        const scaledBalance = new Quantity(balance, denomination);
+
         const balanceCache = {
           dataKey: DATA_KEY,
-          data: wrapQuantity(balance),
+          data: wrapQuantity(scaledBalance),
         };
         cacheData(balanceCache);
 
-        return balance;
+        return scaledBalance;
       }
     },
     enabled: !!walletAddress,

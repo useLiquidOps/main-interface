@@ -31,15 +31,17 @@ export function useGlobalPosition() {
 
   const DATA_KEY = `global-position-${walletAddress || ""}` as const;
 
+  const USD_DENOMINATION = 12n
+
   return useQuery({
     queryKey: ["global-position", walletAddress],
     queryFn: async (): Promise<GlobalPositionResult> => {
       const emptyPosition: GlobalPositionResult = {
         collateralLogos: [],
-        collateralValueUSD: new Quantity(0n, 12n),
-        borrowCapacityUSD: new Quantity(0n, 12n),
-        liquidationPointUSD: new Quantity(0n, 12n),
-        availableToBorrowUSD: new Quantity(0n, 12n),
+        collateralValueUSD: new Quantity(0n, USD_DENOMINATION),
+        borrowCapacityUSD: new Quantity(0n, USD_DENOMINATION),
+        liquidationPointUSD: new Quantity(0n, USD_DENOMINATION),
+        availableToBorrowUSD: new Quantity(0n, USD_DENOMINATION),
       };
 
       // Return empty position if no wallet
@@ -104,16 +106,16 @@ export function useGlobalPosition() {
           collateralLogos,
           collateralValueUSD: new Quantity(
             globalPosition.collateralizationUSD,
-            12n,
+            USD_DENOMINATION,
           ),
-          borrowCapacityUSD: new Quantity(globalPosition.capacityUSD, 12n),
+          borrowCapacityUSD: new Quantity(globalPosition.capacityUSD, USD_DENOMINATION),
           liquidationPointUSD: new Quantity(
             globalPosition.liquidationLimitUSD,
-            12n,
+            USD_DENOMINATION,
           ),
           availableToBorrowUSD: new Quantity(
             globalPosition.capacityUSD - globalPosition.borrowBalanceUSD,
-            12n,
+            USD_DENOMINATION,
           ),
         };
 

@@ -35,6 +35,7 @@
   overflow-y: auto;
   padding-right: 8px;
   width: 100%;
+  min-height: 130px;
 }
 
 .statusMessage {

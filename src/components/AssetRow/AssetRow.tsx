@@ -60,7 +60,7 @@ const AssetRow: React.FC<AssetRowProps> = ({
     onClick(asset, e);
   };
 
-  let formattedBalance
+  let formattedBalance;
   if (currentBalance) {
     formattedBalance = formatTMB(currentBalance);
   }

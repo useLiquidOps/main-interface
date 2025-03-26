@@ -97,7 +97,7 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
   const statusIcon = getResultStatusIcon(resultStatus);
 
   let toolTipText;
-  if (resultStatus) {
+  if (resultStatus === true) {
     toolTipText = "Success";
   } else if (resultStatus === false) {
     toolTipText = "Failed";

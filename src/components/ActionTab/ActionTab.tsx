@@ -6,7 +6,7 @@ import InputBox from "../InputBox/InputBox";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import styles from "./ActionTab.module.css";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
@@ -100,11 +100,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         setIsFocused={setIsFocused}
         ticker={ticker}
         tokenPrice={tokenPrice}
-        walletBalance={
-          isLoadingBalance || !walletBalance
-            ? new Quantity(0n, 12n)
-            : walletBalance
-        }
+        // @ts-ignore, skeleton loading logic relies on this being undefined
+        walletBalance={walletBalance}
         onMaxClick={handleMaxClick}
         denomination={walletBalance?.denomination || 12n}
       />

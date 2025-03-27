@@ -3,10 +3,10 @@ import styles from "./markets.module.css";
 import Header from "../../components/Header/Header";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
-import Banner from "@/components/Banner/Banner";
 import { MarketStats } from "./MarketStats/MarketStats";
 import { MarketRow } from "./MarketRow/MarketRow";
 import Footer from "@/components/Footer/Footer";
+import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 
 interface Token {
   ticker: string;
@@ -20,7 +20,7 @@ const Markets: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      <Banner />
+      <BetaDisclaimer />
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>

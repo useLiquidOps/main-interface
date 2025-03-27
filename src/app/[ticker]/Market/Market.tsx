@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./Market.module.css";
 import { formatTMB } from "../../../components/utils/utils";
 import Image from "next/image";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";

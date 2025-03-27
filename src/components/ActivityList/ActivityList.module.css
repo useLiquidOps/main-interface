@@ -8,9 +8,21 @@
 
 .activityTitleContainer {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  justify-content: center;
   align-items: center;
   gap: 5px;
+}
+
+.right {
+  display: flex;
+  justify-content: right;
+  align-items: center;
 }
 
 .activityTitle {
@@ -35,6 +47,7 @@
   overflow-y: auto;
   padding-right: 8px;
   width: 100%;
+  min-height: 130px;
 }
 
 .statusMessage {

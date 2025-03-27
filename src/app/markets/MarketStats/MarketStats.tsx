@@ -1,6 +1,6 @@
 "use client";
 import styles from "./MarketStats.module.css";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
@@ -44,7 +44,6 @@ interface MarketStatsProps {
 }
 
 export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
-  let totalTVL = new Quantity(0n, 12n);
   let totalCollateral = new Quantity(0n, 12n);
   let totalBorrows = new Quantity(0n, 12n);
 
@@ -62,10 +61,6 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
     if (tokenIsLoading) {
       isLoading = true;
     } else if (stats.data) {
-      totalTVL = Quantity.__add(
-        totalTVL,
-        Quantity.__mul(stats.data.protocolBalance, price),
-      );
       totalCollateral = Quantity.__add(
         totalCollateral,
         Quantity.__mul(stats.data.unLent, price),
@@ -88,15 +83,11 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
       <div className={styles.marketStats}>
         <div className={styles.marketStat}>
           <SkeletonLoading className="h-8 w-28 mb-2" />
-          <p className={styles.marketStatTitle}>LiquidOps TVL</p>
+          <p className={styles.marketStatTitle}>Total supplied</p>
         </div>
         <div className={styles.marketStat}>
           <SkeletonLoading className="h-8 w-28 mb-2" />
-          <p className={styles.marketStatTitle}>Total collateral</p>
-        </div>
-        <div className={styles.marketStat}>
-          <SkeletonLoading className="h-8 w-28 mb-2" />
-          <p className={styles.marketStatTitle}>Total borrows</p>
+          <p className={styles.marketStatTitle}>Total borrowed</p>
         </div>
       </div>
     );
@@ -105,16 +96,16 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
   return (
     <div className={styles.marketStats}>
       <div className={styles.marketStat}>
-        <p className={styles.marketStatValue}>${formatTMB(totalTVL)}</p>
-        <p className={styles.marketStatTitle}>LiquidOps TVL</p>
+        <p className={styles.marketStatValue}>
+          ${Number(formatTMB(totalCollateral)).toFixed(2)}
+        </p>
+        <p className={styles.marketStatTitle}>Total supplied</p>
       </div>
       <div className={styles.marketStat}>
-        <p className={styles.marketStatValue}>${formatTMB(totalCollateral)}</p>
-        <p className={styles.marketStatTitle}>Total collateral</p>
-      </div>
-      <div className={styles.marketStat}>
-        <p className={styles.marketStatValue}>${formatTMB(totalBorrows)}</p>
-        <p className={styles.marketStatTitle}>Total borrows</p>
+        <p className={styles.marketStatValue}>
+          ${Number(formatTMB(totalBorrows)).toFixed(2)}
+        </p>
+        <p className={styles.marketStatTitle}>Total borrowed</p>
       </div>
     </div>
   );

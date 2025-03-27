@@ -13,10 +13,20 @@ interface AssetDisplayProps {
 const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const [showAll, setShowAll] = useState(false);
   const [animateOnScroll, setAnimateOnScroll] = useState(false);
+  const [showContent, setShowContent] = useState(false);
   const { openModal } = useModal();
   const { data: supportedTokens = [] } = useSupportedTokens();
   const componentRef = useRef<HTMLDivElement>(null);
   const animationShownRef = useRef(false);
+
+  // Delay showing content to avoid empty state flash
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     // Check localStorage to see if hint has been shown before
@@ -122,6 +132,10 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const displayedAssets = showAll
     ? supportedTokens
     : supportedTokens.slice(0, 4);
+
+  if (!showContent) {
+    return null;
+  }
 
   return (
     <div className={containerClass} ref={componentRef}>

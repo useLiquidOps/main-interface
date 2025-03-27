@@ -14,8 +14,8 @@ import {
 import { Quantity } from "ao-tokens";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
-import Banner from "@/components/Banner/Banner";
 import Footer from "@/components/Footer/Footer";
+import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 
 // Import components
 import LiquidationStats from "./LiquidationStats/LiquidationStats";
@@ -131,7 +131,7 @@ const LiquidationsContent = () => {
           />
         )}
       </AnimatePresence>
-      <Banner />
+      <BetaDisclaimer />
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>

@@ -24,15 +24,13 @@ interface InputBoxProps {
 
 interface TokenConfig {
   [key: string]: number;
-  stETH: number;
   qAR: number;
-  USDC: number;
+  wUSDC: number;
 }
 
 const DECIMAL_PLACES: TokenConfig = {
-  stETH: 4,
   qAR: 3,
-  USDC: 2,
+  wUSDC: 2,
 };
 
 const useInputValidation = (walletBalance: Quantity) => {
@@ -215,7 +213,7 @@ const InputBox: React.FC<InputBoxProps> = ({
     !disabled && (
       <div className={styles.walletInfo}>
         <Image src="/icons/wallet.svg" height={14} width={14} alt="Wallet" />
-        {!walletBalance || Quantity.eq(walletBalance, new Quantity(0n, 0n)) ? (
+        {!walletBalance ? (
           <SkeletonLoading
             className={styles.balanceAmount}
             style={{ width: "80px", height: "16px" }}

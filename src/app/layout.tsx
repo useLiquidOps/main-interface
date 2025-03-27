@@ -3,7 +3,6 @@ import "./globals.css";
 import { Metadata } from "next";
 import { ModalProvider } from "./[ticker]/PopUp/PopUp";
 import { Providers } from "./providers";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics/GoogleAnalytics";
 
 export const metadata: Metadata = {
   title: "LiquidOps | Lending & Borrowing on Arweave & AO",
@@ -87,7 +86,6 @@ export default function RootLayout({
       <ModalProvider>
         <body className={dmSans.className} style={{ margin: 0, padding: 0 }}>
           <Providers>{children}</Providers>
-          <GoogleAnalytics />
         </body>
       </ModalProvider>
     </html>

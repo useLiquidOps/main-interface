@@ -13,7 +13,7 @@ import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
-import { useGetPosition } from "@/hooks/data/useGetPosition";
+import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
 
 interface WithdrawRepayProps {
@@ -152,11 +152,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         setIsFocused={setIsFocused}
         ticker={ticker}
         tokenPrice={tokenPrice}
-        walletBalance={
-          isLoadingCurrentBalance || !currentBalance
-            ? new Quantity(0n, 12n)
-            : currentBalance
-        }
+        // @ts-ignore, logic relies on undefined to show skeleton loading
+        walletBalance={currentBalance}
         onMaxClick={handleMaxClick}
         denomination={currentBalance?.denomination || 12n}
       />
@@ -168,11 +165,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         onPercentageClick={handlePercentageClick}
         interestOwed={interestOwed}
         onInterestClick={handleInterestClick}
-        walletBalance={
-          isLoadingCurrentBalance || !currentBalance
-            ? new Quantity(0n, 12n)
-            : currentBalance
-        }
+        // @ts-ignore, logic relies on undefined to disable percentage picker
+        walletBalance={currentBalance}
       />
 
       <div className={styles.infoRow}>

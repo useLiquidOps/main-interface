@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 
 interface LiquidationParams {
@@ -9,8 +9,6 @@ interface LiquidationParams {
 }
 
 export function useLiquidation() {
-  const queryClient = useQueryClient();
-
   const liquidationMutation = useMutation({
     mutationFn: async ({
       token,
@@ -28,15 +26,6 @@ export function useLiquidation() {
       } catch (error) {
         throw error;
       }
-    },
-
-    onSuccess: (_, { token, rewardToken }) => {
-      queryClient.invalidateQueries({
-        queryKey: ["user-balance", token],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["user-balance", rewardToken],
-      });
     },
   });
 

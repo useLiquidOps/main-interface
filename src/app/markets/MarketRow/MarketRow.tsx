@@ -1,7 +1,7 @@
 import styles from "./MarketRow.module.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useProtocolStats } from "@/hooks/data/useProtocolStats";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
@@ -60,12 +60,12 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             </div>
           </div>
 
-          {/* APR Info */}
+          {/* APY Info */}
           <div className={styles.aprInfo}>
             {isLoading ? (
               <>
                 <SkeletonLoading className="h-6 w-16 mb-1" />
-                <p className={styles.aprLabel}>APY</p>
+                <p className={styles.aprLabel}>Supply APY</p>
               </>
             ) : (
               <>
@@ -82,41 +82,27 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
                     height={16}
                   />
                 </div>
-                <p className={styles.aprLabel}>APY</p>
+                <p className={styles.aprLabel}>Supply APY</p>
               </>
             )}
           </div>
 
-          {/* TVL Metric */}
+          {/* Supplied Metric */}
           <div className={styles.metricBox}>
             {isLoading ? (
               <>
                 <SkeletonLoading className="h-6 w-20 mb-1" />
-                <p className={styles.metricLabel}>TVL</p>
+                <p className={styles.metricLabel}>Supplied</p>
               </>
             ) : (
               <>
                 <p className={styles.metricValue}>
-                  ${formatTMB(Quantity.__mul(data.protocolBalance, price))}
+                  $
+                  {Number(
+                    formatTMB(Quantity.__mul(data.unLent, price)),
+                  ).toFixed(2)}
                 </p>
-                <p className={styles.metricLabel}>TVL</p>
-              </>
-            )}
-          </div>
-
-          {/* Collateral Metric */}
-          <div className={styles.metricBox}>
-            {isLoading ? (
-              <>
-                <SkeletonLoading className="h-6 w-20 mb-1" />
-                <p className={styles.metricLabel}>Collateral</p>
-              </>
-            ) : (
-              <>
-                <p className={styles.metricValue}>
-                  ${formatTMB(Quantity.__mul(data.unLent, price))}
-                </p>
-                <p className={styles.metricLabel}>Collateral</p>
+                <p className={styles.metricLabel}>Supplied</p>
               </>
             )}
           </div>
@@ -131,7 +117,10 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             ) : (
               <>
                 <p className={styles.metricValue}>
-                  ${formatTMB(Quantity.__mul(data.borrows, price))}
+                  $
+                  {Number(
+                    formatTMB(Quantity.__mul(data.borrows, price)),
+                  ).toFixed(2)}
                 </p>
                 <p className={styles.metricLabel}>Borrowed</p>
               </>

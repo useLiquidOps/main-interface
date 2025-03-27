@@ -15,7 +15,7 @@ module.exports = {
         lastmod: new Date().toISOString(),
       },
       {
-        loc: "/USDC",
+        loc: "/wUSDC",
         changefreq: "daily",
         priority: 0.8,
         lastmod: new Date().toISOString(),

@@ -7,6 +7,7 @@ import {
 } from "./TransactionItem/TransactionItem";
 import { exportTransactionsAsCSV } from "@/utils/CSVExport";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import ClearCache from "../ClearCache/ClearCache";
 
 interface ActivityListProps {
   transactions: Transaction[];
@@ -93,14 +94,20 @@ const ActivityList: React.FC<ActivityListProps> = ({
   return (
     <div className={styles.activityContainer}>
       <div className={styles.activityTitleContainer}>
-        <p className={styles.activityTitle}>Activity</p>
-        <div onClick={handleExport} style={{ cursor: "pointer" }}>
-          <Image
-            src="/icons/csv-export.svg"
-            alt="CSV export"
-            width={9}
-            height={9}
-          />
+        <div className={styles.left}>
+          <p className={styles.activityTitle}>Activity</p>
+          <div onClick={handleExport} style={{ cursor: "pointer" }}>
+            <Image
+              src="/icons/csv-export.svg"
+              alt="CSV export"
+              width={9}
+              height={9}
+            />
+          </div>
+        </div>
+
+        <div className={styles.right}>
+          <ClearCache />
         </div>
       </div>
 

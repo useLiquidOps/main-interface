@@ -9,6 +9,7 @@ import {
   isDataCachedValid,
   cacheData,
 } from "@/utils/cacheUtils";
+import { tokenData } from "liquidops";
 
 export interface GlobalPositionCache {
   collateralLogos: string[];
@@ -69,24 +70,6 @@ export function useGlobalPosition() {
           walletAddress: walletAddress,
         });
 
-        // Get token infos for logos
-        const tokenInfosUnfiltered = await Promise.all(
-          Object.keys(globalPosition.tokenPositions).map(async (token) => {
-            try {
-              const info = await LiquidOpsClient.getInfo({ token });
-              return {
-                Logo: info.logo,
-                Ticker: info.ticker,
-                Name: info.name,
-              };
-            } catch (error) {
-              console.error(`Error fetching info for token ${token}:`, error);
-              return null;
-            }
-          }),
-        );
-
-        const tokenInfos = tokenInfosUnfiltered.filter(Boolean);
 
         // Find logos for tokens with positive collateral
         const collateralLogos = Object.keys(globalPosition.tokenPositions)
@@ -95,11 +78,15 @@ export function useGlobalPosition() {
             return position && BigInt(position.collateralization) > 0n;
           })
           .map((ticker) => {
-            return tokenInfos.find(
-              (info) => info?.Ticker?.toUpperCase() === ticker.toUpperCase(),
-            )?.Logo;
+            // Find matching token in tokenData object by ticker or cleanTicker
+            const foundToken = Object.values(tokenData).find(
+              (info) =>
+                info.ticker.toUpperCase() === ticker.toUpperCase() ||
+                info.cleanTicker.toUpperCase() === ticker.toUpperCase(),
+            );
+            return foundToken?.icon;
           })
-          .filter((logo): logo is string => !!logo);
+          .filter((icon): icon is string => !!icon);
 
         // Create the result with Quantity objects
         const result: GlobalPositionResult = {

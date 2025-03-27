@@ -91,7 +91,9 @@ const PositionSummary: React.FC<{
   };
 
   const handleMouseMoveHealthOne = (e: React.MouseEvent) => {
-    setTooltipContent(`Maximum collateralization: ${healthFactorOne.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`);
+    setTooltipContent(
+      `Maximum collateralization: ${healthFactorOne.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`,
+    );
     setTooltipPosition({ x: e.clientX, y: e.clientY });
     setShowTooltip(true);
   };
@@ -273,7 +275,9 @@ const PositionSummary: React.FC<{
                   <SkeletonLoading style={{ width: "100%", height: "24px" }} />
                 ) : (
                   <div className={styles.riskContainer}>
-                    <p className={styles.value}>{`${liquidationRisk.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`}</p>
+                    <p
+                      className={styles.value}
+                    >{`${liquidationRisk.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`}</p>
                     <div className={styles.riskProgressContainer}>
                       <div
                         className={styles.riskProgress}

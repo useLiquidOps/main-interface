@@ -9,6 +9,7 @@ export interface SupportedToken
   extraAmount: string;
   denomination: bigint;
   collateralEnabled: boolean;
+  baseDenomination: bigint;
 }
 
 export function useSupportedTokens() {
@@ -22,6 +23,7 @@ export function useSupportedTokens() {
         extraAmount: "1",
         denomination: data.denomination,
         collateralEnabled: data.collateralEnabled,
+        baseDenomination: data.baseDenomination,
       }));
     },
     staleTime: 5 * 60 * 1000,

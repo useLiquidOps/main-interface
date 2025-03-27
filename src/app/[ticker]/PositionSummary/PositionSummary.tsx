@@ -38,7 +38,7 @@ const PositionSummary: React.FC<{
     [globalPosition],
   );
 
-  const getProgressWidth = (value: Quantity): string => {
+  const getProgressWidth = (): string => {
     const currentBorrow = Quantity.__sub(
       maxBorrow,
       globalPosition?.availableToBorrowUSD ||
@@ -90,12 +90,23 @@ const PositionSummary: React.FC<{
     setShowTooltip(true);
   };
 
+  const handleMouseMoveHealthOne = (e: React.MouseEvent) => {
+    setTooltipContent(
+      `Maximum collateralization: ${healthFactorOne.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`,
+    );
+    setTooltipPosition({ x: e.clientX, y: e.clientY });
+    setShowTooltip(true);
+  };
+
   const handleMouseLeave = () => {
     setShowTooltip(false);
   };
 
   const liquidationRisk = useMemo(() => {
-    if (!globalPosition || globalPosition.liquidationPointUSD.toNumber() === 0)
+    if (
+      !globalPosition ||
+      Quantity.eq(globalPosition.liquidationPointUSD, new Quantity(0n, 0n))
+    )
       return 0;
     return Quantity.__div(
       Quantity.__mul(
@@ -106,6 +117,25 @@ const PositionSummary: React.FC<{
         new Quantity(
           0n,
           globalPosition.borrowCapacityUSD.denomination,
+        ).fromNumber(100),
+      ),
+      globalPosition.liquidationPointUSD,
+    ).toNumber();
+  }, [globalPosition]);
+
+  const healthFactorOne = useMemo(() => {
+    if (
+      !globalPosition ||
+      Quantity.eq(globalPosition.liquidationPointUSD, new Quantity(0n, 0n))
+    )
+      return 0;
+
+    return Quantity.__div(
+      Quantity.__mul(
+        globalPosition.borrowCapacityUSD,
+        new Quantity(
+          0n,
+          globalPosition.collateralValueUSD.denomination,
         ).fromNumber(100),
       ),
       globalPosition.liquidationPointUSD,
@@ -133,7 +163,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`$${formatTMB(globalPosition.collateralValueUSD)}`}</p>
+                >{`$${Number(formatTMB(globalPosition.collateralValueUSD)).toFixed(2)}`}</p>
               )}
             </div>
             <div className={styles.tokens}>
@@ -171,7 +201,7 @@ const PositionSummary: React.FC<{
                 ) : (
                   <p
                     className={styles.value}
-                  >{`$${formatTMB(globalPosition.borrowCapacityUSD)}`}</p>
+                  >{`$${Number(formatTMB(globalPosition.borrowCapacityUSD)).toFixed(2)}`}</p>
                 )}
                 {extraData && !isLoadingPosition && (
                   <div className={styles.redDot} />
@@ -193,10 +223,7 @@ const PositionSummary: React.FC<{
                   <div
                     className={styles.progressPrimary}
                     style={{
-                      width: getProgressWidth(
-                        globalPosition?.borrowCapacityUSD ||
-                          new Quantity(0n, 12n),
-                      ),
+                      width: getProgressWidth(),
                     }}
                   />
                   <div className={styles.progressBackground} />
@@ -216,7 +243,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`$${formatTMB(globalPosition.liquidationPointUSD)}`}</p>
+                >{`$${Number(formatTMB(globalPosition.liquidationPointUSD)).toFixed(2)}`}</p>
               )}
             </div>
           </div>
@@ -232,7 +259,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`$${formatTMB(globalPosition.availableToBorrowUSD)}`}</p>
+                >{`$${Number(formatTMB(globalPosition.availableToBorrowUSD)).toFixed(2)}`}</p>
               )}
             </div>
           </div>
@@ -245,7 +272,9 @@ const PositionSummary: React.FC<{
                   <SkeletonLoading style={{ width: "100%", height: "24px" }} />
                 ) : (
                   <div className={styles.riskContainer}>
-                    <p className={styles.value}>{`${liquidationRisk}%`}</p>
+                    <p
+                      className={styles.value}
+                    >{`${liquidationRisk.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`}</p>
                     <div className={styles.riskProgressContainer}>
                       <div
                         className={styles.riskProgress}
@@ -253,7 +282,9 @@ const PositionSummary: React.FC<{
                       />
                       <div
                         className={styles.riskIndicator}
-                        style={{ left: `${liquidationRisk}%` }}
+                        style={{ left: `${healthFactorOne}%` }}
+                        onMouseMove={handleMouseMoveHealthOne}
+                        onMouseLeave={handleMouseLeave}
                       />
                     </div>
                   </div>

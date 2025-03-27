@@ -31,7 +31,7 @@ export function useGlobalPosition() {
 
   const DATA_KEY = `global-position-${walletAddress || ""}` as const;
 
-  const USD_DENOMINATION = 12n
+  const USD_DENOMINATION = 12n;
 
   return useQuery({
     queryKey: ["global-position", walletAddress],
@@ -108,7 +108,10 @@ export function useGlobalPosition() {
             globalPosition.collateralizationUSD,
             USD_DENOMINATION,
           ),
-          borrowCapacityUSD: new Quantity(globalPosition.capacityUSD, USD_DENOMINATION),
+          borrowCapacityUSD: new Quantity(
+            globalPosition.capacityUSD,
+            USD_DENOMINATION,
+          ),
           liquidationPointUSD: new Quantity(
             globalPosition.liquidationLimitUSD,
             USD_DENOMINATION,
@@ -122,10 +125,22 @@ export function useGlobalPosition() {
         // Create cacheable version with wrapped Quantity objects
         const cacheableData: GlobalPositionCache = {
           collateralLogos,
-          collateralValueUSD: wrapQuantity(result.collateralValueUSD),
-          borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
-          liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
-          availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
+          collateralValueUSD: wrapQuantity(
+            result.collateralValueUSD,
+            USD_DENOMINATION,
+          ),
+          borrowCapacityUSD: wrapQuantity(
+            result.borrowCapacityUSD,
+            USD_DENOMINATION,
+          ),
+          liquidationPointUSD: wrapQuantity(
+            result.liquidationPointUSD,
+            USD_DENOMINATION,
+          ),
+          availableToBorrowUSD: wrapQuantity(
+            result.availableToBorrowUSD,
+            USD_DENOMINATION,
+          ),
         };
 
         cacheData({

@@ -126,20 +126,16 @@ export function useGlobalPosition() {
         const cacheableData: GlobalPositionCache = {
           collateralLogos,
           collateralValueUSD: wrapQuantity(
-            result.collateralValueUSD,
-            USD_DENOMINATION,
+            result.collateralValueUSD
           ),
           borrowCapacityUSD: wrapQuantity(
-            result.borrowCapacityUSD,
-            USD_DENOMINATION,
+            result.borrowCapacityUSD
           ),
           liquidationPointUSD: wrapQuantity(
-            result.liquidationPointUSD,
-            USD_DENOMINATION,
+            result.liquidationPointUSD
           ),
           availableToBorrowUSD: wrapQuantity(
-            result.availableToBorrowUSD,
-            USD_DENOMINATION,
+            result.availableToBorrowUSD
           ),
         };
 

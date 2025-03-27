@@ -70,9 +70,7 @@ export const formatTMB = (value: Quantity): string => {
       maximumFractionDigits: 2,
     });
   } else {
-    return value.toLocaleString("en-US", {
-      maximumFractionDigits: Number(value.denomination) as DigitType,
-    });
+    return Number(value).toFixed(2);
   }
 };
 

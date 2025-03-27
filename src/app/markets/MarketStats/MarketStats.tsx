@@ -97,13 +97,13 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
     <div className={styles.marketStats}>
       <div className={styles.marketStat}>
         <p className={styles.marketStatValue}>
-          ${Number(formatTMB(totalCollateral)).toFixed(2)}
+          ${formatTMB(totalCollateral)}
         </p>
         <p className={styles.marketStatTitle}>Total supplied</p>
       </div>
       <div className={styles.marketStat}>
         <p className={styles.marketStatValue}>
-          ${Number(formatTMB(totalBorrows)).toFixed(2)}
+          ${formatTMB(totalBorrows)}
         </p>
         <p className={styles.marketStatTitle}>Total borrowed</p>
       </div>

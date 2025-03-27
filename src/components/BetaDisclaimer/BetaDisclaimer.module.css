@@ -21,6 +21,16 @@
   z-index: 1001;
   position: relative;
   gap: 15px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition:
+    transform 0.25s ease-out,
+    opacity 0.2s ease-out;
+}
+
+.disclaimerVisible {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .button {
@@ -47,9 +57,11 @@
   color: black;
   font-weight: 700;
   font-size: 1.1rem;
+  margin: 0;
 }
 
 .text {
   font-size: 14px;
   color: #666;
+  margin: 0;
 }

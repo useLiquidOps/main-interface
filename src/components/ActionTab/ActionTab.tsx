@@ -73,12 +73,10 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
     if (!inputValue || !walletBalance) return;
 
     // Create params for the transaction
-    const baseDenomination = getBaseDenomination(ticker.toUpperCase())
+    const baseDenomination = getBaseDenomination(ticker.toUpperCase());
     const params = {
       token: ticker.toUpperCase(),
-      quantity: new Quantity(0n, baseDenomination).fromString(
-        inputValue,
-      ).raw,
+      quantity: new Quantity(0n, baseDenomination).fromString(inputValue).raw,
     };
 
     // Execute appropriate action based on mode

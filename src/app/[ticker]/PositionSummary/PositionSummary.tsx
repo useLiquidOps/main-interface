@@ -38,7 +38,7 @@ const PositionSummary: React.FC<{
     [globalPosition],
   );
 
-  const getProgressWidth = (value: Quantity): string => {
+  const getProgressWidth = (): string => {
     const currentBorrow = Quantity.__sub(
       maxBorrow,
       globalPosition?.availableToBorrowUSD ||
@@ -223,10 +223,7 @@ const PositionSummary: React.FC<{
                   <div
                     className={styles.progressPrimary}
                     style={{
-                      width: getProgressWidth(
-                        globalPosition?.borrowCapacityUSD ||
-                          new Quantity(0n, 12n),
-                      ),
+                      width: getProgressWidth(),
                     }}
                   />
                   <div className={styles.progressBackground} />

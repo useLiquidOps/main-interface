@@ -29,7 +29,7 @@ const BetaDisclaimer = () => {
     setTimeout(() => {
       setIsVisible(false);
       setIsAnimating(false);
-    }, 250); // Match the transition duration from CSS
+    }, 50);
 
     localStorage.setItem("betaDisclaimer", "false");
     localStorage.setItem("showAnalyticsConsent", "true");

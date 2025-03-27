@@ -70,7 +70,6 @@ export function useGlobalPosition() {
           walletAddress: walletAddress,
         });
 
-
         // Find logos for tokens with positive collateral
         const collateralLogos = Object.keys(globalPosition.tokenPositions)
           .filter((ticker) => {

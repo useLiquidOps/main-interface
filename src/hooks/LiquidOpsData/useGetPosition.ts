@@ -7,7 +7,7 @@ import { GetPositionRes } from "liquidops";
 
 export type PositionCache = GetPositionRes;
 
-export function useGetPosition(tokenAddress: string) {
+export function useGetPosition(tokenAddress: string, overrideCache?: boolean) {
   const { data: walletAddress } = useWalletAddress();
 
   const DATA_KEY =
@@ -24,7 +24,7 @@ export function useGetPosition(tokenAddress: string) {
 
       let positionData: PositionCache;
 
-      if (cachedData) {
+      if (cachedData && overrideCache === false) {
         positionData = cachedData;
       } else {
         positionData = await LiquidOpsClient.getPosition({

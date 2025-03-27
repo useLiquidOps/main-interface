@@ -12,7 +12,7 @@ import { Quantity } from "ao-tokens";
 
 export type UserBalanceCache = WrappedQuantity;
 
-export function useUserBalance(tokenAddress: string) {
+export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
   const { data: walletAddress } = useWalletAddress();
 
   const DATA_KEY =
@@ -25,7 +25,7 @@ export function useUserBalance(tokenAddress: string) {
 
       const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (checkCache) {
+      if (checkCache && overrideCache === false) {
         return unWrapQuantity(checkCache);
       } else {
         const balance = await LiquidOpsClient.getBalance({

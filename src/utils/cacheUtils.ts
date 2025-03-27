@@ -30,7 +30,7 @@ export function isDataCachedValid<K extends DataKeys>(
 
     const dataItem: DataItem<DataTypeMap[K]> = JSON.parse(storedItem);
     const now = Date.now();
-    const isDataValid = now - dataItem.timestamp <= 5 * 60 * 1000;
+    const isDataValid = now - dataItem.timestamp <= 2 * 60 * 1000;
 
     if (isDataValid) {
       return dataItem.data;

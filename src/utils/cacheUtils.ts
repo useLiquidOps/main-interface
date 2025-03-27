@@ -67,7 +67,7 @@ export function cacheData<K extends string>({
 
 export function wrapQuantity(quantity: Quantity): WrappedQuantity {
   return {
-    value: quantity.integer.toString(),
+    value: quantity.raw.toString(),
     denomination: quantity.denomination.toString(),
   };
 }
@@ -77,7 +77,7 @@ export interface WrappedQuantity {
   denomination: string;
 }
 export function unWrapQuantity(wrappedQuantity: WrappedQuantity): Quantity {
-  return new Quantity(BigInt(wrappedQuantity.value), BigInt(wrappedQuantity.denomination));
+  return new Quantity(wrappedQuantity.value, BigInt(wrappedQuantity.denomination));
 }
 
 export function getDenomination(address: string): bigint | undefined {

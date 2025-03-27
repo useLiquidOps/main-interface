@@ -90,6 +90,12 @@ const PositionSummary: React.FC<{
     setShowTooltip(true);
   };
 
+  const handleMouseMoveHealthOne = (e: React.MouseEvent) => {
+    setTooltipContent(`Maximum collateralization: ${healthFactorOne.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`);
+    setTooltipPosition({ x: e.clientX, y: e.clientY });
+    setShowTooltip(true);
+  };
+
   const handleMouseLeave = () => {
     setShowTooltip(false);
   };
@@ -276,6 +282,8 @@ const PositionSummary: React.FC<{
                       <div
                         className={styles.riskIndicator}
                         style={{ left: `${healthFactorOne}%` }}
+                        onMouseMove={handleMouseMoveHealthOne}
+                        onMouseLeave={handleMouseLeave}
                       />
                     </div>
                   </div>

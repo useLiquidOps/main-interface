@@ -95,7 +95,10 @@ const PositionSummary: React.FC<{
   };
 
   const liquidationRisk = useMemo(() => {
-    if (!globalPosition || Quantity.eq(globalPosition.liquidationPointUSD, new Quantity(0n, 0n)))
+    if (
+      !globalPosition ||
+      Quantity.eq(globalPosition.liquidationPointUSD, new Quantity(0n, 0n))
+    )
       return 0;
     return Quantity.__div(
       Quantity.__mul(
@@ -113,18 +116,21 @@ const PositionSummary: React.FC<{
   }, [globalPosition]);
 
   const healthFactorOne = useMemo(() => {
-    if (!globalPosition || Quantity.eq(globalPosition.liquidationPointUSD, new Quantity(0n, 0n)))
+    if (
+      !globalPosition ||
+      Quantity.eq(globalPosition.liquidationPointUSD, new Quantity(0n, 0n))
+    )
       return 0;
 
     return Quantity.__div(
       Quantity.__mul(
-        globalPosition.collateralValueUSD,
+        globalPosition.borrowCapacityUSD,
         new Quantity(
           0n,
-          globalPosition.collateralValueUSD.denomination
-        ).fromNumber(100)
+          globalPosition.collateralValueUSD.denomination,
+        ).fromNumber(100),
       ),
-      globalPosition.liquidationPointUSD
+      globalPosition.liquidationPointUSD,
     ).toNumber();
   }, [globalPosition]);
 
@@ -261,7 +267,7 @@ const PositionSummary: React.FC<{
                   <SkeletonLoading style={{ width: "100%", height: "24px" }} />
                 ) : (
                   <div className={styles.riskContainer}>
-                    <p className={styles.value}>{`${liquidationRisk}%`}</p>
+                    <p className={styles.value}>{`${liquidationRisk.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`}</p>
                     <div className={styles.riskProgressContainer}>
                       <div
                         className={styles.riskProgress}

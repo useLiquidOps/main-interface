@@ -125,18 +125,10 @@ export function useGlobalPosition() {
         // Create cacheable version with wrapped Quantity objects
         const cacheableData: GlobalPositionCache = {
           collateralLogos,
-          collateralValueUSD: wrapQuantity(
-            result.collateralValueUSD
-          ),
-          borrowCapacityUSD: wrapQuantity(
-            result.borrowCapacityUSD
-          ),
-          liquidationPointUSD: wrapQuantity(
-            result.liquidationPointUSD
-          ),
-          availableToBorrowUSD: wrapQuantity(
-            result.availableToBorrowUSD
-          ),
+          collateralValueUSD: wrapQuantity(result.collateralValueUSD),
+          borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
+          liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
+          availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
         };
 
         cacheData({

@@ -77,7 +77,10 @@ export interface WrappedQuantity {
   denomination: string;
 }
 export function unWrapQuantity(wrappedQuantity: WrappedQuantity): Quantity {
-  return new Quantity(wrappedQuantity.value, BigInt(wrappedQuantity.denomination));
+  return new Quantity(
+    wrappedQuantity.value,
+    BigInt(wrappedQuantity.denomination),
+  );
 }
 
 export function getDenomination(address: string): bigint | undefined {

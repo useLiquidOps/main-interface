@@ -128,7 +128,7 @@ export function useGlobalPosition() {
           collateralValueUSD: wrapQuantity(result.collateralValueUSD),
           borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
           liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
-          availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD)
+          availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
         };
 
         cacheData({

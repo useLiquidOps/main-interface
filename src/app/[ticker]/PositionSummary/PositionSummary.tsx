@@ -95,7 +95,7 @@ const PositionSummary: React.FC<{
   };
 
   const liquidationRisk = useMemo(() => {
-    if (!globalPosition || globalPosition.liquidationPointUSD.toNumber() === 0)
+    if (!globalPosition || Quantity.eq(globalPosition.liquidationPointUSD, new Quantity(0n, 0n)))
       return 0;
     return Quantity.__div(
       Quantity.__mul(
@@ -109,6 +109,22 @@ const PositionSummary: React.FC<{
         ).fromNumber(100),
       ),
       globalPosition.liquidationPointUSD,
+    ).toNumber();
+  }, [globalPosition]);
+
+  const healthFactorOne = useMemo(() => {
+    if (!globalPosition || Quantity.eq(globalPosition.liquidationPointUSD, new Quantity(0n, 0n)))
+      return 0;
+
+    return Quantity.__div(
+      Quantity.__mul(
+        globalPosition.collateralValueUSD,
+        new Quantity(
+          0n,
+          globalPosition.collateralValueUSD.denomination
+        ).fromNumber(100)
+      ),
+      globalPosition.liquidationPointUSD
     ).toNumber();
   }, [globalPosition]);
 
@@ -253,7 +269,7 @@ const PositionSummary: React.FC<{
                       />
                       <div
                         className={styles.riskIndicator}
-                        style={{ left: `${liquidationRisk}%` }}
+                        style={{ left: `${healthFactorOne}%` }}
                       />
                     </div>
                   </div>

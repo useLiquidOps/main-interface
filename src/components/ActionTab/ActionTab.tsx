@@ -13,6 +13,7 @@ import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
 import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
+import { getBaseDenomination } from "@/utils/getBaseDenomination";
 
 interface ActionTabProps {
   ticker: string;
@@ -72,9 +73,10 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
     if (!inputValue || !walletBalance) return;
 
     // Create params for the transaction
+    const baseDenomination = getBaseDenomination(ticker.toUpperCase())
     const params = {
       token: ticker.toUpperCase(),
-      quantity: new Quantity(0n, walletBalance.denomination).fromString(
+      quantity: new Quantity(0n, baseDenomination).fromString(
         inputValue,
       ).raw,
     };

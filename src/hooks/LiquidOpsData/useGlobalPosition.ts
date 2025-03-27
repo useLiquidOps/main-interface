@@ -31,17 +31,15 @@ export function useGlobalPosition() {
 
   const DATA_KEY = `global-position-${walletAddress || ""}` as const;
 
-  const USD_DENOMINATION = 12n;
-
   return useQuery({
     queryKey: ["global-position", walletAddress],
     queryFn: async (): Promise<GlobalPositionResult> => {
       const emptyPosition: GlobalPositionResult = {
         collateralLogos: [],
-        collateralValueUSD: new Quantity(0n, USD_DENOMINATION),
-        borrowCapacityUSD: new Quantity(0n, USD_DENOMINATION),
-        liquidationPointUSD: new Quantity(0n, USD_DENOMINATION),
-        availableToBorrowUSD: new Quantity(0n, USD_DENOMINATION),
+        collateralValueUSD: new Quantity(0n, 12n),
+        borrowCapacityUSD: new Quantity(0n, 12n),
+        liquidationPointUSD: new Quantity(0n, 12n),
+        availableToBorrowUSD: new Quantity(0n, 12n),
       };
 
       // Add a delay before checking wallet address
@@ -108,19 +106,19 @@ export function useGlobalPosition() {
           collateralLogos,
           collateralValueUSD: new Quantity(
             globalPosition.collateralizationUSD,
-            USD_DENOMINATION,
+            globalPosition.usdDenomination,
           ),
           borrowCapacityUSD: new Quantity(
             globalPosition.capacityUSD,
-            USD_DENOMINATION,
+            globalPosition.usdDenomination,
           ),
           liquidationPointUSD: new Quantity(
             globalPosition.liquidationLimitUSD,
-            USD_DENOMINATION,
+            globalPosition.usdDenomination,
           ),
           availableToBorrowUSD: new Quantity(
             globalPosition.capacityUSD - globalPosition.borrowBalanceUSD,
-            USD_DENOMINATION,
+            globalPosition.usdDenomination,
           ),
         };
 
@@ -130,7 +128,7 @@ export function useGlobalPosition() {
           collateralValueUSD: wrapQuantity(result.collateralValueUSD),
           borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
           liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
-          availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
+          availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD)
         };
 
         cacheData({

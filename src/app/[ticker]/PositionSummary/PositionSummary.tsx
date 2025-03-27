@@ -163,7 +163,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`$${formatTMB(globalPosition.collateralValueUSD)}`}</p>
+                >{`$${Number(formatTMB(globalPosition.collateralValueUSD)).toFixed(2)}`}</p>
               )}
             </div>
             <div className={styles.tokens}>
@@ -201,7 +201,7 @@ const PositionSummary: React.FC<{
                 ) : (
                   <p
                     className={styles.value}
-                  >{`$${formatTMB(globalPosition.borrowCapacityUSD)}`}</p>
+                  >{`$${Number(formatTMB(globalPosition.borrowCapacityUSD)).toFixed(2)}`}</p>
                 )}
                 {extraData && !isLoadingPosition && (
                   <div className={styles.redDot} />
@@ -246,7 +246,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`$${formatTMB(globalPosition.liquidationPointUSD)}`}</p>
+                >{`$${Number(formatTMB(globalPosition.liquidationPointUSD)).toFixed(2)}`}</p>
               )}
             </div>
           </div>
@@ -262,7 +262,7 @@ const PositionSummary: React.FC<{
               ) : (
                 <p
                   className={styles.value}
-                >{`$${formatTMB(globalPosition.availableToBorrowUSD)}`}</p>
+                >{`$${Number(formatTMB(globalPosition.availableToBorrowUSD)).toFixed(2)}`}</p>
               )}
             </div>
           </div>

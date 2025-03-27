@@ -44,7 +44,9 @@ export function useGlobalPosition() {
         availableToBorrowUSD: new Quantity(0n, USD_DENOMINATION),
       };
 
-      // Return empty position if no wallet
+      // Add a delay before checking wallet address
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       if (!walletAddress) return emptyPosition;
 
       try {

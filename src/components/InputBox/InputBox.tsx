@@ -20,6 +20,7 @@ interface InputBoxProps {
   disabled?: boolean;
   liquidationMode?: boolean;
   liquidationDiscount?: number;
+  bypassBalanceCheck?: boolean;
 }
 
 interface TokenConfig {
@@ -33,11 +34,11 @@ const DECIMAL_PLACES: TokenConfig = {
   wUSDC: 2,
 };
 
-const useInputValidation = (walletBalance: Quantity) => {
+const useInputValidation = (walletBalance: Quantity, bypassBalanceCheck = false) => {
   const [showError, setShowError] = useState(false);
 
   const validateInput = (numberValue: Quantity) => {
-    if (Quantity.lt(walletBalance, numberValue)) {
+    if (!bypassBalanceCheck && Quantity.lt(walletBalance, numberValue)) {
       setShowError(true);
       setTimeout(() => setShowError(false), 820);
       return false;
@@ -107,8 +108,9 @@ const InputBox: React.FC<InputBoxProps> = ({
   liquidationMode = false,
   liquidationDiscount = 0,
   denomination,
+  bypassBalanceCheck = false,
 }) => {
-  const { showError, validateInput } = useInputValidation(walletBalance);
+  const { showError, validateInput } = useInputValidation(walletBalance, bypassBalanceCheck);
   const { formatTokenValue, formatDisplayValue } = useTokenFormatting(ticker);
   const { getBonusAmount, getProfit } = useLiquidationCalculations(
     inputValue,

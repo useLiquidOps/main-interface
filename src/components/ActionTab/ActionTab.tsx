@@ -106,6 +106,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         walletBalance={walletBalance}
         onMaxClick={handleMaxClick}
         denomination={walletBalance?.denomination || 12n}
+        bypassBalanceCheck={mode === "borrow"}
       />
 
       <div className={styles.infoContainer}>

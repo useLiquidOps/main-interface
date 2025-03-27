@@ -96,12 +96,12 @@ const ProtocolBalance: React.FC<{
             />
           ) : (
             <p className={styles.amount}>
-              {formatTMB(
+              {Number(formatTMB(
                 new Quantity(
                   protocolStats.protocolBalance,
                   protocolStats.denomination,
                 ),
-              )}
+              )).toFixed(2)}
             </p>
           )}
           <p className={styles.currency}>{tokenData.ticker}</p>

@@ -125,7 +125,7 @@ const Market: React.FC<{
             ) : (
               <div className={styles.flexDisplay}>
                 <p className={styles.value}>
-                  {`${Number(formatTMB(protocolStats?.protocolBalance || new Quantity(0n, 12n))).toFixed(2)} ${tokenData.ticker}`}
+                  {`${formatTMB(protocolStats?.protocolBalance || new Quantity(0n, 12n))} ${tokenData.ticker}`}
                 </p>
                 {/* {extraData && (
                   <p className={styles.extraData}>
@@ -147,7 +147,7 @@ const Market: React.FC<{
             ) : (
               <div className={styles.valueWithIndicator}>
                 <p className={styles.value}>
-                  {`${Number(formatTMB(protocolStats?.unLent || new Quantity(0n, 12n))).toFixed(2)} ${tokenData.ticker}`}
+                  {`${formatTMB(protocolStats?.unLent || new Quantity(0n, 12n))} ${tokenData.ticker}`}
                 </p>
                 <div className={styles.indicatorGreen}></div>
                 {/* {extraData && (
@@ -170,7 +170,7 @@ const Market: React.FC<{
             ) : (
               <div className={styles.valueWithIndicator}>
                 <p className={styles.value}>
-                  {`${Number(formatTMB(protocolStats?.borrows || new Quantity(0n, 12n))).toFixed(2)} ${tokenData.ticker}`}
+                  {`${formatTMB(protocolStats?.borrows || new Quantity(0n, 12n))} ${tokenData.ticker}`}
                 </p>
                 <div className={styles.indicatorBlue}></div>
               </div>

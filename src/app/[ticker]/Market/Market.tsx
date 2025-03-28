@@ -90,7 +90,7 @@ const Market: React.FC<{
                 ) : (
                   <div className={styles.flexDisplay}>
                     <p className={styles.value}>
-                      {protocolStats?.apr || "0.00"}%
+                      {(protocolStats?.apr).toFixed(2) || "0.00"}%
                     </p>
                     <Image
                       src={

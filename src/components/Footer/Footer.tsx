@@ -49,14 +49,14 @@ const Footer = () => {
             className={styles.feedback}
             target="_blank"
           >
-            Send feedback
+            Feedback
           </a>
           <p
             className={styles.manageAnalytics}
             onClick={handleManageAnalytics}
             style={{ cursor: "pointer" }}
           >
-            Manage analytics
+            Analytics
           </p>
 
           <div className={styles.version}>

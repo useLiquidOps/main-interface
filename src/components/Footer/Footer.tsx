@@ -72,6 +72,18 @@ const Footer = () => {
         <div className={styles.right}>
           <div className={styles.socials}>
             <a
+              href="https://defillama.com/protocol/liquidops"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="/socials/DefiLlama.svg"
+                alt="X"
+                height={15}
+                width={15}
+              />
+            </a>
+            <a
               href="https://x.com/Liquid_Ops"
               target="_blank"
               rel="noopener noreferrer"

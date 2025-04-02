@@ -3,10 +3,13 @@ import styles from "./Footer.module.css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { GoogleAnalytics } from "../GoogleAnalytics/GoogleAnalytics";
+import packageInfo from "../../../package.json";
 
 const Footer = () => {
   // Use the environment variable set at build time from next.config.mjs
   const gitHash = process.env.NEXT_PUBLIC_GIT_HASH || "unknown";
+  // get UI version from package.json
+  const version = packageInfo.version;
   // State to control the analytics visibility
   const [showAnalytics, setShowAnalytics] = useState(false);
 
@@ -60,7 +63,7 @@ const Footer = () => {
           </p>
 
           <div className={styles.version}>
-            <p>v0.1.0</p>
+            <p>v{version}</p>
             <a
               href={`https://github.com/useLiquidOps/main-interface/commit/${gitHash}`}
               target="_blank"

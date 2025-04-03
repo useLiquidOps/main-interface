@@ -63,12 +63,7 @@ const Connect: React.FC = () => {
 
   // Wander connector
   const handleConnectWander = async () => {
-    if (
-      typeof window === "undefined" ||
-      window.arweaveWallet.walletName !== "ArConnect" ||
-      "Wander"
-    ) {
-      // TODO: change to Wander only when Clabs update the window object
+    if (typeof window === "undefined" || !window.arweaveWallet) {
       alert(
         `Please ensure you have the Wander wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to wander.app/download`,
       );

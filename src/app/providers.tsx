@@ -33,8 +33,7 @@ export function Providers({ children }: Props) {
         appInfo={walletInfo}
         muUrl="https://mu.ao-testnet.xyz"
       >
-
-      {children}
+        {children}
       </AOSyncProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

@@ -12,12 +12,14 @@ interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConnectWander: () => void;
+  onConnectBeacon: () => void;
 }
 
 const WalletModal: React.FC<WalletModalProps> = ({
   isOpen,
   onClose,
   onConnectWander,
+  onConnectBeacon,
 }) => {
   return (
     <AnimatePresence>
@@ -66,7 +68,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
                 </div>
               </div>
 
-              <div className={styles.walletOption}>
+              <div className={styles.walletOption} onClick={onConnectBeacon}>
                 <Image
                   src="/partners/beacon.svg"
                   height={40}

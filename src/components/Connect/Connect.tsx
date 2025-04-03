@@ -8,6 +8,7 @@ import { overlayVariants } from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import WalletModal from "./WalletModal/WalletModal";
 
 declare global {
   interface Window {
@@ -22,6 +23,7 @@ const Connect: React.FC = () => {
   const [address, setAddress] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
 
   const { data: profile, isLoading: isProfileLoading } = useAOProfile();
 
@@ -73,7 +75,7 @@ const Connect: React.FC = () => {
     }
   };
 
-  const handleConnect = async () => {
+  const handleConnectWander = async () => {
     if (typeof window === "undefined" || !window.arweaveWallet) {
       alert(
         `Please ensure you have the Wander wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to wander.app/download`,
@@ -90,9 +92,18 @@ const Connect: React.FC = () => {
         },
       );
       await checkWalletConnection();
+      setIsWalletModalOpen(false);
     } catch (error) {
       console.error("Connection error:", error);
     }
+  };
+
+  const handleConnect = () => {
+    setIsWalletModalOpen(true);
+  };
+
+  const handleCloseWalletModal = () => {
+    setIsWalletModalOpen(false);
   };
 
   if (isLoading) {
@@ -163,6 +174,12 @@ const Connect: React.FC = () => {
           </button>
         )}
       </div>
+
+      <WalletModal
+        isOpen={isWalletModalOpen}
+        onClose={handleCloseWalletModal}
+        onConnectWander={handleConnectWander}
+      />
     </>
   );
 };

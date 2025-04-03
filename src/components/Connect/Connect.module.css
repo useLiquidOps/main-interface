@@ -5,7 +5,7 @@
 
 .connectButton {
   font-family: "DM Sans", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   padding: 7px 10px;
   font-size: 13px;
   background: var(--primary-palatinate-blue);
@@ -13,13 +13,11 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  border: 1.5px solid var(--primary-palatinate-blue);
   transition: all 0.18s ease;
 }
 
 .connectButton:hover {
-  background-color: white;
-  color: var(--primary-palatinate-blue);
+  opacity: 0.87;
 }
 
 .profileContainer {

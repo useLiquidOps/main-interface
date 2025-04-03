@@ -8,6 +8,9 @@ import { overlayVariants } from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import WalletModal from "./WalletModal/WalletModal";
+import { walletInfo } from "@/utils/wallets";
+import { useWallet } from "@vela-ventures/aosync-sdk-react";
 
 declare global {
   interface Window {
@@ -17,40 +20,17 @@ declare global {
 }
 
 const Connect: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
 
   const { data: profile, isLoading: isProfileLoading } = useAOProfile();
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() =>
     setIsOpen(false),
   );
-
-  const checkWalletConnection = async () => {
-    if (typeof window === "undefined" || !window.arweaveWallet) {
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const permissions = await window.arweaveWallet.getPermissions();
-      if (permissions.length > 0) {
-        const addr = await window.arweaveWallet.getActiveAddress();
-        setAddress(addr);
-        setConnected(true);
-      }
-    } catch (error) {
-      console.error("Wallet initialization error:", error);
-    }
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    checkWalletConnection();
-  }, []);
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -73,8 +53,22 @@ const Connect: React.FC = () => {
     }
   };
 
-  const handleConnect = async () => {
-    if (typeof window === "undefined" || !window.arweaveWallet) {
+  const handleConnect = () => {
+    setIsWalletModalOpen(true);
+  };
+
+  const handleCloseWalletModal = () => {
+    setIsWalletModalOpen(false);
+  };
+
+  // Wander connector
+  const handleConnectWander = async () => {
+    if (
+      typeof window === "undefined" ||
+      window.arweaveWallet.walletName !== "ArConnect" ||
+      "Wander"
+    ) {
+      // TODO: change to Wander only when Clabs update the window object
       alert(
         `Please ensure you have the Wander wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to wander.app/download`,
       );
@@ -84,20 +78,41 @@ const Connect: React.FC = () => {
     try {
       await window.arweaveWallet.connect(
         ["ACCESS_ADDRESS", "SIGN_TRANSACTION"],
-        {
-          name: "LiquidOps",
-          logo: "https://arweave.net/crrW3xFrtKTdEODVu08XCJB_XPpqhlNDG2f8H8O4iSw",
-        },
+        walletInfo,
       );
-      await checkWalletConnection();
+      const permissions = await window.arweaveWallet.getPermissions();
+      if (permissions.length > 0) {
+        const addr = await window.arweaveWallet.getActiveAddress();
+        setAddress(addr);
+        setConnected(true);
+      }
+
+      setIsWalletModalOpen(false);
     } catch (error) {
       console.error("Connection error:", error);
     }
   };
 
-  if (isLoading) {
-    return null;
-  }
+  // Beacon connector
+  const { isConnected, connect } = useWallet();
+  const handleConnectBeacon = async () => {
+    try {
+      const permissions = await window.arweaveWallet.getPermissions();
+      if (permissions.length > 0) {
+        const addr = await window.arweaveWallet.getActiveAddress();
+        setAddress(addr);
+        setConnected(true);
+      }
+      setIsWalletModalOpen(false);
+    } catch (error) {
+      console.error("Connection error:", error);
+    }
+  };
+  useEffect(() => {
+    if (isConnected) {
+      handleConnectBeacon();
+    }
+  }, [isConnected]);
 
   return (
     <>
@@ -163,6 +178,13 @@ const Connect: React.FC = () => {
           </button>
         )}
       </div>
+
+      <WalletModal
+        isOpen={isWalletModalOpen}
+        onClose={handleCloseWalletModal}
+        onConnectWander={handleConnectWander}
+        onConnectBeacon={connect}
+      />
     </>
   );
 };

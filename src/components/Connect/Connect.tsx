@@ -103,6 +103,28 @@ const Connect: React.FC = () => {
       console.error("Connection error:", error);
     }
   };
+
+  // Check for existing wallet connection on component mount
+  useEffect(() => {
+    const checkConnection = async () => {
+      if (typeof window !== "undefined" && window.arweaveWallet) {
+        try {
+          const permissions = await window.arweaveWallet.getPermissions();
+          if (permissions.length > 0) {
+            const addr = await window.arweaveWallet.getActiveAddress();
+            setAddress(addr);
+            setConnected(true);
+          }
+        } catch (error) {
+          console.error("Error checking wallet connection:", error);
+        }
+      }
+    };
+
+    checkConnection();
+  }, []);
+
+  // Handle Beacon wallet connection
   useEffect(() => {
     if (isConnected) {
       handleConnectBeacon();

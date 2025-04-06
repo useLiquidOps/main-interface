@@ -32,7 +32,8 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
   const isLoading = stats.isLoading || !stats.data;
   const data = isLoading
     ? {
-        apr: 0,
+        supplyAPR: 0,
+        borrowAPR: 0,
         protocolBalance: new Quantity(0n, 12n),
         unLent: new Quantity(0n, 12n),
         borrows: new Quantity(0n, 12n),
@@ -60,7 +61,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             </div>
           </div>
 
-          {/* APY Info */}
+          {/* Supply APY Info */}
           <div className={styles.aprInfo}>
             {isLoading ? (
               <>
@@ -70,7 +71,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             ) : (
               <>
                 <div className={styles.aprValue}>
-                  <p className={styles.apr}>{data.apr.toFixed(2)}%</p>
+                  <p className={styles.apr}>{data.supplyAPR.toFixed(2)}%</p>
                   <Image
                     src={
                       stats.data.percentChange.outcome
@@ -83,6 +84,33 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
                   />
                 </div>
                 <p className={styles.aprLabel}>Supply APY</p>
+              </>
+            )}
+          </div>
+
+          {/* Borrow APR Info */}
+          <div className={styles.aprInfo}>
+            {isLoading ? (
+              <>
+                <SkeletonLoading className="h-6 w-16 mb-1" />
+                <p className={styles.aprLabel}>Borrow APR</p>
+              </>
+            ) : (
+              <>
+                <div className={styles.aprValue}>
+                  <p className={styles.apr}>{data.borrowAPR.toFixed(2)}%</p>
+                  <Image
+                    src={
+                      stats.data.percentChange.outcome
+                        ? "/icons/APRUp.svg"
+                        : "/icons/APRDown.svg"
+                    }
+                    alt="APR trend"
+                    width={16}
+                    height={16}
+                  />
+                </div>
+                <p className={styles.aprLabel}>Borrow APR</p>
               </>
             )}
           </div>

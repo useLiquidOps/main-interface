@@ -46,6 +46,7 @@ interface MarketStatsProps {
 export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
   let totalCollateral = new Quantity(0n, 12n);
   let totalBorrows = new Quantity(0n, 12n);
+  let tvl = new Quantity(0n, 12n);
 
   // Check if any token's stats are still loading
   let isLoading = false;
@@ -69,6 +70,10 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
         totalBorrows,
         Quantity.__mul(stats.data.borrows, price),
       );
+      tvl = Quantity.__add(
+        totalCollateral,
+        totalBorrows,
+      );
     }
   }
 
@@ -83,11 +88,15 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
       <div className={styles.marketStats}>
         <div className={styles.marketStat}>
           <SkeletonLoading className="h-8 w-28 mb-2" />
-          <p className={styles.marketStatTitle}>Total supplied</p>
+          <p className={styles.marketStatTitle}>TVL</p>
         </div>
         <div className={styles.marketStat}>
           <SkeletonLoading className="h-8 w-28 mb-2" />
-          <p className={styles.marketStatTitle}>Total borrowed</p>
+          <p className={styles.marketStatTitle}>Available</p>
+        </div>
+        <div className={styles.marketStat}>
+          <SkeletonLoading className="h-8 w-28 mb-2" />
+          <p className={styles.marketStatTitle}>Borrowed</p>
         </div>
       </div>
     );
@@ -96,12 +105,16 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
   return (
     <div className={styles.marketStats}>
       <div className={styles.marketStat}>
+      <p className={styles.marketStatValue}>${formatTMB(tvl)}</p>
+          <p className={styles.marketStatTitle}>TVL</p>
+        </div>
+      <div className={styles.marketStat}>
         <p className={styles.marketStatValue}>${formatTMB(totalCollateral)}</p>
-        <p className={styles.marketStatTitle}>Total supplied</p>
+        <p className={styles.marketStatTitle}>Available</p>
       </div>
       <div className={styles.marketStat}>
         <p className={styles.marketStatValue}>${formatTMB(totalBorrows)}</p>
-        <p className={styles.marketStatTitle}>Total borrowed</p>
+        <p className={styles.marketStatTitle}>Borrowed</p>
       </div>
     </div>
   );

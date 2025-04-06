@@ -97,10 +97,13 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             ) : (
               <>
                 <p className={styles.metricValue}>
-                  ${formatTMB(Quantity.__add(
-                    Quantity.__mul(data.unLent, price), 
-                    Quantity.__mul(data.borrows, price)
-                    ))}
+                  $
+                  {formatTMB(
+                    Quantity.__add(
+                      Quantity.__mul(data.unLent, price),
+                      Quantity.__mul(data.borrows, price),
+                    ),
+                  )}
                 </p>
                 <p className={styles.metricLabel}>TVL</p>
               </>

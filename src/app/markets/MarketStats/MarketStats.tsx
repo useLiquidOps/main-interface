@@ -70,10 +70,7 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
         totalBorrows,
         Quantity.__mul(stats.data.borrows, price),
       );
-      tvl = Quantity.__add(
-        totalCollateral,
-        totalBorrows,
-      );
+      tvl = Quantity.__add(totalCollateral, totalBorrows);
     }
   }
 
@@ -105,9 +102,9 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
   return (
     <div className={styles.marketStats}>
       <div className={styles.marketStat}>
-      <p className={styles.marketStatValue}>${formatTMB(tvl)}</p>
-          <p className={styles.marketStatTitle}>TVL</p>
-        </div>
+        <p className={styles.marketStatValue}>${formatTMB(tvl)}</p>
+        <p className={styles.marketStatTitle}>TVL</p>
+      </div>
       <div className={styles.marketStat}>
         <p className={styles.marketStatValue}>${formatTMB(totalCollateral)}</p>
         <p className={styles.marketStatTitle}>Available</p>

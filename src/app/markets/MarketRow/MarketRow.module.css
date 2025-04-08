@@ -76,7 +76,7 @@
 
 .apr {
   color: var(--primary-ultramarine);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   margin: 0;
 }
@@ -98,7 +98,7 @@
 
 .metricValue {
   color: var(--primary-ultramarine);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   margin: 0;
   width: 80px;

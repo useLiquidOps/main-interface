@@ -14,6 +14,7 @@ import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
 import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
 import { getBaseDenomination } from "@/utils/getBaseDenomination";
+import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";
 
 interface ActionTabProps {
   ticker: string;
@@ -111,8 +112,22 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
         <div className={styles.infoDetails}>
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>
-              {mode === "supply" ? "Supply" : "Borrow"} APY:{" "}
-              {isLoadingProtocolStats ? "0.00" : protocolStats?.supplyAPR}%
+              {mode === "supply" ? "Supply" : "Borrow"} APR:
+              {isLoadingProtocolStats ||
+              (mode === "supply" && protocolStats?.supplyAPR === undefined) ||
+              (mode === "borrow" && protocolStats?.borrowAPR === undefined) ? (
+                <SkeletonLoading
+                  className={styles.infoLabel}
+                  style={{ width: "35px", height: "12px" }}
+                />
+              ) : (
+                <span>
+                  {mode === "supply"
+                    ? protocolStats?.supplyAPR.toFixed(2)
+                    : protocolStats?.borrowAPR.toFixed(2)}
+                  %
+                </span>
+              )}
             </span>
           </div>
           <div className={styles.infoRow}>

@@ -88,6 +88,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             )}
           </div>
 
+
           {/* Borrow APR Info */}
           <div className={styles.aprInfo}>
             {isLoading ? (
@@ -111,6 +112,27 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
                   />
                 </div>
                 <p className={styles.aprLabel}>Borrow APR</p>
+
+          {/* TVL Metric */}
+          <div className={styles.metricBox}>
+            {isLoading ? (
+              <>
+                <SkeletonLoading className="h-6 w-20 mb-1" />
+                <p className={styles.metricLabel}>TVL</p>
+              </>
+            ) : (
+              <>
+                <p className={styles.metricValue}>
+                  $
+                  {formatTMB(
+                    Quantity.__add(
+                      Quantity.__mul(data.unLent, price),
+                      Quantity.__mul(data.borrows, price),
+                    ),
+                  )}
+                </p>
+                <p className={styles.metricLabel}>TVL</p>
+
               </>
             )}
           </div>
@@ -120,14 +142,14 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             {isLoading ? (
               <>
                 <SkeletonLoading className="h-6 w-20 mb-1" />
-                <p className={styles.metricLabel}>Supplied</p>
+                <p className={styles.metricLabel}>Available</p>
               </>
             ) : (
               <>
                 <p className={styles.metricValue}>
                   ${formatTMB(Quantity.__mul(data.unLent, price))}
                 </p>
-                <p className={styles.metricLabel}>Supplied</p>
+                <p className={styles.metricLabel}>Available</p>
               </>
             )}
           </div>

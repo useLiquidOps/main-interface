@@ -98,7 +98,7 @@ const AssetRow: React.FC<AssetRowProps> = ({
             />
           ) : (
             <p className={styles.apr}>
-              APR {protocolStats.supplyAPR.toFixed(2)}%
+              {protocolStats[mode === "lend" ? "supplyAPR" : "borrowAPR"].toFixed(2)}%
             </p>
           )}
           {isProtocolStatsLoading ? (

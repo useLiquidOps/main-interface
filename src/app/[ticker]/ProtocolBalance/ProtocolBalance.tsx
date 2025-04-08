@@ -68,7 +68,7 @@ const ProtocolBalance: React.FC<{
   if (!tokenData) return null;
 
   const getOutcomeIcon = () => {
-    if (!protocolStats || protocolStats.apr === 0) {
+    if (!protocolStats || protocolStats.supplyAPR === 0) {
       return "/icons/APRUp.svg";
     }
     return protocolStats.percentChange.outcome
@@ -126,7 +126,7 @@ const ProtocolBalance: React.FC<{
       <div className={styles.aprSection}>
         <div className={styles.aprContainer}>
           <p className={styles.aprLabel}>
-            {hoverData ? hoverData.date : "APR"}
+            {hoverData ? hoverData.date : "Borrow APR"}
           </p>
           <div className={styles.aprValue}>
             {isLoadingHistorical || !protocolStats ? (
@@ -150,7 +150,7 @@ const ProtocolBalance: React.FC<{
                 <p className={styles.aprText}>
                   {hoverData
                     ? `${hoverData.value.toFixed(2)}%`
-                    : `${protocolStats.apr.toFixed(2)}%`}
+                    : `${protocolStats.borrowAPR.toFixed(2)}%`}
                 </p>
               </>
             )}

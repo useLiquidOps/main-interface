@@ -79,7 +79,7 @@ const Market: React.FC<{
         <div className={styles.metricsContainer}>
           {extraData && (
             <div className={styles.metric}>
-              <p className={styles.label}>APR</p>
+              <p className={styles.label}>Supply APR</p>
 
               <div className={styles.APRContainer}>
                 {isLoading ? (
@@ -90,7 +90,7 @@ const Market: React.FC<{
                 ) : (
                   <div className={styles.flexDisplay}>
                     <p className={styles.value}>
-                      {(protocolStats?.apr).toFixed(2) || "0.00"}%
+                      {(protocolStats?.supplyAPR).toFixed(2) || "0.00"}%
                     </p>
                     <Image
                       src={

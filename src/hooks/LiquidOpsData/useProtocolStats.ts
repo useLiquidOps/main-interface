@@ -3,7 +3,7 @@ import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { Quantity } from "ao-tokens";
 import { useHistoricalAPR, HistoricalAPRRes } from "./useHistoricalAPR";
 import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
-import { GetInfoRes } from "liquidops";
+import { GetInfoRes, TokenInput } from "liquidops";
 
 interface ProtocolStats {
   denomination: bigint;
@@ -11,7 +11,8 @@ interface ProtocolStats {
   borrows: Quantity;
   protocolBalance: Quantity;
   utilizationRate: Quantity;
-  apr: number;
+  supplyAPR: number;
+  borrowAPR: number;
   percentChange: {
     outcome: boolean;
     change: string;
@@ -32,7 +33,7 @@ export function useProtocolStats(token: string) {
       const safeHistoricalAPR = historicalAPR ?? [];
 
       if (checkCache) {
-        return getProtocolStatsData(checkCache, safeHistoricalAPR);
+        return await getProtocolStatsData(checkCache, safeHistoricalAPR, token);
       } else {
         const [getInfoRes] = await Promise.all([
           LiquidOpsClient.getInfo({ token }),
@@ -44,7 +45,7 @@ export function useProtocolStats(token: string) {
         };
         cacheData(protocolStatsCache);
 
-        return getProtocolStatsData(getInfoRes, safeHistoricalAPR);
+        return await getProtocolStatsData(getInfoRes, safeHistoricalAPR, token);
       }
     },
     enabled: !!historicalAPR,
@@ -53,9 +54,10 @@ export function useProtocolStats(token: string) {
   });
 }
 
-function getProtocolStatsData(
+async function getProtocolStatsData(
   getInfoRes: GetInfoRes,
   historicalAPR: HistoricalAPRRes,
+  token: TokenInput,
 ) {
   const denomination = BigInt(getInfoRes.denomination);
   const available = new Quantity(getInfoRes.cash, denomination);
@@ -68,6 +70,18 @@ function getProtocolStatsData(
   const utilizationRate = Quantity.lt(zero, protocolBalance)
     ? Quantity.__div(Quantity.__mul(lent, oneHundred), protocolBalance)
     : zero;
+
+  // get borrow APR
+  const borrowAPR = await LiquidOpsClient.getBorrowAPR({
+    token,
+  });
+
+  // get supply APR
+  const supplyAPR = await LiquidOpsClient.getSupplyAPR({
+    token,
+    getInfoRes,
+    getBorrowAPRRes: borrowAPR,
+  });
 
   // Use the latest APR from historical data
   const currentAPR = historicalAPR?.[historicalAPR.length - 1]?.value ?? 0;
@@ -84,7 +98,8 @@ function getProtocolStatsData(
     borrows: lent,
     protocolBalance,
     utilizationRate,
-    apr: currentAPR,
+    supplyAPR,
+    borrowAPR,
     percentChange: {
       outcome: currentAPR >= yesterdayAPR,
       change,

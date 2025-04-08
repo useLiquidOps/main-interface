@@ -24,7 +24,7 @@ const TokenItem: React.FC<{ token: Token }> = ({ token }) => {
   const { data: protocolStats } = useProtocolStats(token.ticker.toUpperCase());
 
   const getOutcomeIcon = () => {
-    if (!protocolStats || protocolStats.apr === 0) {
+    if (!protocolStats || protocolStats.supplyAPR === 0) {
       return "/icons/APRUp.svg";
     }
     return protocolStats.percentChange.outcome
@@ -48,7 +48,7 @@ const TokenItem: React.FC<{ token: Token }> = ({ token }) => {
       </div>
       <div className={styles.tokenMetrics}>
         <p className={styles.tokenAPR}>
-          APR {protocolStats?.apr.toFixed(2) ?? 0.0}%
+          APR {protocolStats?.supplyAPR.toFixed(2) ?? 0.0}%
         </p>
         <div className={styles.percentChangeContainer}>
           <Image

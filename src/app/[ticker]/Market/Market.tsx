@@ -79,7 +79,7 @@ const Market: React.FC<{
         <div className={styles.metricsContainer}>
           {extraData && (
             <div className={styles.metric}>
-              <p className={styles.label}>APR</p>
+              <p className={styles.label}>Supply APR</p>
 
               <div className={styles.APRContainer}>
                 {isLoading ? (

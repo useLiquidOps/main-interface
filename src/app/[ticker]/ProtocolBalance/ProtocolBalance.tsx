@@ -126,7 +126,7 @@ const ProtocolBalance: React.FC<{
       <div className={styles.aprSection}>
         <div className={styles.aprContainer}>
           <p className={styles.aprLabel}>
-            {hoverData ? hoverData.date : "APR"}
+            {hoverData ? hoverData.date : "Borrow APR"}
           </p>
           <div className={styles.aprValue}>
             {isLoadingHistorical || !protocolStats ? (

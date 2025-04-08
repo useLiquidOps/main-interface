@@ -68,7 +68,7 @@ const ProtocolBalance: React.FC<{
   if (!tokenData) return null;
 
   const getOutcomeIcon = () => {
-    if (!protocolStats || protocolStats.apr === 0) {
+    if (!protocolStats || protocolStats.supplyAPR === 0) {
       return "/icons/APRUp.svg";
     }
     return protocolStats.percentChange.outcome
@@ -150,7 +150,7 @@ const ProtocolBalance: React.FC<{
                 <p className={styles.aprText}>
                   {hoverData
                     ? `${hoverData.value.toFixed(2)}%`
-                    : `${protocolStats.apr.toFixed(2)}%`}
+                    : `${protocolStats.supplyAPR.toFixed(2)}%`}
                 </p>
               </>
             )}

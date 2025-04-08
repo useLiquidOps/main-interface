@@ -97,7 +97,9 @@ const AssetRow: React.FC<AssetRowProps> = ({
               style={{ width: "80px", height: "20px", marginBottom: "8px" }}
             />
           ) : (
-            <p className={styles.apr}>APR {protocolStats.apr.toFixed(2)}%</p>
+            <p className={styles.apr}>
+              APR {protocolStats.supplyAPR.toFixed(2)}%
+            </p>
           )}
           {isProtocolStatsLoading ? (
             <SkeletonLoading style={{ width: "60px", height: "16px" }} />

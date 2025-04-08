@@ -112,7 +112,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>
               {mode === "supply" ? "Supply" : "Borrow"} APY:{" "}
-              {isLoadingProtocolStats ? "0.00" : protocolStats?.apr}%
+              {isLoadingProtocolStats ? "0.00" : protocolStats?.supplyAPR}%
             </span>
           </div>
           <div className={styles.infoRow}>

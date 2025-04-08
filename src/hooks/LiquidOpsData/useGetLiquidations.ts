@@ -9,9 +9,7 @@ export function useGetLiquidations() {
   const getLiquidationsMutation = useMutation({
     mutationFn: async ({ token }: GetLiquidationsParams) => {
       try {
-        return await LiquidOpsClient.getLiquidations({
-          token,
-        });
+        return await LiquidOpsClient.getLiquidations();
       } catch (error) {
         throw error;
       }

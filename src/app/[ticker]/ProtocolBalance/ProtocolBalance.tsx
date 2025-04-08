@@ -150,7 +150,7 @@ const ProtocolBalance: React.FC<{
                 <p className={styles.aprText}>
                   {hoverData
                     ? `${hoverData.value.toFixed(2)}%`
-                    : `${protocolStats.supplyAPR.toFixed(2)}%`}
+                    : `${protocolStats.borrowAPR.toFixed(2)}%`}
                 </p>
               </>
             )}

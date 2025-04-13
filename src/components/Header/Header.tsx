@@ -181,6 +181,12 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
             >
               <p>Markets</p>
             </Link>
+            <Link
+              href="/strategies"
+              className={isLinkActive("/strategies") ? styles.activeLink : ""}
+            >
+              <p>Strategies</p>
+            </Link>
             {/* <Link
               href="/liquidations"
               className={isLinkActive("/liquidations") ? styles.activeLink : ""}

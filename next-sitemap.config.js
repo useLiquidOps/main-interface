@@ -9,9 +9,21 @@ module.exports = {
   additionalPaths: async (config) => {
     return [
       {
+        loc: "/markets",
+        changefreq: "daily",
+        priority: 1,
+        lastmod: new Date().toISOString(),
+      },
+      {
+        loc: "/strategies",
+        changefreq: "daily",
+        priority: 0.9,
+        lastmod: new Date().toISOString(),
+      },
+      {
         loc: "/qAR",
         changefreq: "daily",
-        priority: 1.0,
+        priority: 0.8,
         lastmod: new Date().toISOString(),
       },
       {
@@ -20,16 +32,11 @@ module.exports = {
         priority: 0.8,
         lastmod: new Date().toISOString(),
       },
-      {
-        loc: "/markets",
-        changefreq: "daily",
-        priority: 0.9,
-        lastmod: new Date().toISOString(),
-      },
+      
       {
         loc: "/liquidations",
         changefreq: "daily",
-        priority: 0.8,
+        priority: 0.7,
         lastmod: new Date().toISOString(),
       },
     ];

@@ -32,7 +32,6 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
   const { lend, isLending, lendError } = useLend();
   const { borrow, isBorrowing, borrowError } = useBorrow();
 
-  const utilizationRate = new Quantity(75, 2n);
   const networkFee = 0;
 
   const [inputValue, setInputValue] = useState("");
@@ -53,11 +52,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
   const calculateMaxAmount = () => {
     if (isLoadingBalance || !walletBalance) return new Quantity(0n, 12n);
-    if (mode === "supply") {
-      return walletBalance;
-    } else {
-      return Quantity.__mul(walletBalance, utilizationRate);
-    }
+    return walletBalance
   };
 
   const handleMaxClick = () => {

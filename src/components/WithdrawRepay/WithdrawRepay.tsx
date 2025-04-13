@@ -44,7 +44,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
   const networkFee = 0;
   const interestOwed = 0.01;
-  const utilizationRate = 0.75;
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -69,16 +68,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const calculateMaxAmount = () => {
     if (isLoadingCurrentBalance || !currentBalance)
       return new Quantity(0n, 12n);
-    if (mode === "withdraw") {
       return currentBalance;
-    } else {
-      return Quantity.__mul(
-        currentBalance,
-        new Quantity(0n, currentBalance.denomination || 12n).fromNumber(
-          utilizationRate,
-        ),
-      );
-    }
   };
 
   const handleMaxClick = () => {

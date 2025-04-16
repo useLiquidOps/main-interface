@@ -88,7 +88,7 @@ export function getDenomination(address: string): bigint | undefined {
   for (const ticker in tokenData) {
     const data = tokenData[ticker];
     if (data.address === address) {
-      return data.denomination;
+      return data.baseDenomination;
     }
   }
 

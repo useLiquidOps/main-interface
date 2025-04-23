@@ -3,27 +3,27 @@ module.exports = {
   siteUrl: "https://liquidops.io",
   generateRobotsTxt: true,
   changefreq: "daily",
-  priority: 0.7,
+  priority: 1,
   sitemapSize: 5000,
   exclude: ["/"],
   additionalPaths: async (config) => {
     return [
       {
-        loc: "/qAR",
+        loc: "/markets",
         changefreq: "daily",
-        priority: 1.0,
+        priority: 0.9,
         lastmod: new Date().toISOString(),
       },
       {
-        loc: "/wUSDC",
+        loc: "/qAR",
         changefreq: "daily",
         priority: 0.8,
         lastmod: new Date().toISOString(),
       },
       {
-        loc: "/markets",
+        loc: "/wUSDC",
         changefreq: "daily",
-        priority: 0.9,
+        priority: 0.7,
         lastmod: new Date().toISOString(),
       },
     ];

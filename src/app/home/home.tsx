@@ -15,8 +15,12 @@ import { useModal, ModalProvider } from "./PopUp/PopUp";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Image from "next/image";
 import { useAccountTab } from "@/components/Connect/accountTabContext";
+import { useState } from "react";
 
 function HomeContent() {
+    const [tooltipContent, setTooltipContent] = useState<string>("");
+      const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+      const [showTooltip, setShowTooltip] = useState(false);
   const { modalType, assetData, closeModal } = useModal();
 
   const { setAccountTab } = useAccountTab();
@@ -30,6 +34,37 @@ function HomeContent() {
     }
   };
 
+  const getProgressWidth = (value: number): string => {
+    return `${value}%`; // find percentage based on the lent + borrows added (user tvl)
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => { // fix the var widths here
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const totalWidth = rect.width;
+  
+      const totalValue = 10
+  
+      const unlentWidth = (5 / totalValue) * totalWidth;
+  
+      let tooltipText = "";
+      if (x <= unlentWidth) {
+        const availablePercentage = 10
+        tooltipText = `Available Lent Tokens: ${availablePercentage.toFixed(1)}%`;
+      } else {
+        const borrowsPercentage = 5
+        tooltipText = `Total Borrows: ${borrowsPercentage.toFixed(1)}%`;
+      }
+  
+      setTooltipContent(tooltipText);
+      setTooltipPosition({ x: e.clientX, y: e.clientY });
+      setShowTooltip(!!tooltipText);
+    };
+  
+    const handleMouseLeave = () => {
+      setShowTooltip(false);
+    };
+
   return (
     <div className={styles.page}>
       <BetaDisclaimer />
@@ -38,8 +73,8 @@ function HomeContent() {
         <div className={styles.bodyContainer}>
           <div className={styles.statsContainer}>
             <div className={styles.cardContainer}>
-              <div className={styles.card}>
-                <div className={styles.graphImage}>
+              <div className={styles.card1}>
+                <div className={styles.cardImage}>
                   <Image
                     src="/icons/graph.svg"
                     height={40}
@@ -55,40 +90,47 @@ function HomeContent() {
                 </div>
               </div>
 
-              <div className={styles.card}>
-                <div className={styles.graphImage}>
-                  <Image
-                    src="/icons/graph.svg"
-                    height={40}
-                    width={40}
-                    alt="User icon"
+              <div className={styles.card2}>
+                <div className={styles.lendVsBorrows}>
+                  <div className={styles.lendBorrow}>
+                    <p className={styles.amount}>$20,230</p>
+                    <p>Supplied</p>
+                  </div>
+                  <div className={styles.lendBorrow}>
+                    <p className={styles.amount}>$10,230</p>
+                    <p>Borrowed</p>
+                  </div>
+                </div>
+
+                <div className={styles.progressBar} onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}>
+                  <div
+                    className={styles.progressGreen}
+                    style={{
+                      width: getProgressWidth(70),
+                    }}
                   />
-                </div>
-
-                <div className={styles.balanceContainer}>
-                  <p className={styles.balanceTitle}>Net worth</p>
-                  <h1 className={styles.balance}>$1,000</h1>
-                  <p className={styles.apyTitle}>Net APY 11.1%</p>
-                </div>
-              </div>
-
-              <div className={styles.card}>
-                <div className={styles.graphImage}>
-                  <Image
-                    src="/icons/graph.svg"
-                    height={40}
-                    width={40}
-                    alt="User icon"
+                  <div
+                    className={styles.progressBlue}
+                    style={{
+                      width: getProgressWidth(30),
+                    }}
                   />
-                </div>
-
-                <div className={styles.balanceContainer}>
-                  <p className={styles.balanceTitle}>Net worth</p>
-                  <h1 className={styles.balance}>$1,000</h1>
-                  <p className={styles.apyTitle}>Net APY 11.1%</p>
                 </div>
               </div>
             </div>
+
+            {showTooltip && (
+        <div
+          className={styles.tooltip}
+          style={{
+            left: `${tooltipPosition.x + 10}px`,
+            top: `${tooltipPosition.y - 25}px`,
+          }}
+        >
+          {tooltipContent}
+        </div>
+      )}
 
             <div className={styles.txnContainer}>
               <button
@@ -145,6 +187,7 @@ function HomeContent() {
         )}
       </AnimatePresence>
       <Footer />
+      
     </div>
   );
 }

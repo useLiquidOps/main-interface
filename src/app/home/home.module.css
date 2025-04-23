@@ -31,11 +31,17 @@
 .statsContainer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   width: 100%;
 }
 
-.card1 {
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
+.card {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,6 +90,12 @@
   width: 100%;
   text-align: left;
   font-size: 0.7rem;
+}
+
+.txnContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .viewTxns {

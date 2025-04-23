@@ -37,26 +37,67 @@ function HomeContent() {
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <div className={styles.statsContainer}>
-            <div className={styles.card1}>
-              <div className={styles.graphImage}>
-                <Image
-                  src="/icons/graph.svg"
-                  height={40}
-                  width={40}
-                  alt="User icon"
-                />
+            <div className={styles.cardContainer}>
+              <div className={styles.card}>
+                <div className={styles.graphImage}>
+                  <Image
+                    src="/icons/graph.svg"
+                    height={40}
+                    width={40}
+                    alt="User icon"
+                  />
+                </div>
+
+                <div className={styles.balanceContainer}>
+                  <p className={styles.balanceTitle}>Net worth</p>
+                  <h1 className={styles.balance}>$1,000</h1>
+                  <p className={styles.apyTitle}>Net APY 11.1%</p>
+                </div>
               </div>
 
-              <div className={styles.balanceContainer}>
-                <p className={styles.balanceTitle}>Net worth</p>
-                <h1 className={styles.balance}>$1,000</h1>
-                <p className={styles.apyTitle}>Net APY 11.1%</p>
+              <div className={styles.card}>
+                <div className={styles.graphImage}>
+                  <Image
+                    src="/icons/graph.svg"
+                    height={40}
+                    width={40}
+                    alt="User icon"
+                  />
+                </div>
+
+                <div className={styles.balanceContainer}>
+                  <p className={styles.balanceTitle}>Net worth</p>
+                  <h1 className={styles.balance}>$1,000</h1>
+                  <p className={styles.apyTitle}>Net APY 11.1%</p>
+                </div>
+              </div>
+
+              <div className={styles.card}>
+                <div className={styles.graphImage}>
+                  <Image
+                    src="/icons/graph.svg"
+                    height={40}
+                    width={40}
+                    alt="User icon"
+                  />
+                </div>
+
+                <div className={styles.balanceContainer}>
+                  <p className={styles.balanceTitle}>Net worth</p>
+                  <h1 className={styles.balance}>$1,000</h1>
+                  <p className={styles.apyTitle}>Net APY 11.1%</p>
+                </div>
               </div>
             </div>
 
-            <button className={styles.viewTxns} onClick={handleOpenAccountTab}>
-              View transactions
-            </button>
+            <div className={styles.txnContainer}>
+              <button
+                className={styles.viewTxns}
+                onClick={handleOpenAccountTab}
+              >
+                View transactions
+              </button>
+            </div>
           </div>
 
           <div className={styles.grid}>

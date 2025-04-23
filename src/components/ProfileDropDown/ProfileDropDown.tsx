@@ -48,13 +48,12 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           <div className={styles.titleContainer}>
-          <p className={styles.title}>Account</p>
-          <button className={styles.close} onClick={onClose}>
-          <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
-        </button>
-
+            <p className={styles.title}>Account</p>
+            <button className={styles.close} onClick={onClose}>
+              <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
+            </button>
           </div>
-         
+
           <div className={styles.profileHeader}>
             <div className={styles.profileDetails}>
               <div className={styles.profileImageContainer}>
@@ -124,7 +123,6 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
 
 export default ProfileDropDown;
 
-
 const slideVariants = {
   hidden: {
     x: "100%",
@@ -132,8 +130,8 @@ const slideVariants = {
     transition: {
       type: "spring",
       stiffness: 300,
-      damping: 30
-    }
+      damping: 30,
+    },
   },
   visible: {
     x: 0,
@@ -141,8 +139,8 @@ const slideVariants = {
     transition: {
       type: "spring",
       stiffness: 300,
-      damping: 30
-    }
+      damping: 30,
+    },
   },
   exit: {
     x: "100%",
@@ -150,7 +148,7 @@ const slideVariants = {
     transition: {
       type: "spring",
       stiffness: 300,
-      damping: 30
-    }
-  }
+      damping: 30,
+    },
+  },
 };

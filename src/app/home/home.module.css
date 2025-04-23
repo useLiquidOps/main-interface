@@ -106,7 +106,6 @@
   background: #a6c45d;
 }
 
-
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

@@ -5,18 +5,18 @@ import Image from "next/image";
 interface DropdownButtonProps {
   isOpen: boolean;
   onToggle: (e: React.MouseEvent) => void;
-  flipArrow?: boolean
+  flipArrow?: boolean;
 }
 
 const DropdownButton: React.FC<DropdownButtonProps> = ({
   isOpen,
   onToggle,
-  flipArrow
+  flipArrow,
 }) => {
-  const iconSrc = flipArrow 
-    ? "/icons/dropdownLeftRight.svg" 
+  const iconSrc = flipArrow
+    ? "/icons/dropdownLeftRight.svg"
     : "/icons/dropdownUpDown.svg";
-    
+
   return (
     <button
       className={`${styles.dropdownButton} ${isOpen ? styles.open : ""}`}

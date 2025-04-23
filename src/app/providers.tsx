@@ -25,20 +25,20 @@ export function Providers({ children }: Props) {
 
   return (
     <AccountTabProvider>
-    <QueryClientProvider client={queryClient}>
-      <AOSyncProvider
-        gatewayConfig={{
-          host: "arweave.net",
-          port: 443,
-          protocol: "https",
-        }}
-        appInfo={walletInfo}
-        muUrl="https://mu.ao-testnet.xyz"
-      >
-        {children}
-      </AOSyncProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AOSyncProvider
+          gatewayConfig={{
+            host: "arweave.net",
+            port: 443,
+            protocol: "https",
+          }}
+          appInfo={walletInfo}
+          muUrl="https://mu.ao-testnet.xyz"
+        >
+          {children}
+        </AOSyncProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </AccountTabProvider>
   );
 }

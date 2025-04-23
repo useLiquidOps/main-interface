@@ -19,17 +19,15 @@ import { useAccountTab } from "@/components/Connect/accountTabContext";
 function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
 
-
   const { setAccountTab } = useAccountTab();
 
   const handleOpenAccountTab = async () => {
     const permissions = await window.arweaveWallet.getPermissions();
     if (permissions.length > 0) {
-        setAccountTab(true);
-      } else {
-        alert('Please connect your wallet by logging in.')
-      }
-   
+      setAccountTab(true);
+    } else {
+      alert("Please connect your wallet by logging in.");
+    }
   };
 
   return (
@@ -56,7 +54,9 @@ function HomeContent() {
               </div>
             </div>
 
-            <button className={styles.viewTxns} onClick={handleOpenAccountTab}>View transactions</button>
+            <button className={styles.viewTxns} onClick={handleOpenAccountTab}>
+              View transactions
+            </button>
           </div>
 
           <div className={styles.grid}>

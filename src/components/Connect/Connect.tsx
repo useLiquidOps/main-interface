@@ -25,7 +25,7 @@ const Connect: React.FC = () => {
   const [address, setAddress] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
-  
+
   const { isOpen, setAccountTab } = useAccountTab();
 
   const { data: profile, isLoading: isProfileLoading } = useAOProfile();

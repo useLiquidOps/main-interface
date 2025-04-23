@@ -4,6 +4,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { AOSyncProvider } from "@vela-ventures/aosync-sdk-react";
 import { walletInfo } from "@/utils/wallets";
+import { AccountTabProvider } from "@/components/Connect/accountTabContext";
 
 type Props = {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ export function Providers({ children }: Props) {
   );
 
   return (
+    <AccountTabProvider>
     <QueryClientProvider client={queryClient}>
       <AOSyncProvider
         gatewayConfig={{
@@ -37,5 +39,6 @@ export function Providers({ children }: Props) {
       </AOSyncProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
+    </AccountTabProvider>
   );
 }

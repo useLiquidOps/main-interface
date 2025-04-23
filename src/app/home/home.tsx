@@ -14,9 +14,23 @@ import Footer from "@/components/Footer/Footer";
 import { useModal, ModalProvider } from "./PopUp/PopUp";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Image from "next/image";
+import { useAccountTab } from "@/components/Connect/accountTabContext";
 
 function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
+
+
+  const { setAccountTab } = useAccountTab();
+
+  const handleOpenAccountTab = async () => {
+    const permissions = await window.arweaveWallet.getPermissions();
+    if (permissions.length > 0) {
+        setAccountTab(true);
+      } else {
+        alert('Please connect your wallet by logging in.')
+      }
+   
+  };
 
   return (
     <div className={styles.page}>
@@ -41,6 +55,8 @@ function HomeContent() {
                 <p className={styles.apyTitle}>Net APY 11.1%</p>
               </div>
             </div>
+
+            <button className={styles.viewTxns} onClick={handleOpenAccountTab}>View transactions</button>
           </div>
 
           <div className={styles.grid}>

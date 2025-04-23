@@ -30,7 +30,7 @@
 
 .statsContainer {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
 }
@@ -85,6 +85,27 @@
   text-align: left;
   font-size: 0.7rem;
 }
+
+.viewTxns {
+  padding: 9px;
+  border-radius: 50px;
+  font-size: 9px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+  color: black;
+  background: var(--secondary-tea-green);
+}
+
+.viewTxns:hover {
+  background: #a6c45d;
+}
+
 
 .grid {
   display: grid;

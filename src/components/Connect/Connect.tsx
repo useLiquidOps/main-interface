@@ -11,6 +11,7 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import WalletModal from "./WalletModal/WalletModal";
 import { walletInfo } from "@/utils/wallets";
 import { useWallet } from "@vela-ventures/aosync-sdk-react";
+import { useAccountTab } from "./accountTabContext";
 
 declare global {
   interface Window {
@@ -22,14 +23,15 @@ declare global {
 const Connect: React.FC = () => {
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  
+  const { isOpen, setAccountTab } = useAccountTab();
 
   const { data: profile, isLoading: isProfileLoading } = useAOProfile();
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() =>
-    setIsOpen(false),
+    setAccountTab(false),
   );
 
   const copyToClipboard = async (text: string) => {
@@ -47,7 +49,7 @@ const Connect: React.FC = () => {
       await window.arweaveWallet.disconnect();
       setConnected(false);
       setAddress(null);
-      setIsOpen(false);
+      setAccountTab(false);
     } catch (error) {
       console.error("Logout error:", error);
     }
@@ -141,7 +143,7 @@ const Connect: React.FC = () => {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            onClick={() => setIsOpen(false)}
+            onClick={() => setAccountTab(false)}
           />
         )}
       </AnimatePresence>
@@ -151,12 +153,12 @@ const Connect: React.FC = () => {
             className={styles.profileContainer}
             onClick={(e) => {
               e.stopPropagation();
-              setIsOpen(!isOpen);
+              setAccountTab(!isOpen);
             }}
           >
             <DropdownButton
               isOpen={isOpen}
-              onToggle={() => setIsOpen(!isOpen)}
+              onToggle={() => setAccountTab(!isOpen)}
               flipArrow={true}
             />
             <div className={styles.profileImageWrapper}>
@@ -182,7 +184,7 @@ const Connect: React.FC = () => {
             </div>
             <ProfileDropDown
               isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
+              onClose={() => setAccountTab(false)}
               address={address}
               isCopied={isCopied}
               onCopy={copyToClipboard}

@@ -18,9 +18,9 @@ import { useAccountTab } from "@/components/Connect/accountTabContext";
 import { useState } from "react";
 
 function HomeContent() {
-    const [tooltipContent, setTooltipContent] = useState<string>("");
-      const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-      const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipContent, setTooltipContent] = useState<string>("");
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [showTooltip, setShowTooltip] = useState(false);
   const { modalType, assetData, closeModal } = useModal();
 
   const { setAccountTab } = useAccountTab();
@@ -38,32 +38,33 @@ function HomeContent() {
     return `${value}%`; // find percentage based on the lent + borrows added (user tvl)
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => { // fix the var widths here
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const totalWidth = rect.width;
-  
-      const totalValue = 10
-  
-      const unlentWidth = (5 / totalValue) * totalWidth;
-  
-      let tooltipText = "";
-      if (x <= unlentWidth) {
-        const availablePercentage = 10
-        tooltipText = `Available Lent Tokens: ${availablePercentage.toFixed(1)}%`;
-      } else {
-        const borrowsPercentage = 5
-        tooltipText = `Total Borrows: ${borrowsPercentage.toFixed(1)}%`;
-      }
-  
-      setTooltipContent(tooltipText);
-      setTooltipPosition({ x: e.clientX, y: e.clientY });
-      setShowTooltip(!!tooltipText);
-    };
-  
-    const handleMouseLeave = () => {
-      setShowTooltip(false);
-    };
+  const handleMouseMove = (e: React.MouseEvent) => {
+    // fix the var widths here
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const totalWidth = rect.width;
+
+    const totalValue = 10;
+
+    const unlentWidth = (5 / totalValue) * totalWidth;
+
+    let tooltipText = "";
+    if (x <= unlentWidth) {
+      const availablePercentage = 10;
+      tooltipText = `Available Lent Tokens: ${availablePercentage.toFixed(1)}%`;
+    } else {
+      const borrowsPercentage = 5;
+      tooltipText = `Total Borrows: ${borrowsPercentage.toFixed(1)}%`;
+    }
+
+    setTooltipContent(tooltipText);
+    setTooltipPosition({ x: e.clientX, y: e.clientY });
+    setShowTooltip(!!tooltipText);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
 
   return (
     <div className={styles.page}>
@@ -102,8 +103,11 @@ function HomeContent() {
                   </div>
                 </div>
 
-                <div className={styles.progressBar} onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}>
+                <div
+                  className={styles.progressBar}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                >
                   <div
                     className={styles.progressGreen}
                     style={{
@@ -121,16 +125,16 @@ function HomeContent() {
             </div>
 
             {showTooltip && (
-        <div
-          className={styles.tooltip}
-          style={{
-            left: `${tooltipPosition.x + 10}px`,
-            top: `${tooltipPosition.y - 25}px`,
-          }}
-        >
-          {tooltipContent}
-        </div>
-      )}
+              <div
+                className={styles.tooltip}
+                style={{
+                  left: `${tooltipPosition.x + 10}px`,
+                  top: `${tooltipPosition.y - 25}px`,
+                }}
+              >
+                {tooltipContent}
+              </div>
+            )}
 
             <div className={styles.txnContainer}>
               <button
@@ -187,7 +191,6 @@ function HomeContent() {
         )}
       </AnimatePresence>
       <Footer />
-      
     </div>
   );
 }

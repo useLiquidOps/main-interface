@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import styles from "./WithdrawRepay.module.css";
-import SubmitButton from "../SubmitButton/SubmitButton";
-import PercentagePicker from "../PercentagePicker/PercentagePicker";
-import InputBox from "../InputBox/InputBox";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import SubmitButton from "@/components/SubmitButton/SubmitButton";
+import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
+import InputBox from "@/components/InputBox/InputBox";
+import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 import Image from "next/image";
-import { formatMaxAmount } from "../utils/utils";
+import { formatMaxAmount } from "@/components/utils/utils";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useLend } from "@/hooks/actions/useLend";
@@ -14,7 +14,7 @@ import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
-import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
+import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+"use client";
+import React from "react";
 import Image from "next/image";
 import styles from "./AssetRow.module.css";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
@@ -7,55 +8,42 @@ import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { SupportedToken } from "@/hooks/data/useSupportedTokens";
-import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";
+import { SkeletonLoading } from "../../../components/SkeletonLoading/SkeletonLoading";
+import { useModal } from "../PopUp/PopUp";
+import Link from "next/link";
 
 interface AssetRowProps {
   asset: SupportedToken;
   mode: "lend" | "borrow";
-  displayText: {
-    actionButton: string;
-    actionIcon: string;
-  };
-  onClick: (asset: SupportedToken, e?: React.MouseEvent) => void;
-  showIndicator?: boolean;
 }
 
-const AssetRow: React.FC<AssetRowProps> = ({
-  asset,
-  mode,
-  displayText,
-  onClick,
-  showIndicator = false,
-}) => {
+const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const { tokenAddress, oTokenAddress } = tokenInput(
     asset.ticker.toUpperCase(),
   );
   const { data: positionBalance } = useGetPosition(tokenAddress);
   const { data: lentBalance } = useUserBalance(oTokenAddress);
   const { data: protocolStats } = useProtocolStats(asset.ticker.toUpperCase());
-  const [isAnimating, setIsAnimating] = useState(false);
 
-  // Handle the indicator animation
-  useEffect(() => {
-    if (showIndicator) {
-      setIsAnimating(true);
-
-      // Reset animation after it completes
-      const timer = setTimeout(() => {
-        setIsAnimating(false);
-      }, 2000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [showIndicator]);
+  const modal = useModal();
 
   const currentBalance = mode === "lend" ? lentBalance : positionBalance;
   const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
   const isProtocolStatsLoading = !protocolStats;
 
-  const handleClick = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    onClick(asset, e);
+  const actionDo = mode === "lend" ? "Supply" : "Borrow";
+  const actionReverse = mode === "lend" ? "Withdraw" : "Repay";
+
+  const handleDoAction = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    modal.openModal(mode === "lend" ? "supply" : "borrow", asset);
+  };
+
+  const handleReverseAction = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    modal.openModal(mode === "lend" ? "withdraw" : "repay", asset);
   };
 
   let formattedBalance;
@@ -63,15 +51,9 @@ const AssetRow: React.FC<AssetRowProps> = ({
     formattedBalance = formatTMB(currentBalance);
   }
 
-  const rowClass = `${styles.assetRowWrapper} ${isAnimating ? styles.showIndicator : ""}`;
-
   return (
-    <div
-      className={rowClass}
-      onClick={handleClick}
-      style={{ cursor: "pointer" }}
-    >
-      <div className={styles.assetRow}>
+    <div className={styles.assetRowWrapper}>
+      <Link href={`/${asset.ticker}`} className={styles.assetRow}>
         <div className={styles.assetInfo}>
           <div className={styles.iconWrapper}>
             <Image src={asset.icon} alt={asset.name} width={40} height={40} />
@@ -124,17 +106,24 @@ const AssetRow: React.FC<AssetRowProps> = ({
             </div>
           )}
         </div>
-      </div>
-      <button className={styles.withdrawButton} onClick={handleClick}>
-        <Image
-          src={displayText.actionIcon}
-          alt={displayText.actionButton}
-          width={14}
-          height={14}
-          className={styles.withdrawIcon}
-        />
-        <span>{displayText.actionButton}</span>
-      </button>
+
+        <div className={styles.actionButtons}>
+          <button
+            className={styles.actionButton}
+            onClick={handleDoAction}
+            type="button"
+          >
+            {actionDo}
+          </button>
+          <button
+            className={styles.actionButton}
+            onClick={handleReverseAction}
+            type="button"
+          >
+            {actionReverse}
+          </button>
+        </div>
+      </Link>
     </div>
   );
 };

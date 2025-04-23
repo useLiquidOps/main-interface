@@ -9,9 +9,17 @@ import { tokens } from "liquidops";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer/Footer";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
+import Link from "next/link";
+import Image from "next/image";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 
 const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
   const ticker = params.ticker as string;
+
+  const { data: supportedTokens = [] } = useSupportedTokens();
+  const tokenData = supportedTokens.find(
+    (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
+  );
 
   const tokenTickers = Object.keys(tokens);
 
@@ -25,6 +33,19 @@ const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
       <Header mode="ticker" currentToken={ticker} />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
+          <div className={styles.titleWrapper}>
+            <Link href="/" className={styles.titleLink}>
+              <Image
+                src="/icons/back.svg"
+                alt="Back"
+                width={24}
+                height={24}
+                className={styles.backIcon}
+              />
+              <h2 className={styles.title}>{tokenData?.name}</h2>
+            </Link>
+          </div>
+
           <ProtocolBalance ticker={ticker} />
           <div className={styles.grid}>
             <Market ticker={ticker} />

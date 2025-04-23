@@ -1,7 +1,7 @@
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
-import { ModalProvider } from "./[ticker]/PopUp/PopUp";
+import { ModalProvider } from "./home/PopUp/PopUp";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {

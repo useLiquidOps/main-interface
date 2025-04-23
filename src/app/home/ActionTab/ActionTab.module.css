@@ -5,12 +5,32 @@
   width: 100%;
 }
 
-.borrowTitle {
+.title {
   color: var(--secondary-slate-blue);
   font-size: 18px;
   font-weight: 700;
   margin: 0;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 16px;
+}
+
+.close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--primary-ghost-white);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  outline: none;
+  border: 0;
 }
 
 .infoContainer {

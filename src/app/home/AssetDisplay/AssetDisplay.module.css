@@ -19,31 +19,10 @@
   margin: 0;
 }
 
-.viewAll {
-  color: var(--secondary-periwinkle);
-  font-size: 16px;
-  font-weight: 600;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
 .assetsList {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.closeButton {
-  background-color: var(--primary-ghost-white);
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  padding: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .emptyState {

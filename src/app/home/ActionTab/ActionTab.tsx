@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import Image from "next/image";
-import SubmitButton from "../SubmitButton/SubmitButton";
-import InputBox from "../InputBox/InputBox";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import SubmitButton from "@/components/SubmitButton/SubmitButton";
+import InputBox from "@/components/InputBox/InputBox";
+import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 import styles from "./ActionTab.module.css";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
@@ -12,16 +12,17 @@ import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
-import { useLoadingScreen } from "../LoadingScreen/useLoadingScreen";
+import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 import { getBaseDenomination } from "@/utils/getBaseDenomination";
-import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface ActionTabProps {
   ticker: string;
   mode: "supply" | "borrow";
+  onClose: () => void;
 }
 
-const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
+const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
   const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
   const { data: protocolStats, isLoading: isLoadingProtocolStats } =
     useProtocolStats(ticker.toUpperCase());
@@ -85,9 +86,14 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
   return (
     <div className={styles.actionTab}>
-      <p className={styles.borrowTitle}>
-        {mode === "supply" ? "Deposit" : "Borrow"}
-      </p>
+      <div className={styles.titleContainer}>
+        <p className={styles.title}>
+          {mode === "supply" ? "Supply" : "Borrow"}
+        </p>
+        <button className={styles.close} onClick={onClose}>
+          <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
+        </button>
+      </div>
 
       <InputBox
         inputValue={inputValue}
@@ -147,7 +153,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
           parseFloat(inputValue) <= 0 ||
           loadingScreenState.submitStatus === "loading"
         }
-        submitText={mode === "supply" ? "Deposit" : "Borrow"}
+        submitText={mode === "supply" ? "Supply" : "Borrow"}
       />
 
       {/* Loading Screen Modal */}

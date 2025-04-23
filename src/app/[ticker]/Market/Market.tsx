@@ -7,12 +7,6 @@ import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
-// // TODO: Replace these with real data
-// const PLACEHOLDER_EXTRA_DATA = {
-//   extraTotalSupply: new Quantity(0n, 12n).fromNumber(6000),
-//   extraLent: new Quantity(0n, 12n).fromNumber(1000),
-// };
-
 const Market: React.FC<{
   ticker: string;
   extraData?: boolean;
@@ -127,12 +121,6 @@ const Market: React.FC<{
                 <p className={styles.value}>
                   {`${formatTMB(protocolStats?.protocolBalance || new Quantity(0n, 12n))} ${tokenData.ticker}`}
                 </p>
-                {/* {extraData && (
-                  <p className={styles.extraData}>
-                    +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraTotalSupply)}{" "}
-                    {tokenData.ticker}
-                  </p>
-                )} */}
               </div>
             )}
           </div>
@@ -150,12 +138,6 @@ const Market: React.FC<{
                   {`${formatTMB(protocolStats?.unLent || new Quantity(0n, 12n))} ${tokenData.ticker}`}
                 </p>
                 <div className={styles.indicatorGreen}></div>
-                {/* {extraData && (
-                  <p className={styles.extraData}>
-                    +{formatTMB(PLACEHOLDER_EXTRA_DATA.extraLent)}{" "}
-                    {tokenData.ticker}
-                  </p>
-                )} */}
               </div>
             )}
           </div>

@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useState } from "react";
 
-type ModalType = "withdraw" | "repay" | "liquidate" | null;
+type ModalType = "withdraw" | "repay" | "borrow" | "supply" | null;
 
 interface ModalContextType {
   modalType: ModalType;

@@ -22,10 +22,36 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 900px;
+  width: 1000px;
   margin-top: 25px;
   margin-bottom: 25px;
   gap: 25px;
+}
+
+.titleWrapper {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+}
+
+.titleLink {
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+.backIcon {
+  color: var(--secondary-slate-blue);
+}
+
+.title {
+  color: var(--secondary-slate-blue);
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
 }
 
 .grid {

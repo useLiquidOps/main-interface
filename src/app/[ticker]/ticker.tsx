@@ -30,7 +30,7 @@ const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
   return (
     <div className={styles.page}>
       <BetaDisclaimer />
-      <Header mode="ticker" currentToken={ticker} />
+      <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <div className={styles.titleWrapper}>

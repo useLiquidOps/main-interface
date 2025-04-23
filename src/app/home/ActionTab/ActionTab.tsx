@@ -137,13 +137,13 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
             </span>
           </div>
         </div>
-        <Image
+        {/* <Image
           src="/icons/customise.svg"
           height={14}
           width={14}
           alt="Customise"
           className={styles.customiseIcon}
-        />
+        /> */}
       </div>
 
       <SubmitButton

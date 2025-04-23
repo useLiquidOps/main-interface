@@ -157,6 +157,7 @@ const Connect: React.FC = () => {
             <DropdownButton
               isOpen={isOpen}
               onToggle={() => setIsOpen(!isOpen)}
+              flipArrow={true}
             />
             <div className={styles.profileImageWrapper}>
               {isProfileLoading ? (
@@ -181,6 +182,7 @@ const Connect: React.FC = () => {
             </div>
             <ProfileDropDown
               isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
               address={address}
               isCopied={isCopied}
               onCopy={copyToClipboard}

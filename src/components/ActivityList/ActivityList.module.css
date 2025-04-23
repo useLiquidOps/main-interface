@@ -39,15 +39,15 @@
   align-items: stretch;
   flex-direction: column;
   gap: 2px;
-  min-height: 130px;
+  min-height: 330px;
 }
 
 .transactionsList {
-  max-height: 130px;
+  max-height: 330px;
   overflow-y: auto;
   padding-right: 8px;
   width: 100%;
-  min-height: 130px;
+  min-height: 330px;
 }
 
 .statusMessage {

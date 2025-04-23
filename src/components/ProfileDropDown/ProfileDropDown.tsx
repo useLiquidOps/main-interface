@@ -2,7 +2,6 @@
 import React from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { dropdownVariants } from "@/components/DropDown/FramerMotion";
 import styles from "./ProfileDropDown.module.css";
 import ActivityList from "../ActivityList/ActivityList";
 import { useTransactions } from "@/hooks/LiquidOpsData/useTransactions";
@@ -10,6 +9,7 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface ProfileDropdownProps {
   isOpen: boolean;
+  onClose: () => void;
   address: string;
   isCopied: boolean;
   onCopy: (text: string) => void;
@@ -23,6 +23,7 @@ interface ProfileDropdownProps {
 
 const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
   isOpen,
+  onClose,
   address,
   isCopied,
   onCopy,
@@ -40,13 +41,20 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
       {isOpen && (
         <motion.div
           className={styles.dropdown}
-          variants={dropdownVariants}
+          variants={slideVariants}
           initial="hidden"
           animate="visible"
-          exit="hidden"
+          exit="exit"
           onClick={(e) => e.stopPropagation()}
         >
-          <p className={styles.title}>Profile</p>
+          <div className={styles.titleContainer}>
+          <p className={styles.title}>Account</p>
+          <button className={styles.close} onClick={onClose}>
+          <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
+        </button>
+
+          </div>
+         
           <div className={styles.profileHeader}>
             <div className={styles.profileDetails}>
               <div className={styles.profileImageContainer}>
@@ -115,3 +123,34 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
 };
 
 export default ProfileDropDown;
+
+
+const slideVariants = {
+  hidden: {
+    x: "100%",
+    opacity: 0,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30
+    }
+  },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30
+    }
+  },
+  exit: {
+    x: "100%",
+    opacity: 0,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30
+    }
+  }
+};

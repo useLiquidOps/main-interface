@@ -1,18 +1,24 @@
 .dropdown {
-  position: absolute;
-  top: calc(100%);
+  position: fixed;
+  top: 0;
   right: 0;
   background-color: white;
-  border-radius: 12px;
   padding: 20px;
   z-index: 1000;
-  width: 318px;
+  width: 400px;
   cursor: default;
   display: flex;
-  justify-content: center;
   align-items: left;
   flex-direction: column;
   gap: 15px;
+  height: 100vh;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .title {
@@ -21,6 +27,19 @@
   margin: 0;
   font-size: 16px;
   font-weight: 700;
+}
+
+.close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--primary-ghost-white);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  outline: none;
+  border: 0;
 }
 
 .profileHeader {

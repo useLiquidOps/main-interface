@@ -15,7 +15,7 @@ import MoreDropdown from "./MoreDropdown/MoreDropdown";
 
 interface HeaderProps {
   currentToken?: string;
-  mode?: "home" | "supply" | "borrow" | "faucet";
+  mode?: "home" | "supply" | "borrow";
 }
 
 const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
@@ -63,7 +63,6 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
       home: `/${tokenLower}`,
       supply: `/${tokenLower}/supply`,
       borrow: `/${tokenLower}/borrow`,
-      faucet: `/faucet/${tokenLower}`,
     };
 
     router.push(routes[mode]);
@@ -92,13 +91,10 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
         pathname === "/" ||
         !firstPathSegment ||
         (firstPathSegment &&
-          !["markets", "liquidations", "faucet", "supply", "borrow"].includes(
+          !["markets", "supply", "borrow"].includes(
             firstPathSegment,
           ))
       );
-    }
-    if (path === "/faucet") {
-      return pathname.startsWith("/faucet");
     }
     return "/" + firstPathSegment === path;
   };
@@ -181,12 +177,6 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
             >
               <p>Markets</p>
             </Link>
-            {/* <Link
-              href="/liquidations"
-              className={isLinkActive("/liquidations") ? styles.activeLink : ""}
-            >
-              <p>Liquidations</p>
-            </Link> */}
             <MoreDropdown items={moreMenuItems} />
           </nav>
         </div>

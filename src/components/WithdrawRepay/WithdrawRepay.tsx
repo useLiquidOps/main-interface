@@ -68,7 +68,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const calculateMaxAmount = () => {
     if (isLoadingCurrentBalance || !currentBalance)
       return new Quantity(0n, 12n);
-      return currentBalance;
+    return currentBalance;
   };
 
   const handleMaxClick = () => {

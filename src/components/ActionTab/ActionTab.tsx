@@ -52,7 +52,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode }) => {
 
   const calculateMaxAmount = () => {
     if (isLoadingBalance || !walletBalance) return new Quantity(0n, 12n);
-    return walletBalance
+    return walletBalance;
   };
 
   const handleMaxClick = () => {

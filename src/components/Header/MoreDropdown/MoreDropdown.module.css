@@ -1,56 +1,55 @@
 .moreDropDown {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    padding: 10px 15px;
-    border-radius: 9px;
-    transition: all 0.18s ease;
-    cursor: default;
-  }
-  
-  .moreDropDown:hover {
-    background-color: var(--primary-ghost-white);
-  }
-  
-  .moreDropDown * {
-    cursor: default !important;
-  }
-  
-  .moreDropdownContent {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: white;
-    width: fit-content;
-    z-index: 1000;
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .moreDropdownItem {
-    color: var(--primary-palatinate-blue);
-    padding: 10px 15px;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    text-align: left;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: all 0.18s ease;
-    cursor: pointer !important;
-  }
-  
-  .moreDropdownItem:hover {
-    background-color: var(--primary-ghost-white);
-  }
-  
-  .moreDropdownItem * {
-    cursor: pointer !important;
-  }
-  
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  border-radius: 9px;
+  transition: all 0.18s ease;
+  cursor: default;
+}
+
+.moreDropDown:hover {
+  background-color: var(--primary-ghost-white);
+}
+
+.moreDropDown * {
+  cursor: default !important;
+}
+
+.moreDropdownContent {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  width: fit-content;
+  z-index: 1000;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.moreDropdownItem {
+  color: var(--primary-palatinate-blue);
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  text-align: left;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.18s ease;
+  cursor: pointer !important;
+}
+
+.moreDropdownItem:hover {
+  background-color: var(--primary-ghost-white);
+}
+
+.moreDropdownItem * {
+  cursor: pointer !important;
+}

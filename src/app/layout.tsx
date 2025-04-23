@@ -5,7 +5,7 @@ import { ModalProvider } from "./[ticker]/PopUp/PopUp";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "LiquidOps | Lending & Borrowing on Arweave & AO",
+  title: "LiquidOps | Home",
   description:
     "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
   keywords: [
@@ -27,14 +27,14 @@ export const metadata: Metadata = {
     icon: "/favicon.svg",
   },
   openGraph: {
-    title: "LiquidOps | Lending & Borrowing on Arweave & AO",
+    title: "LiquidOps | Home",
     description:
       "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
-    url: "https://liquidops.io/qAR",
+    url: "https://liquidops.io/",
     siteName: "LiquidOps",
     images: [
       {
-        url: "https://liquidops.io/SEO/og-image.jpg",
+        url: "https://liquidops.io/SEO/og_image.jpg",
         width: 1200,
         height: 630,
         alt: "LiquidOps",
@@ -44,14 +44,14 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: {
-    canonical: "https://liquidops.io/qAR",
+    canonical: "https://liquidops.io/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LiquidOps | Lending & Borrowing on Arweave & AO",
+    title: "LiquidOps | Home",
     description:
       "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
-    images: ["https://liquidops.io/SEO/og-image.jpg"],
+    images: ["https://liquidops.io/SEO/og_image.jpg"],
   },
   robots: "index, follow",
   other: {
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
       name: "LiquidOps",
       description:
         "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
-      url: "https://liquidops.io/qAR",
+      url: "https://liquidops.io/",
       provider: {
         "@type": "Organization",
         name: "LiquidOps",

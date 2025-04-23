@@ -1,5 +1,12 @@
-import { redirect } from "next/navigation";
+import dynamic from "next/dynamic";
 
-export default function Home() {
-  redirect("/qAR");
-}
+// Dynamically import with SSR disabled, fix window error
+const Home = dynamic(() => import("./home/home"), {
+  ssr: false,
+});
+
+const Page = () => {
+  return <Home />;
+};
+
+export default Page;

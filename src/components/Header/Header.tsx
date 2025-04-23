@@ -15,10 +15,10 @@ import MoreDropdown from "./MoreDropdown/MoreDropdown";
 
 interface HeaderProps {
   currentToken?: string;
-  mode?: "home" | "supply" | "borrow";
+  mode?: "ticker" | "supply" | "borrow";
 }
 
-const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
+const Header: React.FC<HeaderProps> = ({ currentToken, mode = "ticker" }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [activeLink, setActiveLink] = useState<string | null>(null);
@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
   const selectToken = (token: string) => {
     const tokenLower = token;
     const routes = {
-      home: `/${tokenLower}`,
+      ticker: `/${tokenLower}`,
       supply: `/${tokenLower}/supply`,
       borrow: `/${tokenLower}/borrow`,
     };
@@ -91,9 +91,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
         pathname === "/" ||
         !firstPathSegment ||
         (firstPathSegment &&
-          !["markets", "supply", "borrow"].includes(
-            firstPathSegment,
-          ))
+          !["markets", "supply", "borrow"].includes(firstPathSegment))
       );
     }
     return "/" + firstPathSegment === path;
@@ -166,7 +164,7 @@ const Header: React.FC<HeaderProps> = ({ currentToken, mode = "home" }) => {
 
           <nav className={styles.navLinks}>
             <Link
-              href="/qAR"
+              href="/"
               className={isLinkActive("/") ? styles.activeLink : ""}
             >
               <p>Home</p>

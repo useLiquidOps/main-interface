@@ -23,14 +23,14 @@ export async function generateMetadata({
 }
 
 // Dynamically import with SSR disabled, fix window error
-const Home = dynamic(() => import("./home"), {
+const Ticker = dynamic(() => import("./ticker"), {
   ssr: false,
 });
 
 const Page = ({ params }: any) => {
   const { ticker, tab } = params;
 
-  return <Home params={{ ticker, tab }} />;
+  return <Ticker params={{ ticker, tab }} />;
 };
 
 export default Page;

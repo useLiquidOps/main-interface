@@ -25,7 +25,7 @@ module.exports = {
         changefreq: "daily",
         priority: 0.9,
         lastmod: new Date().toISOString(),
-      }
+      },
     ];
   },
   transform: async (config, path) => {

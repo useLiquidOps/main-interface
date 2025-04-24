@@ -1,0 +1,37 @@
+.container {
+  width: 100%;
+  min-height: 200px;
+}
+
+.container * {
+  outline: none;
+  cursor: pointer;
+}
+
+.tooltip {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  animation: fadeInOut 0.2s ease-in-out;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+}
+
+.tooltipName {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.tooltipValue {
+  margin: 0 0 2px 0;
+}
+
+.tooltipPercentage {
+  margin: 0;
+}

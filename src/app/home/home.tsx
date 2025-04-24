@@ -17,6 +17,7 @@ import Image from "next/image";
 import { useAccountTab } from "@/components/Connect/accountTabContext";
 import { useState } from "react";
 import Link from "next/link";
+import PieChart from "@/components/PieChat/PieChart";
 
 function HomeContent() {
   const [tooltipContent, setTooltipContent] = useState<string>("");
@@ -123,6 +124,11 @@ function HomeContent() {
   const isPositive = netAPY >= 0;
   const starType = isPositive ? "APYStars" : "APRStars";
 
+  const userTokenHoldings = [
+    { token: "wAR", tokenHex: "#000000", amount: 10 },
+    { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
+  ];
+
   return (
     <div className={styles.page}>
       <BetaDisclaimer />
@@ -132,12 +138,14 @@ function HomeContent() {
           <div className={styles.statsContainer}>
             <div className={styles.cardContainer}>
               <div className={styles.card1}>
-                <div className={styles.cardImage}>
-                  <Image
-                    src="/icons/graph.svg"
-                    height={40}
-                    width={40}
-                    alt="User icon"
+                <div className={styles.pieChart}>
+                  <PieChart
+                    data={userTokenHoldings.map((token) => ({
+                      name: token.token,
+                      value: token.amount,
+                      color: token.tokenHex,
+                    }))}
+                    height={10}
                   />
                 </div>
 

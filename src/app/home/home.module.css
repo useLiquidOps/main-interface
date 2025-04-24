@@ -54,7 +54,7 @@
   height: 100%;
 }
 
-.cardImage {
+.pieChart {
   display: flex;
   justify-content: center;
   align-items: center;

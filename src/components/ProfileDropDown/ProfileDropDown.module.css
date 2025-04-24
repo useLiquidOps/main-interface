@@ -158,11 +158,12 @@
   justify-content: center;
   gap: 8px;
   transition: all 0.18s ease;
-  background-color: var(--secondary-tea-green);
-  color: black;
+  background-color: var(--primary-palatinate-blue);
+  color: white;
   width: fit-content;
 }
 
 .editProfileButton:hover {
-  background-color: #a6c45d;
+  background-color: #322ece;
 }
+

@@ -24,6 +24,7 @@
   display: flex;
   justify-content: right;
   align-items: center;
+  gap: 5px;
 }
 
 .exportContainer {
@@ -33,7 +34,7 @@
 }
 
 .exportText {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--secondary-periwinkle);
 }
 

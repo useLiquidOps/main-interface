@@ -16,6 +16,7 @@ import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Image from "next/image";
 import { useAccountTab } from "@/components/Connect/accountTabContext";
 import { useState } from "react";
+import Link from "next/link";
 
 function HomeContent() {
   const [tooltipContent, setTooltipContent] = useState<string>("");
@@ -65,6 +66,58 @@ function HomeContent() {
   const handleMouseLeave = () => {
     setShowTooltip(false);
   };
+
+  const strategies = [
+    {
+      id: "wUSDC-wAR",
+      APY: 2.5,
+      baseTicker: "wUSDC",
+      borrowTicker: "wAR",
+      rewardTicker: "AO",
+    },
+    {
+      id: "wUSDC-wAR",
+      APY: 1.7,
+      baseTicker: "wUSDC",
+      borrowTicker: "wAR",
+      rewardTicker: "APUS",
+    },
+    {
+      id: "wUSDC-wAR",
+      APY: 1.5,
+      baseTicker: "wUSDC",
+      borrowTicker: "wAR",
+      rewardTicker: "BOTG",
+    },
+    {
+      id: "wUSDC-wAR",
+      APY: 0.5,
+      baseTicker: "wUSDC",
+      borrowTicker: "wAR",
+      rewardTicker: "PL",
+    },
+    {
+      id: "wUSDC-wAR",
+      APY: 3.5,
+      baseTicker: "wUSDC",
+      borrowTicker: "wAR",
+      rewardTicker: "ARIO",
+    },
+    {
+      id: "wUSDC-wAR",
+      APY: 0.1,
+      baseTicker: "wUSDC",
+      borrowTicker: "wAR",
+      rewardTicker: "ACTION",
+    },
+    {
+      id: "wUSDC-wAR",
+      APY: 1,
+      baseTicker: "wUSDC",
+      borrowTicker: "wAR",
+      rewardTicker: "PIXL",
+    },
+  ];
 
   return (
     <div className={styles.page}>
@@ -120,6 +173,70 @@ function HomeContent() {
                       width: getProgressWidth(30),
                     }}
                   />
+                </div>
+              </div>
+
+              <div className={styles.card3}>
+                <div className={styles.stratergyTitleContainer}>
+                  <p>Strategy</p>
+                  <p>Reward token</p>
+                  <p>APY</p>
+                </div>
+                <div className={styles.strategiesContainer}>
+                  {strategies.map((stratergy) => (
+                    <Link
+                      href={`/strategies/${stratergy.id}`}
+                      className={styles.stratergy}
+                    >
+                      <div className={styles.stratergyContainer}>
+                        <div className={styles.stratergyPairContainer}>
+                          <Image
+                            src={`/tokens/${stratergy.baseTicker}.svg`}
+                            alt={`${stratergy.baseTicker}`}
+                            width={15}
+                            height={15}
+                            style={{ position: "relative", zIndex: 1 }}
+                          />
+
+                          <Image
+                            src={`/tokens/${stratergy.borrowTicker}.svg`}
+                            alt={`${stratergy.borrowTicker}`}
+                            width={15}
+                            height={15}
+                            style={{
+                              position: "relative",
+                              marginLeft: "-5px",
+                              zIndex: 2,
+                            }}
+                          />
+                        </div>
+
+                        <p>
+                          {stratergy.baseTicker} / {stratergy.borrowTicker}
+                        </p>
+                      </div>
+
+                      <div className={styles.rewardContainer}>
+                        <Image
+                          src={`/tokens/${stratergy.rewardTicker}.svg`}
+                          alt={`${stratergy.rewardTicker}`}
+                          width={15}
+                          height={15}
+                        />
+                        <p>{stratergy.rewardTicker}</p>
+                      </div>
+
+                      <div className={styles.APYContainer}>
+                        <Image
+                          src={`/icons/APYStars.svg`}
+                          alt={`Stars icon`}
+                          width={10}
+                          height={10}
+                        />
+                        <p className={styles.stratergyAPY}>{stratergy.APY}%</p>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>

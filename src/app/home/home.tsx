@@ -125,7 +125,7 @@ function HomeContent() {
   const starType = isPositive ? "APYStars" : "APRStars";
 
   const userTokenHoldings = [
-    { token: "wAR", tokenHex: "#000000", amount: 10 },
+    { token: "wAR", tokenHex: "#ec406d", amount: 10 },
     { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
   ];
 

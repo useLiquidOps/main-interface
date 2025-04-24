@@ -47,68 +47,75 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
           exit="exit"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={styles.titleContainer}>
-            <p className={styles.title}>Account</p>
-            <button className={styles.close} onClick={onClose}>
-              <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
-            </button>
-          </div>
+          <div className={styles.profile}>
+            <div className={styles.titleContainer}>
+              <p className={styles.title}>Account</p>
+              <button className={styles.close} onClick={onClose}>
+                <Image
+                  src="/icons/close.svg"
+                  height={9}
+                  width={9}
+                  alt="Close"
+                />
+              </button>
+            </div>
 
-          <div className={styles.profileHeader}>
-            <div className={styles.profileDetails}>
-              <div className={styles.profileImageContainer}>
-                {isProfileLoading ? (
-                  <SkeletonLoading className="h-full w-full rounded-full" />
-                ) : (
-                  <img
-                    src={
-                      profile?.thumbnail
-                        ? `https://arweave.net/${profile.thumbnail}`
-                        : "/icons/user.svg"
-                    }
-                    alt="Profile image"
-                    width={42}
-                    height={42}
-                    className={styles.profileImage}
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/icons/user.svg";
-                    }}
-                  />
-                )}
-              </div>
-              <div className={styles.profileName}>
-                <p className={styles.userName}>
-                  {!isProfileLoading && profile?.username
-                    ? `${profile.username}`
-                    : "Anonymous"}
-                </p>
-                <div className={styles.addressContainer}>
-                  <span>{shortenAddress(address)}</span>
-                  <button
-                    className={styles.copyButton}
-                    onClick={() => onCopy(address)}
-                  >
-                    <Image
+            <div className={styles.profileHeader}>
+              <div className={styles.profileDetails}>
+                <div className={styles.profileImageContainer}>
+                  {isProfileLoading ? (
+                    <SkeletonLoading className="h-full w-full rounded-full" />
+                  ) : (
+                    <img
                       src={
-                        isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"
+                        profile?.thumbnail
+                          ? `https://arweave.net/${profile.thumbnail}`
+                          : "/icons/user.svg"
                       }
-                      alt="Copy"
-                      width={14}
-                      height={14}
+                      alt="Profile image"
+                      width={42}
+                      height={42}
+                      className={styles.profileImage}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "/icons/user.svg";
+                      }}
                     />
-                  </button>
+                  )}
+                </div>
+                <div className={styles.profileName}>
+                  <p className={styles.userName}>
+                    {!isProfileLoading && profile?.username
+                      ? `${profile.username}`
+                      : "Anonymous"}
+                  </p>
+                  <div className={styles.addressContainer}>
+                    <span>{shortenAddress(address)}</span>
+                    <button
+                      className={styles.copyButton}
+                      onClick={() => onCopy(address)}
+                    >
+                      <Image
+                        src={
+                          isCopied ? "/icons/copyActive.svg" : "/icons/copy.svg"
+                        }
+                        alt="Copy"
+                        width={14}
+                        height={14}
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
+              <button className={styles.logoutButton} onClick={onLogout}>
+                <Image
+                  src="/icons/logout.svg"
+                  alt="logout"
+                  width={18}
+                  height={18}
+                />
+              </button>
             </div>
-            <button className={styles.logoutButton} onClick={onLogout}>
-              <Image
-                src="/icons/logout.svg"
-                alt="logout"
-                width={18}
-                height={18}
-              />
-            </button>
           </div>
 
           <ActivityList

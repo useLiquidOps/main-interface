@@ -1,9 +1,10 @@
 .activityContainer {
   display: flex;
-  justify-content: center;
   align-items: left;
   gap: 10px;
   flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
 }
 
 .activityTitleContainer {
@@ -40,6 +41,8 @@
   flex-direction: column;
   gap: 2px;
   min-height: 330px;
+  flex-grow: 1;
+  height: 100%;
 }
 
 .transactionsList {

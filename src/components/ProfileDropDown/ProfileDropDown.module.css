@@ -10,8 +10,16 @@
   display: flex;
   align-items: left;
   flex-direction: column;
-  gap: 15px;
   height: 100vh;
+  gap: 15px;
+}
+
+.profile {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .titleContainer {

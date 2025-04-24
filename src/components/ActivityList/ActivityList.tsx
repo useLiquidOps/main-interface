@@ -33,11 +33,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   const handleRefreshClick = () => {
     setIsRotating(true);
-    
+
     setTimeout(() => {
       setIsRotating(false);
     }, 500); // animation duration in CSS
-    
   };
 
   useEffect(() => {
@@ -111,13 +110,13 @@ const ActivityList: React.FC<ActivityListProps> = ({
         <div className={styles.left}>
           <p className={styles.activityTitle}>Transactions</p>
           <Image
-              src="/icons/refresh.svg"
-              alt="Refresh icon"
-              width={14}
-              height={14}
-              className={`${styles.refreshIcon} ${isRotating ? styles.rotating : ""}`}
-              onClick={handleRefreshClick}
-            />
+            src="/icons/refresh.svg"
+            alt="Refresh icon"
+            width={14}
+            height={14}
+            className={`${styles.refreshIcon} ${isRotating ? styles.rotating : ""}`}
+            onClick={handleRefreshClick}
+          />
         </div>
 
         <div className={styles.right}>

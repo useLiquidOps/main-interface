@@ -5,6 +5,7 @@
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
+  overflow: hidden;
 }
 
 .activityTitleContainer {
@@ -48,21 +49,16 @@
 
 .activity {
   display: flex;
-  justify-content: flex-start;
-  align-items: stretch;
   flex-direction: column;
-  gap: 2px;
-  min-height: 330px;
   flex-grow: 1;
-  height: 100%;
+  min-height: 0;
 }
 
 .transactionsList {
-  max-height: 330px;
   overflow-y: auto;
   padding-right: 8px;
   width: 100%;
-  min-height: 330px;
+  height: 100%;
 }
 
 .statusMessage {

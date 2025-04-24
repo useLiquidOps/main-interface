@@ -157,7 +157,16 @@ const Connect: React.FC = () => {
             }}
           >
             <div className={styles.profileSectionContainer}>
-              <p className={styles.profileName}>Lorimer Jenkins</p>
+              {isProfileLoading ? (
+                <SkeletonLoading style={{ width: "60px", height: "15px" }} />
+              ) : (
+                <p className={styles.profileName}>
+                  {!isProfileLoading && profile?.username
+                    ? `${profile.username}`
+                    : "Anonymous"}
+                </p>
+              )}
+
               <Image
                 src={"/icons/dropdownUpDown.svg"}
                 alt="Dropdown"

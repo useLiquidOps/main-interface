@@ -94,6 +94,12 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             ) : (
               <>
                 <div className={styles.aprValue}>
+                  <Image
+                    src={`/icons/APYStars.svg`}
+                    alt={`Stars icon`}
+                    width={10}
+                    height={10}
+                  />
                   <p className={styles.apr}>{data.supplyAPR.toFixed(2)}%</p>
                   <Image
                     src={
@@ -121,6 +127,12 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             ) : (
               <>
                 <div className={styles.aprValue}>
+                  <Image
+                    src={`/icons/APRStars.svg`}
+                    alt={`Stars icon`}
+                    width={10}
+                    height={10}
+                  />
                   <p className={styles.apr}>{data.borrowAPR.toFixed(2)}%</p>
                   <Image
                     src={

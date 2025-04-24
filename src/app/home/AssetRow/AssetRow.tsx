@@ -79,12 +79,20 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
               style={{ width: "80px", height: "20px", marginBottom: "8px" }}
             />
           ) : (
-            <p className={styles.apr}>
-              {protocolStats[
-                mode === "lend" ? "supplyAPR" : "borrowAPR"
-              ].toFixed(2)}
-              %
-            </p>
+            <div className={styles.APYRStarsContainer}>
+              <Image
+                src={`/icons/${mode === "lend" ? "APYStars" : "APRStars"}.svg`}
+                alt={`Stars icon`}
+                width={10}
+                height={10}
+              />
+              <p className={styles.apr}>
+                {protocolStats[
+                  mode === "lend" ? "supplyAPR" : "borrowAPR"
+                ].toFixed(2)}
+                %
+              </p>
+            </div>
           )}
           {isProtocolStatsLoading ? (
             <SkeletonLoading style={{ width: "60px", height: "16px" }} />

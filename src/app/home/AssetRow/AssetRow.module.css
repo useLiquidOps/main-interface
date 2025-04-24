@@ -61,6 +61,13 @@
   flex-shrink: 0;
 }
 
+.APYRStarsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
 .apr {
   color: var(--primary-ultramarine);
   font-size: 15px;

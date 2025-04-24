@@ -12,6 +12,7 @@
   transition: all 0.18s ease;
   background-color: var(--primary-palatinate-blue);
   color: white;
+  width: fit-content;
 }
 
 .button:hover {

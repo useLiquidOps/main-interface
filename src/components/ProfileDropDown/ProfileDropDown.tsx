@@ -6,6 +6,7 @@ import styles from "./ProfileDropDown.module.css";
 import ActivityList from "../ActivityList/ActivityList";
 import { useTransactions } from "@/hooks/LiquidOpsData/useTransactions";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import ClearCache from "../ClearCache/ClearCache";
 
 interface ProfileDropdownProps {
   isOpen: boolean;
@@ -116,6 +117,9 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
                 />
               </button>
             </div>
+
+            <ClearCache />
+
           </div>
 
           <ActivityList

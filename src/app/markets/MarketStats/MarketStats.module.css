@@ -1,12 +1,28 @@
 .marketStats {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  background-color: white;
   width: 100%;
+}
+
+.marketContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  background-color: white;
   padding: 24px;
   border-radius: 24px;
-  gap: 5px;
+}
+
+.pieChart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-ghost-white);
+  height: 80px;
+  width: 80px;
+  border-radius: 24px;
 }
 
 .marketStat {
@@ -14,10 +30,6 @@
   justify-content: center;
   flex-direction: column;
   gap: 5px;
-  padding: 50px;
-  padding-top: 0;
-  padding-bottom: 0;
-  width: 200px;
 }
 
 .marketStatValue {

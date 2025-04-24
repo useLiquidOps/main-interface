@@ -5,6 +5,7 @@ import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import PieChart from "@/components/PieChat/PieChart";
 
 interface Token {
   ticker: string;
@@ -79,21 +80,53 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
     isLoading = true;
   }
 
+  const tvlHoldings = [
+    { token: "wAR", tokenHex: "#ec406d", amount: 10 },
+    { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
+  ];
+
+  const availableHoldings = [
+    { token: "wAR", tokenHex: "#ec406d", amount: 10 },
+    { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
+  ];
+
+  const borrowedHoldings = [
+    { token: "wAR", tokenHex: "#ec406d", amount: 10 },
+    { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
+  ];
+
   // Render skeleton when loading
   if (isLoading) {
     return (
       <div className={styles.marketStats}>
-        <div className={styles.marketStat}>
-          <SkeletonLoading className="h-8 w-28 mb-2" />
-          <p className={styles.marketStatTitle}>TVL</p>
+        <div className={styles.marketContainer}>
+          <div className={styles.pieChart}>
+            <SkeletonLoading className="h-full w-full rounded-2xl" />
+          </div>
+          <div className={styles.marketStat}>
+            <SkeletonLoading className="h-8 w-28 mb-2" />
+            <p className={styles.marketStatTitle}>TVL</p>
+          </div>
         </div>
-        <div className={styles.marketStat}>
-          <SkeletonLoading className="h-8 w-28 mb-2" />
-          <p className={styles.marketStatTitle}>Available</p>
+
+        <div className={styles.marketContainer}>
+          <div className={styles.pieChart}>
+            <SkeletonLoading className="h-full w-full rounded-2xl" />
+          </div>
+          <div className={styles.marketStat}>
+            <SkeletonLoading className="h-8 w-28 mb-2" />
+            <p className={styles.marketStatTitle}>Available</p>
+          </div>
         </div>
-        <div className={styles.marketStat}>
-          <SkeletonLoading className="h-8 w-28 mb-2" />
-          <p className={styles.marketStatTitle}>Borrowed</p>
+
+        <div className={styles.marketContainer}>
+          <div className={styles.pieChart}>
+            <SkeletonLoading className="h-full w-full rounded-2xl" />
+          </div>
+          <div className={styles.marketStat}>
+            <SkeletonLoading className="h-8 w-28 mb-2" />
+            <p className={styles.marketStatTitle}>Borrowed</p>
+          </div>
         </div>
       </div>
     );
@@ -101,17 +134,57 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
 
   return (
     <div className={styles.marketStats}>
-      <div className={styles.marketStat}>
-        <p className={styles.marketStatValue}>${formatTMB(tvl)}</p>
-        <p className={styles.marketStatTitle}>TVL</p>
+      <div className={styles.marketContainer}>
+        <div className={styles.pieChart}>
+          <PieChart
+            data={tvlHoldings.map((token) => ({
+              name: token.token,
+              value: token.amount,
+              color: token.tokenHex,
+            }))}
+            height={10}
+          />
+        </div>
+        <div className={styles.marketStat}>
+          <p className={styles.marketStatValue}>${formatTMB(tvl)}</p>
+          <p className={styles.marketStatTitle}>TVL</p>
+        </div>
       </div>
-      <div className={styles.marketStat}>
-        <p className={styles.marketStatValue}>${formatTMB(totalCollateral)}</p>
-        <p className={styles.marketStatTitle}>Available</p>
+
+      <div className={styles.marketContainer}>
+        <div className={styles.pieChart}>
+          <PieChart
+            data={availableHoldings.map((token) => ({
+              name: token.token,
+              value: token.amount,
+              color: token.tokenHex,
+            }))}
+            height={10}
+          />
+        </div>
+        <div className={styles.marketStat}>
+          <p className={styles.marketStatValue}>
+            ${formatTMB(totalCollateral)}
+          </p>
+          <p className={styles.marketStatTitle}>Available</p>
+        </div>
       </div>
-      <div className={styles.marketStat}>
-        <p className={styles.marketStatValue}>${formatTMB(totalBorrows)}</p>
-        <p className={styles.marketStatTitle}>Borrowed</p>
+
+      <div className={styles.marketContainer}>
+        <div className={styles.pieChart}>
+          <PieChart
+            data={borrowedHoldings.map((token) => ({
+              name: token.token,
+              value: token.amount,
+              color: token.tokenHex,
+            }))}
+            height={10}
+          />
+        </div>
+        <div className={styles.marketStat}>
+          <p className={styles.marketStatValue}>${formatTMB(totalBorrows)}</p>
+          <p className={styles.marketStatTitle}>Borrowed</p>
+        </div>
       </div>
     </div>
   );

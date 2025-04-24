@@ -138,3 +138,31 @@
   overflow: hidden;
   position: relative;
 }
+
+.profileButtons {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+}
+
+.editProfileButton {
+  padding: 9px;
+  border-radius: 50px;
+  font-size: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+  background-color: var(--secondary-tea-green);
+  color: black;
+  width: fit-content;
+}
+
+.editProfileButton:hover {
+  background-color: #a6c45d;
+}

@@ -52,6 +52,20 @@
   cursor: pointer;
 }
 
+/* Animation for refresh icon */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating {
+  animation: spin 0.5s linear;
+}
+
 .activity {
   display: flex;
   flex-direction: column;

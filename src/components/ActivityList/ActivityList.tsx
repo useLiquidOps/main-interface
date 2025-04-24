@@ -21,6 +21,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const { data: supportedTokens } = useSupportedTokens();
   const [displayLimit, setDisplayLimit] = useState(5);
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const [isRotating, setIsRotating] = useState(false);
 
   const handleCsvExport = () => {
     exportTransactionsAsCSV(transactions, supportedTokens);
@@ -28,6 +29,15 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   const handleJsonExport = () => {
     exportTransactionsAsJSON(transactions, supportedTokens);
+  };
+
+  const handleRefreshClick = () => {
+    setIsRotating(true);
+    
+    setTimeout(() => {
+      setIsRotating(false);
+    }, 500); // animation duration in CSS
+    
   };
 
   useEffect(() => {
@@ -105,7 +115,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
               alt="Refresh icon"
               width={14}
               height={14}
-              className={styles.refreshIcon}
+              className={`${styles.refreshIcon} ${isRotating ? styles.rotating : ""}`}
+              onClick={handleRefreshClick}
             />
         </div>
 

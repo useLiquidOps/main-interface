@@ -103,7 +103,6 @@ const ActivityList: React.FC<ActivityListProps> = ({
         </div>
 
         <div className={styles.right}>
-
           <div
             onClick={handleCsvExport}
             style={{ cursor: "pointer" }}
@@ -131,11 +130,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
             />
             <p className={styles.exportText}>.JSON</p>
           </div>
-
         </div>
-
-        
-
       </div>
 
       <div className={styles.activity}>{renderContent()}</div>

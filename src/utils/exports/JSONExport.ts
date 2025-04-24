@@ -58,8 +58,8 @@ export const exportTransactionsAsJSON = (
       // Optionally include raw data for more flexibility
       rawData: {
         tags: tx.tags,
-        block: tx.block
-      }
+        block: tx.block,
+      },
     };
   });
 
@@ -67,7 +67,9 @@ export const exportTransactionsAsJSON = (
   const jsonContent = JSON.stringify(formattedTransactions, null, 2);
 
   // Create download
-  const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
+  const blob = new Blob([jsonContent], {
+    type: "application/json;charset=utf-8;",
+  });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.setAttribute("href", url);

@@ -119,7 +119,6 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
             </div>
 
             <div className={styles.profileButtons}>
-              
               <button className={styles.editProfileButton}>Edit profile</button>
               <ClearCache />
             </div>

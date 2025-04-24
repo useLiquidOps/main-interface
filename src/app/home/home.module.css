@@ -90,12 +90,24 @@
   font-weight: 600;
 }
 
+.netAPYContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
 .apyTitle {
   color: var(--secondary-slate-blue);
-  width: 100%;
-  text-align: left;
   font-size: 0.7rem;
   font-weight: 500;
+}
+
+.netAPY {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 
 /* card two */

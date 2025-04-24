@@ -119,6 +119,10 @@ function HomeContent() {
     },
   ];
 
+  const netAPY = 11.1;
+  const isPositive = netAPY >= 0;
+  const starType = isPositive ? "APYStars" : "APRStars";
+
   return (
     <div className={styles.page}>
       <BetaDisclaimer />
@@ -140,7 +144,21 @@ function HomeContent() {
                 <div className={styles.balanceContainer}>
                   <p className={styles.balanceTitle}>Net worth</p>
                   <h1 className={styles.balance}>$1,000</h1>
-                  <p className={styles.apyTitle}>Net APY 11.1%</p>
+
+                  <div className={styles.netAPYContainer}>
+                    <p className={styles.apyTitle}>Net APY</p>
+                    <div className={styles.netAPY}>
+                    <Image
+                      src={`/icons/${starType}.svg`} 
+                      alt={`Stars icon`}
+                      width={10}
+                      height={10}
+                    />
+                    <p className={styles.apyTitle}>{netAPY}%</p>
+
+                    </div>
+                    
+                  </div>
                 </div>
               </div>
 

@@ -48,6 +48,10 @@
   margin: 0;
 }
 
+.refreshIcon {
+  cursor: pointer;
+}
+
 .activity {
   display: flex;
   flex-direction: column;

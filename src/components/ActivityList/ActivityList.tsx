@@ -100,6 +100,13 @@ const ActivityList: React.FC<ActivityListProps> = ({
       <div className={styles.activityTitleContainer}>
         <div className={styles.left}>
           <p className={styles.activityTitle}>Transactions</p>
+          <Image
+              src="/icons/refresh.svg"
+              alt="Refresh icon"
+              width={14}
+              height={14}
+              className={styles.refreshIcon}
+            />
         </div>
 
         <div className={styles.right}>

@@ -36,13 +36,14 @@
 
 .exportText {
   font-size: 10px;
-  color: var(--secondary-periwinkle);
+  color: var(--secondary-slate-blue);
+  font-weight: 600;
 }
 
 .activityTitle {
   font-family: "DM Sans", sans-serif;
-  font-size: 12px;
-  color: var(--secondary-periwinkle);
+  font-size: 14px;
+  color: var(--secondary-slate-blue);
   font-weight: 600;
   margin: 0;
 }

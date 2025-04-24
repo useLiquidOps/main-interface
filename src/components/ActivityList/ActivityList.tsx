@@ -5,7 +5,8 @@ import {
   TransactionItem,
   Transaction,
 } from "./TransactionItem/TransactionItem";
-import { exportTransactionsAsCSV } from "@/utils/CSVExport";
+import { exportTransactionsAsCSV } from "@/utils/exports/CSVExport";
+import { exportTransactionsAsJSON } from "@/utils/exports/JSONExport";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 
 interface ActivityListProps {
@@ -21,8 +22,12 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const [displayLimit, setDisplayLimit] = useState(5);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleExport = () => {
+  const handleCsvExport = () => {
     exportTransactionsAsCSV(transactions, supportedTokens);
+  };
+
+  const handleJsonExport = () => {
+    exportTransactionsAsJSON(transactions, supportedTokens);
   };
 
   useEffect(() => {
@@ -100,7 +105,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
         <div className={styles.right}>
 
           <div
-            onClick={handleExport}
+            onClick={handleCsvExport}
             style={{ cursor: "pointer" }}
             className={styles.exportContainer}
           >
@@ -114,7 +119,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
           </div>
 
           <div
-            onClick={handleExport}
+            onClick={handleJsonExport}
             style={{ cursor: "pointer" }}
             className={styles.exportContainer}
           >

@@ -148,16 +148,14 @@ function HomeContent() {
                   <div className={styles.netAPYContainer}>
                     <p className={styles.apyTitle}>Net APY</p>
                     <div className={styles.netAPY}>
-                    <Image
-                      src={`/icons/${starType}.svg`} 
-                      alt={`Stars icon`}
-                      width={10}
-                      height={10}
-                    />
-                    <p className={styles.apyTitle}>{netAPY}%</p>
-
+                      <Image
+                        src={`/icons/${starType}.svg`}
+                        alt={`Stars icon`}
+                        width={10}
+                        height={10}
+                      />
+                      <p className={styles.apyTitle}>{netAPY}%</p>
                     </div>
-                    
                   </div>
                 </div>
               </div>

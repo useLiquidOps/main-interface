@@ -28,11 +28,23 @@
   cursor: pointer;
 }
 
+.profileSectionContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.profileName {
+  font-weight: 500;
+  font-size: 10px;
+  color: var(--primary-palatinate-blue);
+}
+
 .connectImage {
   height: 32px;
   width: 32px;
   border-radius: 50%;
-  margin-left: 4px;
 }
 
 .overlay {

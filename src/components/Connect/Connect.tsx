@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Connect.module.css";
 import { useClickOutside } from "../utils/utils";
-import DropdownButton from "../DropDown/DropDown";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { overlayVariants } from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
@@ -156,32 +156,39 @@ const Connect: React.FC = () => {
               setAccountTab(!isOpen);
             }}
           >
-            <DropdownButton
-              isOpen={isOpen}
-              onToggle={() => setAccountTab(!isOpen)}
-              flipArrow={true}
-            />
-            <div className={styles.profileImageWrapper}>
-              {isProfileLoading ? (
-                <SkeletonLoading className="h-full w-full rounded-full" />
-              ) : (
-                <img
-                  src={
-                    profile?.thumbnail
-                      ? `https://arweave.net/${profile.thumbnail}`
-                      : "/icons/user.svg"
-                  }
-                  alt="Profile image"
-                  width={32}
-                  height={32}
-                  className={styles.connectImage}
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/icons/user.svg";
-                  }}
-                />
-              )}
+            <div className={styles.profileSectionContainer}>
+              <p className={styles.profileName}>Lorimer Jenkins</p>
+              <Image
+                src={"/icons/dropdownUpDown.svg"}
+                alt="Dropdown"
+                width={7}
+                height={7}
+                className={styles.dropdownIcon}
+              />
+
+              <div className={styles.profileImageWrapper}>
+                {isProfileLoading ? (
+                  <SkeletonLoading className="h-full w-full rounded-full" />
+                ) : (
+                  <img
+                    src={
+                      profile?.thumbnail
+                        ? `https://arweave.net/${profile.thumbnail}`
+                        : "/icons/user.svg"
+                    }
+                    alt="Profile image"
+                    width={32}
+                    height={32}
+                    className={styles.connectImage}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/icons/user.svg";
+                    }}
+                  />
+                )}
+              </div>
             </div>
+
             <ProfileDropDown
               isOpen={isOpen}
               onClose={() => setAccountTab(false)}

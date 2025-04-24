@@ -26,6 +26,17 @@
   align-items: center;
 }
 
+.exportContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exportText {
+  font-size: 12px;
+  color: var(--secondary-periwinkle);
+}
+
 .activityTitle {
   font-family: "DM Sans", sans-serif;
   font-size: 12px;

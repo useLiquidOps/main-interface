@@ -95,17 +95,19 @@ const ActivityList: React.FC<ActivityListProps> = ({
       <div className={styles.activityTitleContainer}>
         <div className={styles.left}>
           <p className={styles.activityTitle}>Transactions</p>
-          <div onClick={handleExport} style={{ cursor: "pointer" }}>
-            <Image
-              src="/icons/csv-export.svg"
-              alt="CSV export"
-              width={9}
-              height={9}
-            />
-          </div>
+          
         </div>
 
         <div className={styles.right}>
+        <div onClick={handleExport} style={{ cursor: "pointer" }} className={styles.exportContainer}>
+            <Image
+              src="/icons/csv-export.svg"
+              alt="CSV export"
+              width={15}
+              height={15}
+            />
+            <p className={styles.exportText}>.csv</p>
+          </div>
           
         </div>
       </div>

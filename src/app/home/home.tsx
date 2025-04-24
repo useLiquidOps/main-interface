@@ -172,11 +172,17 @@ function HomeContent() {
                 <div className={styles.lendVsBorrows}>
                   <div className={styles.lendBorrow}>
                     <p className={styles.amount}>$20,230</p>
+                    <div className={styles.card2TitleContainer}>
+                        <div className={styles.indicatorGreen}></div>
                     <p>Supplied</p>
+                    </div>
                   </div>
                   <div className={styles.lendBorrow}>
                     <p className={styles.amount}>$10,230</p>
+                    <div className={styles.card2TitleContainer}>
+                    <div className={styles.indicatorBlue}></div>
                     <p>Borrowed</p>
+                    </div>
                   </div>
                 </div>
 

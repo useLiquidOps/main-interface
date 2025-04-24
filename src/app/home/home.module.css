@@ -147,6 +147,27 @@
   font-weight: 600;
 }
 
+.card2TitleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.indicatorGreen {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--secondary-tea-green);
+}
+
+.indicatorBlue {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--primary-palatinate-blue);
+}
+
 .progressBar {
   width: 100%;
   height: 8px;

@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = () => {
       href: "https://docs.liquidops.io",
     },
     { label: "Blog", href: "https://labs.liquidops.io/blog" },
-    { label: "Company", href: "https://labs.liquidops.io" },
+    { label: "Labs", href: "https://labs.liquidops.io" },
   ];
 
   const isLinkActive = (path: string) => {

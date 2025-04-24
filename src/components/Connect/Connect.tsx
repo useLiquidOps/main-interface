@@ -29,8 +29,10 @@ const Connect: React.FC = () => {
   const { isOpen, setAccountTab } = useAccountTab();
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]); // disable scroll when profile is visible
 
   const { data: profile, isLoading: isProfileLoading } = useAOProfile();

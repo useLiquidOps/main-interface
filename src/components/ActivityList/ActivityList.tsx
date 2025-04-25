@@ -48,8 +48,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
           !isLoading &&
           transactions.length > displayLimit
         ) {
-          // Load 5 more transactions when the user scrolls to the bottom
-          setDisplayLimit((prevLimit) => prevLimit + 5);
+          // Load 9 more transactions when the user scrolls to the bottom
+          setDisplayLimit((prevLimit) => prevLimit + 9);
         }
       },
       { threshold: 0.5 },

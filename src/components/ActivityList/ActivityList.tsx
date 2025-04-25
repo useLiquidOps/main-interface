@@ -98,8 +98,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
               <div className={styles.highestAPYText}>
                 <span>earn you up to</span>
-                {isApyLoading ? (
-                  <SkeletonLoading style={{ width: "60px", height: "15px" }} />
+                {isApyLoading || highestAPY === 0 ? (
+                  <SkeletonLoading style={{ width: "60px", height: "13px" }} />
                 ) : (
                   <Link
                     onClick={onClose}

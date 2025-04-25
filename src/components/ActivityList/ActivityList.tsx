@@ -66,13 +66,33 @@ const ActivityList: React.FC<ActivityListProps> = ({
     };
   }, [displayLimit, isLoading, transactions.length]);
 
+  const highestAPY = "2.7";
+
   const renderContent = () => {
     if (isLoading && (!transactions || transactions.length === 0)) {
       return <p className={styles.statusMessage}>Loading...</p>;
     }
 
     if (!isLoading && (!transactions || transactions.length === 0)) {
-      return <p className={styles.statusMessage}>No transactions found</p>;
+      return (
+        <div className={styles.noTransactionsContainer}>
+          <Image
+            src="/icons/noAssets.svg"
+            alt="No assets"
+            width={100}
+            height={100}
+          />
+          <div className={styles.noTxnTextContainer}>
+            <p className={styles.noTransactionsFound}>No assets supplied yet</p>
+            <p className={styles.highestAPY}>
+              <span>
+                Supplying liquidity you can earn you up to {highestAPY}% APY
+              </span>
+              Link
+            </p>
+          </div>
+        </div>
+      );
     }
 
     // Only display transactions up to the current limit

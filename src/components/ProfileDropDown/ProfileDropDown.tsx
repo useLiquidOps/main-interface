@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./ProfileDropDown.module.css";
@@ -34,6 +34,49 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
   profile,
 }) => {
   const { data: transactions, isLoading } = useTransactions();
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+  const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  // Handle profile image upload
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setNewProfileImage(file);
+
+      // Create a preview URL for the image
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Toggle edit mode
+  const toggleEditMode = () => {
+    if (isEditMode) {
+      // If switching from edit mode to view mode, save changes
+      console.log("Updated profile:", {
+        username: newUsername || profile?.username || "Anonymous",
+        profileImage: newProfileImage,
+      });
+      setIsEditMode(false);
+    } else {
+      // If switching to edit mode, initialize the edit form
+      setNewUsername(profile?.username || "");
+      setPreviewImage(null);
+      setIsEditMode(true);
+    }
+  };
+
+  // Get the current profile image URL
+  const getProfileImage = () => {
+    if (previewImage) return previewImage;
+    if (profile?.thumbnail) return `https://arweave.net/${profile.thumbnail}`;
+    return "/icons/user.svg";
+  };
 
   return (
     <AnimatePresence>
@@ -61,33 +104,59 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
 
             <div className={styles.profileHeader}>
               <div className={styles.profileDetails}>
-                <div className={styles.profileImageContainer}>
+                <div
+                  className={`${styles.profileImageContainer} ${isEditMode ? styles.editModeImage : ""}`}
+                >
                   {isProfileLoading ? (
                     <SkeletonLoading className="h-full w-full rounded-full" />
                   ) : (
-                    <img
-                      src={
-                        profile?.thumbnail
-                          ? `https://arweave.net/${profile.thumbnail}`
-                          : "/icons/user.svg"
-                      }
-                      alt="Profile image"
-                      width={42}
-                      height={42}
-                      className={styles.profileImage}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/icons/user.svg";
-                      }}
-                    />
+                    <>
+                      <img
+                        src={getProfileImage()}
+                        alt="Profile image"
+                        width={42}
+                        height={42}
+                        className={styles.profileImage}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/icons/user.svg";
+                        }}
+                      />
+                      {isEditMode && (
+                        <label className={styles.uploadOverlay}>
+                          <Image
+                            src="/icons/upload.svg"
+                            width={20}
+                            height={20}
+                            alt="Upload"
+                          />
+                          <input
+                            type="file"
+                            hidden
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                          />
+                        </label>
+                      )}
+                    </>
                   )}
                 </div>
                 <div className={styles.profileName}>
-                  <p className={styles.userName}>
-                    {!isProfileLoading && profile?.username
-                      ? `${profile.username}`
-                      : "Anonymous"}
-                  </p>
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      className={styles.usernameInput}
+                      value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
+                      placeholder="Enter username"
+                    />
+                  ) : (
+                    <p className={styles.userName}>
+                      {!isProfileLoading && profile?.username
+                        ? `${profile.username}`
+                        : "Anonymous"}
+                    </p>
+                  )}
                   <div className={styles.addressContainer}>
                     <span>{shortenAddress(address)}</span>
                     <button
@@ -117,7 +186,12 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
             </div>
 
             <div className={styles.profileButtons}>
-              <button className={styles.editProfileButton}>Edit profile</button>
+              <button
+                className={styles.editProfileButton}
+                onClick={toggleEditMode}
+              >
+                {isEditMode ? "Save" : "Edit profile"}
+              </button>
               <ClearCache />
             </div>
           </div>

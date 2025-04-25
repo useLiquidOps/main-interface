@@ -139,6 +139,29 @@
   position: relative;
 }
 
+.editModeImage {
+  cursor: pointer;
+  position: relative;
+}
+
+.editModeImage img {
+  transition: opacity 0.2s ease;
+}
+
+.uploadOverlay {
+  position: absolute;
+  height: 42px;
+  width: 42px;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 50%;
+}
+
 .profileButtons {
   display: flex;
   justify-content: left;
@@ -165,4 +188,18 @@
 
 .editProfileButton:hover {
   background-color: #322ece;
+}
+
+.usernameInput {
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+  color: var(--secondary-slate-blue);
+  font-weight: 600;
+  margin: 0;
+  background: white;
+  border: 0;
+  border-radius: 4px;
+  padding: 2px 5px;
+  width: 100%;
+  outline: none;
 }

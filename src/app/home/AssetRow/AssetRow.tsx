@@ -117,14 +117,14 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
 
         <div className={styles.actionButtons}>
           <button
-            className={styles.actionButton}
+            className={styles.supplyBorrowButton}
             onClick={handleDoAction}
             type="button"
           >
             {actionDo}
           </button>
           <button
-            className={styles.actionButton}
+            className={styles.withdrawRepayButton}
             onClick={handleReverseAction}
             type="button"
           >

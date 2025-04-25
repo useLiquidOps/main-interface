@@ -7,6 +7,8 @@ import ActivityList from "../ActivityList/ActivityList";
 import { useTransactions } from "@/hooks/LiquidOpsData/useTransactions";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import ClearCache from "../ClearCache/ClearCache";
+import { shortenAddress } from "@/utils/wallets";
+
 
 interface ProfileDropdownProps {
   isOpen: boolean;
@@ -32,8 +34,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
   isProfileLoading,
   profile,
 }) => {
-  const shortenAddress = (addr: string) =>
-    `${addr.slice(0, 5)}...${addr.slice(-5)}`;
+  
 
   const { data: transactions, isLoading } = useTransactions();
 

@@ -12,6 +12,7 @@ import WalletModal from "./WalletModal/WalletModal";
 import { walletInfo } from "@/utils/wallets";
 import { useWallet } from "@vela-ventures/aosync-sdk-react";
 import { useAccountTab } from "./accountTabContext";
+import { shortenAddress } from "@/utils/wallets";
 
 declare global {
   interface Window {
@@ -170,7 +171,7 @@ const Connect: React.FC = () => {
                 <p className={styles.profileName}>
                   {!isProfileLoading && profile?.username
                     ? `${profile.username}`
-                    : "Anonymous"}
+                    : shortenAddress(address)}
                 </p>
               )}
 

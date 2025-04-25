@@ -66,7 +66,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
     } else {
       // If switching to edit mode, initialize the edit form
       setNewUsername(profile?.username || "");
-      setPreviewImage(null);
+      // Don't reset preview image to allow for continuous editing
       setIsEditMode(true);
     }
   };
@@ -122,7 +122,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
                           target.src = "/icons/user.svg";
                         }}
                       />
-                      {isEditMode && (
+                      {isEditMode && !previewImage && (
                         <label className={styles.uploadOverlay}>
                           <Image
                             src="/icons/upload.svg"
@@ -130,6 +130,16 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
                             height={20}
                             alt="Upload"
                           />
+                          <input
+                            type="file"
+                            hidden
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                          />
+                        </label>
+                      )}
+                      {isEditMode && previewImage && (
+                        <label className={styles.editModeContainer}>
                           <input
                             type="file"
                             hidden
@@ -190,7 +200,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
                 className={styles.editProfileButton}
                 onClick={toggleEditMode}
               >
-                {isEditMode ? "Save" : "Edit profile"}
+                {isEditMode ? "\u00A0\u00A0Save\u00A0\u00A0" : "Edit profile"}
               </button>
               <ClearCache />
             </div>

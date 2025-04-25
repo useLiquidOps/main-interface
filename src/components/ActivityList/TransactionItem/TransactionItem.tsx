@@ -116,7 +116,7 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
       rel="noopener noreferrer"
     >
       <div className={styles.activityItemContainer}>
-        <div className={styles.actionContainer}>
+        <div className={styles.left}>
           <Image src={activityIcon} alt="activity" width={25} height={25} />
 
           <div className={styles.actionDetailsContainer}>
@@ -138,7 +138,7 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
           </div>
         </div>
 
-        <div>
+        <div className={styles.right}>
           <Tooltip text={toolTipText} fontSize="12px">
             {statusIcon ? (
               <Image

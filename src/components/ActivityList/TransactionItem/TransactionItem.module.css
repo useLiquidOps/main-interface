@@ -18,11 +18,17 @@
   width: 100%;
 }
 
-.actionContainer {
+.left {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
+}
+
+.right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .actionDetailsContainer {

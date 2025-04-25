@@ -7,8 +7,10 @@ import {
 } from "./TransactionItem/TransactionItem";
 import { exportTransactionsAsCSV } from "@/utils/exports/CSVExport";
 import { exportTransactionsAsJSON } from "@/utils/exports/JSONExport";
-import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import Link from "next/link";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import { useHighestAPY } from "@/hooks/LiquidOpsData/useHighestAPY";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface ActivityListProps {
   transactions: Transaction[];
@@ -19,12 +21,18 @@ interface ActivityListProps {
 const ActivityList: React.FC<ActivityListProps> = ({
   transactions,
   isLoading,
-  onClose
+  onClose,
 }) => {
   const { data: supportedTokens } = useSupportedTokens();
   const [displayLimit, setDisplayLimit] = useState(5);
   const observerRef = useRef<HTMLDivElement | null>(null);
   const [isRotating, setIsRotating] = useState(false);
+
+  const { data: highestAPYData, isLoading: isApyLoading } =
+    useHighestAPY(supportedTokens);
+
+  const highestAPY = highestAPYData?.highestAPY || 0;
+  const highestTicker = highestAPYData?.highestTicker || "";
 
   const handleCsvExport = () => {
     exportTransactionsAsCSV(transactions, supportedTokens);
@@ -69,8 +77,6 @@ const ActivityList: React.FC<ActivityListProps> = ({
     };
   }, [displayLimit, isLoading, transactions.length]);
 
-  const highestAPY = "2.7";
-
   const renderContent = () => {
     if (isLoading && (!transactions || transactions.length === 0)) {
       return <p className={styles.statusMessage}>Loading...</p>;
@@ -88,14 +94,22 @@ const ActivityList: React.FC<ActivityListProps> = ({
           <div className={styles.noTxnTextContainer}>
             <p className={styles.noTransactionsFound}>No assets supplied yet</p>
             <div className={styles.highestAPY}>
-              <span>Supplying liquidity you can</span>
+              <span>Supplying liquidity can</span>
 
               <div className={styles.highestAPYText}>
                 <span>earn you up to</span>
-                <Link onClick={onClose} className={styles.apyNumber} href={`/qAR`}>{highestAPY}% APY</Link>
+                {isApyLoading ? (
+                  <SkeletonLoading style={{ width: "60px", height: "15px" }} />
+                ) : (
+                  <Link
+                    onClick={onClose}
+                    className={styles.apyNumber}
+                    href={`/${highestTicker}`}
+                  >
+                    {highestAPY.toFixed(2)}% APY
+                  </Link>
+                )}
               </div>
-
-             
             </div>
           </div>
         </div>

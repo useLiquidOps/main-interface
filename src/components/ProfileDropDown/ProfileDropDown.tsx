@@ -9,7 +9,6 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import ClearCache from "../ClearCache/ClearCache";
 import { shortenAddress } from "@/utils/wallets";
 
-
 interface ProfileDropdownProps {
   isOpen: boolean;
   onClose: () => void;
@@ -34,8 +33,6 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
   isProfileLoading,
   profile,
 }) => {
-  
-
   const { data: transactions, isLoading } = useTransactions();
 
   return (

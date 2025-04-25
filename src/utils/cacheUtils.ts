@@ -4,6 +4,7 @@ import { UserBalanceCache } from "@/hooks/data/useUserBalance";
 import { PositionCache } from "@/hooks/LiquidOpsData/useGetPosition";
 import { Quantity } from "ao-tokens";
 import { GlobalPositionCache } from "@/hooks/LiquidOpsData/useGlobalPosition";
+import { TransactionCache } from "@/hooks/LiquidOpsData/useTransactions";
 import { tokenData } from "liquidops";
 
 interface DataTypeMap {
@@ -12,6 +13,7 @@ interface DataTypeMap {
   [key: `user-balance-${string}`]: UserBalanceCache;
   [key: `user-position-${string}`]: PositionCache;
   [key: `global-position-${string}`]: GlobalPositionCache;
+  [key: `allTransactions-${string}`]: TransactionCache;
 }
 
 type DataKeys = keyof DataTypeMap;

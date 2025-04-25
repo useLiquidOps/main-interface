@@ -8,15 +8,18 @@ import {
 import { exportTransactionsAsCSV } from "@/utils/exports/CSVExport";
 import { exportTransactionsAsJSON } from "@/utils/exports/JSONExport";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import Link from "next/link";
 
 interface ActivityListProps {
   transactions: Transaction[];
   isLoading: boolean;
+  onClose: () => void;
 }
 
 const ActivityList: React.FC<ActivityListProps> = ({
   transactions,
   isLoading,
+  onClose
 }) => {
   const { data: supportedTokens } = useSupportedTokens();
   const [displayLimit, setDisplayLimit] = useState(5);
@@ -84,12 +87,16 @@ const ActivityList: React.FC<ActivityListProps> = ({
           />
           <div className={styles.noTxnTextContainer}>
             <p className={styles.noTransactionsFound}>No assets supplied yet</p>
-            <p className={styles.highestAPY}>
-              <span>
-                Supplying liquidity you can earn you up to {highestAPY}% APY
-              </span>
-              Link
-            </p>
+            <div className={styles.highestAPY}>
+              <span>Supplying liquidity you can</span>
+
+              <div className={styles.highestAPYText}>
+                <span>earn you up to</span>
+                <Link onClick={onClose} className={styles.apyNumber} href={`/qAR`}>{highestAPY}% APY</Link>
+              </div>
+
+             
+            </div>
           </div>
         </div>
       );

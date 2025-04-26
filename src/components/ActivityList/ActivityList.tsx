@@ -28,11 +28,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const observerRef = useRef<HTMLDivElement | null>(null);
   const [isRotating, setIsRotating] = useState(false);
 
-  const { data: highestAPYData, isLoading: isApyLoading } =
-    useHighestAPY(supportedTokens);
+  const { data: highestAPYData, isLoading: isApyLoading } = useHighestAPY();
 
-  const highestAPY = highestAPYData?.highestAPY || 0;
-  const highestTicker = highestAPYData?.highestTicker || "";
+  const highestAPY = highestAPYData?.highestAPY;
+  const highestTicker = highestAPYData?.highestTicker;
 
   const handleCsvExport = () => {
     exportTransactionsAsCSV(transactions, supportedTokens);
@@ -98,7 +97,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
               <div className={styles.highestAPYText}>
                 <span>earn you up to</span>
-                {isApyLoading || highestAPY === 0 ? (
+                {isApyLoading ? (
                   <SkeletonLoading style={{ width: "60px", height: "13px" }} />
                 ) : (
                   <Link
@@ -106,7 +105,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
                     className={styles.apyNumber}
                     href={`/${highestTicker}`}
                   >
-                    {highestAPY.toFixed(2)}% APY
+                    {highestAPY}% APY
                   </Link>
                 )}
               </div>

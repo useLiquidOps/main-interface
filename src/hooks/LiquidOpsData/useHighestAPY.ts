@@ -1,43 +1,52 @@
 import { useQuery } from "@tanstack/react-query";
-import { LiquidOpsClient } from "@/utils/LiquidOps";
+import { getSupplyAPRCache } from "../caches/getSupplyAPRCache";
+import { tokenData } from "liquidops";
 
-interface SupportedToken {
-  ticker: string;
-  [key: string]: any;
-}
-
-interface HighestAPYResult {
+export interface HighestAPYResult {
   highestAPY: number;
   highestTicker: string;
   isLoading: boolean;
 }
 
-export function useHighestAPY(supportedTokens?: SupportedToken[]) {
-  return useQuery<HighestAPYResult>({
-    queryKey: ["highest-apy"],
-    queryFn: async (): Promise<HighestAPYResult> => {
-      if (!supportedTokens || supportedTokens.length === 0) {
-        return {
-          highestAPY: 0,
-          highestTicker: "",
-          isLoading: false,
-        };
-      }
+export function useHighestAPY() {
+  const supportedTokens = Object.entries(tokenData).map(([_, data]) => ({
+    icon: `/tokens/${data.ticker}.svg`,
+    name: data.name,
+    ticker: data.cleanTicker,
+    extraAmount: "1",
+    denomination: data.denomination,
+    collateralEnabled: data.collateralEnabled,
+    baseDenomination: data.baseDenomination,
+  }));
 
+  return useQuery({
+    queryKey: [
+      "highest-apy",
+      supportedTokens?.map((token) => token.ticker).join("-") || "",
+    ],
+    queryFn: async () => {
+      if (!supportedTokens || supportedTokens.length === 0) {
+        throw new Error(
+          "Error in useHighestAPY: Supported tokens is 0 or undefined.",
+        );
+      }
       try {
-        let currentHighestAPY = 0;
-        let currentHighestTicker = supportedTokens[0]?.ticker || "";
+        let currentHighestAPY: number | null = null;
+        let currentHighestTicker: string | null = null;
 
         for (const token of supportedTokens) {
           const ticker = token.ticker.toUpperCase();
 
-          const supplyAPR = await LiquidOpsClient.getSupplyAPR({
-            token: ticker,
-          });
+          const supplyAPR = await getSupplyAPRCache({ token: ticker }, 'd');
 
-          if (supplyAPR > currentHighestAPY) {
+          if (currentHighestAPY === null) {
             currentHighestAPY = supplyAPR;
             currentHighestTicker = token.ticker;
+          } else {
+            if (supplyAPR > currentHighestAPY) {
+              currentHighestAPY = supplyAPR;
+              currentHighestTicker = token.ticker;
+            }
           }
         }
 
@@ -48,11 +57,6 @@ export function useHighestAPY(supportedTokens?: SupportedToken[]) {
         };
       } catch (error) {
         console.error("Error finding highest APY:", error);
-        return {
-          highestAPY: 0,
-          highestTicker: "",
-          isLoading: false,
-        };
       }
     },
     enabled: !!supportedTokens && supportedTokens.length > 0,

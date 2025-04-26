@@ -4,6 +4,7 @@ import { Quantity } from "ao-tokens";
 import { useHistoricalAPR, HistoricalAPRRes } from "./useHistoricalAPR";
 import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
 import { GetInfoRes, TokenInput } from "liquidops";
+import { getSupplyAPRCache } from "../caches/getSupplyAPRCache";
 
 interface ProtocolStats {
   denomination: bigint;
@@ -77,7 +78,7 @@ async function getProtocolStatsData(
   });
 
   // get supply APR
-  const supplyAPR = await LiquidOpsClient.getSupplyAPR({
+  const supplyAPR = await getSupplyAPRCache({
     token,
     getInfoRes,
     getBorrowAPRRes: borrowAPR,

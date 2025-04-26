@@ -16,6 +16,7 @@ interface DataTypeMap {
   [key: `global-position-${string}`]: GlobalPositionCache;
   [key: `allTransactions-${string}`]: TransactionCache;
   [key: `result-${string}-${string}-${string}`]: ResultCache;
+  [key: `supply-apr-${string}`]: number;
 }
 
 type DataKeys = keyof DataTypeMap;

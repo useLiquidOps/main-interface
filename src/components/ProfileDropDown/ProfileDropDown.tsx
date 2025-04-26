@@ -209,6 +209,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
           <ActivityList
             transactions={transactions ?? []}
             isLoading={isLoading}
+            onClose={onClose}
           />
         </motion.div>
       )}

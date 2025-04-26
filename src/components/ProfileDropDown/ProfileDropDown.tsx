@@ -8,6 +8,7 @@ import { useTransactions } from "@/hooks/LiquidOpsData/useTransactions";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import ClearCache from "../ClearCache/ClearCache";
 import { shortenAddress } from "@/utils/wallets";
+import Link from "next/link";
 
 interface ProfileDropdownProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ interface ProfileDropdownProps {
   profile: {
     thumbnail?: string;
     username?: string;
+    displayName?: string
   };
 }
 
@@ -162,8 +164,8 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
                     />
                   ) : (
                     <p className={styles.userName}>
-                      {!isProfileLoading && profile?.username
-                        ? `${profile.username}`
+                      {!isProfileLoading && profile?.displayName
+                        ? `${profile.displayName}`
                         : "Anonymous"}
                     </p>
                   )}
@@ -196,12 +198,13 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
             </div>
 
             <div className={styles.profileButtons}>
-              <button
+              <Link
                 className={styles.editProfileButton}
-                onClick={toggleEditMode}
+                href={`https://bazar.arweave.dev/#/profile/${address}/assets/`}
+                target="_blank"
               >
-                {isEditMode ? "\u00A0\u00A0Save\u00A0\u00A0" : "Edit profile"}
-              </button>
+                Edit profile
+              </Link>
               <ClearCache />
             </div>
           </div>

@@ -189,7 +189,6 @@
   transition: all 0.18s ease;
   background-color: var(--primary-palatinate-blue);
   color: white;
-  min-width: 65px;
   text-align: center;
 }
 

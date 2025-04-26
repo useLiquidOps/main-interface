@@ -154,21 +154,16 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
                   )}
                 </div>
                 <div className={styles.profileName}>
-                  {isEditMode ? (
-                    <input
-                      type="text"
-                      className={styles.usernameInput}
-                      value={newUsername}
-                      onChange={(e) => setNewUsername(e.target.value)}
-                      placeholder="Enter username"
-                    />
-                  ) : (
-                    <p className={styles.userName}>
-                      {!isProfileLoading && profile?.displayName
-                        ? `${profile.displayName}`
-                        : "Anonymous"}
-                    </p>
-                  )}
+                  <p className={styles.userName}>
+                    {isProfileLoading ? (
+                      <SkeletonLoading
+                        style={{ width: "100px", height: "17px" }}
+                      />
+                    ) : (
+                      profile.displayName
+                    )}
+                  </p>
+
                   <div className={styles.addressContainer}>
                     <span>{shortenAddress(address)}</span>
                     <button

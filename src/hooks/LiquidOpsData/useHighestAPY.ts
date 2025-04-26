@@ -37,7 +37,7 @@ export function useHighestAPY() {
         for (const token of supportedTokens) {
           const ticker = token.ticker.toUpperCase();
 
-          const supplyAPR = await getSupplyAPRCache({ token: ticker }, 'd');
+          const supplyAPR = await getSupplyAPRCache({ token: ticker });
 
           if (currentHighestAPY === null) {
             currentHighestAPY = supplyAPR;

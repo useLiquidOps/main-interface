@@ -4,7 +4,7 @@ import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
 
 export async function getSupplyAPRCache(
   configs: GetSupplyAPR,
-  overrideCache?: boolean | 'd',
+  overrideCache?: boolean,
 ): Promise<GetSupplyAPRRes> {
   const DATA_KEY = `supply-apr-${configs.token.toUpperCase()}` as const;
 

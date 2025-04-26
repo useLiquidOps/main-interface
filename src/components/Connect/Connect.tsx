@@ -169,8 +169,8 @@ const Connect: React.FC = () => {
                 <SkeletonLoading style={{ width: "60px", height: "15px" }} />
               ) : (
                 <p className={styles.profileName}>
-                  {!isProfileLoading && profile?.username
-                    ? `${profile.username}`
+                  {!isProfileLoading && profile?.displayName
+                    ? `${profile.displayName}`
                     : shortenAddress(address)}
                 </p>
               )}

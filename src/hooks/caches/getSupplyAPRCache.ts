@@ -10,8 +10,11 @@ export async function getSupplyAPRCache(
 
   const checkCache = isDataCachedValid(DATA_KEY);
 
-
-  if (checkCache !== false && typeof checkCache === 'number' && overrideCache !== true) {
+  if (
+    checkCache !== false &&
+    typeof checkCache === "number" &&
+    overrideCache !== true
+  ) {
     return checkCache;
   } else {
     const supplyAPR = await LiquidOpsClient.getSupplyAPR(configs);

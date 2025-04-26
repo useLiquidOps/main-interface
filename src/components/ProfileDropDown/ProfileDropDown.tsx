@@ -21,7 +21,7 @@ interface ProfileDropdownProps {
   profile: {
     thumbnail?: string;
     username?: string;
-    displayName?: string
+    displayName?: string;
   };
 }
 

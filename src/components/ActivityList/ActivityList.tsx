@@ -97,7 +97,9 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
               <div className={styles.highestAPYText}>
                 <span>earn you up to</span>
-                {isApyLoading ? (
+                {isApyLoading ||
+                highestAPY === undefined ||
+                highestAPY === null ? (
                   <SkeletonLoading style={{ width: "60px", height: "13px" }} />
                 ) : (
                   <Link
@@ -105,7 +107,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
                     className={styles.apyNumber}
                     href={`/${highestTicker}`}
                   >
-                    {highestAPY?.toFixed(2)}% APY
+                    {highestAPY.toFixed(2)}% APY
                   </Link>
                 )}
               </div>

@@ -105,7 +105,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
                     className={styles.apyNumber}
                     href={`/${highestTicker}`}
                   >
-                    {highestAPY}% APY
+                    {highestAPY?.toFixed(2)}% APY
                   </Link>
                 )}
               </div>

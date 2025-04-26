@@ -80,6 +80,14 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
     return "/icons/user.svg";
   };
 
+  const getUsername = () => {
+    if (profile.displayName) {
+      return profile.displayName;
+    }
+
+    return "Anonymous";
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -160,7 +168,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
                         style={{ width: "100px", height: "17px" }}
                       />
                     ) : (
-                      profile.displayName
+                      getUsername()
                     )}
                   </p>
 

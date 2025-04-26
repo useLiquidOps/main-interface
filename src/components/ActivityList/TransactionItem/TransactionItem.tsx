@@ -8,6 +8,7 @@ import Spinner from "@/components/Spinner/Spinner";
 import Image from "next/image";
 import styles from "./TransactionItem.module.css";
 import Tooltip from "@/components/Tooltip/Tooltip";
+import Link from "next/link";
 
 export interface Transaction {
   id: string;
@@ -108,7 +109,7 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
   }
 
   return (
-    <a
+    <Link
       key={tx.id}
       target="_blank"
       href={`https://www.ao.link/#/message/${tx.id}`}
@@ -153,6 +154,6 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
           </Tooltip>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };

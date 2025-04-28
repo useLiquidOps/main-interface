@@ -201,13 +201,13 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
             </div>
 
             <div className={styles.profileButtons}>
-              <Link
+              {/* <Link
                 className={styles.editProfileButton}
                 href={`https://bazar.arweave.dev/#/profile/${address}/assets/`}
                 target="_blank"
               >
                 Edit profile
-              </Link>
+              </Link> */}
               <ClearCache />
             </div>
           </div>

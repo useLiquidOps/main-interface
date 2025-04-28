@@ -1,0 +1,141 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: white;
+  border-radius: 24px;
+  padding: 24px;
+}
+
+/* utilization rate */
+
+.utilizationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+}
+
+.circleChartContainer {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circleChart {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.circleChartBg {
+  fill: none;
+  stroke: var(--secondary-tea-green);
+  stroke-width: 8;
+}
+
+.circleChartProgress {
+  fill: none;
+  stroke: var(--primary-palatinate-blue);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.utilizationTextContainer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.utilizationPercentage {
+  position: absolute;
+  font-size: 16px;
+  color: var(--secondary-slate-blue);
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  top: 45%;
+  transform: translateY(-60%);
+}
+
+.utilizationLabel {
+  position: absolute;
+  font-size: 10px;
+  color: var(--secondary-slate-blue);
+  margin: 0;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+  top: 55%;
+}
+
+/* APR chart */
+
+.APRInfo {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: column;
+  width: fit-content;
+  gap: 15px;
+}
+
+.title {
+  display: flex;
+  width: fit-content;
+  font-size: 12px;
+  color: var(--secondary-slate-blue);
+  font-weight: 700;
+}
+
+.graph {
+  width: 190px;
+  height: 100px;
+}
+
+.infoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.infoTextContainer {
+  display: flex;
+  justify-content: center;
+  align-items: right;
+  color: var(--secondary-slate-blue);
+  font-weight: 500;
+  flex-direction: column;
+}
+
+.apyContainer {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 5px;
+}
+
+.infoValue {
+  margin: 0;
+  font-size: 13px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.infoTitle {
+  margin: 0;
+  font-size: 10px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}

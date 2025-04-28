@@ -17,6 +17,7 @@ interface DataTypeMap {
   [key: `allTransactions-${string}`]: TransactionCache;
   [key: `result-${string}-${string}-${string}`]: ResultCache;
   [key: `supply-apr-${string}`]: number;
+  [key: `defi-llama-pool-${string}`]: any;
 }
 
 type DataKeys = keyof DataTypeMap;

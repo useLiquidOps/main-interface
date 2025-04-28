@@ -2,7 +2,6 @@
 import React from "react";
 import styles from "./ticker.module.css";
 import Header from "../../components/Header/Header";
-import ProtocolBalance from "./ProtocolBalance/ProtocolBalance";
 import Market from "./Market/Market";
 import PositionSummary from "./PositionSummary/PositionSummary";
 import { tokens } from "liquidops";
@@ -12,6 +11,7 @@ import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Link from "next/link";
 import Image from "next/image";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import APRInfo from "./APRInfo/APRInfo";
 
 const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
   const ticker = params.ticker as string;
@@ -46,8 +46,9 @@ const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
             </Link>
           </div>
 
-          <ProtocolBalance ticker={ticker} />
           <div className={styles.grid}>
+            <APRInfo ticker={ticker} />
+            <APRInfo ticker={ticker} />
             <Market ticker={ticker} />
             <PositionSummary ticker={ticker} />
           </div>

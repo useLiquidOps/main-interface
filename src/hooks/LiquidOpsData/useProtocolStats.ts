@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { Quantity } from "ao-tokens";
 import { useHistoricalAPR, HistoricalAPRRes } from "./useHistoricalAPR";
-import { isDataCachedValid, cacheData } from "@/hooks/caches/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import { GetInfoRes, TokenInput } from "liquidops";
-import { getSupplyAPRCache } from "../caches/getSupplyAPRCache";
+import { getSupplyAPRCache } from "../../utils/caches/getSupplyAPRCache";
 
 interface ProtocolStats {
   denomination: bigint;
@@ -58,7 +58,7 @@ export function useProtocolStats(token: string) {
 async function getProtocolStatsData(
   getInfoRes: GetInfoRes,
   historicalAPR: HistoricalAPRRes,
-  token: TokenInput,
+  token: TokenInput
 ) {
   const denomination = BigInt(getInfoRes.denomination);
   const available = new Quantity(getInfoRes.cash, denomination);
@@ -90,7 +90,7 @@ async function getProtocolStatsData(
     historicalAPR?.[historicalAPR.length - 2]?.value ?? currentAPR;
 
   const change = (((currentAPR - yesterdayAPR) / yesterdayAPR) * 100).toFixed(
-    2,
+    2
   );
 
   return {

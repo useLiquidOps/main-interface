@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { GetResultRes } from "liquidops";
-import { isDataCachedValid, cacheData } from "@/hooks/caches/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 
 export type ResultCache = GetResultRes;
 
@@ -9,7 +9,7 @@ export function useGetResult(
   transferID: string,
   tokenAddress: string,
   action: "lend" | "unLend" | "borrow" | "repay",
-  overrideCache?: boolean,
+  overrideCache?: boolean
 ) {
   const DATA_KEY = `result-${transferID}-${tokenAddress}-${action}` as const;
 

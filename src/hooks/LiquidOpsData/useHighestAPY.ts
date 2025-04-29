@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getSupplyAPRCache } from "../caches/getSupplyAPRCache";
+import { getSupplyAPRCache } from "../../utils/caches/getSupplyAPRCache";
 import { tokenData } from "liquidops";
 
 export interface HighestAPYResult {
@@ -27,7 +27,7 @@ export function useHighestAPY() {
     queryFn: async () => {
       if (!supportedTokens || supportedTokens.length === 0) {
         throw new Error(
-          "Error in useHighestAPY: Supported tokens is 0 or undefined.",
+          "Error in useHighestAPY: Supported tokens is 0 or undefined."
         );
       }
       try {

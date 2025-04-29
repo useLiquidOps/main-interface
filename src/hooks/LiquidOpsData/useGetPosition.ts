@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "../data/useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { Quantity } from "ao-tokens";
-import { isDataCachedValid, cacheData } from "@/hooks/caches/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import { GetPositionRes } from "liquidops";
 
 export type PositionCache = GetPositionRes;
@@ -40,7 +40,7 @@ export function useGetPosition(tokenAddress: string, overrideCache?: boolean) {
 
       return new Quantity(
         positionData.borrowBalance,
-        BigInt(positionData.collateralDenomination),
+        BigInt(positionData.collateralDenomination)
       );
     },
     enabled: !!tokenAddress,

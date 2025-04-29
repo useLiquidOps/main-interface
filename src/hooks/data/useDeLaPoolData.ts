@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAPRGraph } from "@/utils/DefiLlama";
-import { isDataCachedValid, cacheData } from "@/hooks/caches/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 
 const defiLlamaIds: Record<string, string> = {
   qAR: "cd2164c7-66f3-455c-a690-e4fc778f8a72",
@@ -16,7 +16,7 @@ export function useDeLaPoolData(ticker: string, overrideCache?: boolean) {
     queryFn: async () => {
       if (!defiLlamaId)
         throw new Error(
-          "Error in getAPRGraph: Please specify a Defi Llama pool ID",
+          "Error in getAPRGraph: Please specify a Defi Llama pool ID"
         );
 
       const checkCache = isDataCachedValid(DATA_KEY);

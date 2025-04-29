@@ -3,7 +3,7 @@ import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { useWalletAddress } from "../data/useWalletAddress";
 import { GetTransactions } from "liquidops";
 import { useSupportedTokens } from "../data/useSupportedTokens";
-import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/hooks/caches/cacheUtils";
 
 type TransactionAction = GetTransactions["action"];
 
@@ -43,7 +43,7 @@ export function useTransactions(overrideCache?: boolean) {
             } catch (error) {
               console.error(
                 `Error fetching transactions for ${token} ${action}:`,
-                error,
+                error
               );
             }
           }

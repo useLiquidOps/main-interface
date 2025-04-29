@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
-import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/hooks/caches/cacheUtils";
 import {
   WrappedQuantity,
   unWrapQuantity,
   wrapQuantity,
-} from "@/utils/cacheUtils";
-import { getDenomination } from "@/utils/cacheUtils";
+} from "@/hooks/caches/cacheUtils";
+import { getDenomination } from "@/hooks/caches/cacheUtils";
 import { Quantity } from "ao-tokens";
 
 export type UserBalanceCache = WrappedQuantity;
@@ -36,7 +36,7 @@ export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
         const denomination = getDenomination(tokenAddress);
         if (denomination === undefined) {
           throw new Error(
-            "Cannot find token address denomination in useUserBalance.ts",
+            "Cannot find token address denomination in useUserBalance.ts"
           );
         }
         const scaledBalance = new Quantity(balance, denomination);

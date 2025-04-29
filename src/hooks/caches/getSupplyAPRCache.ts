@@ -1,10 +1,10 @@
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { GetSupplyAPR, GetSupplyAPRRes } from "liquidops";
-import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/hooks/caches/cacheUtils";
 
 export async function getSupplyAPRCache(
   configs: GetSupplyAPR,
-  overrideCache?: boolean,
+  overrideCache?: boolean
 ): Promise<GetSupplyAPRRes> {
   const DATA_KEY = `supply-apr-${configs.token.toUpperCase()}` as const;
 

@@ -8,7 +8,7 @@ import {
   wrapQuantity,
   isDataCachedValid,
   cacheData,
-} from "@/utils/cacheUtils";
+} from "@/hooks/caches/cacheUtils";
 import { tokenData } from "liquidops";
 
 export interface GlobalPositionCache {
@@ -69,7 +69,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
           const foundToken = Object.values(tokenData).find(
             (info) =>
               info.ticker.toUpperCase() === ticker.toUpperCase() ||
-              info.cleanTicker.toUpperCase() === ticker.toUpperCase(),
+              info.cleanTicker.toUpperCase() === ticker.toUpperCase()
           );
           return foundToken?.icon;
         })
@@ -80,19 +80,19 @@ export function useGlobalPosition(overrideCache?: boolean) {
         collateralLogos,
         collateralValueUSD: new Quantity(
           globalPosition.collateralizationUSD,
-          globalPosition.usdDenomination,
+          globalPosition.usdDenomination
         ),
         borrowCapacityUSD: new Quantity(
           globalPosition.capacityUSD,
-          globalPosition.usdDenomination,
+          globalPosition.usdDenomination
         ),
         liquidationPointUSD: new Quantity(
           globalPosition.liquidationLimitUSD,
-          globalPosition.usdDenomination,
+          globalPosition.usdDenomination
         ),
         availableToBorrowUSD: new Quantity(
           globalPosition.capacityUSD - globalPosition.borrowBalanceUSD,
-          globalPosition.usdDenomination,
+          globalPosition.usdDenomination
         ),
       };
 

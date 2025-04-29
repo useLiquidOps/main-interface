@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import styles from "./SupplyBorrow.module.css";
+import { useGlobalPosition } from "@/hooks/LiquidOpsData/useGlobalPosition";
+import { Quantity } from "ao-tokens";
+import { formatTMB } from "@/components/utils/utils";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface SupplyBorrowProps {}
 
 const SupplyBorrow: React.FC<SupplyBorrowProps> = () => {
-  const suppliedAmount = 20230;
-  const borrowedAmount = 10230;
-  const supplyPercentage = 70;
-  const borrowPercentage = 30;
+  const { data: globalPosition } = useGlobalPosition();
+  const isLoading = !globalPosition;
+
+  const suppliedAmount = globalPosition?.collateralValueUSD;
+  const borrowedAmount = globalPosition?.borrowCapacityUSD;
 
   const [tooltipContent, setTooltipContent] = useState<string>("");
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -22,14 +27,18 @@ const SupplyBorrow: React.FC<SupplyBorrowProps> = () => {
     const x = e.clientX - rect.left;
     const totalWidth = rect.width;
 
-    const totalValue = supplyPercentage + borrowPercentage;
-    const suppliedWidth = (supplyPercentage / totalValue) * totalWidth;
+    const totalValue =
+      Number(suppliedAmount || 0) + Number(borrowedAmount || 0);
+    const suppliedWidth =
+      (Number(suppliedAmount || 0) / totalValue) * totalWidth;
 
     let tooltipText = "";
     if (x <= suppliedWidth) {
-      tooltipText = `Available Lent Tokens: ${supplyPercentage.toFixed(1)}%`;
+      const supplyPercentage = (Number(suppliedAmount || 0) / totalValue) * 100;
+      tooltipText = `Supplied tokens: ${supplyPercentage.toFixed(2)}%`;
     } else {
-      tooltipText = `Total Borrows: ${borrowPercentage.toFixed(1)}%`;
+      const borrowPercentage = (Number(borrowedAmount || 0) / totalValue) * 100;
+      tooltipText = `Borrowed tokens: ${borrowPercentage.toFixed(2)}%`;
     }
 
     setTooltipContent(tooltipText);
@@ -46,14 +55,33 @@ const SupplyBorrow: React.FC<SupplyBorrowProps> = () => {
       <div className={styles.card}>
         <div className={styles.lendVsBorrows}>
           <div className={styles.lendBorrow}>
-            <p className={styles.amount}>${suppliedAmount.toLocaleString()}</p>
+            {isLoading ? (
+              <SkeletonLoading
+                className={styles.valueWithIndicator}
+                style={{ width: "70px", height: "22px" }}
+              />
+            ) : (
+              <p className={styles.amount}>
+                ${formatTMB(suppliedAmount || new Quantity(0n, 12n))}
+              </p>
+            )}
+
             <div className={styles.card2TitleContainer}>
               <div className={styles.indicatorGreen}></div>
               <p>Supplied</p>
             </div>
           </div>
           <div className={styles.lendBorrow}>
-            <p className={styles.amount}>${borrowedAmount.toLocaleString()}</p>
+            {isLoading ? (
+              <SkeletonLoading
+                className={styles.valueWithIndicator}
+                style={{ width: "70px", height: "22px" }}
+              />
+            ) : (
+              <p className={styles.amount}>
+                ${formatTMB(borrowedAmount || new Quantity(0n, 12n))}
+              </p>
+            )}
             <div className={styles.card2TitleContainer}>
               <div className={styles.indicatorBlue}></div>
               <p>Borrowed</p>
@@ -66,18 +94,24 @@ const SupplyBorrow: React.FC<SupplyBorrowProps> = () => {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
-          <div
-            className={styles.progressGreen}
-            style={{
-              width: getProgressWidth(supplyPercentage),
-            }}
-          />
-          <div
-            className={styles.progressBlue}
-            style={{
-              width: getProgressWidth(borrowPercentage),
-            }}
-          />
+          {isLoading ? (
+            <SkeletonLoading style={{ width: "100%", height: "100%" }} />
+          ) : (
+            <>
+              <div
+                className={styles.progressGreen}
+                style={{
+                  width: getProgressWidth(Number(suppliedAmount || 0)),
+                }}
+              />
+              <div
+                className={styles.progressBlue}
+                style={{
+                  width: getProgressWidth(Number(borrowedAmount || 0)),
+                }}
+              />
+            </>
+          )}
         </div>
       </div>
 

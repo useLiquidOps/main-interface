@@ -35,86 +35,82 @@ export function useGlobalPosition(overrideCache?: boolean) {
   return useQuery({
     queryKey: ["global-position", walletAddress],
     queryFn: async (): Promise<GlobalPositionResult> => {
-
       if (!walletAddress) {
         throw new Error("Wallet address not available");
       }
 
-        // Check cache first
-        const checkCache = isDataCachedValid(DATA_KEY);
+      // Check cache first
+      const checkCache = isDataCachedValid(DATA_KEY);
 
-        if (checkCache && overrideCache === false) {
-          // Convert cached data back to the original format with Quantity objects
-          return {
-            collateralLogos: checkCache.collateralLogos,
-            collateralValueUSD: unWrapQuantity(checkCache.collateralValueUSD),
-            borrowCapacityUSD: unWrapQuantity(checkCache.borrowCapacityUSD),
-            liquidationPointUSD: unWrapQuantity(checkCache.liquidationPointUSD),
-            availableToBorrowUSD: unWrapQuantity(
-              checkCache.availableToBorrowUSD,
-            ),
-          };
-        }
-
-        // Use the getGlobalPosition function to get all data
-        const { globalPosition } = await LiquidOpsClient.getGlobalPosition({
-          walletAddress: walletAddress,
-        });
-
-        // Find logos for tokens with positive collateral
-        const collateralLogos = Object.keys(globalPosition.tokenPositions)
-          .filter((ticker) => {
-            const position = globalPosition.tokenPositions[ticker];
-            return position && BigInt(position.collateralization) > 0n;
-          })
-          .map((ticker) => {
-            // Find matching token in tokenData object by ticker or cleanTicker
-            const foundToken = Object.values(tokenData).find(
-              (info) =>
-                info.ticker.toUpperCase() === ticker.toUpperCase() ||
-                info.cleanTicker.toUpperCase() === ticker.toUpperCase(),
-            );
-            return foundToken?.icon;
-          })
-          .filter((icon): icon is string => !!icon);
-
-        // Create the result with Quantity objects
-        const result: GlobalPositionResult = {
-          collateralLogos,
-          collateralValueUSD: new Quantity(
-            globalPosition.collateralizationUSD,
-            globalPosition.usdDenomination,
-          ),
-          borrowCapacityUSD: new Quantity(
-            globalPosition.capacityUSD,
-            globalPosition.usdDenomination,
-          ),
-          liquidationPointUSD: new Quantity(
-            globalPosition.liquidationLimitUSD,
-            globalPosition.usdDenomination,
-          ),
-          availableToBorrowUSD: new Quantity(
-            globalPosition.capacityUSD - globalPosition.borrowBalanceUSD,
-            globalPosition.usdDenomination,
-          ),
+      if (checkCache && overrideCache === false) {
+        // Convert cached data back to the original format with Quantity objects
+        return {
+          collateralLogos: checkCache.collateralLogos,
+          collateralValueUSD: unWrapQuantity(checkCache.collateralValueUSD),
+          borrowCapacityUSD: unWrapQuantity(checkCache.borrowCapacityUSD),
+          liquidationPointUSD: unWrapQuantity(checkCache.liquidationPointUSD),
+          availableToBorrowUSD: unWrapQuantity(checkCache.availableToBorrowUSD),
         };
+      }
 
-        // Create cacheable version with wrapped Quantity objects
-        const cacheableData: GlobalPositionCache = {
-          collateralLogos,
-          collateralValueUSD: wrapQuantity(result.collateralValueUSD),
-          borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
-          liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
-          availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
-        };
+      // Use the getGlobalPosition function to get all data
+      const { globalPosition } = await LiquidOpsClient.getGlobalPosition({
+        walletAddress: walletAddress,
+      });
 
-        cacheData({
-          dataKey: DATA_KEY,
-          data: cacheableData,
-        });
+      // Find logos for tokens with positive collateral
+      const collateralLogos = Object.keys(globalPosition.tokenPositions)
+        .filter((ticker) => {
+          const position = globalPosition.tokenPositions[ticker];
+          return position && BigInt(position.collateralization) > 0n;
+        })
+        .map((ticker) => {
+          // Find matching token in tokenData object by ticker or cleanTicker
+          const foundToken = Object.values(tokenData).find(
+            (info) =>
+              info.ticker.toUpperCase() === ticker.toUpperCase() ||
+              info.cleanTicker.toUpperCase() === ticker.toUpperCase(),
+          );
+          return foundToken?.icon;
+        })
+        .filter((icon): icon is string => !!icon);
 
-        return result;
+      // Create the result with Quantity objects
+      const result: GlobalPositionResult = {
+        collateralLogos,
+        collateralValueUSD: new Quantity(
+          globalPosition.collateralizationUSD,
+          globalPosition.usdDenomination,
+        ),
+        borrowCapacityUSD: new Quantity(
+          globalPosition.capacityUSD,
+          globalPosition.usdDenomination,
+        ),
+        liquidationPointUSD: new Quantity(
+          globalPosition.liquidationLimitUSD,
+          globalPosition.usdDenomination,
+        ),
+        availableToBorrowUSD: new Quantity(
+          globalPosition.capacityUSD - globalPosition.borrowBalanceUSD,
+          globalPosition.usdDenomination,
+        ),
+      };
 
+      // Create cacheable version with wrapped Quantity objects
+      const cacheableData: GlobalPositionCache = {
+        collateralLogos,
+        collateralValueUSD: wrapQuantity(result.collateralValueUSD),
+        borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
+        liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
+        availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
+      };
+
+      cacheData({
+        dataKey: DATA_KEY,
+        data: cacheableData,
+      });
+
+      return result;
     },
     enabled: !!walletAddress,
     staleTime: 30 * 1000, // 30 seconds

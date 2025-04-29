@@ -11,7 +11,7 @@ import PieChart from "@/components/PieChat/PieChart";
 const TOKEN_COLORS: Record<string, string> = {
   wAR: "#ec406d",
   wUSDC: "#2775ca",
-  qAR: "#5f80fe", 
+  qAR: "#5f80fe",
 };
 
 interface Token {

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import styles from "./Home.module.css";
+import styles from "./home.module.css";
 import Header from "../../components/Header/Header";
 import AssetDisplay from "./AssetDisplay/AssetDisplay";
 import WithdrawRepay from "./WithdrawRepay/WithdrawRepay";

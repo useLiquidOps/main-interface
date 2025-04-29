@@ -52,7 +52,7 @@ const CustomTooltip = (props: any) => {
         <p className={styles.tooltipName}>{data.name}</p>
         <p className={styles.tooltipValue}>
           Amount:{" "}
-          {data.value.toLocaleString(undefined, {
+          ${data.value.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}

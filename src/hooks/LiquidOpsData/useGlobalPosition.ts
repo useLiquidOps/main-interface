@@ -27,7 +27,7 @@ export interface GlobalPositionResult {
   availableToBorrowUSD: Quantity;
 }
 
-export function useGlobalPosition() {
+export function useGlobalPosition(overrideCache?: boolean) {
   const { data: walletAddress } = useWalletAddress();
 
   const DATA_KEY = `global-position-${walletAddress || ""}` as const;
@@ -35,32 +35,23 @@ export function useGlobalPosition() {
   return useQuery({
     queryKey: ["global-position", walletAddress],
     queryFn: async (): Promise<GlobalPositionResult> => {
-      const emptyPosition: GlobalPositionResult = {
-        collateralLogos: [],
-        collateralValueUSD: new Quantity(0n, 12n),
-        borrowCapacityUSD: new Quantity(0n, 12n),
-        liquidationPointUSD: new Quantity(0n, 12n),
-        availableToBorrowUSD: new Quantity(0n, 12n),
-      };
 
-      // Add a delay before checking wallet address
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (!walletAddress) {
+        throw new Error("Wallet address not available");
+      }
 
-      if (!walletAddress) return emptyPosition;
-
-      try {
         // Check cache first
-        const cachedData = isDataCachedValid(DATA_KEY);
+        const checkCache = isDataCachedValid(DATA_KEY);
 
-        if (cachedData) {
+        if (checkCache && overrideCache === false) {
           // Convert cached data back to the original format with Quantity objects
           return {
-            collateralLogos: cachedData.collateralLogos,
-            collateralValueUSD: unWrapQuantity(cachedData.collateralValueUSD),
-            borrowCapacityUSD: unWrapQuantity(cachedData.borrowCapacityUSD),
-            liquidationPointUSD: unWrapQuantity(cachedData.liquidationPointUSD),
+            collateralLogos: checkCache.collateralLogos,
+            collateralValueUSD: unWrapQuantity(checkCache.collateralValueUSD),
+            borrowCapacityUSD: unWrapQuantity(checkCache.borrowCapacityUSD),
+            liquidationPointUSD: unWrapQuantity(checkCache.liquidationPointUSD),
             availableToBorrowUSD: unWrapQuantity(
-              cachedData.availableToBorrowUSD,
+              checkCache.availableToBorrowUSD,
             ),
           };
         }
@@ -123,11 +114,9 @@ export function useGlobalPosition() {
         });
 
         return result;
-      } catch (error) {
-        console.error("Error fetching global position:", error);
-        return emptyPosition;
-      }
+
     },
+    enabled: !!walletAddress,
     staleTime: 30 * 1000, // 30 seconds
     gcTime: 5 * 60 * 1000, // 5 minutes
   });

@@ -11,7 +11,7 @@ export const tickerToGeckoMap: Record<string, string> = {
   WUSDC: "usd-coin",
 };
 
-export function usePrices() {
+export function usePrices(overrideCache?: boolean) {
   const DATA_KEY = "prices" as const;
 
   return useQuery({
@@ -19,11 +19,11 @@ export function usePrices() {
     queryFn: async (): Promise<Prices> => {
       const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (checkCache) {
+      if (checkCache !== false && overrideCache !== true) {
         return checkCache;
       } else {
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,&vs_currencies=usd"
+          "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,&vs_currencies=usd",
         );
 
         const geckoResponse = await response.json();

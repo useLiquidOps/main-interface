@@ -25,7 +25,7 @@ export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
 
       const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (checkCache && overrideCache === false) {
+      if (checkCache !== false && overrideCache !== true) {
         return unWrapQuantity(checkCache);
       } else {
         const balance = await LiquidOpsClient.getBalance({
@@ -36,7 +36,7 @@ export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
         const denomination = getDenomination(tokenAddress);
         if (denomination === undefined) {
           throw new Error(
-            "Cannot find token address denomination in useUserBalance.ts"
+            "Cannot find token address denomination in useUserBalance.ts",
           );
         }
         const scaledBalance = new Quantity(balance, denomination);

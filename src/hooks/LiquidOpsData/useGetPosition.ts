@@ -24,7 +24,7 @@ export function useGetPosition(tokenAddress: string, overrideCache?: boolean) {
 
       let positionData: PositionCache;
 
-      if (cachedData && overrideCache === false) {
+      if (cachedData !== false && overrideCache !== true) {
         positionData = cachedData;
       } else {
         positionData = await LiquidOpsClient.getPosition({
@@ -40,7 +40,7 @@ export function useGetPosition(tokenAddress: string, overrideCache?: boolean) {
 
       return new Quantity(
         positionData.borrowBalance,
-        BigInt(positionData.collateralDenomination)
+        BigInt(positionData.collateralDenomination),
       );
     },
     enabled: !!tokenAddress,

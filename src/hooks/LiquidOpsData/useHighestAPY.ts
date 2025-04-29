@@ -27,7 +27,7 @@ export function useHighestAPY() {
     queryFn: async () => {
       if (!supportedTokens || supportedTokens.length === 0) {
         throw new Error(
-          "Error in useHighestAPY: Supported tokens is 0 or undefined."
+          "Error in useHighestAPY: Supported tokens is 0 or undefined.",
         );
       }
       try {

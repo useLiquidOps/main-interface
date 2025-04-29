@@ -22,7 +22,7 @@ interface ProtocolStats {
 
 export type ProtocolStatsCache = GetInfoRes;
 
-export function useProtocolStats(token: string) {
+export function useProtocolStats(token: string, overrideCache?: boolean) {
   const { data: historicalAPR } = useHistoricalAPR(token);
 
   const DATA_KEY = `protocol-stats-${token}` as const;
@@ -33,7 +33,7 @@ export function useProtocolStats(token: string) {
       const checkCache = isDataCachedValid(DATA_KEY);
       const safeHistoricalAPR = historicalAPR ?? [];
 
-      if (checkCache) {
+      if (checkCache !== false && overrideCache !== true) {
         return await getProtocolStatsData(checkCache, safeHistoricalAPR, token);
       } else {
         const [getInfoRes] = await Promise.all([
@@ -58,7 +58,7 @@ export function useProtocolStats(token: string) {
 async function getProtocolStatsData(
   getInfoRes: GetInfoRes,
   historicalAPR: HistoricalAPRRes,
-  token: TokenInput
+  token: TokenInput,
 ) {
   const denomination = BigInt(getInfoRes.denomination);
   const available = new Quantity(getInfoRes.cash, denomination);
@@ -90,7 +90,7 @@ async function getProtocolStatsData(
     historicalAPR?.[historicalAPR.length - 2]?.value ?? currentAPR;
 
   const change = (((currentAPR - yesterdayAPR) / yesterdayAPR) * 100).toFixed(
-    2
+    2,
   );
 
   return {

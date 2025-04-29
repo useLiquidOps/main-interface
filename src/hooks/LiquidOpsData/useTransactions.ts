@@ -26,7 +26,7 @@ export function useTransactions(overrideCache?: boolean) {
 
       const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (checkCache && overrideCache === false) {
+      if (checkCache !== false && overrideCache !== true) {
         return checkCache;
       } else {
         const allTransactions = [];
@@ -43,7 +43,7 @@ export function useTransactions(overrideCache?: boolean) {
             } catch (error) {
               console.error(
                 `Error fetching transactions for ${token} ${action}:`,
-                error
+                error,
               );
             }
           }

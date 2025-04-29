@@ -9,7 +9,7 @@ export function useGetResult(
   transferID: string,
   tokenAddress: string,
   action: "lend" | "unLend" | "borrow" | "repay",
-  overrideCache?: boolean
+  overrideCache?: boolean,
 ) {
   const DATA_KEY = `result-${transferID}-${tokenAddress}-${action}` as const;
 
@@ -18,7 +18,7 @@ export function useGetResult(
     queryFn: async (): Promise<GetResultRes> => {
       const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (checkCache && overrideCache === false) {
+      if (checkCache !== false && overrideCache !== true) {
         return checkCache;
       } else {
         const getResult = await LiquidOpsClient.getResult({

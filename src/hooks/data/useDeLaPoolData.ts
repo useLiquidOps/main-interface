@@ -16,12 +16,12 @@ export function useDeLaPoolData(ticker: string, overrideCache?: boolean) {
     queryFn: async () => {
       if (!defiLlamaId)
         throw new Error(
-          "Error in getAPRGraph: Please specify a Defi Llama pool ID"
+          "Error in getAPRGraph: Please specify a Defi Llama pool ID",
         );
 
       const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (checkCache && overrideCache === false) {
+      if (checkCache !== false && overrideCache !== true) {
         return checkCache;
       } else {
         const data = await getAPRGraph(defiLlamaId);

@@ -17,7 +17,7 @@ export function useGetPosition(tokenAddress: string, overrideCache?: boolean) {
     queryKey: ["position", tokenAddress, walletAddress],
     queryFn: async (): Promise<Quantity> => {
       if (!walletAddress) {
-        return new Quantity(0n, 12n);
+        throw new Error("Wallet address not available");
       }
 
       const cachedData = isDataCachedValid(DATA_KEY);

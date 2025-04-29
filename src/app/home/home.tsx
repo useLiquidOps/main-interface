@@ -44,7 +44,9 @@ function HomeContent() {
             </div>
 
             <div className={styles.widgetRightContainer}>
-              <Strategies />
+              {/* <Strategies /> */}
+              {/* remove div after stratergies are implemented */}
+              <div></div>
               <button
                 className={styles.viewTxns}
                 onClick={handleOpenAccountTab}

@@ -2,18 +2,29 @@ import React from "react";
 import styles from "./NetWorth.module.css";
 import Image from "next/image";
 import PieChart from "@/components/PieChat/PieChart";
-
-interface TokenHolding {
-  token: string;
-  tokenHex: string;
-  amount: number;
-}
+import { useGlobalPosition } from "@/hooks/LiquidOpsData/useGlobalPosition";
+import { Quantity } from "ao-tokens";
+import { formatTMB } from "@/components/utils/utils";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import { TOKEN_COLORS } from "@/utils/tokenDetails";
+import { GlobalPositionResult } from "@/hooks/LiquidOpsData/useGlobalPosition";
 
 const NetWorth: React.FC = () => {
-  const userTokenHoldings: TokenHolding[] = [
-    { token: "wAR", tokenHex: "#ec406d", amount: 10 },
-    { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
-  ];
+  const { data: globalPosition } = useGlobalPosition();
+  const isLoading = !globalPosition;
+
+  const netWorth = globalPosition
+    ? formatTMB(
+        Quantity.__add(
+          globalPosition.collateralValueUSD,
+          globalPosition.borrowCapacityUSD,
+        ),
+      )
+    : 0;
+
+  const userTokenHoldings = globalPosition
+    ? createUserTokenHoldings(globalPosition)
+    : [];
 
   const netAPY = 11.1;
   const isPositive = netAPY >= 0;
@@ -22,31 +33,44 @@ const NetWorth: React.FC = () => {
   return (
     <div className={styles.card}>
       <div className={styles.pieChart}>
-        <PieChart
-          data={userTokenHoldings.map((token) => ({
-            name: token.token,
-            value: token.amount,
-            color: token.tokenHex,
-          }))}
-          height={10}
-        />
+        {isLoading ? (
+          <SkeletonLoading className="h-full w-full rounded-2xl" />
+        ) : (
+          <PieChart
+            data={userTokenHoldings.map((token) => ({
+              name: token.token,
+              value: token.amount,
+              color: token.tokenHex,
+            }))}
+            height={10}
+          />
+        )}
       </div>
 
       <div className={styles.balanceContainer}>
         <p className={styles.balanceTitle}>Net worth</p>
-        <h1 className={styles.balance}>$1,000</h1>
+        {isLoading ? (
+          <SkeletonLoading style={{ width: "100%", height: "35px" }} />
+        ) : (
+          <h1 className={styles.balance}>${netWorth}</h1>
+        )}
 
         <div className={styles.netAPYContainer}>
           <p className={styles.apyTitle}>Net APY</p>
-          <div className={styles.netAPY}>
-            <Image
-              src={`/icons/${starType}.svg`}
-              alt={`Stars icon`}
-              width={10}
-              height={10}
-            />
-            <p className={styles.apyTitle}>{netAPY}%</p>
-          </div>
+
+          {isLoading ? (
+            <SkeletonLoading style={{ width: "25px", height: "10px" }} />
+          ) : (
+            <div className={styles.netAPY}>
+              <Image
+                src={`/icons/${starType}.svg`}
+                alt={`Stars icon`}
+                width={10}
+                height={10}
+              />
+              <p className={styles.apyTitle}>{netAPY}%</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -54,3 +78,31 @@ const NetWorth: React.FC = () => {
 };
 
 export default NetWorth;
+
+interface TokenHolding {
+  token: string;
+  tokenHex: string;
+  amount: number;
+}
+
+function createUserTokenHoldings(
+  globalPosition: GlobalPositionResult,
+): TokenHolding[] {
+  const userTokenHoldings: TokenHolding[] = [];
+
+  Object.entries(globalPosition.tokenPositions).forEach(([token, position]) => {
+    const ticker = position.ticker;
+
+    const amount = Number(position.collateralization + position.borrowBalance);
+
+    if (amount > 0) {
+      userTokenHoldings.push({
+        token: ticker,
+        tokenHex: TOKEN_COLORS[ticker],
+        amount: amount,
+      });
+    }
+  });
+
+  return userTokenHoldings;
+}

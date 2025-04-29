@@ -51,11 +51,12 @@
   justify-content: center;
   align-items: center;
   gap: 5px;
+  width: 100%;
 }
 
 .apyTitle {
   color: var(--secondary-slate-blue);
-  font-size: 0.7rem;
+  font-size: 10px;
   font-weight: 500;
 }
 

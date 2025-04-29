@@ -11,12 +11,23 @@ import {
 } from "@/utils/caches/cacheUtils";
 import { tokenData } from "liquidops";
 
+interface TokenPosition {
+  borrowBalance: bigint;
+  capacity: bigint;
+  collateralization: bigint;
+  liquidationLimit: bigint;
+  ticker: string;
+}
+
 export interface GlobalPositionCache {
   collateralLogos: string[];
   collateralValueUSD: WrappedQuantity;
   borrowCapacityUSD: WrappedQuantity;
   liquidationPointUSD: WrappedQuantity;
   availableToBorrowUSD: WrappedQuantity;
+  tokenPositions: {
+    [token: string]: TokenPosition;
+  };
 }
 
 export interface GlobalPositionResult {
@@ -25,6 +36,9 @@ export interface GlobalPositionResult {
   borrowCapacityUSD: Quantity;
   liquidationPointUSD: Quantity;
   availableToBorrowUSD: Quantity;
+  tokenPositions: {
+    [token: string]: TokenPosition;
+  };
 }
 
 export function useGlobalPosition(overrideCache?: boolean) {
@@ -50,6 +64,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
           borrowCapacityUSD: unWrapQuantity(checkCache.borrowCapacityUSD),
           liquidationPointUSD: unWrapQuantity(checkCache.liquidationPointUSD),
           availableToBorrowUSD: unWrapQuantity(checkCache.availableToBorrowUSD),
+          tokenPositions: checkCache.tokenPositions,
         };
       } else {
         // Use the getGlobalPosition function to get all data
@@ -93,6 +108,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
             globalPosition.capacityUSD - globalPosition.borrowBalanceUSD,
             globalPosition.usdDenomination,
           ),
+          tokenPositions: globalPosition.tokenPositions,
         };
 
         // Create cacheable version with wrapped Quantity objects
@@ -102,6 +118,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
           borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
           liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
           availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
+          tokenPositions: result.tokenPositions,
         };
 
         cacheData({

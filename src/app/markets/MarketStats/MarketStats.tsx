@@ -6,13 +6,7 @@ import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import PieChart from "@/components/PieChat/PieChart";
-
-// Token hex color mapping for visualization
-const TOKEN_COLORS: Record<string, string> = {
-  wAR: "#ec406d",
-  wUSDC: "#2775ca",
-  qAR: "#5f80fe",
-};
+import { TOKEN_COLORS } from "@/utils/tokenDetails";
 
 interface Token {
   ticker: string;

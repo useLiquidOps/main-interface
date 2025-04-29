@@ -10,7 +10,7 @@ interface APR {
   value: number;
 }
 
-export function useHistoricalAPR(token: string, overrideCache: boolean) {
+export function useHistoricalAPR(token: string, overrideCache?: boolean) {
   const DATA_KEY = `historical-apr-${token}` as const;
 
   return useQuery({

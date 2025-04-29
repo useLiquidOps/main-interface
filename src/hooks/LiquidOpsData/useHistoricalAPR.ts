@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { GetHistoricalAPRRes } from "liquidops";
+import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 
 export type HistoricalAPRRes = APR[];
 
@@ -9,15 +10,31 @@ interface APR {
   value: number;
 }
 
-export function useHistoricalAPR(token: string) {
+export function useHistoricalAPR(token: string, overrideCache: boolean) {
+  const DATA_KEY = `historical-apr-${token}` as const;
+
   return useQuery({
     queryKey: ["historical-apr", token],
     queryFn: async (): Promise<HistoricalAPRRes> => {
-      const data = await LiquidOpsClient.getHistoricalAPR({
-        token,
-      });
+      const checkCache = isDataCachedValid(DATA_KEY);
 
-      return formatHistoricalAPR(data);
+      if (checkCache !== false && overrideCache !== true) {
+        return checkCache;
+      } else {
+        const data = await LiquidOpsClient.getHistoricalAPR({
+          token,
+        });
+
+        const formattedData = formatHistoricalAPR(data);
+
+        const historicalAPRCache = {
+          dataKey: DATA_KEY,
+          data: formattedData,
+        };
+        cacheData(historicalAPRCache);
+
+        return formattedData;
+      }
     },
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,

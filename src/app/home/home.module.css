@@ -28,23 +28,25 @@
   gap: 25px;
 }
 
-.statsContainer {
-  display: flex;
-  justify-content: space-between;
+.widgetContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
   width: 100%;
 }
 
-.cardContainer {
+.widgetLeftContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 25px;
 }
 
-.txnContainer {
+.widgetRightContainer {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 25px;
 }
 
 .viewTxns {

@@ -37,14 +37,14 @@ function HomeContent() {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
-          <div className={styles.statsContainer}>
-            <div className={styles.cardContainer}>
+          <div className={styles.widgetContainer}>
+            <div className={styles.widgetLeftContainer}>
               <NetWorth />
               <SupplyBorrow />
-              <Strategies />
             </div>
 
-            <div className={styles.txnContainer}>
+            <div className={styles.widgetRightContainer}>
+              <Strategies />
               <button
                 className={styles.viewTxns}
                 onClick={handleOpenAccountTab}

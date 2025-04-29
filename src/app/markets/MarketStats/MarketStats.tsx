@@ -7,6 +7,13 @@ import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import PieChart from "@/components/PieChat/PieChart";
 
+// Token hex color mapping for visualization
+const TOKEN_COLORS: Record<string, string> = {
+  wAR: "#ec406d",
+  wUSDC: "#2775ca",
+  qAR: "#5f80fe", 
+};
+
 interface Token {
   ticker: string;
   name: string;
@@ -23,6 +30,14 @@ interface StatsHookResult {
   stats: ReturnType<typeof useProtocolStats>;
   price: Quantity;
   isLoading: boolean;
+}
+
+interface TokenStats {
+  ticker: string;
+  tvl: Quantity;
+  collateral: Quantity;
+  borrows: Quantity;
+  color: string;
 }
 
 const useTokenStats = (
@@ -49,6 +64,9 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
   let totalBorrows = new Quantity(0n, 12n);
   let tvl = new Quantity(0n, 12n);
 
+  // Create arrays to store data for each token's stats for pie charts
+  const tokenStatsArray: TokenStats[] = [];
+
   // Check if any token's stats are still loading
   let isLoading = false;
 
@@ -63,37 +81,51 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
     if (tokenIsLoading) {
       isLoading = true;
     } else if (stats.data) {
-      totalCollateral = Quantity.__add(
-        totalCollateral,
-        Quantity.__mul(stats.data.unLent, price),
-      );
-      totalBorrows = Quantity.__add(
-        totalBorrows,
-        Quantity.__mul(stats.data.borrows, price),
-      );
-      tvl = Quantity.__add(totalCollateral, totalBorrows);
+      const tokenCollateral = Quantity.__mul(stats.data.unLent, price);
+      const tokenBorrows = Quantity.__mul(stats.data.borrows, price);
+      const tokenTvl = Quantity.__add(tokenCollateral, tokenBorrows);
+
+      // Store token specific values
+      tokenStatsArray.push({
+        ticker: token.ticker,
+        tvl: tokenTvl,
+        collateral: tokenCollateral,
+        borrows: tokenBorrows,
+        color: TOKEN_COLORS[token.ticker] || "#808080", // Default gray if no color defined
+      });
+
+      // Add to totals
+      totalCollateral = Quantity.__add(totalCollateral, tokenCollateral);
+      totalBorrows = Quantity.__add(totalBorrows, tokenBorrows);
     }
   }
+
+  // Calculate total TVL as sum of collateral and borrows
+  tvl = Quantity.__add(totalCollateral, totalBorrows);
 
   // Also consider loading if prices aren't available yet
   if (!prices) {
     isLoading = true;
   }
 
-  const tvlHoldings = [
-    { token: "wAR", tokenHex: "#ec406d", amount: 10 },
-    { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
-  ];
+  // Create data for pie charts using collected token stats
+  const tvlHoldings = tokenStatsArray.map((token) => ({
+    token: token.ticker,
+    tokenHex: token.color,
+    amount: token.tvl.toNumber(),
+  }));
 
-  const availableHoldings = [
-    { token: "wAR", tokenHex: "#ec406d", amount: 10 },
-    { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
-  ];
+  const availableHoldings = tokenStatsArray.map((token) => ({
+    token: token.ticker,
+    tokenHex: token.color,
+    amount: token.collateral.toNumber(),
+  }));
 
-  const borrowedHoldings = [
-    { token: "wAR", tokenHex: "#ec406d", amount: 10 },
-    { token: "wUSDC", tokenHex: "#2775ca", amount: 10 },
-  ];
+  const borrowedHoldings = tokenStatsArray.map((token) => ({
+    token: token.ticker,
+    tokenHex: token.color,
+    amount: token.borrows.toNumber(),
+  }));
 
   // Render skeleton when loading
   if (isLoading) {
@@ -137,10 +169,10 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
       <div className={styles.marketContainer}>
         <div className={styles.pieChart}>
           <PieChart
-            data={tvlHoldings.map((token) => ({
-              name: token.token,
-              value: token.amount,
-              color: token.tokenHex,
+            data={tvlHoldings.map((holding) => ({
+              name: holding.token,
+              value: holding.amount,
+              color: holding.tokenHex,
             }))}
             height={10}
           />
@@ -154,10 +186,10 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
       <div className={styles.marketContainer}>
         <div className={styles.pieChart}>
           <PieChart
-            data={availableHoldings.map((token) => ({
-              name: token.token,
-              value: token.amount,
-              color: token.tokenHex,
+            data={availableHoldings.map((holding) => ({
+              name: holding.token,
+              value: holding.amount,
+              color: holding.tokenHex,
             }))}
             height={10}
           />
@@ -173,10 +205,10 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
       <div className={styles.marketContainer}>
         <div className={styles.pieChart}>
           <PieChart
-            data={borrowedHoldings.map((token) => ({
-              name: token.token,
-              value: token.amount,
-              color: token.tokenHex,
+            data={borrowedHoldings.map((holding) => ({
+              name: holding.token,
+              value: holding.amount,
+              color: holding.tokenHex,
             }))}
             height={10}
           />

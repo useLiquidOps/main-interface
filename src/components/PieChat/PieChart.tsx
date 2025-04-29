@@ -50,7 +50,13 @@ const CustomTooltip = (props: any) => {
     return (
       <div className={styles.tooltip}>
         <p className={styles.tooltipName}>{data.name}</p>
-        <p className={styles.tooltipValue}>Amount: {data.value}</p>
+        <p className={styles.tooltipValue}>
+          Amount:{" "}
+          {data.value.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </p>
         <p className={styles.tooltipPercentage}>
           Percentage: {((data.value / total) * 100).toFixed(1)}%
         </p>

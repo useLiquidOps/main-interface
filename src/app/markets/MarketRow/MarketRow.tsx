@@ -101,7 +101,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
                     height={10}
                   />
                   <p className={styles.apr}>{data.supplyAPR.toFixed(2)}%</p>
-                  <Image
+                  {/* <Image
                     src={
                       stats.data.percentChange.outcome
                         ? "/icons/APRUp.svg"
@@ -110,7 +110,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
                     alt="APR trend"
                     width={16}
                     height={16}
-                  />
+                  /> */}
                 </div>
                 <p className={styles.aprLabel}>Supply APY</p>
               </>
@@ -134,7 +134,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
                     height={10}
                   />
                   <p className={styles.apr}>{data.borrowAPR.toFixed(2)}%</p>
-                  <Image
+                  {/* <Image
                     src={
                       stats.data.percentChange.outcome
                         ? "/icons/APRUp.svg"
@@ -143,7 +143,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
                     alt="APR trend"
                     width={16}
                     height={16}
-                  />
+                  /> */}
                 </div>
                 <p className={styles.aprLabel}>Borrow APR</p>
               </>

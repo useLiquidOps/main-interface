@@ -40,7 +40,7 @@ export function useGetPosition(tokenAddress: string, overrideCache?: boolean) {
 
       return new Quantity(
         positionData.borrowBalance,
-        BigInt(positionData.collateralDenomination)
+        BigInt(positionData.collateralDenomination),
       );
     },
     enabled: !!tokenAddress,

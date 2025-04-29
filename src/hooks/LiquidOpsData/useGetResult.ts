@@ -9,7 +9,7 @@ export function useGetResult(
   transferID: string,
   tokenAddress: string,
   action: "lend" | "unLend" | "borrow" | "repay",
-  overrideCache?: boolean
+  overrideCache?: boolean,
 ) {
   const DATA_KEY = `result-${transferID}-${tokenAddress}-${action}` as const;
 

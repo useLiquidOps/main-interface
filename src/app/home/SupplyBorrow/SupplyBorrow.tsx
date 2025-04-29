@@ -11,8 +11,6 @@ const SupplyBorrow: React.FC<SupplyBorrowProps> = () => {
   const { data: globalPosition } = useGlobalPosition();
   const isLoading = !globalPosition;
 
-  console.log(isLoading, globalPosition)
-
   const suppliedAmount = globalPosition?.collateralValueUSD;
   const borrowedAmount = globalPosition?.borrowCapacityUSD;
 

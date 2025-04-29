@@ -43,7 +43,7 @@ export function useTransactions(overrideCache?: boolean) {
             } catch (error) {
               console.error(
                 `Error fetching transactions for ${token} ${action}:`,
-                error
+                error,
               );
             }
           }

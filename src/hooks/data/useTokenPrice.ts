@@ -23,7 +23,7 @@ export function usePrices() {
         return checkCache;
       } else {
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,&vs_currencies=usd"
+          "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,&vs_currencies=usd",
         );
 
         const geckoResponse = await response.json();

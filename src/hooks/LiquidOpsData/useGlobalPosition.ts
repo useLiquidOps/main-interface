@@ -10,12 +10,17 @@ import {
   cacheData,
 } from "@/utils/caches/cacheUtils";
 import { tokenData } from "liquidops";
+import {
+  wrapTokenPositions,
+  unWrapTokenPositions,
+} from "./helpers/wrapGlobalPositions";
+import { getBaseDenomination } from "@/utils/getBaseDenomination";
 
-interface TokenPosition {
-  borrowBalance: bigint;
-  capacity: bigint;
-  collateralization: bigint;
-  liquidationLimit: bigint;
+export interface TokenPositionCache {
+  borrowBalance: WrappedQuantity;
+  capacity: WrappedQuantity;
+  collateralization: WrappedQuantity;
+  liquidationLimit: WrappedQuantity;
   ticker: string;
 }
 
@@ -26,8 +31,16 @@ export interface GlobalPositionCache {
   liquidationPointUSD: WrappedQuantity;
   availableToBorrowUSD: WrappedQuantity;
   tokenPositions: {
-    [token: string]: TokenPosition;
+    [token: string]: TokenPositionCache;
   };
+}
+
+export interface TokenPositionResult {
+  borrowBalance: Quantity;
+  capacity: Quantity;
+  collateralization: Quantity;
+  liquidationLimit: Quantity;
+  ticker: string;
 }
 
 export interface GlobalPositionResult {
@@ -37,7 +50,7 @@ export interface GlobalPositionResult {
   liquidationPointUSD: Quantity;
   availableToBorrowUSD: Quantity;
   tokenPositions: {
-    [token: string]: TokenPosition;
+    [token: string]: TokenPositionResult;
   };
 }
 
@@ -64,7 +77,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
           borrowCapacityUSD: unWrapQuantity(checkCache.borrowCapacityUSD),
           liquidationPointUSD: unWrapQuantity(checkCache.liquidationPointUSD),
           availableToBorrowUSD: unWrapQuantity(checkCache.availableToBorrowUSD),
-          tokenPositions: checkCache.tokenPositions,
+          tokenPositions: unWrapTokenPositions(checkCache),
         };
       } else {
         // Use the getGlobalPosition function to get all data
@@ -89,6 +102,32 @@ export function useGlobalPosition(overrideCache?: boolean) {
           })
           .filter((icon): icon is string => !!icon);
 
+        // turn Bigints to Quantities
+        const formattedTokenResult: { [token: string]: TokenPositionResult } =
+          {};
+
+        for (const [ticker, position] of Object.entries(
+          globalPosition.tokenPositions,
+        )) {
+          const denomination = getBaseDenomination(ticker.toUpperCase());
+          formattedTokenResult[ticker] = {
+            borrowBalance: new Quantity(position.borrowBalance, denomination),
+
+            capacity: new Quantity(position.capacity, denomination),
+
+            collateralization: new Quantity(
+              position.collateralization,
+              denomination,
+            ),
+            liquidationLimit: new Quantity(
+              position.liquidationLimit,
+              denomination,
+            ),
+
+            ticker,
+          };
+        }
+
         // Create the result with Quantity objects
         const result: GlobalPositionResult = {
           collateralLogos,
@@ -108,7 +147,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
             globalPosition.capacityUSD - globalPosition.borrowBalanceUSD,
             globalPosition.usdDenomination,
           ),
-          tokenPositions: globalPosition.tokenPositions,
+          tokenPositions: formattedTokenResult,
         };
 
         // Create cacheable version with wrapped Quantity objects
@@ -118,7 +157,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
           borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
           liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
           availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
-          tokenPositions: result.tokenPositions,
+          tokenPositions: wrapTokenPositions(globalPosition),
         };
 
         cacheData({

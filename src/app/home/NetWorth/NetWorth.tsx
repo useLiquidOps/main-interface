@@ -8,10 +8,14 @@ import { formatTMB } from "@/components/utils/utils";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { TOKEN_COLORS } from "@/utils/tokenDetails";
 import { GlobalPositionResult } from "@/hooks/LiquidOpsData/useGlobalPosition";
+import { usePrices, tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
+import { getBaseDenomination } from "@/utils/getBaseDenomination";
 
 const NetWorth: React.FC = () => {
+  const { data: tokenPrices } = usePrices();
+  const isLoadingPrices = !tokenPrices;
   const { data: globalPosition } = useGlobalPosition();
-  const isLoading = !globalPosition;
+  const isLoadingPositions = !globalPosition;
 
   const netWorth = globalPosition
     ? formatTMB(
@@ -23,7 +27,7 @@ const NetWorth: React.FC = () => {
     : 0;
 
   const userTokenHoldings = globalPosition
-    ? createUserTokenHoldings(globalPosition)
+    ? createUserTokenHoldings(globalPosition, tokenPrices)
     : [];
 
   const netAPY = 11.1;
@@ -33,7 +37,7 @@ const NetWorth: React.FC = () => {
   return (
     <div className={styles.card}>
       <div className={styles.pieChart}>
-        {isLoading ? (
+        {isLoadingPositions ? (
           <SkeletonLoading className="h-full w-full rounded-2xl" />
         ) : (
           <PieChart
@@ -49,7 +53,7 @@ const NetWorth: React.FC = () => {
 
       <div className={styles.balanceContainer}>
         <p className={styles.balanceTitle}>Net worth</p>
-        {isLoading ? (
+        {isLoadingPositions ? (
           <SkeletonLoading style={{ width: "100%", height: "35px" }} />
         ) : (
           <h1 className={styles.balance}>${netWorth}</h1>
@@ -58,7 +62,7 @@ const NetWorth: React.FC = () => {
         <div className={styles.netAPYContainer}>
           <p className={styles.apyTitle}>Net APY</p>
 
-          {isLoading ? (
+          {isLoadingPositions || isLoadingPrices ? (
             <SkeletonLoading style={{ width: "25px", height: "10px" }} />
           ) : (
             <div className={styles.netAPY}>
@@ -87,19 +91,30 @@ interface TokenHolding {
 
 function createUserTokenHoldings(
   globalPosition: GlobalPositionResult,
+  tokenPrices: any,
 ): TokenHolding[] {
   const userTokenHoldings: TokenHolding[] = [];
 
   Object.entries(globalPosition.tokenPositions).forEach(([token, position]) => {
     const ticker = position.ticker;
 
-    const amount = Number(position.collateralization + position.borrowBalance);
+    const denomination = getBaseDenomination(ticker.toUpperCase());
 
-    if (amount > 0) {
+    const amount = Quantity.__add(
+      position.collateralization,
+      position.borrowBalance,
+    );
+
+    const geckoID = tickerToGeckoMap[ticker.toUpperCase()];
+    const tokenPrice = new Quantity(0n, 12n).fromNumber(
+      tokenPrices?.[geckoID]?.usd ?? 0,
+    );
+
+    if (amount > new Quantity(0n, denomination)) {
       userTokenHoldings.push({
         token: ticker,
-        tokenHex: TOKEN_COLORS[ticker],
-        amount: amount,
+        tokenHex: TOKEN_COLORS[ticker.toUpperCase()],
+        amount: Number(Quantity.__mul(amount, tokenPrice)),
       });
     }
   });

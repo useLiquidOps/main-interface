@@ -85,7 +85,7 @@ export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
         tvl: tokenTvl,
         collateral: tokenCollateral,
         borrows: tokenBorrows,
-        color: TOKEN_COLORS[token.ticker] || "#808080", // Default gray if no color defined
+        color: TOKEN_COLORS[token.ticker.toUpperCase()] || "#808080", // Default gray if no color defined
       });
 
       // Add to totals

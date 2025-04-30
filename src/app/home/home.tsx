@@ -11,7 +11,7 @@ import {
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
 import Footer from "@/components/Footer/Footer";
-import { useModal, ModalProvider } from "./PopUp/PopUp";
+import { useModal, ModalProvider } from "../../components/PopUp/PopUp";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import { useAccountTab } from "@/components/Connect/accountTabContext";
 import NetWorth from "./NetWorth/NetWorth";

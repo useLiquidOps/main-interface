@@ -5,7 +5,7 @@ import { useState } from "react";
 import { AOSyncProvider } from "@vela-ventures/aosync-sdk-react";
 import { walletInfo } from "@/utils/wallets";
 import { AccountTabProvider } from "@/components/Connect/accountTabContext";
-import { ModalProvider } from "./home/PopUp/PopUp";
+import { ModalProvider } from "../components/PopUp/PopUp";
 
 type Props = {
   children: React.ReactNode;

@@ -8,8 +8,8 @@ import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { SupportedToken } from "@/hooks/data/useSupportedTokens";
-import { SkeletonLoading } from "../../../components/SkeletonLoading/SkeletonLoading";
-import { useModal } from "../PopUp/PopUp";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import { useModal } from "@/components/PopUp/PopUp";
 import Link from "next/link";
 
 interface AssetRowProps {
@@ -37,6 +37,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const handleDoAction = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log(asset);
     modal.openModal(mode === "lend" ? "supply" : "borrow", asset);
   };
 

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import styles from "./TickerInfo.module.css";
-import { useModal } from "@/app/home/PopUp/PopUp";
+import { useModal } from "@/components/PopUp/PopUp";
 import Image from "next/image";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
@@ -31,6 +31,7 @@ const TickerInfo: React.FC<{
   const handleSupply = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log(asset);
     modal.openModal("supply", asset);
   };
 

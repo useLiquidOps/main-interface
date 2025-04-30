@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AOSyncProvider } from "@vela-ventures/aosync-sdk-react";
 import { walletInfo } from "@/utils/wallets";
 import { AccountTabProvider } from "@/components/Connect/accountTabContext";
+import { ModalProvider } from "./home/PopUp/PopUp";
 
 type Props = {
   children: React.ReactNode;
@@ -24,21 +25,23 @@ export function Providers({ children }: Props) {
   );
 
   return (
-    <AccountTabProvider>
-      <QueryClientProvider client={queryClient}>
-        <AOSyncProvider
-          gatewayConfig={{
-            host: "arweave.net",
-            port: 443,
-            protocol: "https",
-          }}
-          appInfo={walletInfo}
-          muUrl="https://mu.ao-testnet.xyz"
-        >
-          {children}
-        </AOSyncProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </AccountTabProvider>
+    <ModalProvider>
+      <AccountTabProvider>
+        <QueryClientProvider client={queryClient}>
+          <AOSyncProvider
+            gatewayConfig={{
+              host: "arweave.net",
+              port: 443,
+              protocol: "https",
+            }}
+            appInfo={walletInfo}
+            muUrl="https://mu.ao-testnet.xyz"
+          >
+            {children}
+          </AOSyncProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </AccountTabProvider>
+    </ModalProvider>
   );
 }

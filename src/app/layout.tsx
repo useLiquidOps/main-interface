@@ -1,7 +1,6 @@
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
-import { ModalProvider } from "./home/PopUp/PopUp";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
@@ -83,11 +82,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <ModalProvider>
-        <body className={dmSans.className} style={{ margin: 0, padding: 0 }}>
-          <Providers>{children}</Providers>
-        </body>
-      </ModalProvider>
+      <body className={dmSans.className} style={{ margin: 0, padding: 0 }}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

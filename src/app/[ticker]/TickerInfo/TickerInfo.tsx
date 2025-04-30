@@ -31,7 +31,6 @@ const TickerInfo: React.FC<{
   const handleSupply = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(asset);
     modal.openModal("supply", asset);
   };
 

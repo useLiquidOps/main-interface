@@ -37,7 +37,6 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const handleDoAction = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(asset);
     modal.openModal(mode === "lend" ? "supply" : "borrow", asset);
   };
 

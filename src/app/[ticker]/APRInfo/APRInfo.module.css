@@ -1,10 +1,9 @@
 .container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  background-color: white;
-  border-radius: 24px;
-  padding: 24px;
+  height: 100%;
+  gap: 50px;
 }
 
 /* utilization rate */
@@ -57,23 +56,23 @@
 .utilizationPercentage {
   position: absolute;
   font-size: 16px;
-  color: var(--secondary-slate-blue);
-  font-weight: 700;
   text-align: center;
   width: 100%;
   top: 45%;
   transform: translateY(-60%);
+  color: var(--primary-ultramarine);
+  font-weight: 600;
 }
 
 .utilizationLabel {
   position: absolute;
   font-size: 10px;
-  color: var(--secondary-slate-blue);
   margin: 0;
-  font-weight: 500;
   text-align: center;
   width: 100%;
   top: 55%;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
 }
 
 /* APR chart */
@@ -126,10 +125,12 @@
 
 .infoValue {
   margin: 0;
-  font-size: 13px;
   display: flex;
   justify-content: right;
   align-items: center;
+  color: var(--primary-ultramarine);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .infoTitle {
@@ -138,4 +139,6 @@
   display: flex;
   justify-content: right;
   align-items: center;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
 }

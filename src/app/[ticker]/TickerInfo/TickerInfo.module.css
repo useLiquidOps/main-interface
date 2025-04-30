@@ -1,0 +1,130 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: stretch;
+  height: auto;
+  min-height: 100%;
+}
+.assetInfo {
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  align-items: center;
+  gap: 5px;
+}
+
+.tickerTitle {
+  color: var(--secondary-slate-blue);
+  font-size: 25px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* market details */
+
+.marketDetails {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  gap: 15px;
+}
+
+.detailContainer {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.detailTitle {
+  color: var(--secondary-periwinkle);
+  font-size: 10px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.detailContent {
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.indicatorContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.indicatorGreen {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--secondary-tea-green);
+}
+
+.indicatorBlue {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--primary-palatinate-blue);
+}
+
+/* action buttons */
+
+.actionButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+}
+
+.supplyButton,
+.borrowButton {
+  padding: 9px;
+  border-radius: 50px;
+  font-size: 9px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+  min-width: 80px;
+}
+
+.supplyButton:hover,
+.borrowButton:hover {
+  background-color: #322ece;
+}
+
+.withdrawButton,
+.repayButton {
+  padding: 9px;
+  border-radius: 50px;
+  font-size: 9px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+  background-color: var(--secondary-tea-green);
+  color: black;
+  min-width: 80px;
+}
+
+.withdrawButton:hover,
+.repayButton:hover {
+  background-color: #a6c45d;
+}

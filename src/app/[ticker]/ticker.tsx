@@ -2,7 +2,6 @@
 import React from "react";
 import styles from "./ticker.module.css";
 import Header from "../../components/Header/Header";
-import Market from "./Market/Market";
 import PositionSummary from "./PositionSummary/PositionSummary";
 import { tokens } from "liquidops";
 import { redirect } from "next/navigation";
@@ -12,6 +11,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import APRInfo from "./APRInfo/APRInfo";
+import TickerInfo from "./TickerInfo/TickerInfo";
+import { useAccountTab } from "@/components/Connect/accountTabContext";
 
 const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
   const ticker = params.ticker as string;
@@ -26,6 +27,17 @@ const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
   if (!tokenTickers.includes(ticker.toUpperCase())) {
     redirect("/404");
   }
+
+  const { setAccountTab } = useAccountTab();
+
+  const handleOpenAccountTab = async () => {
+    const permissions = await window.arweaveWallet.getPermissions();
+    if (permissions.length > 0) {
+      setAccountTab(true);
+    } else {
+      alert("Please connect your wallet by logging in.");
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -44,13 +56,19 @@ const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
               />
               <h2 className={styles.title}>{tokenData?.name}</h2>
             </Link>
+            <button className={styles.viewTxns} onClick={handleOpenAccountTab}>
+              View transactions
+            </button>
+          </div>
+
+          <div className={styles.topContainer}>
+            <TickerInfo ticker={ticker} />
+            <APRInfo ticker={ticker} />
           </div>
 
           <div className={styles.grid}>
-            <APRInfo ticker={ticker} />
-            <APRInfo ticker={ticker} />
-            <Market ticker={ticker} />
             <PositionSummary ticker={ticker} />
+            <div></div>
           </div>
         </div>
       </div>

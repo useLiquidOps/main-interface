@@ -8,6 +8,7 @@ import Spinner from "@/components/Spinner/Spinner";
 import Image from "next/image";
 import styles from "./TransactionItem.module.css";
 import Tooltip from "@/components/Tooltip/Tooltip";
+import Link from "next/link";
 
 export interface Transaction {
   id: string;
@@ -108,7 +109,7 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
   }
 
   return (
-    <a
+    <Link
       key={tx.id}
       target="_blank"
       href={`https://www.ao.link/#/message/${tx.id}`}
@@ -116,42 +117,43 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
       rel="noopener noreferrer"
     >
       <div className={styles.activityItemContainer}>
-        <div className={styles.actionContainer}>
+        <div className={styles.left}>
+          <Image src={activityIcon} alt="activity" width={25} height={25} />
+
+          <div className={styles.actionDetailsContainer}>
+            <div className={styles.actionDetails}>
+              <p>{display}</p>
+              <p>
+                {formatTMB(
+                  new Quantity(
+                    tx.tags["Quantity"],
+                    getTokenDenomination(tx.tags["token"]),
+                  ),
+                )}
+              </p>
+            </div>
+
+            <p className={styles.timestamp}>
+              {new Date(Number(tx.tags["timestamp"])).toLocaleString()}
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.right}>
           <Tooltip text={toolTipText} fontSize="12px">
             {statusIcon ? (
               <Image
                 src={statusIcon}
                 alt={`Status: ${resultStatus}`}
-                width={18}
-                height={18}
+                width={25}
+                height={25}
               />
             ) : (
               <Spinner />
             )}
           </Tooltip>
-          <div className={styles.actionDetails}>
-            <p>{display}</p>
-            <p>
-              {formatTMB(
-                new Quantity(
-                  tx.tags["Quantity"],
-                  getTokenDenomination(tx.tags["token"]),
-                ),
-              )}
-            </p>
-          </div>
-          <Image
-            src={activityIcon}
-            alt="activity"
-            width={18}
-            height={18}
-            style={{ marginLeft: "5px" }}
-          />
         </div>
-        <p className={styles.timestamp}>
-          {new Date(Number(tx.tags["timestamp"])).toLocaleString()}
-        </p>
       </div>
-    </a>
+    </Link>
   );
 };

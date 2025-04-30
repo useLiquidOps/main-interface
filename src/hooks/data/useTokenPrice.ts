@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Quantity } from "ao-tokens";
-import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 
 export interface Prices {
   [key: string]: { usd: number };
@@ -11,7 +11,7 @@ export const tickerToGeckoMap: Record<string, string> = {
   WUSDC: "usd-coin",
 };
 
-export function usePrices() {
+export function usePrices(overrideCache?: boolean) {
   const DATA_KEY = "prices" as const;
 
   return useQuery({
@@ -19,7 +19,7 @@ export function usePrices() {
     queryFn: async (): Promise<Prices> => {
       const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (checkCache) {
+      if (checkCache !== false && overrideCache !== true) {
         return checkCache;
       } else {
         const response = await fetch(

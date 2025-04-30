@@ -60,13 +60,14 @@ const PercentagePicker: React.FC<PercentagePickerProps> = ({
           </button>
         ))}
         {mode === "repay" && interestOwed && onInterestClick && (
-          <button
-            className={styles.percentageButton}
-            onClick={onInterestClick}
-            disabled={!walletBalance}
-          >
-            Interest
-          </button>
+          // <button
+          //   className={styles.percentageButton}
+          //   onClick={onInterestClick}
+          //   disabled={!walletBalance}
+          // >
+          //   Interest
+          // </button>
+          <></>
         )}
       </div>
     </>

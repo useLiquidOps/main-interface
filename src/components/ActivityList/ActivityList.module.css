@@ -1,9 +1,11 @@
 .activityContainer {
   display: flex;
-  justify-content: center;
   align-items: left;
   gap: 10px;
   flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
 }
 
 .activityTitleContainer {
@@ -23,32 +25,62 @@
   display: flex;
   justify-content: right;
   align-items: center;
+  gap: 5px;
+}
+
+.exportContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exportText {
+  font-size: 10px;
+  color: var(--secondary-slate-blue);
+  font-weight: 600;
 }
 
 .activityTitle {
   font-family: "DM Sans", sans-serif;
-  font-size: 12px;
-  color: var(--secondary-periwinkle);
+  font-size: 14px;
+  color: var(--secondary-slate-blue);
   font-weight: 600;
   margin: 0;
 }
 
+.refreshIcon {
+  cursor: pointer;
+}
+
+/* Animation for refresh icon */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating {
+  animation: spin 0.5s linear;
+}
+
 .activity {
   display: flex;
-  justify-content: flex-start;
-  align-items: stretch;
   flex-direction: column;
-  gap: 2px;
-  min-height: 130px;
+  flex-grow: 1;
+  min-height: 0;
 }
 
 .transactionsList {
-  max-height: 130px;
   overflow-y: auto;
   padding-right: 8px;
   width: 100%;
-  min-height: 130px;
+  height: 100%;
 }
+
+/* no transactions found  */
 
 .statusMessage {
   text-align: center;
@@ -58,4 +90,50 @@
   font-size: 12px;
   font-weight: 500;
   margin: auto 0;
+}
+
+.noTransactionsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-direction: column;
+  height: 100%;
+}
+
+.noTxnTextContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  flex-direction: column;
+  text-align: center;
+  width: 220px;
+}
+
+.noTransactionsFound {
+  font-weight: 600;
+  color: var(--primary-ultramarine);
+  font-size: 15px;
+}
+
+.highestAPY {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  color: var(--secondary-periwinkle);
+  font-size: 13px;
+  flex-direction: column;
+}
+
+.highestAPYText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+}
+
+.apyNumber {
+  text-decoration: underline solid var(--secondary-periwinkle) 1px;
 }

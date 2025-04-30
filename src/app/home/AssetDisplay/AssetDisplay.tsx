@@ -1,0 +1,57 @@
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import styles from "./AssetDisplay.module.css";
+import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import AssetRow from "@/app/home/AssetRow/AssetRow";
+
+interface AssetDisplayProps {
+  mode: "lend" | "borrow";
+}
+
+const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
+  const [showContent, setShowContent] = useState(false);
+  const { data: supportedTokens = [] } = useSupportedTokens();
+  const componentRef = useRef<HTMLDivElement>(null);
+
+  // Delay showing content to avoid empty state flash
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const displayText =
+    mode === "lend"
+      ? {
+          title: "Lent assets",
+        }
+      : {
+          title: "Borrowed assets",
+        };
+
+  const containerClass = `${styles.container} ${
+    mode === "lend" ? styles.lendContainer : styles.borrowContainer
+  }`;
+
+  if (!showContent) {
+    return null;
+  }
+
+  return (
+    <div className={containerClass} ref={componentRef}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>{displayText.title}</h2>
+      </div>
+
+      <div className={styles.assetsList}>
+        {supportedTokens.map((asset, index) => (
+          <AssetRow key={`${mode}-${asset.ticker}`} asset={asset} mode={mode} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default AssetDisplay;

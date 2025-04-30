@@ -5,25 +5,48 @@ import {
   TransactionItem,
   Transaction,
 } from "./TransactionItem/TransactionItem";
-import { exportTransactionsAsCSV } from "@/utils/CSVExport";
+import { exportTransactionsAsCSV } from "@/utils/exports/CSVExport";
+import { exportTransactionsAsJSON } from "@/utils/exports/JSONExport";
+import Link from "next/link";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
-import ClearCache from "../ClearCache/ClearCache";
+import { useHighestAPY } from "@/hooks/LiquidOpsData/useHighestAPY";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface ActivityListProps {
   transactions: Transaction[];
   isLoading: boolean;
+  onClose: () => void;
 }
 
 const ActivityList: React.FC<ActivityListProps> = ({
   transactions,
   isLoading,
+  onClose,
 }) => {
   const { data: supportedTokens } = useSupportedTokens();
   const [displayLimit, setDisplayLimit] = useState(5);
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const [isRotating, setIsRotating] = useState(false);
 
-  const handleExport = () => {
+  const { data: highestAPYData, isLoading: isApyLoading } = useHighestAPY();
+
+  const highestAPY = highestAPYData?.highestAPY;
+  const highestTicker = highestAPYData?.highestTicker;
+
+  const handleCsvExport = () => {
     exportTransactionsAsCSV(transactions, supportedTokens);
+  };
+
+  const handleJsonExport = () => {
+    exportTransactionsAsJSON(transactions, supportedTokens);
+  };
+
+  const handleRefreshClick = () => {
+    setIsRotating(true);
+
+    setTimeout(() => {
+      setIsRotating(false);
+    }, 500); // animation duration in CSS
   };
 
   useEffect(() => {
@@ -35,8 +58,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
           !isLoading &&
           transactions.length > displayLimit
         ) {
-          // Load 5 more transactions when the user scrolls to the bottom
-          setDisplayLimit((prevLimit) => prevLimit + 5);
+          // Load 9 more transactions when the user scrolls to the bottom
+          setDisplayLimit((prevLimit) => prevLimit + 9);
         }
       },
       { threshold: 0.5 },
@@ -59,7 +82,39 @@ const ActivityList: React.FC<ActivityListProps> = ({
     }
 
     if (!isLoading && (!transactions || transactions.length === 0)) {
-      return <p className={styles.statusMessage}>No transactions found</p>;
+      return (
+        <div className={styles.noTransactionsContainer}>
+          <Image
+            src="/icons/noAssets.svg"
+            alt="No assets"
+            width={100}
+            height={100}
+          />
+          <div className={styles.noTxnTextContainer}>
+            <p className={styles.noTransactionsFound}>No assets supplied yet</p>
+            <div className={styles.highestAPY}>
+              <span>Supplying liquidity can</span>
+
+              <div className={styles.highestAPYText}>
+                <span>earn you up to</span>
+                {isApyLoading ||
+                highestAPY === undefined ||
+                highestAPY === null ? (
+                  <SkeletonLoading style={{ width: "60px", height: "13px" }} />
+                ) : (
+                  <Link
+                    onClick={onClose}
+                    className={styles.apyNumber}
+                    href={`/${highestTicker}`}
+                  >
+                    {highestAPY.toFixed(2)}% APY
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
     }
 
     // Only display transactions up to the current limit
@@ -95,19 +150,45 @@ const ActivityList: React.FC<ActivityListProps> = ({
     <div className={styles.activityContainer}>
       <div className={styles.activityTitleContainer}>
         <div className={styles.left}>
-          <p className={styles.activityTitle}>Activity</p>
-          <div onClick={handleExport} style={{ cursor: "pointer" }}>
-            <Image
-              src="/icons/csv-export.svg"
-              alt="CSV export"
-              width={9}
-              height={9}
-            />
-          </div>
+          <p className={styles.activityTitle}>Transactions</p>
+          {/* <Image
+            src="/icons/refresh.svg"
+            alt="Refresh icon"
+            width={14}
+            height={14}
+            className={`${styles.refreshIcon} ${isRotating ? styles.rotating : ""}`}
+            onClick={handleRefreshClick}
+          /> */}
         </div>
 
         <div className={styles.right}>
-          <ClearCache />
+          <div
+            onClick={handleCsvExport}
+            style={{ cursor: "pointer" }}
+            className={styles.exportContainer}
+          >
+            <Image
+              src="/icons/csv-export.svg"
+              alt="CSV export"
+              width={15}
+              height={15}
+            />
+            <p className={styles.exportText}>.CSV</p>
+          </div>
+
+          <div
+            onClick={handleJsonExport}
+            style={{ cursor: "pointer" }}
+            className={styles.exportContainer}
+          >
+            <Image
+              src="/icons/csv-export.svg"
+              alt="CSV export"
+              width={15}
+              height={15}
+            />
+            <p className={styles.exportText}>.JSON</p>
+          </div>
         </div>
       </div>
 

@@ -1,18 +1,32 @@
 .dropdown {
-  position: absolute;
-  top: calc(100%);
+  position: fixed;
+  top: 0;
   right: 0;
   background-color: white;
-  border-radius: 12px;
   padding: 20px;
   z-index: 1000;
-  width: 318px;
+  width: 400px;
   cursor: default;
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+  height: 100vh;
+  gap: 15px;
+}
+
+.profile {
   display: flex;
   justify-content: center;
   align-items: left;
   flex-direction: column;
   gap: 15px;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .title {
@@ -21,6 +35,19 @@
   margin: 0;
   font-size: 16px;
   font-weight: 700;
+}
+
+.close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--primary-ghost-white);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  outline: none;
+  border: 0;
 }
 
 .profileHeader {
@@ -43,17 +70,20 @@
   height: 42px;
   width: 42px;
   border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .profileName {
   display: flex;
-  justify-content: center;
-  align-items: left;
+  justify-content: flex-start;
+  align-items: flex-start;
   flex-direction: column;
-  gap: 2px;
-  padding: 5px;
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0;
+  height: 42px;
+  position: relative;
 }
 
 .userName {
@@ -61,13 +91,17 @@
   font-size: 17px;
   color: var(--secondary-slate-blue);
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 4px 0;
+  line-height: 20px;
+  height: 20px;
 }
 
 .addressContainer {
   display: flex;
   justify-content: left;
   align-items: center;
+  height: 14px;
+  margin-top: 0;
 }
 
 .addressContainer span {
@@ -110,4 +144,80 @@
   border-radius: 50%;
   overflow: hidden;
   position: relative;
+}
+
+.editModeImage {
+  cursor: pointer;
+  position: relative;
+}
+
+.editModeImage img {
+  transition: opacity 0.2s ease;
+}
+
+.uploadOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.profileButtons {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
+}
+
+.editProfileButton {
+  padding: 9px 12px;
+  border-radius: 50px;
+  font-size: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+  text-align: center;
+}
+
+.editProfileButton:hover {
+  background-color: #322ece;
+}
+
+.usernameInput {
+  font-family: "DM Sans", sans-serif;
+  font-size: 17px;
+  color: var(--secondary-slate-blue);
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  background: white;
+  border: 0;
+  border-radius: 4px;
+  padding: 0;
+  width: 100%;
+  outline: none;
+  line-height: 20px;
+  height: 20px;
+}
+
+.editModeContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  border-radius: 50%;
 }

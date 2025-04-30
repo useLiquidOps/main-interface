@@ -18,18 +18,32 @@
   width: 100%;
 }
 
-.actionContainer {
+.left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.right {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.actionDetails {
+.actionDetailsContainer {
   display: flex;
   justify-content: center;
+  align-items: left;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.actionDetails {
+  display: flex;
+  justify-content: left;
   align-items: center;
   gap: 5px;
-  margin-left: 10px;
 }
 
 .actionDetails p {

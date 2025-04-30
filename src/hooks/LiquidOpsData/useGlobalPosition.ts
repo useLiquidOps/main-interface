@@ -8,8 +8,21 @@ import {
   wrapQuantity,
   isDataCachedValid,
   cacheData,
-} from "@/utils/cacheUtils";
+} from "@/utils/caches/cacheUtils";
 import { tokenData } from "liquidops";
+import {
+  wrapTokenPositions,
+  unWrapTokenPositions,
+} from "./helpers/wrapGlobalPositions";
+import { getBaseDenomination } from "@/utils/getBaseDenomination";
+
+export interface TokenPositionCache {
+  borrowBalance: WrappedQuantity;
+  capacity: WrappedQuantity;
+  collateralization: WrappedQuantity;
+  liquidationLimit: WrappedQuantity;
+  ticker: string;
+}
 
 export interface GlobalPositionCache {
   collateralLogos: string[];
@@ -17,6 +30,17 @@ export interface GlobalPositionCache {
   borrowCapacityUSD: WrappedQuantity;
   liquidationPointUSD: WrappedQuantity;
   availableToBorrowUSD: WrappedQuantity;
+  tokenPositions: {
+    [token: string]: TokenPositionCache;
+  };
+}
+
+export interface TokenPositionResult {
+  borrowBalance: Quantity;
+  capacity: Quantity;
+  collateralization: Quantity;
+  liquidationLimit: Quantity;
+  ticker: string;
 }
 
 export interface GlobalPositionResult {
@@ -25,9 +49,12 @@ export interface GlobalPositionResult {
   borrowCapacityUSD: Quantity;
   liquidationPointUSD: Quantity;
   availableToBorrowUSD: Quantity;
+  tokenPositions: {
+    [token: string]: TokenPositionResult;
+  };
 }
 
-export function useGlobalPosition() {
+export function useGlobalPosition(overrideCache?: boolean) {
   const { data: walletAddress } = useWalletAddress();
 
   const DATA_KEY = `global-position-${walletAddress || ""}` as const;
@@ -35,36 +62,24 @@ export function useGlobalPosition() {
   return useQuery({
     queryKey: ["global-position", walletAddress],
     queryFn: async (): Promise<GlobalPositionResult> => {
-      const emptyPosition: GlobalPositionResult = {
-        collateralLogos: [],
-        collateralValueUSD: new Quantity(0n, 12n),
-        borrowCapacityUSD: new Quantity(0n, 12n),
-        liquidationPointUSD: new Quantity(0n, 12n),
-        availableToBorrowUSD: new Quantity(0n, 12n),
-      };
+      if (!walletAddress) {
+        throw new Error("Wallet address not available");
+      }
 
-      // Add a delay before checking wallet address
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Check cache first
+      const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (!walletAddress) return emptyPosition;
-
-      try {
-        // Check cache first
-        const cachedData = isDataCachedValid(DATA_KEY);
-
-        if (cachedData) {
-          // Convert cached data back to the original format with Quantity objects
-          return {
-            collateralLogos: cachedData.collateralLogos,
-            collateralValueUSD: unWrapQuantity(cachedData.collateralValueUSD),
-            borrowCapacityUSD: unWrapQuantity(cachedData.borrowCapacityUSD),
-            liquidationPointUSD: unWrapQuantity(cachedData.liquidationPointUSD),
-            availableToBorrowUSD: unWrapQuantity(
-              cachedData.availableToBorrowUSD,
-            ),
-          };
-        }
-
+      if (checkCache !== false && overrideCache !== true) {
+        // Convert cached data back to the original format with Quantity objects
+        return {
+          collateralLogos: checkCache.collateralLogos,
+          collateralValueUSD: unWrapQuantity(checkCache.collateralValueUSD),
+          borrowCapacityUSD: unWrapQuantity(checkCache.borrowCapacityUSD),
+          liquidationPointUSD: unWrapQuantity(checkCache.liquidationPointUSD),
+          availableToBorrowUSD: unWrapQuantity(checkCache.availableToBorrowUSD),
+          tokenPositions: unWrapTokenPositions(checkCache),
+        };
+      } else {
         // Use the getGlobalPosition function to get all data
         const { globalPosition } = await LiquidOpsClient.getGlobalPosition({
           walletAddress: walletAddress,
@@ -87,6 +102,32 @@ export function useGlobalPosition() {
           })
           .filter((icon): icon is string => !!icon);
 
+        // turn Bigints to Quantities
+        const formattedTokenResult: { [token: string]: TokenPositionResult } =
+          {};
+
+        for (const [ticker, position] of Object.entries(
+          globalPosition.tokenPositions,
+        )) {
+          const denomination = getBaseDenomination(ticker.toUpperCase());
+          formattedTokenResult[ticker] = {
+            borrowBalance: new Quantity(position.borrowBalance, denomination),
+
+            capacity: new Quantity(position.capacity, denomination),
+
+            collateralization: new Quantity(
+              position.collateralization,
+              denomination,
+            ),
+            liquidationLimit: new Quantity(
+              position.liquidationLimit,
+              denomination,
+            ),
+
+            ticker,
+          };
+        }
+
         // Create the result with Quantity objects
         const result: GlobalPositionResult = {
           collateralLogos,
@@ -106,6 +147,7 @@ export function useGlobalPosition() {
             globalPosition.capacityUSD - globalPosition.borrowBalanceUSD,
             globalPosition.usdDenomination,
           ),
+          tokenPositions: formattedTokenResult,
         };
 
         // Create cacheable version with wrapped Quantity objects
@@ -115,6 +157,7 @@ export function useGlobalPosition() {
           borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
           liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
           availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
+          tokenPositions: wrapTokenPositions(globalPosition),
         };
 
         cacheData({
@@ -123,11 +166,9 @@ export function useGlobalPosition() {
         });
 
         return result;
-      } catch (error) {
-        console.error("Error fetching global position:", error);
-        return emptyPosition;
       }
     },
+    enabled: !!walletAddress,
     staleTime: 30 * 1000, // 30 seconds
     gcTime: 5 * 60 * 1000, // 5 minutes
   });

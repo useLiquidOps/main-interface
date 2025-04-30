@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Connect.module.css";
 import { useClickOutside } from "../utils/utils";
-import DropdownButton from "../DropDown/DropDown";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { overlayVariants } from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
@@ -11,6 +11,8 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import WalletModal from "./WalletModal/WalletModal";
 import { walletInfo } from "@/utils/wallets";
 import { useWallet } from "@vela-ventures/aosync-sdk-react";
+import { useAccountTab } from "./accountTabContext";
+import { shortenAddress } from "@/utils/wallets";
 
 declare global {
   interface Window {
@@ -22,14 +24,22 @@ declare global {
 const Connect: React.FC = () => {
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+
+  const { isOpen, setAccountTab } = useAccountTab();
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]); // disable scroll when profile is visible
 
   const { data: profile, isLoading: isProfileLoading } = useAOProfile();
 
   const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() =>
-    setIsOpen(false),
+    setAccountTab(false),
   );
 
   const copyToClipboard = async (text: string) => {
@@ -47,7 +57,7 @@ const Connect: React.FC = () => {
       await window.arweaveWallet.disconnect();
       setConnected(false);
       setAddress(null);
-      setIsOpen(false);
+      setAccountTab(false);
     } catch (error) {
       console.error("Logout error:", error);
     }
@@ -141,7 +151,7 @@ const Connect: React.FC = () => {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            onClick={() => setIsOpen(false)}
+            onClick={() => setAccountTab(false)}
           />
         )}
       </AnimatePresence>
@@ -151,36 +161,54 @@ const Connect: React.FC = () => {
             className={styles.profileContainer}
             onClick={(e) => {
               e.stopPropagation();
-              setIsOpen(!isOpen);
+              setAccountTab(!isOpen);
             }}
           >
-            <DropdownButton
-              isOpen={isOpen}
-              onToggle={() => setIsOpen(!isOpen)}
-            />
-            <div className={styles.profileImageWrapper}>
+            <div className={styles.profileSectionContainer}>
               {isProfileLoading ? (
-                <SkeletonLoading className="h-full w-full rounded-full" />
+                <SkeletonLoading style={{ width: "60px", height: "15px" }} />
               ) : (
-                <img
-                  src={
-                    profile?.thumbnail
-                      ? `https://arweave.net/${profile.thumbnail}`
-                      : "/icons/user.svg"
-                  }
-                  alt="Profile image"
-                  width={32}
-                  height={32}
-                  className={styles.connectImage}
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/icons/user.svg";
-                  }}
-                />
+                <p className={styles.profileName}>
+                  {!isProfileLoading && profile?.displayName
+                    ? `${profile.displayName}`
+                    : shortenAddress(address)}
+                </p>
               )}
+
+              <Image
+                src={"/icons/dropdownUpDown.svg"}
+                alt="Dropdown"
+                width={7}
+                height={7}
+                className={styles.dropdownIcon}
+              />
+
+              <div className={styles.profileImageWrapper}>
+                {isProfileLoading ? (
+                  <SkeletonLoading className="h-full w-full rounded-full" />
+                ) : (
+                  <img
+                    src={
+                      profile?.thumbnail
+                        ? `https://arweave.net/${profile.thumbnail}`
+                        : "/icons/user.svg"
+                    }
+                    alt="Profile image"
+                    width={32}
+                    height={32}
+                    className={styles.connectImage}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/icons/user.svg";
+                    }}
+                  />
+                )}
+              </div>
             </div>
+
             <ProfileDropDown
               isOpen={isOpen}
+              onClose={() => setAccountTab(false)}
               address={address}
               isCopied={isCopied}
               onCopy={copyToClipboard}

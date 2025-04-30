@@ -2,8 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
 import { Quantity } from "ao-tokens";
 import { useHistoricalAPR, HistoricalAPRRes } from "./useHistoricalAPR";
-import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import { GetInfoRes, TokenInput } from "liquidops";
+import { getSupplyAPRCache } from "../../utils/caches/getSupplyAPRCache";
 
 interface ProtocolStats {
   denomination: bigint;
@@ -21,7 +22,7 @@ interface ProtocolStats {
 
 export type ProtocolStatsCache = GetInfoRes;
 
-export function useProtocolStats(token: string) {
+export function useProtocolStats(token: string, overrideCache?: boolean) {
   const { data: historicalAPR } = useHistoricalAPR(token);
 
   const DATA_KEY = `protocol-stats-${token}` as const;
@@ -32,7 +33,7 @@ export function useProtocolStats(token: string) {
       const checkCache = isDataCachedValid(DATA_KEY);
       const safeHistoricalAPR = historicalAPR ?? [];
 
-      if (checkCache) {
+      if (checkCache !== false && overrideCache !== true) {
         return await getProtocolStatsData(checkCache, safeHistoricalAPR, token);
       } else {
         const [getInfoRes] = await Promise.all([
@@ -77,7 +78,7 @@ async function getProtocolStatsData(
   });
 
   // get supply APR
-  const supplyAPR = await LiquidOpsClient.getSupplyAPR({
+  const supplyAPR = await getSupplyAPRCache({
     token,
     getInfoRes,
     getBorrowAPRRes: borrowAPR,

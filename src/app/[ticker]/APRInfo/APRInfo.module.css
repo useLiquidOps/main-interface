@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 50px;
+}
+
+/* utilization rate */
+
+.utilizationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+}
+
+.circleChartContainer {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circleChart {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.circleChartBg {
+  fill: none;
+  stroke: var(--secondary-tea-green);
+  stroke-width: 8;
+}
+
+.circleChartProgress {
+  fill: none;
+  stroke: var(--primary-palatinate-blue);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.utilizationTextContainer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.utilizationPercentage {
+  position: absolute;
+  font-size: 16px;
+  text-align: center;
+  width: 100%;
+  top: 45%;
+  transform: translateY(-60%);
+  color: var(--primary-ultramarine);
+  font-weight: 600;
+}
+
+.utilizationLabel {
+  position: absolute;
+  font-size: 10px;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+  top: 55%;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
+}
+
+/* APR chart */
+
+.APRInfo {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: column;
+  width: fit-content;
+  gap: 15px;
+}
+
+.title {
+  display: flex;
+  width: fit-content;
+  font-size: 12px;
+  color: var(--secondary-slate-blue);
+  font-weight: 700;
+}
+
+.graph {
+  width: 190px;
+  height: 100px;
+}
+
+.infoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.infoTextContainer {
+  display: flex;
+  justify-content: center;
+  align-items: right;
+  color: var(--secondary-slate-blue);
+  font-weight: 500;
+  flex-direction: column;
+}
+
+.apyContainer {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 5px;
+}
+
+.infoValue {
+  margin: 0;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  color: var(--primary-ultramarine);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.infoTitle {
+  margin: 0;
+  font-size: 10px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  color: var(--secondary-periwinkle);
+  font-weight: 600;
+}

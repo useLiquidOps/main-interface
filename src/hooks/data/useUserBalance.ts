@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps";
-import { isDataCachedValid, cacheData } from "@/utils/cacheUtils";
+import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import {
   WrappedQuantity,
   unWrapQuantity,
   wrapQuantity,
-} from "@/utils/cacheUtils";
-import { getDenomination } from "@/utils/cacheUtils";
+} from "@/utils/caches/cacheUtils";
+import { getDenomination } from "@/utils/caches/cacheUtils";
 import { Quantity } from "ao-tokens";
 
 export type UserBalanceCache = WrappedQuantity;
@@ -25,7 +25,7 @@ export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
 
       const checkCache = isDataCachedValid(DATA_KEY);
 
-      if (checkCache && overrideCache === false) {
+      if (checkCache !== false && overrideCache !== true) {
         return unWrapQuantity(checkCache);
       } else {
         const balance = await LiquidOpsClient.getBalance({

@@ -13,9 +13,24 @@ import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import APRInfo from "./APRInfo/APRInfo";
 import TickerInfo from "./TickerInfo/TickerInfo";
 import { useAccountTab } from "@/components/Connect/accountTabContext";
+import { ModalProvider } from "@/components/PopUp/PopUp";
+import WithdrawRepay from "../home/WithdrawRepay/WithdrawRepay";
+import ActionTab from "../home/ActionTab/ActionTab";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  overlayVariants,
+  dropdownVariants,
+} from "@/components/DropDown/FramerMotion";
+import { useModal } from "@/components/PopUp/PopUp";
 
-const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
+const TickerContent = ({
+  params,
+}: {
+  params: { ticker: string; tab: string };
+}) => {
   const ticker = params.ticker as string;
+
+  const { modalType, assetData, closeModal } = useModal();
 
   const { data: supportedTokens = [] } = useSupportedTokens();
   const tokenData = supportedTokens.find(
@@ -72,9 +87,54 @@ const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
           </div>
         </div>
       </div>
+      <AnimatePresence>
+        {modalType && (
+          <motion.div
+            className={styles.modalOverlay}
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={closeModal}
+          >
+            <motion.div
+              className={styles.modalContent}
+              variants={dropdownVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {(modalType === "withdraw" || modalType === "repay") && (
+                <WithdrawRepay
+                  mode={modalType}
+                  ticker={assetData?.ticker}
+                  onClose={closeModal}
+                />
+              )}
+
+              {(modalType === "supply" || modalType === "borrow") && (
+                <ActionTab
+                  mode={modalType as "supply" | "borrow"}
+                  ticker={assetData?.ticker}
+                  onClose={closeModal}
+                />
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>
+  );
+};
+
+const Ticker = ({ params }: { params: { ticker: string; tab: string } }) => {
+  return (
+    <ModalProvider>
+      <TickerContent params={params} />
+    </ModalProvider>
   );
 };
 

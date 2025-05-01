@@ -6,7 +6,7 @@ export interface TokenDetails {
 const tokens: TokenDetails[] = [
   {
     name: "USD Circle",
-    ticker: "USDC",
+    ticker: "wUSDC",
   },
   {
     name: "Quantum Arweave",

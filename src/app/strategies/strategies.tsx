@@ -6,9 +6,11 @@ import Footer from "@/components/Footer/Footer";
 import { FairLaunchStrategy } from "./adapters/fairLaunch";
 import { FairLaunchRow } from "./FairLaunchRow/FairLaunchRow";
 import { useFairLaunches } from "@/hooks/strategies/useFairLaunches";
+import { usePrices } from "@/hooks/data/useTokenPrice";
 
 const Markets: React.FC = () => {
-  const { data: fairLaunchStrategies = [] } = useFairLaunches();
+  const { data: fairLaunchStrategies = [] } = useFairLaunches(true);
+  const { data: prices } = usePrices();
 
   return (
     <div className={styles.page}>
@@ -19,9 +21,16 @@ const Markets: React.FC = () => {
           <div className={styles.strategyContainer}>
             <p className={styles.strategyTitle}>Fair Launches</p>
             <div className={styles.strategiesList}>
+              <div className={styles.tokenTitleContainer}>
+                <p className={styles.tokenTitle}>Collateral token</p>
+                <p className={styles.tokenTitle}>Borrow token</p>
+                <p className={styles.tokenTitle}>Available borrow token</p>
+                <p className={styles.tokenTitle}>Reward token</p>
+                <p className={styles.tokenTitle}>APY / reward ratio</p>
+              </div>
               {(fairLaunchStrategies as FairLaunchStrategy[]).map(
                 (strategy) => (
-                  <FairLaunchRow strategy={strategy} />
+                  <FairLaunchRow strategy={strategy} prices={prices} />
                 ),
               )}
             </div>

@@ -16,7 +16,7 @@ import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import { useAccountTab } from "@/components/Connect/accountTabContext";
 import NetWorth from "./NetWorth/NetWorth";
 import SupplyBorrow from "./SupplyBorrow/SupplyBorrow";
-// import Strategies from "./Strategies/Strategies";
+import Strategies from "./Strategies/Strategies";
 
 function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
@@ -46,9 +46,7 @@ function HomeContent() {
             </div>
 
             <div className={styles.widgetRightContainer}>
-              {/* <Strategies /> */}
-              {/* remove div after stratergies are implemented */}
-              <div></div>
+              <Strategies />
               <button
                 className={styles.viewTxns}
                 onClick={handleOpenAccountTab}

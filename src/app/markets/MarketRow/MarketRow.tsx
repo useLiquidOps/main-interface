@@ -6,6 +6,7 @@ import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import { Prices } from "@/hooks/data/useTokenPrice";
 
 interface Token {
   ticker: string;
@@ -13,15 +14,9 @@ interface Token {
   icon: string;
 }
 
-interface PriceData {
-  [geckoId: string]: {
-    usd: number;
-  };
-}
-
 interface MarketRowProps {
   token: Token;
-  prices: PriceData | undefined;
+  prices: Prices | undefined;
 }
 
 export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {

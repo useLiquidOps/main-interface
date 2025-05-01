@@ -2,25 +2,62 @@ import styles from "./FairLaunchRow.module.css";
 import Image from "next/image";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { FairLaunchStrategy } from "../adapters/fairLaunch";
+import { Prices } from "@/hooks/data/useTokenPrice";
+import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
+import { formatTMB } from "@/components/utils/utils";
+import { Quantity } from "ao-tokens";
 
 interface FairLaunchRowProps {
   strategy: FairLaunchStrategy;
+  prices: Prices | undefined;
 }
 
-export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({ strategy }) => {
-  //   const isLoading = stats.isLoading TODO: may need to add
+export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
+  strategy,
+  prices,
+}) => {
+  const isLoadingStrategy = !strategy;
+
+  const borrowTokenStats = useProtocolStats(
+    strategy.borrowToken.ticker.toUpperCase(),
+  );
+
+  const geckoId = tickerToGeckoMap[strategy.borrowToken.ticker.toUpperCase()];
+  const borrowTokenPrice = new Quantity(0n, 12n).fromNumber(
+    prices?.[geckoId]?.usd ?? 0,
+  );
+
+  const isLoadingStats = borrowTokenStats.isLoading || !borrowTokenStats.data;
 
   return (
     <div className={styles.fairLaunchRowWrapper}>
       <div className={styles.fairLaunchRow}>
-        {/* Deposit asset Info */}
+        {/* Collateral asset info */}
+        <div className={styles.assetInfo}>
+          <div className={styles.iconWrapper}>
+            <Image
+              src={`/tokens/${strategy.depositToken.ticker}.svg`}
+              alt={strategy.depositToken.name}
+              width={30}
+              height={30}
+            />
+          </div>
+
+          <div className={styles.nameSymbol}>
+            <h2 className={styles.name}>{strategy.depositToken.name}</h2>
+            <p className={styles.symbol}>{strategy.depositToken.ticker}</p>
+          </div>
+        </div>
+
+        {/* Borrow asset info */}
         <div className={styles.assetInfo}>
           <div className={styles.iconWrapper}>
             <Image
               src={`/tokens/${strategy.borrowToken.ticker}.svg`}
               alt={strategy.borrowToken.name}
-              width={40}
-              height={40}
+              width={30}
+              height={30}
             />
           </div>
 
@@ -32,22 +69,59 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({ strategy }) => {
 
         {/* Available */}
         <div className={styles.metricBox}>
-          <p className={styles.metricValue}>{strategy.available}</p>
-          <p className={styles.metricLabel}>Available</p>
+          {isLoadingStats ? (
+            <>
+              <SkeletonLoading style={{ width: "90px", height: "14px" }} />
+              <SkeletonLoading style={{ width: "60px", height: "13px" }} />
+            </>
+          ) : (
+            <>
+              <p className={styles.metricValue}>
+                {formatTMB(borrowTokenStats.data.unLent)}{" "}
+                {strategy.borrowToken.ticker}
+              </p>
+              <p className={styles.metricLabel}>
+                $
+                {formatTMB(
+                  Quantity.__mul(
+                    borrowTokenStats.data.unLent,
+                    borrowTokenPrice,
+                  ),
+                )}
+              </p>
+            </>
+          )}
+        </div>
+
+        {/* Reward asset info */}
+        <div className={styles.assetInfo}>
+          <div className={styles.iconWrapper}>
+            <Image
+              src={`/tokens/${strategy.rewardToken.ticker}.svg`}
+              alt={strategy.rewardToken.name}
+              width={30}
+              height={30}
+            />
+          </div>
+
+          <div className={styles.nameSymbol}>
+            <h2 className={styles.name}>{strategy.rewardToken.name}</h2>
+            <p className={styles.symbol}>{strategy.rewardToken.ticker}</p>
+          </div>
         </div>
 
         {/* APY Info */}
         <div className={styles.aprInfo}>
           <div className={styles.aprValue}>
             <Image
-              src={`/icons/APYStars.svg`}
+              src={`/icons/${strategy.apy >= 0 ? "APYStars" : "APRStars"}.svg`}
               alt={`Stars icon`}
               width={10}
               height={10}
             />
             <p className={styles.apr}>{strategy.apy.toFixed(2)}%</p>
           </div>
-          <p className={styles.aprLabel}>Supply APY</p>
+          <p className={styles.aprLabel}>Total APY</p>
         </div>
       </div>
     </div>

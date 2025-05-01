@@ -5,61 +5,62 @@ export interface FairLaunchStrategy {
   borrowToken: TokenDetails;
   rewardToken: TokenDetails;
   apy: number;
-  available: number;
+  depositRewardRatio: number;
 }
 
 export const fairLaunchStrategies: FairLaunchStrategy[] = [
   {
-    depositToken: tokenMap["USDC"],
+    depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["AO"],
-    apy: 3.1,
-    available: 3000,
+    apy: 4.1,
+    depositRewardRatio: 1,
   },
   {
-    depositToken: tokenMap["USDC"],
+    depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["APUS"],
     apy: 3.1,
-    available: 3000,
+    depositRewardRatio: 1,
   },
   {
-    depositToken: tokenMap["USDC"],
+    depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["BOTG"],
     apy: 3.1,
-    available: 3000,
+    depositRewardRatio: 1,
   },
   {
-    depositToken: tokenMap["USDC"],
+    depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["ACTION"],
     apy: 3.1,
-    available: 3000,
+    depositRewardRatio: 1,
   },
   {
-    depositToken: tokenMap["USDC"],
+    depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["PL"],
     apy: 3.1,
-    available: 3000,
+    depositRewardRatio: 1,
   },
   {
-    depositToken: tokenMap["USDC"],
+    depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["ARIO"],
     apy: 3.1,
-    available: 3000,
+    depositRewardRatio: 1,
   },
   {
-    depositToken: tokenMap["USDC"],
+    depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["PIXL"],
-    apy: 3.1,
-    available: 3000,
+    apy: -3.1,
+    depositRewardRatio: 1,
   },
 ];
 
 export async function fairLaunchAdapter(): Promise<FairLaunchStrategy[]> {
-  return fairLaunchStrategies;
+  // Sort the strategies by APY in descending order
+  return [...fairLaunchStrategies].sort((a, b) => b.apy - a.apy);
 }

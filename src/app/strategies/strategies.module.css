@@ -55,3 +55,19 @@
   padding: 24px;
   border-radius: 24px;
 }
+
+.tokenTitleContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.tokenTitle {
+  margin: 0;
+  color: var(--primary-palatinate-blue);
+  font-weight: 500;
+  font-size: 12px;
+}

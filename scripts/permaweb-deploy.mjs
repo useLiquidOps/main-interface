@@ -46,13 +46,13 @@ async function deploy() {
     });
     irys.uploader.useChunking = false;
 
-    // const arweaveTokenAmount = irys.utils.toAtomic(1)
-    // const fundNode = await irys.fund(arweaveTokenAmount)
+    // const arweaveTokenAmount = irys.utils.toAtomic(1);
+    // const fundNode = await irys.fund(arweaveTokenAmount);
     // console.log(
     //   "📜 LOG > funded:",
     //   irys.utils.fromAtomic(arweaveTokenAmount),
     //   irys.token,
-    //   fundNode
+    //   fundNode,
     // );
 
     const balance = await irys.getBalance(DEPLOY_WALLET);

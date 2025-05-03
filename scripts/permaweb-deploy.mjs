@@ -112,7 +112,7 @@ async function deploy() {
           },
           {
             name: "GIT-HASH",
-            value: "process.env.GITHUB_SHA", // TODO: remove when strategies PR merged
+            value: process.env.GITHUB_SHA || "local-deploy",
           },
         ],
       },

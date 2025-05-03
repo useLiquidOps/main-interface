@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main # This triggers when code is pushed to main (including merged PRs)
-    workflow_dispatch: # This allows manual actions triggering
+  workflow_dispatch: # This allows manual actions triggering
 
 jobs:
   build-and-deploy:

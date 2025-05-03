@@ -6,7 +6,7 @@ import "dotenv/config";
 
 const DEPLOY_FOLDER = "./dist";
 const DEPLOY_KEY = process.env.DEPLOY_KEY;
-const DEPLOY_WALLET = process.env.DEPLOY_KEY;
+const DEPLOY_WALLET = process.env.DEPLOY_WALLET;
 const ANT_PROCESS = "Ayie-yIUDWQZYwt2XFGQYwpbg9je77W9tr6HXMOwDkc";
 
 async function getFolderSize(folderPath) {
@@ -112,7 +112,7 @@ async function deploy() {
           },
           {
             name: "GIT-HASH",
-            value: process.env.GITHUB_SHA,
+            value: "process.env.GITHUB_SHA", // TODO: remove when strategies PR merged
           },
         ],
       },

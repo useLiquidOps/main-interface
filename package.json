@@ -8,7 +8,7 @@
     "prettier": "prettier --write .",
     "link": "bun link liquidops",
     "postbuild": "next-sitemap",
-    "permaweb-deploy": "node .github/scripts/permaweb-deploy.mjs || cat dist-errors.txt"
+    "permaweb-deploy": "node scripts/permaweb-deploy.mjs || cat dist-errors.txt"
   },
   "dependencies": {
     "@ar.io/sdk": "^3.10.1",

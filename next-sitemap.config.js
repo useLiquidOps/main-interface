@@ -15,21 +15,27 @@ module.exports = {
         lastmod: new Date().toISOString(),
       },
       {
-        loc: "/qAR",
+        loc: "/strategies",
         changefreq: "daily",
         priority: 0.8,
         lastmod: new Date().toISOString(),
       },
       {
-        loc: "/wUSDC",
+        loc: "/qAR",
         changefreq: "daily",
         priority: 0.7,
         lastmod: new Date().toISOString(),
       },
       {
-        loc: "https://liquidops.arweave.net",
+        loc: "/wUSDC",
         changefreq: "daily",
         priority: 0.6,
+        lastmod: new Date().toISOString(),
+      },
+      {
+        loc: "https://liquidops.arweave.net",
+        changefreq: "daily",
+        priority: 0.5,
         lastmod: new Date().toISOString(),
       },
     ];

@@ -134,3 +134,6 @@ dist
 public/robots.txt
 public/sitemap.xml
 public/sitemap-0.xml
+
+# Error logs
+dist-errors.txt

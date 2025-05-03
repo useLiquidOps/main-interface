@@ -1,0 +1,38 @@
+name: Deploy to Permaweb
+
+on:
+  push:
+    branches:
+      - main # This triggers when code is pushed to main (including merged PRs)
+    workflow_dispatch: # This allows manual actions triggering
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build website
+        run: bun run build
+
+      - name: Deploy to Permaweb
+        run: bun run permaweb-deploy
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DEPLOY_WALLET: ${{ secrets.DEPLOY_WALLET }}
+          GITHUB_SHA: ${{ github.sha }}

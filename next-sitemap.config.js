@@ -26,6 +26,12 @@ module.exports = {
         priority: 0.7,
         lastmod: new Date().toISOString(),
       },
+      {
+        loc: "https://liquidops.arweave.net",
+        changefreq: "daily",
+        priority: 0.6,
+        lastmod: new Date().toISOString(),
+      }
     ];
   },
   transform: async (config, path) => {

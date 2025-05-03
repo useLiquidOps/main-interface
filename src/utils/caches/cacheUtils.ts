@@ -20,6 +20,7 @@ interface DataTypeMap {
   [key: `defi-llama-pool-${string}`]: any;
   [key: `historical-apr-${string}`]: any;
   "fair-launch-strategies": any;
+  "leverage-strategies": any;
 }
 
 type DataKeys = keyof DataTypeMap;

@@ -18,6 +18,7 @@ interface ProtocolStats {
     outcome: boolean;
     change: string;
   };
+  info: GetInfoRes;
 }
 
 export type ProtocolStatsCache = GetInfoRes;
@@ -105,5 +106,6 @@ async function getProtocolStatsData(
       outcome: currentAPR >= yesterdayAPR,
       change,
     },
+    info: getInfoRes,
   };
 }

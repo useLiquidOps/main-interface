@@ -39,8 +39,8 @@ function HomeContent() {
         <div className={styles.bodyContainer}>
           <div className={styles.widgetContainer}>
             <div className={styles.widgetLeftContainer}>
-              {/* <NetWorth />
-              <SupplyBorrow /> */}
+              <NetWorth />
+              <SupplyBorrow />
               <div></div>
               <div></div>
             </div>

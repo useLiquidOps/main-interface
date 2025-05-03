@@ -1,17 +1,24 @@
 import { TokenDetails, tokenMap } from "../tokens";
 
 export interface LeverageStrategy {
-  depositToken: TokenDetails;
+  type: "Long" | "Short";
+  leverageToken: TokenDetails;
   borrowToken: TokenDetails;
 }
 
 export const leverageStrategies: LeverageStrategy[] = [
   {
-    depositToken: tokenMap["USDC"],
+    type: "Long",
+    leverageToken: tokenMap["qAR"],
+    borrowToken: tokenMap["wUSDC"],
+  },
+  {
+    type: "Short",
+    leverageToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
   },
 ];
 
 export async function leverageAdapter() {
-  console.log(leverageStrategies);
+  return leverageStrategies;
 }

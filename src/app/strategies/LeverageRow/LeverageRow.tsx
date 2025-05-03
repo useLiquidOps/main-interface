@@ -187,16 +187,16 @@ function getLeverageValues({
     // For long positions
     // Base leverage is 1 + what we can borrow, which is the collateral factor
     baseLeverage = 1 + supplyFactor;
-    
+
     // Max leverage for longs with recursive borrowing
-    maxLeverage = 1 / (1 - (supplyFactor / (1 - (supplyFactor * borrowFactor))));
+    maxLeverage = 1 / (1 - supplyFactor / (1 - supplyFactor * borrowFactor));
   } else {
     // For short positions
     // Base leverage is 1 + what we can borrow, which is the collateral factor
     baseLeverage = 1 + borrowFactor;
-    
+
     // Max leverage for shorts with recursive borrowing
-    maxLeverage = 1 / (1 - (borrowFactor / (1 - (supplyFactor * borrowFactor))));
+    maxLeverage = 1 / (1 - borrowFactor / (1 - supplyFactor * borrowFactor));
   }
 
   return {

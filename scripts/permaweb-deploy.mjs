@@ -7,7 +7,6 @@ import "dotenv/config";
 const DEPLOY_FOLDER = "./dist";
 const DEPLOY_KEY = process.env.DEPLOY_KEY;
 const DEPLOY_WALLET = process.env.DEPLOY_KEY;
-// const ANT_PROCESS = "lwqoAlNbEzJG3rCsWYSCTNYG43a_I4FUKUD9QxieaQg";
 const ANT_PROCESS = "Ayie-yIUDWQZYwt2XFGQYwpbg9je77W9tr6HXMOwDkc";
 
 async function getFolderSize(folderPath) {

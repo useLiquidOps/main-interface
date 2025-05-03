@@ -100,7 +100,7 @@ async function deploy() {
 
     const { id: txId } = await ant.setRecord(
       {
-        undername: "stg",
+        undername: "@",
         transactionId: txResult.id,
         ttlSeconds: 900,
       },

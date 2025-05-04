@@ -22,9 +22,10 @@ export const metadata: Metadata = {
     "Arweave lending",
     "AO lending",
   ],
-  icons: {
-    icon: "/favicon.svg",
-  },
+  icons: [
+    { url: "/favicon.ico", sizes: "any", type: "image/x-icon" },
+    { url: "/favicon.svg", type: "image/svg+xml" },
+  ],
   openGraph: {
     title: "LiquidOps | Home",
     description:

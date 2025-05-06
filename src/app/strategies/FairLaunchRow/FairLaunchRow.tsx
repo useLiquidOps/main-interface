@@ -3,7 +3,7 @@ import Image from "next/image";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { FairLaunchStrategy } from "../adapters/fairLaunch";
 import { Prices } from "@/hooks/data/useTokenPrice";
-import { tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
+import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";

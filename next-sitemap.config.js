@@ -1,8 +1,8 @@
 const SUPPORTED_TOKENS = [
-  { ticker: "qAR" },
-  { ticker: "wUSDC" },
-  { ticker: "wAR" },
-  { ticker: "wUSDT" },
+  { ticker: "qAR", name: 'Quantum Arweave' },
+  { ticker: "wUSDC", name: 'Wrapped USD Circle' },
+  { ticker: "wAR", name: 'Wrapped Arweave' },
+  { ticker: "wUSDT", name: 'Wrapped USD Circle' },
 ];
 
 /** @type {import('next-sitemap').IConfig} */
@@ -22,15 +22,28 @@ module.exports = {
         lastmod: new Date().toISOString(),
       },
       {
-        loc: "/strategies",
+        loc: "https://labs.liquidops.io",
         changefreq: "daily",
         priority: 0.8,
         lastmod: new Date().toISOString(),
       },
       {
-        loc: "https://liquidops.arweave.net",
+        loc: "https://docs.liquidops.io",
+        changefreq: "daily",
+        priority: 0.7,
+        lastmod: new Date().toISOString(),
+      },
+      {
+        loc: "/strategies",
         changefreq: "daily",
         priority: 0.6,
+        lastmod: new Date().toISOString(),
+      },
+      // the tickers are 0.5
+      {
+        loc: "https://liquidops.arweave.net",
+        changefreq: "daily",
+        priority: 0.4,
         lastmod: new Date().toISOString(),
       },
     ];
@@ -38,7 +51,7 @@ module.exports = {
     const tokenPaths = SUPPORTED_TOKENS.map((token) => ({
       loc: `/${token.ticker}`,
       changefreq: "daily",
-      priority: 0.7,
+      priority: 0.5,
       lastmod: new Date().toISOString(),
     }));
 

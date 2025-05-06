@@ -6,7 +6,6 @@ export interface SupportedToken
     TokenData,
     "oTicker" | "oAddress" | "controllerAddress" | "cleanTicker" | "address"
   > {
-  extraAmount: string;
   denomination: bigint;
   collateralEnabled: boolean;
   baseDenomination: bigint;
@@ -20,7 +19,6 @@ export function useSupportedTokens() {
         icon: `/tokens/${data.ticker}.svg`,
         name: data.name,
         ticker: data.cleanTicker,
-        extraAmount: "1",
         denomination: data.denomination,
         collateralEnabled: data.collateralEnabled,
         baseDenomination: data.baseDenomination,

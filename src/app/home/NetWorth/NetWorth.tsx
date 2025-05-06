@@ -8,7 +8,8 @@ import { formatTMB } from "@/components/utils/utils";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { TOKEN_COLORS } from "@/utils/tokenDetails";
 import { GlobalPositionResult } from "@/hooks/LiquidOpsData/useGlobalPosition";
-import { usePrices, tickerToGeckoMap } from "@/hooks/data/useTokenPrice";
+import { usePrices } from "@/hooks/data/useTokenPrice";
+import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { getBaseDenomination } from "@/utils/getBaseDenomination";
 
 const NetWorth: React.FC = () => {

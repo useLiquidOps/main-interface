@@ -6,7 +6,7 @@ import { tickerDescription } from "@/utils/SEO/SEO";
 const title = (ticker: string) => `LiquidOps | ${ticker}`;
 const url = (ticker: string) => `https://liquidops.io/${ticker}`;
 const imagePath = (ticker: string) =>
-  `https://liquidops.io/SEO/token-site-image/${ticker}.png`;
+  `https://liquidops.io/SEO/token-site-image/${ticker.toUpperCase()}.png`;
 
 // need to export static ticker page paths for permaweb-deploy
 export async function generateStaticParams() {

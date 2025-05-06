@@ -2,70 +2,53 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
 import { Providers } from "./providers";
+import { siteWideSEO } from "@/utils/SEO/SEO";
+
+const title = "LiquidOps | Home";
+const imagePath = "https://liquidops.io/SEO/home.png";
 
 export const metadata: Metadata = {
-  title: "LiquidOps | Home",
-  description:
-    "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
-  keywords: [
-    "LiquidOps",
-    "Arweave",
-    "lending protocol",
-    "borrowing protocol",
-    "AO",
-    "DeFi",
-    "over-collateralised",
-    "Arweave yield farming",
-    "AO yield farming",
-    "lending",
-    "borrowing",
-    "Arweave lending",
-    "AO lending",
-  ],
-  icons: [
-    { url: "/favicon.ico", sizes: "any", type: "image/x-icon" },
-    { url: "/favicon.svg", type: "image/svg+xml" },
-  ],
+  title: title,
+  description: siteWideSEO.description,
+  keywords: siteWideSEO.keyWords,
+  icons: siteWideSEO.icons,
   openGraph: {
-    title: "LiquidOps | Home",
-    description:
-      "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
-    url: "https://liquidops.io/",
-    siteName: "LiquidOps",
+    title,
+    description: siteWideSEO.description,
+    url: siteWideSEO.url,
+    siteName: siteWideSEO.name,
     images: [
       {
-        url: "https://liquidops.io/SEO/og_image.jpg",
+        url: imagePath,
         width: 1200,
         height: 630,
-        alt: "LiquidOps",
+        alt: siteWideSEO.name,
       },
     ],
     locale: "en_US",
     type: "website",
   },
   alternates: {
-    canonical: "https://liquidops.io/",
+    canonical: siteWideSEO.url,
   },
   twitter: {
     card: "summary_large_image",
-    title: "LiquidOps | Home",
-    description:
-      "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
-    images: ["https://liquidops.io/SEO/og_image.jpg"],
+    title,
+    description: siteWideSEO.description,
+    images: [imagePath],
   },
   robots: "index, follow",
   other: {
     "script:ld+json": JSON.stringify({
       "@context": "https://schema.org",
       "@type": "FinancialProduct",
-      name: "LiquidOps",
-      description:
-        "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
-      url: "https://liquidops.io/",
+      name: siteWideSEO.name,
+      description: siteWideSEO.description,
+      url: siteWideSEO.url,
       provider: {
         "@type": "Organization",
-        name: "LiquidOps",
-        url: "https://liquidops.io",
+        name: siteWideSEO.name,
+        url: siteWideSEO.url,
       },
     }),
   },

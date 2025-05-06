@@ -11,10 +11,10 @@ export const tickerToGeckoMap: Record<string, string> = {
 };
 
 export const SUPPORTED_TOKENS = [
-  { ticker: "qAR" },
-  { ticker: "wUSDC" },
-  { ticker: "wAR" },
-  { ticker: "wUSDT" },
+  { ticker: "qAR", name: "Quantum Arweave" },
+  { ticker: "wUSDC", name: "Wrapped USD Circle" },
+  { ticker: "wAR", name: "Wrapped Arweave" },
+  { ticker: "wUSDT", name: "Wrapped USD Circle" },
 ];
 
 // NOTE: there is also a SUPPORTED_TOKENS in next-sitemap-config.js

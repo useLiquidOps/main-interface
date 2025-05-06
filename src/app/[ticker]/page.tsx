@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { SUPPORTED_TOKENS } from "@/utils/tokenMappings";
 
 // need to export static ticker page paths for permaweb-deploy
-const SUPPORTED_TOKENS = [{ ticker: "qAR" }, { ticker: "wUSDC" }];
 export async function generateStaticParams() {
   return SUPPORTED_TOKENS;
 }

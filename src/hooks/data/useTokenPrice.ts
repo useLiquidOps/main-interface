@@ -1,15 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Quantity } from "ao-tokens";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
+import { tickerToGeckoMap } from "@/utils/tokenMappings";
 
 export interface Prices {
   [key: string]: { usd: number };
 }
-
-export const tickerToGeckoMap: Record<string, string> = {
-  QAR: "arweave",
-  WUSDC: "usd-coin",
-};
 
 export function usePrices(overrideCache?: boolean) {
   const DATA_KEY = "prices" as const;

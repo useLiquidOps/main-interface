@@ -1,11 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAPRGraph } from "@/utils/DefiLlama";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
-
-const defiLlamaIds: Record<string, string> = {
-  qAR: "cd2164c7-66f3-455c-a690-e4fc778f8a72",
-  wUSDC: "55e444cd-dae7-4ad6-8a3b-1ca4d1d44bae",
-};
+import { defiLlamaIds } from "@/utils/tokenMappings";
 
 export function useDeLaPoolData(ticker: string, overrideCache?: boolean) {
   const defiLlamaId = defiLlamaIds[ticker];

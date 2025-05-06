@@ -15,6 +15,8 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_GIT_HASH: gitHash,
   },
+  output: "export",
+  distDir: "dist",
 };
 
 export default nextConfig;

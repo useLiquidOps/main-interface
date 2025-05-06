@@ -118,7 +118,7 @@ const Strategies: React.FC = () => {
 
             <div className={styles.APYContainer}>
               <Image
-                src={`/icons/APYStars.svg`}
+                src={`/icons/${strategy.APY >= 0 ? "APYStars" : "APRStars"}.svg`}
                 alt={`Stars icon`}
                 width={10}
                 height={10}

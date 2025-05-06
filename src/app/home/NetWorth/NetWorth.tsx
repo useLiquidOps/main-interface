@@ -31,8 +31,6 @@ const NetWorth: React.FC = () => {
     : [];
 
   const netAPY = 11.1;
-  const isPositive = netAPY >= 0;
-  const starType = isPositive ? "APYStars" : "APRStars";
 
   return (
     <div className={styles.card}>
@@ -67,7 +65,7 @@ const NetWorth: React.FC = () => {
           ) : (
             <div className={styles.netAPY}>
               <Image
-                src={`/icons/${starType}.svg`}
+                src={`/icons/${netAPY >= 0 ? "APYStars" : "APRStars"}.svg`}
                 alt={`Stars icon`}
                 width={10}
                 height={10}

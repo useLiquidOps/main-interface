@@ -75,6 +75,12 @@ const Header: React.FC<HeaderProps> = () => {
             >
               <p>Markets</p>
             </Link>
+            {/* <Link
+              href="/strategies"
+              className={isLinkActive("/strategies") ? styles.activeLink : ""}
+            >
+              <p>Strategies</p>
+            </Link> */}
             <MoreDropdown items={moreMenuItems} />
           </nav>
         </div>

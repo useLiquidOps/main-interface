@@ -1,15 +1,18 @@
 {
   "name": "main-interface",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "dev": "bun run prettier && next dev",
     "build": "next build",
     "prettier": "prettier --write .",
     "link": "bun link liquidops",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "permaweb-deploy": "node scripts/permaweb-deploy.mjs || cat dist-errors.txt"
   },
   "dependencies": {
+    "@ar.io/sdk": "^3.10.1",
+    "@irys/sdk": "^0.2.11",
     "@permaweb/aoconnect": "^0.0.77",
     "@permaweb/aoprofile": "^0.0.9",
     "@tailwindcss/postcss": "^4.0.15",
@@ -20,6 +23,7 @@
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^16.5.0",
     "framer-motion": "^11.15.0",
     "liquidops": "^1.0.1",
     "lucide-react": "^0.483.0",

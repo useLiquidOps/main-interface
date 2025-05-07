@@ -49,13 +49,11 @@ export async function getFairlaunchAPY(fairLaunchID: string) {
     (tag) => tag.name === "Total-Distribution-Ticks",
   ).value;
 
-    // get current distribution tick
-    const currentDistrubutionTick = fairLaunchData.find(
-      // @ts-ignore
-      (tag) => tag.name === "Distribution-Tick",
-    ).value;
-  
-
+  // get current distribution tick
+  const currentDistrubutionTick = fairLaunchData.find(
+    // @ts-ignore
+    (tag) => tag.name === "Distribution-Tick",
+  ).value;
 
   // get total AO given to the project so far
   const totalAOGiven = new Quantity(
@@ -63,10 +61,9 @@ export async function getFairlaunchAPY(fairLaunchID: string) {
     BigInt(projectDenomination),
   );
 
-  // // get project estimated AO day cycle 
+  // // get project estimated AO day cycle
   // const estimatedDayCycle = totalAOGiven.toNumber() / currentDistrubutionTick
   // console.log('estimatedDayCycle', fairLaunchID,estimatedDayCycle)
-
 
   const tokenPerAOInTotal =
     totalTokenSupplyFairLaunchedScaled.toNumber() / totalAOGiven.toNumber();

@@ -19,8 +19,8 @@ const nextConfig = {
   distDir: "dist",
   assetPrefix: "/",
   images: {
-    unoptimized: true
-  }
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;

@@ -109,7 +109,11 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
                 height={16}
               />
               <p className={styles.change}>
-                {protocolStats.percentChange?.change ?? "0.00"}%
+                {protocolStats.percentChange?.change !== undefined
+                  ? !isNaN(Number(protocolStats.percentChange?.change))
+                    ? `${protocolStats.percentChange?.change}%`
+                    : "0.00%"
+                  : "0.00%"}
               </p>
             </div>
           )}

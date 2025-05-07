@@ -9,6 +9,7 @@ export interface FairLaunchStrategy {
 }
 
 export const fairLaunchStrategies: FairLaunchStrategy[] = [
+  // qAR
   // wUSDC
   {
     depositToken: tokenMap["wUSDC"],
@@ -105,6 +106,107 @@ export const fairLaunchStrategies: FairLaunchStrategy[] = [
   {
     depositToken: tokenMap["wUSDT"],
     borrowToken: tokenMap["qAR"],
+    rewardToken: tokenMap["PIXL"],
+    apy: -3.1,
+    depositRewardRatio: 1,
+  },
+  // wAR
+  // wUSDC
+  {
+    depositToken: tokenMap["wUSDC"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["AO"],
+    apy: 4.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDC"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["APUS"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDC"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["BOTG"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDC"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["ACTION"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDC"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["PL"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDC"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["ARIO"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDC"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["PIXL"],
+    apy: -3.1,
+    depositRewardRatio: 1,
+  },
+  // wUSDT
+  {
+    depositToken: tokenMap["wUSDT"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["AO"],
+    apy: 4.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDT"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["APUS"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDT"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["BOTG"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDT"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["ACTION"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDT"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["PL"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDT"],
+    borrowToken: tokenMap["wAR"],
+    rewardToken: tokenMap["ARIO"],
+    apy: 3.1,
+    depositRewardRatio: 1,
+  },
+  {
+    depositToken: tokenMap["wUSDT"],
+    borrowToken: tokenMap["wAR"],
     rewardToken: tokenMap["PIXL"],
     apy: -3.1,
     depositRewardRatio: 1,

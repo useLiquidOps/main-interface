@@ -42,7 +42,9 @@ const Markets: React.FC = () => {
             </div>
           </div>
           <div className={styles.strategyContainer}>
-            <p className={styles.strategyTitle}>Deposit USDC/USDT into fair launches</p>
+            <p className={styles.strategyTitle}>
+              Deposit USDC/USDT into fair launches
+            </p>
             <div className={styles.strategiesList}>
               <div className={styles.tokenTitleContainer}>
                 <p className={styles.tokenTitle}>Collateral token</p>

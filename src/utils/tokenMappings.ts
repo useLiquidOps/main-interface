@@ -7,7 +7,7 @@ export const tickerToGeckoMap: Record<string, string> = {
   QAR: "arweave",
   WUSDC: "usd-coin",
   WAR: "arweave",
-  WUSDT: "binance-bridged-usdt-bnb-smart-chain",
+  WUSDT: "tether",
 };
 
 export const SUPPORTED_TOKENS = [
@@ -18,3 +18,6 @@ export const SUPPORTED_TOKENS = [
 ];
 
 // NOTE: there is also a SUPPORTED_TOKENS in next-sitemap-config.js
+
+
+export const gekoURL = "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,&vs_currencies=usd"

@@ -28,6 +28,7 @@ const Markets: React.FC = () => {
               <div className={styles.tokenTitleContainer}>
                 <p className={styles.tokenTitle}>Type</p>
                 <p className={styles.tokenTitle}>Leverage token</p>
+                <p className={styles.tokenTitle}>Collateral token</p>
                 <p className={styles.tokenTitle}>
                   Max simple/recursive leverage
                 </p>

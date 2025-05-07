@@ -59,6 +59,23 @@ export const LeverageRow: React.FC<LeverageRowRowProps> = ({
           <p className={styles.fee}>{leverage.type}</p>
         </div>
 
+        {/* Base token info */}
+        <div className={styles.assetInfo}>
+          <div className={styles.iconWrapper}>
+            <Image
+              src={`/tokens/${leverage.baseToken.ticker}.svg`}
+              alt={leverage.baseToken.name}
+              width={30}
+              height={30}
+            />
+          </div>
+
+          <div className={styles.nameSymbol}>
+            <h2 className={styles.name}>{leverage.baseToken.name}</h2>
+            <p className={styles.symbol}>{leverage.baseToken.ticker}</p>
+          </div>
+        </div>
+
         {/* Leverage token info */}
         <div className={styles.assetInfo}>
           <div className={styles.iconWrapper}>

@@ -7,7 +7,7 @@ export const tickerToGeckoMap: Record<string, string> = {
   QAR: "arweave",
   WUSDC: "usd-coin",
   WAR: "arweave",
-  WUSDT: "tether",
+  WUSDT: "binance-bridged-usdt-bnb-smart-chain",
 };
 
 export const SUPPORTED_TOKENS = [

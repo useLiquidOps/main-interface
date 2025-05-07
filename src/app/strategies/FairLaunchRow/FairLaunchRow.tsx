@@ -117,7 +117,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
         </div>
 
         {/* APY Info */}
-        <div className={styles.aprInfo} style={{ width: "205px" }}>
+        {/* <div className={styles.aprInfo} style={{ width: "205px" }}>
           <div className={styles.aprValue}>
             <Image
               src={`/icons/APYStars.svg`}
@@ -136,7 +136,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
           <p className={styles.aprLabel}>
             {strategy.rewardToken.ticker} per 1 AO APY
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

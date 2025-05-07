@@ -51,7 +51,7 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Borrow token</p>
                 <p className={styles.tokenTitle}>Available borrow token</p>
                 <p className={styles.tokenTitle}>Reward token</p>
-                <p className={styles.tokenTitle}>APY / reward ratio</p>
+                {/* <p className={styles.tokenTitle}>APY / reward ratio</p> */}
               </div>
               {(fairLaunchStrategies as FairLaunchStrategy[]).map(
                 (strategy) => (

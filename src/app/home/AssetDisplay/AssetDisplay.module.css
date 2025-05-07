@@ -55,13 +55,13 @@
 }
 
 .lendContainer {
-  height: 390px;
+  min-height: 390px;
   transition: max-height 0.3s ease;
   overflow: hidden;
 }
 
 .borrowContainer {
-  height: 390px;
+  min-height: 390px;
   transition: max-height 0.3s ease;
   overflow: hidden;
 }

@@ -19,5 +19,5 @@ export const SUPPORTED_TOKENS = [
 
 // NOTE: there is also a SUPPORTED_TOKENS in next-sitemap-config.js
 
-
-export const gekoURL = "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,&vs_currencies=usd"
+export const gekoURL =
+  "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,&vs_currencies=usd";

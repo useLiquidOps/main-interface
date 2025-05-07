@@ -18,9 +18,7 @@ export function usePrices(overrideCache?: boolean) {
       if (checkCache !== false && overrideCache !== true) {
         return checkCache;
       } else {
-        const response = await fetch(
-          gekoURL
-        );
+        const response = await fetch(gekoURL);
 
         const geckoResponse = await response.json();
 

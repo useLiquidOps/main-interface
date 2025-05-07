@@ -21,6 +21,7 @@ interface DataTypeMap {
   [key: `historical-apr-${string}`]: any;
   "fair-launch-strategies": any;
   "leverage-strategies": any;
+  [key: `fairlaunch-apy-${string}`]: any;
 }
 
 type DataKeys = keyof DataTypeMap;

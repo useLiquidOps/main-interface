@@ -63,9 +63,9 @@ export async function getFairlaunchAPY(fairLaunchID: string) {
     BigInt(projectDenomination),
   );
 
-  // get project estimated AO day cycle 
-  const estimatedDayCycle = totalAOGiven.toNumber() / currentDistrubutionTick
-  console.log('estimatedDayCycle', fairLaunchID,estimatedDayCycle)
+  // // get project estimated AO day cycle 
+  // const estimatedDayCycle = totalAOGiven.toNumber() / currentDistrubutionTick
+  // console.log('estimatedDayCycle', fairLaunchID,estimatedDayCycle)
 
 
   const tokenPerAOInTotal =

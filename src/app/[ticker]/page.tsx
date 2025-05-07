@@ -34,6 +34,14 @@ export async function generateMetadata({
       title: title(ticker),
       description: tickerDescription(tokenInfo?.name || "", ticker),
       url: url(ticker),
+      images: [
+        {
+          url: imagePath(ticker),
+          width: 1200,
+          height: 630,
+          alt: title(ticker),
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",

@@ -9,8 +9,16 @@ const tokens: TokenDetails[] = [
     ticker: "wUSDC",
   },
   {
+    name: "USD Tether",
+    ticker: "wUSDT",
+  },
+  {
     name: "Quantum Arweave",
     ticker: "qAR",
+  },
+  {
+    name: "Wrapped Arweave",
+    ticker: "wAR",
   },
   {
     name: "AO",

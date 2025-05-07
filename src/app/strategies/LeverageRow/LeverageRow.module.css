@@ -24,8 +24,8 @@
 .assetInfo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 205px;
+  gap: 6px;
+  width: 190px;
   flex-shrink: 0;
 }
 

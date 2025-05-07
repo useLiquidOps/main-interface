@@ -17,8 +17,6 @@ export const LeverageRow: React.FC<LeverageRowRowProps> = ({
   leverage,
   prices,
 }) => {
-  const isLoadingLeverage = !leverage;
-
   const borrowTokenStats = useProtocolStats(
     leverage.borrowToken.ticker.toUpperCase(),
   );
@@ -45,11 +43,15 @@ export const LeverageRow: React.FC<LeverageRowRowProps> = ({
 
   const maxLeverages = getLeverageValues({
     type: leverage.type,
-    supplyTokenCollateralFactor:
-      leverageTokenStats.data?.info.collateralFactor ?? "0",
-    borrowTokenCollateralFactor:
-      borrowTokenStats.data?.info.collateralFactor ?? "0",
+    // @ts-ignore, skeleton loading logic relies on it being undef
+    supplyTokenCollateralFactor: leverageTokenStats.data?.info.collateralFactor,
+    // @ts-ignore, skeleton loading logic relies on it being undef
+    borrowTokenCollateralFactor: borrowTokenStats.data?.info.collateralFactor,
   });
+
+  const isLoadingMaxLeverage =
+    // @ts-ignore, skeleton loading logic relies on it being undef
+    isNaN(maxLeverages.baseLeverage) || isNaN(maxLeverages.maxLeverage);
 
   return (
     <div className={styles.leverageRowWrapper}>
@@ -57,6 +59,23 @@ export const LeverageRow: React.FC<LeverageRowRowProps> = ({
         {/* Leverage type info */}
         <div className={styles.feeInfo}>
           <p className={styles.fee}>{leverage.type}</p>
+        </div>
+
+        {/* Base token info */}
+        <div className={styles.assetInfo}>
+          <div className={styles.iconWrapper}>
+            <Image
+              src={`/tokens/${leverage.baseToken.ticker}.svg`}
+              alt={leverage.baseToken.name}
+              width={30}
+              height={30}
+            />
+          </div>
+
+          <div className={styles.nameSymbol}>
+            <h2 className={styles.name}>{leverage.baseToken.name}</h2>
+            <p className={styles.symbol}>{leverage.baseToken.ticker}</p>
+          </div>
         </div>
 
         {/* Leverage token info */}
@@ -78,8 +97,17 @@ export const LeverageRow: React.FC<LeverageRowRowProps> = ({
 
         {/* Max leverage info */}
         <div className={styles.feeInfo}>
-          <p className={styles.fee}>{maxLeverages.baseLeverage}x</p>
-          <p className={styles.feeLabel}>{maxLeverages.maxLeverage}x</p>
+          {isLoadingMaxLeverage ? (
+            <>
+              <SkeletonLoading style={{ width: "50px", height: "14px" }} />
+              <SkeletonLoading style={{ width: "50px", height: "14px" }} />
+            </>
+          ) : (
+            <>
+              <p className={styles.fee}>{maxLeverages.baseLeverage}x</p>
+              <p className={styles.feeLabel}>{maxLeverages.maxLeverage}x</p>
+            </>
+          )}
         </div>
 
         {/* Borrow token info */}
@@ -167,8 +195,8 @@ interface GetLeverageValues {
 }
 
 interface GetLeverageValuesRes {
-  maxLeverage: string;
-  baseLeverage: string;
+  maxLeverage: string | undefined;
+  baseLeverage: string | undefined;
 }
 
 function getLeverageValues({

@@ -23,11 +23,12 @@ const Markets: React.FC = () => {
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
           <div className={styles.strategyContainer}>
-            <p className={styles.strategyTitle}>Leverage</p>
+            <p className={styles.strategyTitle}>Leverage AR tokens</p>
             <div className={styles.strategiesList}>
               <div className={styles.tokenTitleContainer}>
                 <p className={styles.tokenTitle}>Type</p>
                 <p className={styles.tokenTitle}>Leverage token</p>
+                <p className={styles.tokenTitle}>Collateral token</p>
                 <p className={styles.tokenTitle}>
                   Max simple/recursive leverage
                 </p>
@@ -41,14 +42,16 @@ const Markets: React.FC = () => {
             </div>
           </div>
           <div className={styles.strategyContainer}>
-            <p className={styles.strategyTitle}>Fair Launches</p>
+            <p className={styles.strategyTitle}>
+              Deposit USDC/USDT into fair launches
+            </p>
             <div className={styles.strategiesList}>
               <div className={styles.tokenTitleContainer}>
                 <p className={styles.tokenTitle}>Collateral token</p>
                 <p className={styles.tokenTitle}>Borrow token</p>
                 <p className={styles.tokenTitle}>Available borrow token</p>
                 <p className={styles.tokenTitle}>Reward token</p>
-                <p className={styles.tokenTitle}>APY / reward ratio</p>
+                {/* <p className={styles.tokenTitle}>APY / reward ratio</p> */}
               </div>
               {(fairLaunchStrategies as FairLaunchStrategy[]).map(
                 (strategy) => (

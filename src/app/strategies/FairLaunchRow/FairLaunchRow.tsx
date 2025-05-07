@@ -7,6 +7,7 @@ import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
+import { useFairLaunchAPY } from "@/hooks/strategies/useFairLaunchAPY";
 
 interface FairLaunchRowProps {
   strategy: FairLaunchStrategy;
@@ -17,11 +18,16 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   strategy,
   prices,
 }) => {
-  const isLoadingStrategy = !strategy;
-
   const borrowTokenStats = useProtocolStats(
     strategy.borrowToken.ticker.toUpperCase(),
   );
+
+  let strategyAPY;
+  if (strategy.fairLaunchID) {
+    strategyAPY = useFairLaunchAPY(strategy.fairLaunchID, true).data;
+  } else {
+    strategyAPY = 0.016;
+  }
 
   const geckoId = tickerToGeckoMap[strategy.borrowToken.ticker.toUpperCase()];
   const borrowTokenPrice = new Quantity(0n, 12n).fromNumber(
@@ -111,18 +117,26 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
         </div>
 
         {/* APY Info */}
-        <div className={styles.aprInfo}>
+        {/* <div className={styles.aprInfo} style={{ width: "205px" }}>
           <div className={styles.aprValue}>
             <Image
-              src={`/icons/${strategy.apy >= 0 ? "APYStars" : "APRStars"}.svg`}
+              src={`/icons/APYStars.svg`}
               alt={`Stars icon`}
               width={10}
               height={10}
             />
-            <p className={styles.apr}>{strategy.apy.toFixed(2)}%</p>
+            {!strategyAPY ? (
+              <>
+                <SkeletonLoading style={{ width: "90px", height: "14px" }} />
+              </>
+            ) : (
+              <p className={styles.apr}>{strategyAPY.toLocaleString()}</p>
+            )}
           </div>
-          <p className={styles.aprLabel}>Total APY</p>
-        </div>
+          <p className={styles.aprLabel}>
+            {strategy.rewardToken.ticker} per 1 AO APY
+          </p>
+        </div> */}
       </div>
     </div>
   );

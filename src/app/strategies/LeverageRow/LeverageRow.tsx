@@ -17,7 +17,6 @@ export const LeverageRow: React.FC<LeverageRowRowProps> = ({
   leverage,
   prices,
 }) => {
-  const isLoadingLeverage = !leverage;
 
   const borrowTokenStats = useProtocolStats(
     leverage.borrowToken.ticker.toUpperCase(),

@@ -233,7 +233,7 @@ const APRInfo: React.FC<{
           <div className={styles.infoTextContainer}>
             <div className={styles.apyContainer}>
               <Image
-                src={"/icons/APYStars.svg"}
+                src={"./icons/APYStars.svg"}
                 alt={"Up arrow"}
                 width={13}
                 height={13}
@@ -257,7 +257,7 @@ const APRInfo: React.FC<{
           <div className={styles.infoTextContainer}>
             <div className={styles.apyContainer}>
               <Image
-                src={"/icons/APRStars.svg"}
+                src={"./icons/APRStars.svg"}
                 alt={"Down arrow"}
                 width={13}
                 height={13}

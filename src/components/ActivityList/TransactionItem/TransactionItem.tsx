@@ -86,7 +86,7 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
 
   const { display, action } = getTransactionInfo(tx.tags);
   const tokenTicker = getTokenTicker(tx.tags["token"]);
-  const activityIcon = `/tokens/${tokenTicker}.svg`;
+  const activityIcon = `./tokens/${tokenTicker}.svg`;
 
   const { data: resultData, isLoading: resultIsLoading } = useGetResult(
     tx.id,

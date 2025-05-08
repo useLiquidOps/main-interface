@@ -13,7 +13,7 @@ import { useBorrow } from "@/hooks/actions/useBorrow";
 import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
-import { getBaseDenomination } from "@/utils/getBaseDenomination";
+import { getBaseDenomination } from "@/utils/LiquidOps/getBaseDenomination";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 interface ActionTabProps {

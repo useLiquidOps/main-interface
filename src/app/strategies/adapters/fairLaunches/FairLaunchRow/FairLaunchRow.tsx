@@ -1,7 +1,7 @@
 import styles from "./FairLaunchRow.module.css";
 import Image from "next/image";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
-import { FairLaunchStrategy } from "../adapters/fairLaunches/fairLaunch";
+import { FairLaunchStrategy } from "../getFairlaunchAPY";
 import { Prices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
@@ -18,65 +18,68 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   strategy,
   prices,
 }) => {
-
-
-const rewardTokenGeckoID = tickerToGeckoMap[strategy.rewardToken.ticker.toUpperCase()];
-let rewardTokenPrice
-if (rewardTokenGeckoID) {
-  rewardTokenPrice = prices?.[rewardTokenGeckoID]?.usd ?? 0
-} else {
-  rewardTokenPrice = false
-}
-
-  const AOPerAR = 0.016
-
-  // deposit the USDC/USDT tokens
-
+  // APY base, deposit the USDC/USDT tokens
   const depositTokenStats = useProtocolStats(
     strategy.depositToken.ticker.toUpperCase(),
   );
+  const baseAPY = depositTokenStats.data?.supplyAPR;
 
-  const depositTokensAPY = depositTokenStats.data?.supplyAPR
+  const maxBorrowPercent =
+    Number(depositTokenStats.data?.info.collateralFactor) / 100;
 
-  // now borrow qAR/wAR and find the reward APY and borrow APY cost
+  // APY reward, find the reward for borrowing ar then earning AO or fair launch tokens
 
+  // check if reward has a usd value or is a token reward only
+  const rewardTokenGeckoID =
+    tickerToGeckoMap[strategy.rewardToken.ticker.toUpperCase()];
 
-  const arTokenGeckoID = tickerToGeckoMap[strategy.borrowToken.ticker.toUpperCase()];
+  let rewardTokenPrice;
+  if (!rewardTokenGeckoID) {
+    rewardTokenPrice = false;
+  } else {
+    rewardTokenPrice = prices?.[rewardTokenGeckoID]?.usd ?? 0;
+  }
+
+  // check if it is a fair launch reward or AO reward
+  const AOTokensPerAR = 0.016;
+  let strategyAPY;
+  if (strategy.rewardToken.ticker === "ARIO") {
+    // fair launch tokens with a price
+  } else if (strategy.fairLaunchID) {
+    strategyAPY = useFairLaunchAPY(strategy.fairLaunchID).data;
+  } else if (strategy.rewardToken.ticker === "AO") {
+    strategyAPY = AOTokensPerAR;
+  }
+
+  const arTokenGeckoID =
+    tickerToGeckoMap[strategy.borrowToken.ticker.toUpperCase()];
   const arTokenPrice = new Quantity(0n, 12n).fromNumber(
     prices?.[arTokenGeckoID]?.usd ?? 0,
   );
 
-  const arBorrowAmountUSD = 100
-  const arBorrowAmount = arBorrowAmountUSD / arTokenPrice.toNumber()
+  const arBorrowAmountUSD = 100;
+  const arBorrowAmount = arBorrowAmountUSD / arTokenPrice.toNumber();
 
-  const maxRewardAmount = arBorrowAmount * AOPerAR
+  const maxRewardAmount = arBorrowAmount * AOTokensPerAR;
 
   if (maxRewardAmountUSD !== false) {
-    
   }
 
-  const maxRewardAmountUSD = maxRewardAmount * rewardTokenPrice
+  const maxRewardAmountUSD = maxRewardAmount * rewardTokenPrice;
 
-  const maxARBorrowPercentage = Number(depositTokenStats.data?.info.collateralFactor) / 100
-  const rewardAPY = ((maxRewardAmountUSD / arBorrowAmountUSD) * 100) * maxARBorrowPercentage
+  const rewardAPY =
+    (maxRewardAmountUSD / arBorrowAmountUSD) * 100 * maxBorrowPercent;
+
+  // find borrow APR
 
   const arTokenStats = useProtocolStats(
     strategy.borrowToken.ticker.toUpperCase(),
   );
+  const totalBorrowArAPR = arTokenStats.data?.borrowAPR * maxBorrowPercent;
 
-    // @ts-ignore
-  const totalBorrowArAPR = (arTokenStats.data?.borrowAPR * maxARBorrowPercentage)
-  // @ts-ignore
-  const maxAPY = (depositTokensAPY + rewardAPY) - totalBorrowArAPR
+  // final APY
 
-  let strategyAPY;
-  if (strategy.fairLaunchID) {
-    strategyAPY = useFairLaunchAPY(strategy.fairLaunchID).data;
-  } else if (strategy.rewardToken.ticker === "AO") {
-    strategyAPY = AOPerAR;
-  }
-
-
+  const maxAPY = baseAPY + rewardAPY - totalBorrowArAPR;
 
   const isLoadingArTokenStats = arTokenStats.isLoading || !arTokenStats.data;
 
@@ -133,10 +136,7 @@ if (rewardTokenGeckoID) {
               <p className={styles.metricLabel}>
                 $
                 {formatTMB(
-                  Quantity.__mul(
-                    arTokenStats.data.unLent,
-                    arTokenPrice,
-                  ),
+                  Quantity.__mul(arTokenStats.data.unLent, arTokenPrice),
                 )}
               </p>
             </>
@@ -162,7 +162,7 @@ if (rewardTokenGeckoID) {
 
         {/* APY Info */}
         <div className={styles.aprInfo} style={{ width: "205px" }}>
-          {!strategyAPY ? (
+          {!maxAPY ? (
             <>
               <SkeletonLoading style={{ width: "90px", height: "14px" }} />
               <SkeletonLoading style={{ width: "90px", height: "13px" }} />
@@ -179,7 +179,8 @@ if (rewardTokenGeckoID) {
                 <p className={styles.apr}>{maxAPY.toFixed(2)}%</p>
               </div>
               <p className={styles.aprLabel}>
-              {maxRewardAmount.toFixed(2)} {strategy.rewardToken.ticker} per {arBorrowAmountUSD} {strategy.depositToken.ticker}
+                {maxRewardAmount.toFixed(2)} {strategy.rewardToken.ticker} per{" "}
+                {arBorrowAmountUSD} {strategy.depositToken.ticker}
               </p>
             </>
           )}

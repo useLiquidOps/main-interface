@@ -1,7 +1,7 @@
 import styles from "./LeverageRow.module.css";
 import Image from "next/image";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
-import { LeverageStrategy } from "../adapters/leverage/leverage";
+import { LeverageStrategy } from "../leverage";
 import { Prices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";

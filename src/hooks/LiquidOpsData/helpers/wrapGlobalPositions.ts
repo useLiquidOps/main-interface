@@ -5,7 +5,7 @@ import {
   TokenPositionResult,
 } from "../useGlobalPosition";
 import { wrapQuantity, unWrapQuantity } from "@/utils/caches/cacheUtils";
-import { getBaseDenomination } from "@/utils/getBaseDenomination";
+import { getBaseDenomination } from "@/utils/LiquidOps/getBaseDenomination";
 
 interface TokenPosition {
   borrowBalance: bigint;

@@ -6,7 +6,7 @@ import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import PieChart from "@/components/PieChat/PieChart";
-import { TOKEN_COLORS } from "@/utils/tokenDetails";
+import { TOKEN_COLORS } from "@/utils/tokenMappings";
 
 interface Token {
   ticker: string;

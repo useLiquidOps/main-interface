@@ -3,13 +3,13 @@ import styles from "./strategies.module.css";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import { FairLaunchStrategy } from "./adapters/fairLaunches/fairLaunch";
-import { FairLaunchRow } from "./FairLaunchRow/FairLaunchRow";
+import { FairLaunchStrategy } from "./adapters/fairLaunches/getFairlaunchAPY";
+import { FairLaunchRow } from "./adapters/fairLaunches/FairLaunchRow/FairLaunchRow";
 import { useFairLaunches } from "@/hooks/strategies/useFairLaunches";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useLeverage } from "@/hooks/strategies/useLeverage";
 import { LeverageStrategy } from "./adapters/leverage/leverage";
-import { LeverageRow } from "./LeverageRow/LeverageRow";
+import { LeverageRow } from "./adapters/leverage/LeverageRow/LeverageRow";
 
 const Markets: React.FC = () => {
   const { data: fairLaunchStrategies = [] } = useFairLaunches(true);

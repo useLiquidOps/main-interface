@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { LiquidOpsClient } from "@/utils/LiquidOps";
+import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { useWalletAddress } from "../data/useWalletAddress";
 import { GetTransactions } from "liquidops";
 import { useSupportedTokens } from "../data/useSupportedTokens";

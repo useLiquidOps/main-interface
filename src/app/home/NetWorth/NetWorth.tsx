@@ -6,11 +6,11 @@ import { useGlobalPosition } from "@/hooks/LiquidOpsData/useGlobalPosition";
 import { Quantity } from "ao-tokens";
 import { formatTMB } from "@/components/utils/utils";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
-import { TOKEN_COLORS } from "@/utils/tokenDetails";
+import { TOKEN_COLORS } from "@/utils/tokenMappings";
 import { GlobalPositionResult } from "@/hooks/LiquidOpsData/useGlobalPosition";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/utils/tokenMappings";
-import { getBaseDenomination } from "@/utils/getBaseDenomination";
+import { getBaseDenomination } from "@/utils/LiquidOps/getBaseDenomination";
 
 const NetWorth: React.FC = () => {
   const { data: tokenPrices } = usePrices();

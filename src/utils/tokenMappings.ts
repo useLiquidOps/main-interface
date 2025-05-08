@@ -4,12 +4,12 @@ export const defiLlamaIds: Record<string, string> = {
 };
 
 export const tickerToGeckoMap: Record<string, string> = {
-  // listed
+  // listed on LiquidOps
   QAR: "arweave",
   WUSDC: "usd-coin",
   WAR: "arweave",
   WUSDT: "tether",
-  // other
+  // fair launches
   AO: "ao-computer",
   ARIO: "ar-io-network",
 };
@@ -25,3 +25,11 @@ export const SUPPORTED_TOKENS = [
 
 export const gekoURL =
   "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,&vs_currencies=usd";
+
+// Token hex color mapping for visualization
+export const TOKEN_COLORS: Record<string, string> = {
+  WAR: "#ec406d",
+  WUSDC: "#2775ca",
+  QAR: "#5f80fe",
+  WUSDT: "#26A17B",
+};

@@ -3,12 +3,12 @@ import styles from "./strategies.module.css";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import { FairLaunchStrategy } from "./adapters/fairLaunch";
+import { FairLaunchStrategy } from "./adapters/fairLaunches/fairLaunch";
 import { FairLaunchRow } from "./FairLaunchRow/FairLaunchRow";
 import { useFairLaunches } from "@/hooks/strategies/useFairLaunches";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useLeverage } from "@/hooks/strategies/useLeverage";
-import { LeverageStrategy } from "./adapters/leverage";
+import { LeverageStrategy } from "./adapters/leverage/leverage";
 import { LeverageRow } from "./LeverageRow/LeverageRow";
 
 const Markets: React.FC = () => {
@@ -36,9 +36,9 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Available</p>
                 <p className={styles.tokenTitle}>APY</p>
               </div>
-              {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
+              {/* {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
                 <LeverageRow leverage={leverage} prices={prices} />
-              ))}
+              ))} */}
             </div>
           </div>
           <div className={styles.strategyContainer}>

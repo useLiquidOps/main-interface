@@ -1,7 +1,7 @@
 import styles from "./FairLaunchRow.module.css";
 import Image from "next/image";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
-import { FairLaunchStrategy } from "../adapters/fairLaunch";
+import { FairLaunchStrategy } from "../adapters/fairLaunches/fairLaunch";
 import { Prices } from "@/hooks/data/useTokenPrice";
 import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
@@ -24,6 +24,8 @@ const rewardTokenGeckoID = tickerToGeckoMap[strategy.rewardToken.ticker.toUpperC
 let rewardTokenPrice
 if (rewardTokenGeckoID) {
   rewardTokenPrice = prices?.[rewardTokenGeckoID]?.usd ?? 0
+} else {
+  rewardTokenPrice = false
 }
 
   const AOPerAR = 0.016
@@ -38,7 +40,6 @@ if (rewardTokenGeckoID) {
 
   // now borrow qAR/wAR and find the reward APY and borrow APY cost
 
-  const maxARBorrowPercentage = Number(depositTokenStats.data?.info.collateralFactor) / 100
 
   const arTokenGeckoID = tickerToGeckoMap[strategy.borrowToken.ticker.toUpperCase()];
   const arTokenPrice = new Quantity(0n, 12n).fromNumber(
@@ -49,8 +50,14 @@ if (rewardTokenGeckoID) {
   const arBorrowAmount = arBorrowAmountUSD / arTokenPrice.toNumber()
 
   const maxRewardAmount = arBorrowAmount * AOPerAR
+
+  if (maxRewardAmountUSD !== false) {
+    
+  }
+
   const maxRewardAmountUSD = maxRewardAmount * rewardTokenPrice
 
+  const maxARBorrowPercentage = Number(depositTokenStats.data?.info.collateralFactor) / 100
   const rewardAPY = ((maxRewardAmountUSD / arBorrowAmountUSD) * 100) * maxARBorrowPercentage
 
   const arTokenStats = useProtocolStats(
@@ -60,7 +67,7 @@ if (rewardTokenGeckoID) {
     // @ts-ignore
   const totalBorrowArAPR = (arTokenStats.data?.borrowAPR * maxARBorrowPercentage)
   // @ts-ignore
-  const maxAPY = (depositTokensAPY + rewardAPY) - borrowArAPR
+  const maxAPY = (depositTokensAPY + rewardAPY) - totalBorrowArAPR
 
   let strategyAPY;
   if (strategy.fairLaunchID) {

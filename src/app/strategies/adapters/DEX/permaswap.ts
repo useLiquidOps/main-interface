@@ -1,4 +1,4 @@
-import { TokenDetails, tokenMap } from "../tokens";
+import { TokenDetails, tokenMap } from "../../tokens";
 
 export interface PermaswapStrategy {
   depositToken: TokenDetails;

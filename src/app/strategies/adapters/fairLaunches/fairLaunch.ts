@@ -1,4 +1,4 @@
-import { TokenDetails, tokenMap } from "../tokens";
+import { TokenDetails, tokenMap } from "../../tokens";
 import { Quantity } from "ao-tokens";
 import { getData } from "@/utils/AO/getData";
 

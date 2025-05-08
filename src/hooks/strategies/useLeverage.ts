@@ -3,7 +3,7 @@ import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import {
   leverageAdapter,
   LeverageStrategy,
-} from "@/app/strategies/adapters/leverage";
+} from "@/app/strategies/adapters/leverage/leverage";
 
 export function useLeverage(overrideCache?: boolean) {
   const DATA_KEY = `leverage-strategies` as const;

@@ -44,36 +44,32 @@ export async function getFairlaunchAPY(fairLaunchID: string) {
   );
 
   // get total distribution ticks
-  const totalDistrubutionTickers = fairLaunchData.find(
+  const totalDistrubedTokens = fairLaunchData.find(
     // @ts-ignore
-    (tag) => tag.name === "Total-Distribution-Ticks",
+    (tag) => tag.name === "Distributed-Quantity",
   ).value;
 
-    // get current distribution tick
-    const currentDistrubutionTick = fairLaunchData.find(
-      // @ts-ignore
-      (tag) => tag.name === "Distribution-Tick",
-    ).value;
-  
-
+  // get current distribution tick
+  const currentDistrubutionTick = fairLaunchData.find(
+    // @ts-ignore
+    (tag) => tag.name === "Distribution-Tick",
+  ).value;
 
   // get total AO given to the project so far
   const totalAOGiven = new Quantity(
     projectDelegatedAO.combined[fairLaunchID],
-    BigInt(projectDenomination),
+    BigInt(12),
   );
 
-  // // get project estimated AO day cycle 
-  // const estimatedDayCycle = totalAOGiven.toNumber() / currentDistrubutionTick
-  // console.log('estimatedDayCycle', fairLaunchID,estimatedDayCycle)
-
+  // get project estimated AO day cycle
+  const estimatedDayCycle = totalAOGiven.toNumber() / currentDistrubutionTick;
+  console.log("estimatedDayCycle", fairLaunchID, estimatedDayCycle);
 
   const tokenPerAOInTotal =
-    totalTokenSupplyFairLaunchedScaled.toNumber() / totalAOGiven.toNumber();
+    totalDistrubedTokens.toNumber() / totalAOGiven.toNumber();
 
-  const tokenPerAOPerTick = tokenPerAOInTotal / totalDistrubutionTickers;
-  const tickToYearRatio = totalDistrubutionTickers / 365;
-  const tokenPerAOPerYear = tokenPerAOPerTick * tickToYearRatio;
+  const tokenPerAOPerTick = tokenPerAOInTotal / estimatedDayCycle;
+  const tokenPerAOPerYear = tokenPerAOPerTick * 365;
 
   return tokenPerAOPerYear;
 }

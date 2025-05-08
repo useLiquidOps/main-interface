@@ -4,10 +4,14 @@ export const defiLlamaIds: Record<string, string> = {
 };
 
 export const tickerToGeckoMap: Record<string, string> = {
+  // listed
   QAR: "arweave",
   WUSDC: "usd-coin",
   WAR: "arweave",
   WUSDT: "tether",
+  // other
+  AO: "ao-computer",
+  ARIO: "ar-io-network",
 };
 
 export const SUPPORTED_TOKENS = [

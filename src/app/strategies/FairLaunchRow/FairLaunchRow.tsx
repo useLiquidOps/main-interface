@@ -18,23 +18,60 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   strategy,
   prices,
 }) => {
-  const borrowTokenStats = useProtocolStats(
+
+
+const rewardTokenGeckoID = tickerToGeckoMap[strategy.rewardToken.ticker.toUpperCase()];
+let rewardTokenPrice
+if (rewardTokenGeckoID) {
+  rewardTokenPrice = prices?.[rewardTokenGeckoID]?.usd ?? 0
+}
+
+  const AOPerAR = 0.016
+
+  // deposit the USDC/USDT tokens
+
+  const depositTokenStats = useProtocolStats(
+    strategy.depositToken.ticker.toUpperCase(),
+  );
+
+  const depositTokensAPY = depositTokenStats.data?.supplyAPR
+
+  // now borrow qAR/wAR and find the reward APY and borrow APY cost
+
+  const maxARBorrowPercentage = Number(depositTokenStats.data?.info.collateralFactor) / 100
+
+  const arTokenGeckoID = tickerToGeckoMap[strategy.borrowToken.ticker.toUpperCase()];
+  const arTokenPrice = new Quantity(0n, 12n).fromNumber(
+    prices?.[arTokenGeckoID]?.usd ?? 0,
+  );
+
+  const arBorrowAmountUSD = 100
+  const arBorrowAmount = arBorrowAmountUSD / arTokenPrice.toNumber()
+
+  const maxRewardAmount = arBorrowAmount * AOPerAR
+  const maxRewardAmountUSD = maxRewardAmount * rewardTokenPrice
+
+  const rewardAPY = ((maxRewardAmountUSD / arBorrowAmountUSD) * 100) * maxARBorrowPercentage
+
+  const arTokenStats = useProtocolStats(
     strategy.borrowToken.ticker.toUpperCase(),
   );
 
+    // @ts-ignore
+  const totalBorrowArAPR = (arTokenStats.data?.borrowAPR * maxARBorrowPercentage)
+  // @ts-ignore
+  const maxAPY = (depositTokensAPY + rewardAPY) - borrowArAPR
+
   let strategyAPY;
   if (strategy.fairLaunchID) {
-    strategyAPY = useFairLaunchAPY(strategy.fairLaunchID, true).data;
-  } else {
-    strategyAPY = 0.016;
+    strategyAPY = useFairLaunchAPY(strategy.fairLaunchID).data;
+  } else if (strategy.rewardToken.ticker === "AO") {
+    strategyAPY = AOPerAR;
   }
 
-  const geckoId = tickerToGeckoMap[strategy.borrowToken.ticker.toUpperCase()];
-  const borrowTokenPrice = new Quantity(0n, 12n).fromNumber(
-    prices?.[geckoId]?.usd ?? 0,
-  );
 
-  const isLoadingStats = borrowTokenStats.isLoading || !borrowTokenStats.data;
+
+  const isLoadingArTokenStats = arTokenStats.isLoading || !arTokenStats.data;
 
   return (
     <div className={styles.fairLaunchRowWrapper}>
@@ -75,7 +112,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
 
         {/* Available */}
         <div className={styles.metricBox}>
-          {isLoadingStats ? (
+          {isLoadingArTokenStats ? (
             <>
               <SkeletonLoading style={{ width: "90px", height: "14px" }} />
               <SkeletonLoading style={{ width: "60px", height: "13px" }} />
@@ -83,15 +120,15 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
           ) : (
             <>
               <p className={styles.metricValue}>
-                {formatTMB(borrowTokenStats.data.unLent)}{" "}
+                {formatTMB(arTokenStats.data.unLent)}{" "}
                 {strategy.borrowToken.ticker}
               </p>
               <p className={styles.metricLabel}>
                 $
                 {formatTMB(
                   Quantity.__mul(
-                    borrowTokenStats.data.unLent,
-                    borrowTokenPrice,
+                    arTokenStats.data.unLent,
+                    arTokenPrice,
                   ),
                 )}
               </p>
@@ -117,26 +154,29 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
         </div>
 
         {/* APY Info */}
-        {/* <div className={styles.aprInfo} style={{ width: "205px" }}>
-          <div className={styles.aprValue}>
-            <Image
-              src={`/icons/APYStars.svg`}
-              alt={`Stars icon`}
-              width={10}
-              height={10}
-            />
-            {!strategyAPY ? (
-              <>
-                <SkeletonLoading style={{ width: "90px", height: "14px" }} />
-              </>
-            ) : (
-              <p className={styles.apr}>{strategyAPY.toLocaleString()}</p>
-            )}
-          </div>
-          <p className={styles.aprLabel}>
-            {strategy.rewardToken.ticker} per 1 AO APY
-          </p>
-        </div> */}
+        <div className={styles.aprInfo} style={{ width: "205px" }}>
+          {!strategyAPY ? (
+            <>
+              <SkeletonLoading style={{ width: "90px", height: "14px" }} />
+              <SkeletonLoading style={{ width: "90px", height: "13px" }} />
+            </>
+          ) : (
+            <>
+              <div className={styles.aprValue}>
+                <Image
+                  src={`/icons/APYStars.svg`}
+                  alt={`Stars icon`}
+                  width={10}
+                  height={10}
+                />
+                <p className={styles.apr}>{maxAPY.toFixed(2)}%</p>
+              </div>
+              <p className={styles.aprLabel}>
+              {maxRewardAmount.toFixed(2)} {strategy.rewardToken.ticker} per {arBorrowAmountUSD} {strategy.depositToken.ticker}
+              </p>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

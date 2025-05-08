@@ -24,8 +24,6 @@ interface InputBoxProps {
   bypassBalanceCheck?: boolean;
 }
 
-
-
 const useInputValidation = (
   walletBalance: Quantity,
   bypassBalanceCheck = false,

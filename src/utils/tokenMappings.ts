@@ -22,10 +22,9 @@ export const SUPPORTED_TOKENS = [
 export const gekoURL =
   "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,&vs_currencies=usd";
 
-
-  export const TOKEN_DECIMAL_PLACES: {[key: string]: number} = {
-    qAR: 3,
-    wAR: 3,
-    wUSDC: 2,
-    wUSDT: 2,
-  };
+export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
+  qAR: 3,
+  wAR: 3,
+  wUSDC: 2,
+  wUSDT: 2,
+};

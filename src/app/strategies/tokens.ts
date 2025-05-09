@@ -1,29 +1,34 @@
 export interface TokenDetails {
   name: string;
   ticker: string;
-  fairLaunchID?: string;
+  fairLaunchID: string;
 }
 
 const tokens: TokenDetails[] = [
   {
     name: "USD Circle",
     ticker: "wUSDC",
+    fairLaunchID: "",
   },
   {
     name: "USD Tether",
     ticker: "wUSDT",
+    fairLaunchID: "",
   },
   {
     name: "Quantum Arweave",
     ticker: "qAR",
+    fairLaunchID: "",
   },
   {
     name: "Wrapped Arweave",
     ticker: "wAR",
+    fairLaunchID: "",
   },
   {
     name: "AO",
     ticker: "AO",
+    fairLaunchID: "ao",
   },
   // fair launches
   {

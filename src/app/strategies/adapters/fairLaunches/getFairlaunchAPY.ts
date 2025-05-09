@@ -6,10 +6,16 @@ export interface FairLaunchStrategy {
   depositToken: TokenDetails;
   borrowToken: TokenDetails;
   rewardToken: TokenDetails;
-  fairLaunchID?: string;
+  fairLaunchID: string;
 }
 
+export const AOPerAR = 0.016;
+
 export async function getFairlaunchAPY(fairLaunchID: string) {
+  if (fairLaunchID === "ao") {
+    return AOPerAR;
+  }
+
   // get total AO delegated so far
   const aoWatcherRes = await getData({
     Target: "NRP0xtzeV9MHgwLmgD254erUB7mUjMBhBkYkNYkbNEo",
@@ -63,7 +69,7 @@ export async function getFairlaunchAPY(fairLaunchID: string) {
 
   // get project estimated AO day cycle
   const estimatedDayCycle = totalAOGiven.toNumber() / currentDistrubutionTick;
-  console.log("estimatedDayCycle", fairLaunchID, estimatedDayCycle);
+  // console.log("estimatedDayCycle", fairLaunchID, estimatedDayCycle);
 
   const tokenPerAOInTotal =
     totalDistrubedTokens.toNumber() / totalAOGiven.toNumber();
@@ -81,6 +87,7 @@ export const fairLaunchStrategies: FairLaunchStrategy[] = [
     depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["AO"],
+    fairLaunchID: tokenMap["AO"].fairLaunchID,
   },
   {
     depositToken: tokenMap["wUSDC"],
@@ -123,6 +130,7 @@ export const fairLaunchStrategies: FairLaunchStrategy[] = [
     depositToken: tokenMap["wUSDT"],
     borrowToken: tokenMap["qAR"],
     rewardToken: tokenMap["AO"],
+    fairLaunchID: tokenMap["AO"].fairLaunchID,
   },
   {
     depositToken: tokenMap["wUSDT"],
@@ -166,6 +174,7 @@ export const fairLaunchStrategies: FairLaunchStrategy[] = [
     depositToken: tokenMap["wUSDC"],
     borrowToken: tokenMap["wAR"],
     rewardToken: tokenMap["AO"],
+    fairLaunchID: tokenMap["AO"].fairLaunchID,
   },
   {
     depositToken: tokenMap["wUSDC"],
@@ -208,6 +217,7 @@ export const fairLaunchStrategies: FairLaunchStrategy[] = [
     depositToken: tokenMap["wUSDT"],
     borrowToken: tokenMap["wAR"],
     rewardToken: tokenMap["AO"],
+    fairLaunchID: tokenMap["AO"].fairLaunchID,
   },
   {
     depositToken: tokenMap["wUSDT"],

@@ -23,9 +23,6 @@ export const SUPPORTED_TOKENS = [
 
 // NOTE: there is also a SUPPORTED_TOKENS in next-sitemap-config.js
 
-export const gekoURL =
-  "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,&vs_currencies=usd";
-
 // Token hex color mapping for visualization
 export const TOKEN_COLORS: Record<string, string> = {
   WAR: "#ec406d",

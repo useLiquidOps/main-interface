@@ -81,7 +81,6 @@ async function deploy() {
       ...manifest.paths,
       // general
       "404": manifest.paths["404.html"],
-      "index": manifest.paths["index.html"],
       "markets": manifest.paths["markets.html"],
       "strategies": manifest.paths["strategies.html"],
       // tokens

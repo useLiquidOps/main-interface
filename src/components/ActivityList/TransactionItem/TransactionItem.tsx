@@ -1,5 +1,4 @@
 import { formatTMB } from "@/components/utils/utils";
-import { tokens } from "liquidops";
 import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useGetResult } from "@/hooks/LiquidOpsData/useGetResult";
@@ -38,22 +37,18 @@ const STATUS_ICONS = {
 export const TransactionItem = ({ tx }: { tx: Transaction }) => {
   const { data: supportedTokens } = useSupportedTokens();
 
-  const getTokenDenomination = (tokenAddress: string) => {
-    const token = supportedTokens?.find((t) => {
-      const ticker = Object.entries(tokens)
-        .find(([_, addr]) => addr === tokenAddress)?.[0]
-        ?.toLowerCase();
-      return ticker === t.ticker.toLowerCase();
-    });
+  const getTokenDenomination = (tokenAddress: string): bigint => {
+    const token = supportedTokens?.find(
+      (token) => token.address.toLowerCase() === tokenAddress.toLowerCase()
+    );
+    
     return token?.denomination ?? 0n;
   };
 
   const getTokenTicker = (tokenAddress: string) => {
-    return (
-      Object.entries(tokens)
-        .find(([_, address]) => address === tokenAddress)?.[0]
-        ?.toLowerCase() || "unknown"
-    );
+    const token = supportedTokens?.find(token => token.address === tokenAddress);
+  
+  return token ? token.ticker : "unknown";
   };
 
   const getTransactionInfo = (tags: Transaction["tags"]) => {

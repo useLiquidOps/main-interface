@@ -104,7 +104,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
               <p className={styles.title}>Account</p>
               <button className={styles.close} onClick={onClose}>
                 <Image
-                  src="/icons/close.svg"
+                  src="./icons/close.svg"
                   height={9}
                   width={9}
                   alt="Close"

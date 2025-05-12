@@ -86,7 +86,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
           {mode === "supply" ? "Supply" : "Borrow"}
         </p>
         <button className={styles.close} onClick={onClose}>
-          <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
+          <Image src="./icons/close.svg" height={9} width={9} alt="Close" />
         </button>
       </div>
 

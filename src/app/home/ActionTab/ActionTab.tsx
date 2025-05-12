@@ -58,12 +58,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
 
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
-    setInputValue(
-      maxAmount.toLocaleString("en-US", {
-        maximumFractionDigits: 8,
-        useGrouping: true,
-      }),
-    );
+    setInputValue(maxAmount.toString());
   };
 
   const handleSubmit = () => {

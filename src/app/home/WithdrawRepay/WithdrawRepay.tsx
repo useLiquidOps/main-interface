@@ -6,7 +6,6 @@ import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
 import InputBox from "@/components/InputBox/InputBox";
 import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 import Image from "next/image";
-import { formatMaxAmount } from "@/components/utils/utils";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useLend } from "@/hooks/actions/useLend";
@@ -73,7 +72,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
-    setInputValue(formatMaxAmount(maxAmount));
+    setInputValue(maxAmount.toString());
   };
 
   const handlePercentageClick = (percentage: number) => {
@@ -82,7 +81,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
       Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),
       new Quantity(0n, 12n).fromNumber(100),
     );
-    setInputValue(formatMaxAmount(amount));
+    setInputValue(amount.toString());
     setSelectedPercentage(percentage);
   };
 
@@ -103,7 +102,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   };
 
   const handleInterestClick = () => {
-    setInputValue(formatMaxAmount(interestOwed));
+    setInputValue(interestOwed.toString());
     setSelectedPercentage(null);
   };
 

@@ -6,6 +6,7 @@ import { formatInputNumber, calculateUsdValue } from "../utils/utils";
 import { formatTMB } from "../utils/utils";
 import { Quantity } from "ao-tokens";
 import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";
+import { TOKEN_DECIMAL_PLACES } from "@/utils/tokenMappings";
 
 interface InputBoxProps {
   inputValue: string;
@@ -22,17 +23,6 @@ interface InputBoxProps {
   liquidationDiscount?: number;
   bypassBalanceCheck?: boolean;
 }
-
-interface TokenConfig {
-  [key: string]: number;
-  qAR: number;
-  wUSDC: number;
-}
-
-const DECIMAL_PLACES: TokenConfig = {
-  qAR: 3,
-  wUSDC: 2,
-};
 
 const useInputValidation = (
   walletBalance: Quantity,
@@ -55,7 +45,7 @@ const useInputValidation = (
 const useTokenFormatting = (ticker: string) => {
   const formatTokenValue = (value: Quantity, isLiquidationMode = false) => {
     if (value.raw === 0n && isLiquidationMode) return "0";
-    const decimals = DECIMAL_PLACES[ticker] || 2;
+    const decimals = TOKEN_DECIMAL_PLACES[ticker] || 2;
     return value.toLocaleString("en-US", {
       maximumFractionDigits: decimals,
       minimumFractionDigits: decimals,

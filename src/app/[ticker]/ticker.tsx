@@ -63,7 +63,7 @@ const TickerContent = ({
           <div className={styles.titleWrapper}>
             <Link href="/" className={styles.titleLink}>
               <Image
-                src="/icons/back.svg"
+                src="./icons/back.svg"
                 alt="Back"
                 width={24}
                 height={24}

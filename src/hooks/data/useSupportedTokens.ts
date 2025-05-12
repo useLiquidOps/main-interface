@@ -16,7 +16,7 @@ export function useSupportedTokens() {
     queryKey: ["supported-tokens"],
     queryFn: (): SupportedToken[] => {
       return Object.entries(tokenData).map(([_, data]) => ({
-        icon: `./tokens/${data.ticker}.svg`,
+        icon: `./tokens/${data.cleanTicker}.svg`,
         name: data.name,
         ticker: data.cleanTicker,
         denomination: data.denomination,

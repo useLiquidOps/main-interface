@@ -44,7 +44,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
               <p className={styles.modalTitle}>Select wallet</p>
               <button className={styles.closeButton} onClick={onClose}>
                 <Image
-                  src="/icons/close.svg"
+                  src="/icons/close-icon.svg"
                   height={9}
                   width={9}
                   alt="Close"

@@ -57,7 +57,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
             <div className={styles.closeContainer}>
               <button className={styles.closeButton} onClick={onClose}>
                 <Image
-                  src="/icons/close.svg"
+                  src="/icons/close-icon.svg"
                   height={9}
                   width={9}
                   alt="Close"

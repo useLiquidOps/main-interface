@@ -23,7 +23,7 @@ export function useSupportedTokens() {
         collateralEnabled: data.collateralEnabled,
         baseDenomination: data.baseDenomination,
         address: data.address,
-        oAddress: data.oAddress
+        oAddress: data.oAddress,
       }));
     },
     staleTime: 5 * 60 * 1000,

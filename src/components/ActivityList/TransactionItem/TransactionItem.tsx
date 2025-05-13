@@ -39,16 +39,18 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
 
   const getTokenDenomination = (tokenAddress: string): bigint => {
     const token = supportedTokens?.find(
-      (token) => token.address.toLowerCase() === tokenAddress.toLowerCase()
+      (token) => token.address.toLowerCase() === tokenAddress.toLowerCase(),
     );
-    
+
     return token?.denomination ?? 0n;
   };
 
   const getTokenTicker = (tokenAddress: string) => {
-    const token = supportedTokens?.find(token => token.address === tokenAddress);
-  
-  return token ? token.ticker : "unknown";
+    const token = supportedTokens?.find(
+      (token) => token.address === tokenAddress,
+    );
+
+    return token ? token.ticker : "unknown";
   };
 
   const getTransactionInfo = (tags: Transaction["tags"]) => {

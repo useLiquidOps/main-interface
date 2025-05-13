@@ -59,8 +59,16 @@ const OtherYield: React.FC = () => {
             </div>
           </div>
           <div className={styles.yieldTitleContainer}>
-            <p className={styles.yieldTitle}>Arweave AO airdrop</p>
-            <p className={styles.tokenYield}>+{AOPerAR.APY.toFixed(2)}%</p>
+            <p className={styles.yieldTitle}>AO airdrop</p>
+            <div className={styles.tokenYield}>
+              <Image
+                src={`/icons/APYStars.svg`}
+                alt={`Stars icon`}
+                width={10}
+                height={10}
+              />
+              <p>{AOPerAR.APY.toFixed(2)}% APY</p>
+            </div>
           </div>
         </Link>
 
@@ -98,8 +106,16 @@ const OtherYield: React.FC = () => {
             </div>
           </div>
           <div className={styles.yieldTitleContainer}>
-            <p className={styles.yieldTitle}>stETH AO pre-bridge</p>
-            <p className={styles.tokenYield}>+{AOPerETH.APY.toFixed(2)}%</p>
+            <p className={styles.yieldTitle}>AO pre-bridge</p>
+            <div className={styles.tokenYield}>
+              <Image
+                src={`/icons/APYStars.svg`}
+                alt={`Stars icon`}
+                width={10}
+                height={10}
+              />
+              <p>{AOPerETH.APY.toFixed(2)}% APY</p>
+            </div>
           </div>
         </Link>
 
@@ -137,8 +153,16 @@ const OtherYield: React.FC = () => {
             </div>
           </div>
           <div className={styles.yieldTitleContainer}>
-            <p className={styles.yieldTitle}>DAI AO pre-bridge</p>
-            <p className={styles.tokenYield}>+{AOPerDAI.APY.toFixed(2)}%</p>
+            <p className={styles.yieldTitle}>AO pre-bridge</p>
+            <div className={styles.tokenYield}>
+              <Image
+                src={`/icons/APYStars.svg`}
+                alt={`Stars icon`}
+                width={10}
+                height={10}
+              />
+              <p>{AOPerDAI.APY.toFixed(2)}% APY</p>
+            </div>
           </div>
         </Link>
       </div>

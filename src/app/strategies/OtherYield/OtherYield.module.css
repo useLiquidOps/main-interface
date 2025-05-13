@@ -28,7 +28,7 @@
   padding: 24px;
   border-radius: 24px;
   flex-direction: column;
-  min-width: 225px;
+  min-width: 220px;
 }
 
 .detailsContainer {
@@ -71,7 +71,14 @@
 }
 
 .tokenYield {
-  color: var(--APY-green);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.tokenYield > p {
+  color: var(--primary-ultramarine);
   font-weight: 500;
   font-size: 12px;
 }

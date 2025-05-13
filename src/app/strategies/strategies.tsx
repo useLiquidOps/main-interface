@@ -10,7 +10,7 @@ import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useLeverage } from "@/hooks/strategies/useLeverage";
 import { LeverageStrategy } from "./adapters/leverage";
 import { LeverageRow } from "./LeverageRow/LeverageRow";
-import OtherYield from "@/components/OtherYield/OtherYield";
+import OtherYield from "@/app/strategies/OtherYield/OtherYield";
 
 const Markets: React.FC = () => {
   const { data: fairLaunchStrategies = [] } = useFairLaunches(true);

@@ -31,7 +31,7 @@ export const TOKEN_COLORS: Record<string, string> = {
   WUSDC: "#2775ca",
   QAR: "#5f80fe",
   WUSDT: "#26A17B",
-
+};
 export const gekoURL =
   "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,ao-computer,dai,staked-ether,&vs_currencies=usd";
 

@@ -3,14 +3,13 @@ import styles from "./strategies.module.css";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import { FairLaunchStrategy } from "./adapters/fairLaunch";
-import { FairLaunchRow } from "./FairLaunchRow/FairLaunchRow";
+import { FairLaunchStrategy } from "./adapters/fairLaunches/getFairlaunchAPY";
+import { FairLaunchRow } from "./adapters/fairLaunches/FairLaunchRow/FairLaunchRow";
 import { useFairLaunches } from "@/hooks/strategies/useFairLaunches";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useLeverage } from "@/hooks/strategies/useLeverage";
-import { LeverageStrategy } from "./adapters/leverage";
-import { LeverageRow } from "./LeverageRow/LeverageRow";
-import OtherYield from "@/app/strategies/OtherYield/OtherYield";
+import { LeverageStrategy } from "./adapters/leverage/leverage";
+import { LeverageRow } from "./adapters/leverage/LeverageRow/LeverageRow";
 
 const Markets: React.FC = () => {
   const { data: fairLaunchStrategies = [] } = useFairLaunches(true);
@@ -38,9 +37,9 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Available</p>
                 <p className={styles.tokenTitle}>APY</p>
               </div>
-              {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
+              {/* {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
                 <LeverageRow leverage={leverage} prices={prices} />
-              ))}
+              ))} */}
             </div>
           </div>
           <div className={styles.strategyContainer}>
@@ -53,7 +52,7 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Borrow token</p>
                 <p className={styles.tokenTitle}>Available borrow token</p>
                 <p className={styles.tokenTitle}>Reward token</p>
-                {/* <p className={styles.tokenTitle}>APY / reward ratio</p> */}
+                <p className={styles.tokenTitle}>Average APY / reward ratio</p>
               </div>
               {(fairLaunchStrategies as FairLaunchStrategy[]).map(
                 (strategy) => (

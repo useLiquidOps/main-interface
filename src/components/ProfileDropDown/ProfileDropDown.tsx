@@ -7,7 +7,7 @@ import ActivityList from "../ActivityList/ActivityList";
 import { useTransactions } from "@/hooks/LiquidOpsData/useTransactions";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import ClearCache from "../ClearCache/ClearCache";
-import { shortenAddress } from "@/utils/wallets";
+import { shortenAddress } from "@/utils/Wallets/wallets";
 import Link from "next/link";
 
 interface ProfileDropdownProps {

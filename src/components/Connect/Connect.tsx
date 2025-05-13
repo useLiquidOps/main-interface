@@ -9,10 +9,10 @@ import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import WalletModal from "./WalletModal/WalletModal";
-import { walletInfo } from "@/utils/wallets";
+import { walletInfo } from "@/utils/Wallets/wallets";
 import { useWallet } from "@vela-ventures/aosync-sdk-react";
 import { useAccountTab } from "./accountTabContext";
-import { shortenAddress } from "@/utils/wallets";
+import { shortenAddress } from "@/utils/Wallets/wallets";
 
 declare global {
   interface Window {

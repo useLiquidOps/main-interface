@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { LiquidOpsClient } from "@/utils/LiquidOps";
+import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { GetResultRes } from "liquidops";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 

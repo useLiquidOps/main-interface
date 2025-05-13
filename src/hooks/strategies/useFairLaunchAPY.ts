@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
-import { getFairlaunchAPY } from "@/app/strategies/adapters/fairLaunch";
+import { getFairlaunchAPY } from "@/app/strategies/adapters/fairLaunches/getFairlaunchAPY";
 
 export function useFairLaunchAPY(
   fairLaunchID: string,

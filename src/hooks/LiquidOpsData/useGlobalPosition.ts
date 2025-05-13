@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Quantity } from "ao-tokens";
-import { LiquidOpsClient } from "@/utils/LiquidOps";
+import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { useWalletAddress } from "../data/useWalletAddress";
 import {
   WrappedQuantity,
@@ -14,7 +14,7 @@ import {
   wrapTokenPositions,
   unWrapTokenPositions,
 } from "./helpers/wrapGlobalPositions";
-import { getBaseDenomination } from "@/utils/getBaseDenomination";
+import { getBaseDenomination } from "@/utils/LiquidOps/getBaseDenomination";
 
 export interface TokenPositionCache {
   borrowBalance: WrappedQuantity;

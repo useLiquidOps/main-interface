@@ -1,4 +1,4 @@
-import { LiquidOpsClient } from "@/utils/LiquidOps";
+import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { GetSupplyAPR, GetSupplyAPRRes } from "liquidops";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 

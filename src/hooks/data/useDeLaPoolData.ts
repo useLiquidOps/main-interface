@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAPRGraph } from "@/utils/DefiLlama";
+import { getAPRGraph } from "@/utils/DeFiLlama/DefiLlama";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import { defiLlamaIds } from "@/utils/tokenMappings";
 

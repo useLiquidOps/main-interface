@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { LiquidOpsClient } from "@/utils/LiquidOps";
+import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 
 interface BorrowParams {
   token: string;

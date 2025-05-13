@@ -59,6 +59,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   if (strategy.rewardToken.ticker === "AO") {
     fairLaunchTokenRewardsPerAR = AOPerAR;
   } else {
+    // @ts-ignore
     fairLaunchTokenRewardsPerAR = fairLaunchPerAO * AOPerAR;
   }
 
@@ -71,6 +72,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
     // find fair launch apy
 
     const fairLaunchUSDRewardsPerAR =
+        // @ts-ignore
       fairLaunchTokenRewardsPerAR * rewardTokenPrice;
 
     const fairLaunchAPY = (fairLaunchUSDRewardsPerAR / oneARUSD) * 100;
@@ -83,6 +85,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
 
     // fair launch with token amount
   } else {
+        // @ts-ignore
     fairLaunchRewards = { type: "token", reward: fairLaunchPerAO };
   }
 
@@ -91,6 +94,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   const arTokenStats = useProtocolStats(
     strategy.borrowToken.ticker.toUpperCase(),
   );
+      // @ts-ignore
   const totalBorrowArAPR = arTokenStats.data.borrowAPR * maxBorrowPercent;
 
   // final APY
@@ -99,6 +103,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   if (fairLaunchRewards.type === "token") {
     maxAPY = fairLaunchRewards.reward;
   } else {
+        // @ts-ignore
     const totalAPY = baseAPY + fairLaunchRewards.reward;
     maxAPY = totalAPY - totalBorrowArAPR;
   }

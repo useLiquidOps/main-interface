@@ -31,7 +31,13 @@ const OtherYield: React.FC = () => {
             <Image src={"/tokens/AR.svg"} alt="AO" width={25} height={25} />
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>1 AR</p>
-              <p className={styles.usdAmount}>${arPrice.toLocaleString()}</p>
+              <p className={styles.usdAmount}>
+                $
+                {arPrice.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
             </div>
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>
@@ -39,7 +45,13 @@ const OtherYield: React.FC = () => {
               </p>
               <p className={styles.usdAmount}>
                 $
-                {(aoPrice.toNumber() * AOPerAR.rewardPerToken).toLocaleString()}
+                {(aoPrice.toNumber() * AOPerAR.rewardPerToken).toLocaleString(
+                  "en-US",
+                  {
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3,
+                  },
+                )}
               </p>
             </div>
           </div>
@@ -58,7 +70,13 @@ const OtherYield: React.FC = () => {
             <Image src={"/tokens/stETH.svg"} alt="AO" width={30} height={30} />
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>1 stETH</p>
-              <p className={styles.usdAmount}>${ethPrice.toLocaleString()}</p>
+              <p className={styles.usdAmount}>
+                $
+                {ethPrice.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
             </div>
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>
@@ -66,9 +84,13 @@ const OtherYield: React.FC = () => {
               </p>
               <p className={styles.usdAmount}>
                 $
-                {(
-                  aoPrice.toNumber() * AOPerETH.rewardPerToken
-                ).toLocaleString()}
+                {(aoPrice.toNumber() * AOPerETH.rewardPerToken).toLocaleString(
+                  "en-US",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  },
+                )}
               </p>
             </div>
           </div>
@@ -87,7 +109,13 @@ const OtherYield: React.FC = () => {
             <Image src={"/tokens/DAI.svg"} alt="AO" width={30} height={30} />
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>1 DAI</p>
-              <p className={styles.usdAmount}>${daiPrice.toLocaleString()}</p>
+              <p className={styles.usdAmount}>
+                $
+                {daiPrice.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
             </div>
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>
@@ -95,9 +123,13 @@ const OtherYield: React.FC = () => {
               </p>
               <p className={styles.usdAmount}>
                 $
-                {(
-                  aoPrice.toNumber() * AOPerDAI.rewardPerToken
-                ).toLocaleString()}
+                {(aoPrice.toNumber() * AOPerDAI.rewardPerToken).toLocaleString(
+                  "en-US",
+                  {
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3,
+                  },
+                )}
               </p>
             </div>
           </div>

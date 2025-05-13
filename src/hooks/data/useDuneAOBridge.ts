@@ -13,7 +13,7 @@ export function useDuneAOBridge(overrideCache?: boolean) {
       if (checkCache !== false && overrideCache !== true) {
         return checkCache;
       } else {
-        const data = await axios.get("http://api.liquidops.io/ao-bridge-data");
+        const data = await axios.get("https://api.liquidops.io/ao-bridge-data");
         const procccesedData = data.data;
 
         const cache = {

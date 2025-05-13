@@ -62,6 +62,14 @@ const Footer = () => {
             Analytics
           </p>
 
+          <a
+            href="https://liquidops.arweave.net"
+            className={styles.support}
+            target="_blank"
+          >
+            Permasite
+          </a>
+
           <div className={styles.version}>
             <p>v{version}</p>
             <a

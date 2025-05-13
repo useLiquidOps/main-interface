@@ -20,7 +20,7 @@ export const SUPPORTED_TOKENS = [
   { ticker: "qAR", name: "Quantum Arweave" },
   { ticker: "wUSDC", name: "Wrapped USD Circle" },
   { ticker: "wAR", name: "Wrapped Arweave" },
-  { ticker: "wUSDT", name: "Wrapped USD Circle" },
+  { ticker: "wUSDT", name: "Wrapped USD Tether" },
 ];
 
 // NOTE: there is also a SUPPORTED_TOKENS in next-sitemap-config.js
@@ -32,8 +32,6 @@ export const TOKEN_COLORS: Record<string, string> = {
   QAR: "#5f80fe",
   WUSDT: "#26A17B",
 };
-export const gekoURL =
-  "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,ao-computer,dai,staked-ether,&vs_currencies=usd";
 
 // NOTE: we need to update the permaweb-deploy file after every new page
 

@@ -3,6 +3,7 @@ import styles from "./OtherYield.module.css";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import Link from "next/link";
 import Image from "next/image";
+import { useDuneAOBridge } from "@/hooks/data/useDuneAOBridge";
 
 const OtherYield: React.FC = () => {
   const { price: aoPrice, isLoading: isLoadingAoPrice } = useTokenPrice("AO");
@@ -12,11 +13,13 @@ const OtherYield: React.FC = () => {
   const { price: daiPrice, isLoading: isLoadingDaiPrice } =
     useTokenPrice("DAI");
 
+  const { data: duneData, isLoading: isLoadingDuneData } = useDuneAOBridge();
+
   const AOPerAR = aoAPY(aoPrice.toNumber(), arPrice.toNumber());
 
-  const AOPerETH = ethAPY(aoPrice.toNumber(), ethPrice.toNumber());
+  const AOPerETH = ethAPY(aoPrice.toNumber(), ethPrice.toNumber(), duneData);
 
-  const AOPerDAI = daiAPY(aoPrice.toNumber(), daiPrice.toNumber());
+  const AOPerDAI = daiAPY(aoPrice.toNumber(), daiPrice.toNumber(), duneData);
 
   return (
     <div className={styles.container}>
@@ -155,10 +158,12 @@ function aoAPY(aoPrice: number, arPrice: number) {
   return { rewardPerToken: aoPerToken, APY };
 }
 
-function ethAPY(aoPrice: number, ethPrice: number) {
-  const oneUnitMultiplier = 1 / 0.38896;
+function ethAPY(aoPrice: number, ethPrice: number, duneData: any) {
+  const data = duneData?.stETH;
 
-  const yearlyProjection = 2.21595 * oneUnitMultiplier;
+  const oneUnitMultiplier = 1 / data?.Token_Qty;
+
+  const yearlyProjection = data?.Est_Yearly_AO * oneUnitMultiplier;
 
   const aoPerToken = yearlyProjection;
 
@@ -169,8 +174,10 @@ function ethAPY(aoPrice: number, ethPrice: number) {
   return { rewardPerToken: aoPerToken, APY };
 }
 
-function daiAPY(aoPrice: number, daiPrice: number) {
-  const yearlyProjection = 8.86382 / 1000;
+function daiAPY(aoPrice: number, daiPrice: number, duneData: any) {
+  const data = duneData?.DAI;
+
+  const yearlyProjection = data?.Est_Yearly_AO / data?.Token_Qty;
 
   const aoPerToken = yearlyProjection;
 

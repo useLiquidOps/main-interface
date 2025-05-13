@@ -3,8 +3,8 @@ import styles from "./strategies.module.css";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-// import { FairLaunchStrategy } from "./adapters/fairLaunches/getFairlaunchAPY";
-// import { FairLaunchRow } from "./adapters/fairLaunches/FairLaunchRow/FairLaunchRow";
+import { FairLaunchStrategy } from "./adapters/fairLaunches/getFairlaunchAPY";
+import { FairLaunchRow } from "./adapters/fairLaunches/FairLaunchRow/FairLaunchRow";
 import { useFairLaunches } from "@/hooks/strategies/useFairLaunches";
 import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useLeverage } from "@/hooks/strategies/useLeverage";
@@ -38,9 +38,9 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Available</p>
                 <p className={styles.tokenTitle}>APY</p>
               </div>
-              {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
+              {/* {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
                 <LeverageRow leverage={leverage} prices={prices} />
-              ))}
+              ))} */}
             </div>
           </div>
           <div className={styles.strategyContainer}>
@@ -55,11 +55,11 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Reward token</p>
                 <p className={styles.tokenTitle}>Average APY / reward ratio</p>
               </div>
-              {/* {(fairLaunchStrategies as FairLaunchStrategy[]).map(
+              {(fairLaunchStrategies as FairLaunchStrategy[]).map(
                 (strategy) => (
                   <FairLaunchRow strategy={strategy} prices={prices} />
                 ),
-              )} */}
+              )}
             </div>
           </div>
         </div>

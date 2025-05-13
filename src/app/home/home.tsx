@@ -46,7 +46,7 @@ function HomeContent() {
             </div>
 
             <div className={styles.widgetRightContainer}>
-              {/* <Strategies /> */}
+              <Strategies />
               <div></div>
               <button
                 className={styles.viewTxns}

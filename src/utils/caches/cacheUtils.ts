@@ -22,6 +22,7 @@ interface DataTypeMap {
   "fair-launch-strategies": any;
   "leverage-strategies": any;
   [key: `fairlaunch-apy-${string}`]: any;
+  "dune-ao-bridge-stats": any;
 }
 
 type DataKeys = keyof DataTypeMap;

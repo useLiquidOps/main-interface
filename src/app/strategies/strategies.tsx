@@ -10,6 +10,7 @@ import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useLeverage } from "@/hooks/strategies/useLeverage";
 import { LeverageStrategy } from "./adapters/leverage";
 import { LeverageRow } from "./LeverageRow/LeverageRow";
+import OtherYield from "@/app/strategies/OtherYield/OtherYield";
 
 const Markets: React.FC = () => {
   const { data: fairLaunchStrategies = [] } = useFairLaunches(true);
@@ -22,6 +23,7 @@ const Markets: React.FC = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
+          <OtherYield />
           <div className={styles.strategyContainer}>
             <p className={styles.strategyTitle}>Leverage AR tokens</p>
             <div className={styles.strategiesList}>

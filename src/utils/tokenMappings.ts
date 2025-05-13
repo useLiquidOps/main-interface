@@ -4,10 +4,16 @@ export const defiLlamaIds: Record<string, string> = {
 };
 
 export const tickerToGeckoMap: Record<string, string> = {
+  // supporyed tokens
   QAR: "arweave",
   WUSDC: "usd-coin",
   WAR: "arweave",
   WUSDT: "tether",
+  // other data
+  AR: "arweave",
+  AO: "ao-computer",
+  DAI: "dai",
+  STETH: "staked-ether",
 };
 
 export const SUPPORTED_TOKENS = [
@@ -20,7 +26,7 @@ export const SUPPORTED_TOKENS = [
 // NOTE: there is also a SUPPORTED_TOKENS in next-sitemap-config.js
 
 export const gekoURL =
-  "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,&vs_currencies=usd";
+  "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,ao-computer,dai,staked-ether,&vs_currencies=usd";
 
 // NOTE: we need to update the permaweb-deploy file after every new page
 

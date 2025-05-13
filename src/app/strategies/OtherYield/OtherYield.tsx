@@ -32,7 +32,7 @@ const OtherYield: React.FC = () => {
           className={styles.card}
         >
           <div className={styles.detailsContainer}>
-            <Image src={"/tokens/AR.svg"} alt="AO" width={25} height={25} />
+            <Image src={"/tokens/AR.svg"} alt="AR" width={30} height={30} />
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>1 AR</p>
               {isLoadingArPrice ? (

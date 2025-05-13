@@ -10,6 +10,7 @@ import { usePrices } from "@/hooks/data/useTokenPrice";
 import { useLeverage } from "@/hooks/strategies/useLeverage";
 import { LeverageStrategy } from "./adapters/leverage";
 import { LeverageRow } from "./LeverageRow/LeverageRow";
+import OtherYield from "@/components/OtherYield/OtherYield";
 
 const Markets: React.FC = () => {
   const { data: fairLaunchStrategies = [] } = useFairLaunches(true);
@@ -22,6 +23,7 @@ const Markets: React.FC = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
+          <OtherYield />
           <div className={styles.strategyContainer}>
             <p className={styles.strategyTitle}>Leverage AR tokens</p>
             <div className={styles.strategiesList}>
@@ -36,9 +38,9 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Available</p>
                 <p className={styles.tokenTitle}>APY</p>
               </div>
-              {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
+              {/* {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
                 <LeverageRow leverage={leverage} prices={prices} />
-              ))}
+              ))} */}
             </div>
           </div>
           <div className={styles.strategyContainer}>
@@ -53,11 +55,11 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Reward token</p>
                 {/* <p className={styles.tokenTitle}>APY / reward ratio</p> */}
               </div>
-              {(fairLaunchStrategies as FairLaunchStrategy[]).map(
+              {/* {(fairLaunchStrategies as FairLaunchStrategy[]).map(
                 (strategy) => (
                   <FairLaunchRow strategy={strategy} prices={prices} />
                 ),
-              )}
+              )} */}
             </div>
           </div>
         </div>

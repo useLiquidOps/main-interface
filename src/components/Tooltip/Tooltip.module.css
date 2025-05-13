@@ -5,25 +5,26 @@
 
 .tooltip {
   position: absolute;
-  top: 100%;
-  left: 0;
-  transform: none;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
   background-color: var(--secondary-periwinkle);
   color: white;
   padding: 5px 10px;
   border-radius: 4px;
   white-space: nowrap;
   z-index: 9999;
-  margin-top: 5px;
+  margin-right: 5px;
 }
 
 .tooltip::before {
   content: "";
   position: absolute;
-  top: -5px;
-  left: 10px;
-  transform: none;
-  border-width: 0 5px 5px;
+  top: 50%;
+  right: -5px;
+  left: auto;
+  transform: translateY(-50%);
+  border-width: 5px 0 5px 5px;
   border-style: solid;
-  border-color: transparent transparent var(--secondary-periwinkle);
+  border-color: transparent transparent transparent var(--secondary-periwinkle);
 }

@@ -25,11 +25,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   );
   const baseAPY = depositTokenStats.data?.supplyAPR;
 
-  // const maxBorrowPercent =
-  //   Number(depositTokenStats.data?.info.collateralFactor) / 100;
-  const maxBorrowPercent = 0.75;
-
-  console.log("maxBorrowPercent", maxBorrowPercent);
+  const maxBorrowPercent = Number(depositTokenStats.data?.info.collateralFactor) / 100;
 
   // APY reward, find the reward for borrowing ar then earning AO or fair launch tokens
 
@@ -95,7 +91,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   const arTokenStats = useProtocolStats(
     strategy.borrowToken.ticker.toUpperCase(),
   );
-  const totalBorrowArAPR = arTokenStats.data?.borrowAPR * maxBorrowPercent;
+  const totalBorrowArAPR = arTokenStats.data.borrowAPR * maxBorrowPercent;
 
   // final APY
 
@@ -106,10 +102,6 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
     const totalAPY = baseAPY + fairLaunchRewards.reward;
     maxAPY = totalAPY - totalBorrowArAPR;
   }
-
-  console.log("baseAPY", baseAPY);
-  console.log("rewardAPY", fairLaunchRewards.reward);
-  console.log("totalBorrowArAPR", totalBorrowArAPR);
 
   const isLoadingArTokenStats = arTokenStats.isLoading || !arTokenStats.data;
 

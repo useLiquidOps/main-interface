@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
-import { DuneClient } from "@duneanalytics/client-sdk";
+import axios from "axios";
 
 export function useDuneAOBridge(overrideCache?: boolean) {
   const DATA_KEY = `dune-ao-bridge-stats`;
@@ -13,25 +13,8 @@ export function useDuneAOBridge(overrideCache?: boolean) {
       if (checkCache !== false && overrideCache !== true) {
         return checkCache;
       } else {
-        const duneAPIKey = "";
-
-        if (!duneAPIKey) {
-          throw new Error("duneAPIKey not found in the .env file.");
-        }
-
-        const dune = new DuneClient(duneAPIKey);
-
-        const query_result = await dune.getLatestResult({ queryId: 4030850 });
-
-        const data = query_result.result?.rows;
-
-        const stETH = data?.find((item: any) => item.Token === "stETH");
-        const DAI = data?.find((item: any) => item.Token === "DAI");
-
-        const procccesedData = {
-          stETH,
-          DAI,
-        };
+        const data = await axios.get("http://api.liquidops.io/ao-bridge-data");
+        const procccesedData = data.data;
 
         const cache = {
           dataKey: DATA_KEY,

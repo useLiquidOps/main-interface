@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@ar.io/sdk": "^3.10.1",
-    "@duneanalytics/client-sdk": "^0.2.5",
     "@irys/sdk": "^0.2.11",
     "@permaweb/aoconnect": "^0.0.77",
     "@permaweb/aoprofile": "^0.0.9",

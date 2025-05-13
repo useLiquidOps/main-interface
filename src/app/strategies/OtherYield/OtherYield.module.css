@@ -1,0 +1,84 @@
+.container {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title {
+  color: var(--primary-ultramarine);
+  font-weight: 600;
+  font-size: 20px;
+  width: 100%;
+  text-align: left;
+}
+
+.cardContainer {
+  display: flex;
+  width: fit-content;
+  gap: 15px;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background-color: white;
+  padding: 24px;
+  border-radius: 24px;
+  flex-direction: column;
+  min-width: 225px;
+}
+
+.detailsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+}
+
+.tokenTitle {
+  color: var(--primary-palatinate-blue);
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.usdAmount {
+  color: var(--secondary-periwinkle);
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.yieldTitleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.yieldTitle {
+  color: var(--primary-palatinate-blue);
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.tokenYield {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.tokenYield > p {
+  color: var(--primary-ultramarine);
+  font-weight: 500;
+  font-size: 12px;
+}

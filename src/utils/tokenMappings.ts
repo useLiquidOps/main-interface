@@ -9,9 +9,11 @@ export const tickerToGeckoMap: Record<string, string> = {
   WUSDC: "usd-coin",
   WAR: "arweave",
   WUSDT: "tether",
-  // fair launches
+  // other data
+  AR: "arweave",
   AO: "ao-computer",
-  ARIO: "ar-io-network",
+  DAI: "dai",
+  STETH: "staked-ether",
 };
 
 export const SUPPORTED_TOKENS = [
@@ -29,4 +31,15 @@ export const TOKEN_COLORS: Record<string, string> = {
   WUSDC: "#2775ca",
   QAR: "#5f80fe",
   WUSDT: "#26A17B",
+
+export const gekoURL =
+  "https://api.coingecko.com/api/v3/simple/price?ids=arweave,usd-coin,tether,ao-computer,dai,staked-ether,&vs_currencies=usd";
+
+// NOTE: we need to update the permaweb-deploy file after every new page
+
+export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
+  qAR: 3,
+  wAR: 3,
+  wUSDC: 2,
+  wUSDT: 2,
 };

@@ -58,12 +58,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
 
   const handleMaxClick = () => {
     const maxAmount = calculateMaxAmount();
-    setInputValue(
-      maxAmount.toLocaleString("en-US", {
-        maximumFractionDigits: 8,
-        useGrouping: true,
-      }),
-    );
+    setInputValue(maxAmount.toString());
   };
 
   const handleSubmit = () => {
@@ -91,7 +86,12 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
           {mode === "supply" ? "Supply" : "Borrow"}
         </p>
         <button className={styles.close} onClick={onClose}>
-          <Image src="/icons/close.svg" height={9} width={9} alt="Close" />
+          <Image
+            src="./icons/close-icon.svg"
+            height={9}
+            width={9}
+            alt="Close"
+          />
         </button>
       </div>
 

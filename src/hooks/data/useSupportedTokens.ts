@@ -4,7 +4,7 @@ import { tokenData, TokenData } from "liquidops";
 export interface SupportedToken
   extends Omit<
     TokenData,
-    "oTicker" | "oAddress" | "controllerAddress" | "cleanTicker" | "address"
+    "oTicker" | "oAddress" | "controllerAddress" | "cleanTicker"
   > {
   denomination: bigint;
   collateralEnabled: boolean;
@@ -16,12 +16,14 @@ export function useSupportedTokens() {
     queryKey: ["supported-tokens"],
     queryFn: (): SupportedToken[] => {
       return Object.entries(tokenData).map(([_, data]) => ({
-        icon: `/tokens/${data.ticker}.svg`,
+        icon: `./tokens/${data.cleanTicker}.svg`,
         name: data.name,
         ticker: data.cleanTicker,
         denomination: data.denomination,
         collateralEnabled: data.collateralEnabled,
         baseDenomination: data.baseDenomination,
+        address: data.address,
+        oAddress: data.oAddress,
       }));
     },
     staleTime: 5 * 60 * 1000,

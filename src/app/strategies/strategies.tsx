@@ -22,6 +22,7 @@ const Markets: React.FC = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
+          <OtherYield />
           <div className={styles.strategyContainer}>
             <p className={styles.strategyTitle}>Leverage AR tokens</p>
             <div className={styles.strategiesList}>

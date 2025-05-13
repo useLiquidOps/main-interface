@@ -23,29 +23,6 @@ export const useClickOutside = <T extends HTMLElement>(
   return { ref };
 };
 
-type DigitType =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16
-  | 17
-  | 18
-  | 19
-  | 20;
-
 // format thousands, millions, billions
 export const formatTMB = (value: Quantity): string => {
   const billions = new Quantity(0, value.denomination).fromNumber(1000000000);
@@ -93,10 +70,7 @@ export const formatInputNumber = (value: string): string => {
 
   if (rawValue === "") return "";
 
-  return Number(rawValue).toLocaleString("en-US", {
-    maximumFractionDigits: 8,
-    useGrouping: true,
-  });
+  return rawValue;
 };
 
 export const calculateUsdValue = (value: string, rate: Quantity): string => {
@@ -110,12 +84,5 @@ export const calculateUsdValue = (value: string, rate: Quantity): string => {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 2,
-  });
-};
-
-export const formatMaxAmount = (amount: number | Quantity): string => {
-  return amount.toLocaleString("en-US", {
-    maximumFractionDigits: 8,
-    useGrouping: true,
   });
 };

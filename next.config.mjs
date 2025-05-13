@@ -17,6 +17,19 @@ const nextConfig = {
   },
   output: "export",
   distDir: "dist",
+  assetPrefix: "/",
+  images: {
+    unoptimized: true,
+  },
+  webpack: (config, { isServer }) => {
+    // Fix for missing modules like @tanstack
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+    };
+    return config;
+  },
 };
 
 export default nextConfig;

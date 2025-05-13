@@ -3,31 +3,12 @@ import Irys from "@irys/sdk";
 import { readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import "dotenv/config";
+import { readFileSync } from "node:fs";
 
 const DEPLOY_FOLDER = "./dist";
 const DEPLOY_KEY = process.env.DEPLOY_KEY;
 const DEPLOY_WALLET = process.env.DEPLOY_WALLET;
 const ANT_PROCESS = "Ayie-yIUDWQZYwt2XFGQYwpbg9je77W9tr6HXMOwDkc";
-
-async function getFolderSize(folderPath) {
-  let totalSize = 0;
-
-  async function calculateSize(dirPath) {
-    const entries = await readdir(dirPath, { withFileTypes: true });
-    for (const entry of entries) {
-      const fullPath = join(dirPath, entry.name);
-      if (entry.isDirectory()) {
-        await calculateSize(fullPath);
-      } else {
-        const stats = await stat(fullPath);
-        totalSize += stats.size;
-      }
-    }
-  }
-
-  await calculateSize(folderPath);
-  return totalSize;
-}
 
 async function deploy() {
   if (!DEPLOY_KEY) throw new Error("DEPLOY_KEY not configured");
@@ -54,6 +35,8 @@ async function deploy() {
     //   fundNode,
     // );
 
+    // check balance
+
     const balance = await irys.getBalance(DEPLOY_WALLET);
     console.log(
       "📜 LOG > node balance:",
@@ -75,6 +58,8 @@ async function deploy() {
       throw new Error("Insufficient balance");
     }
 
+    // deploy to arweave
+
     console.log(`Deploying ${DEPLOY_FOLDER} folder`);
 
     const txResult = await irys.uploadFolder(DEPLOY_FOLDER, {
@@ -85,8 +70,34 @@ async function deploy() {
     });
 
     console.log("📜 LOG > txResult:", txResult);
-
     await new Promise((r) => setTimeout(r, 1000));
+
+
+    // fix the Next js routing issue
+
+    const manifest = JSON.parse(readFileSync(`./dist-manifest.json`, "utf-8"))
+
+    manifest.paths = {
+      ...manifest.paths,
+      // general
+      "404": manifest.paths["404.html"],
+      "markets": manifest.paths["markets.html"],
+      "strategies": manifest.paths["strategies.html"],
+      // tokens
+      "qAR": manifest.paths["qAR.html"],
+      "wAR": manifest.paths["wAR.html"],
+      "wUSDC": manifest.paths["wUSDC.html"],
+      "wUSDT": manifest.paths["wUSDT.html"],
+    } 
+    
+    const tags = [
+      { name: "Type", value: "manifest" },
+      { name: "Content-Type", value: "application/x.arweave-manifest+json" },
+    ];
+    const manifestReceipt = await irys.upload(JSON.stringify(manifest), { tags });
+    console.log("📜 LOG > deploy > receipt:", manifestReceipt);
+  
+    // upload to ARNS 
 
     const ant = ANT.init({
       signer: new ArweaveSigner(jwk),
@@ -100,10 +111,9 @@ async function deploy() {
     const { id: txId } = await ant.setRecord(
       {
         undername: "@",
-        transactionId: txResult.id,
+        transactionId: manifestReceipt.id,
         ttlSeconds: 900,
       },
-      // optional additional tags
       {
         tags: [
           {
@@ -125,3 +135,24 @@ async function deploy() {
 }
 
 deploy().then().catch(console.error);
+
+
+async function getFolderSize(folderPath) {
+  let totalSize = 0;
+
+  async function calculateSize(dirPath) {
+    const entries = await readdir(dirPath, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = join(dirPath, entry.name);
+      if (entry.isDirectory()) {
+        await calculateSize(fullPath);
+      } else {
+        const stats = await stat(fullPath);
+        totalSize += stats.size;
+      }
+    }
+  }
+
+  await calculateSize(folderPath);
+  return totalSize;
+}

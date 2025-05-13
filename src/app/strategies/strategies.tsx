@@ -38,9 +38,9 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Available</p>
                 <p className={styles.tokenTitle}>APY</p>
               </div>
-              {/* {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
+              {(leverageStrategies as LeverageStrategy[]).map((leverage) => (
                 <LeverageRow leverage={leverage} prices={prices} />
-              ))} */}
+              ))}
             </div>
           </div>
           <div className={styles.strategyContainer}>
@@ -55,11 +55,11 @@ const Markets: React.FC = () => {
                 <p className={styles.tokenTitle}>Reward token</p>
                 {/* <p className={styles.tokenTitle}>APY / reward ratio</p> */}
               </div>
-              {/* {(fairLaunchStrategies as FairLaunchStrategy[]).map(
+              {(fairLaunchStrategies as FairLaunchStrategy[]).map(
                 (strategy) => (
                   <FairLaunchRow strategy={strategy} prices={prices} />
                 ),
-              )} */}
+              )}
             </div>
           </div>
         </div>

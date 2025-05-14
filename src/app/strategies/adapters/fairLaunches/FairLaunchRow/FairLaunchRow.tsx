@@ -8,7 +8,7 @@ import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { useFairLaunchAPY } from "@/hooks/strategies/useFairLaunchAPY";
-import { AOPerAR } from "../getFairlaunchAPY";
+import { getMaxReward } from "./getMaxReward";
 
 interface FairLaunchRowProps {
   strategy: FairLaunchStrategy;
@@ -19,94 +19,37 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
   strategy,
   prices,
 }) => {
-  // APY base, deposit the USDC/USDT tokens
   const depositTokenStats = useProtocolStats(
     strategy.depositToken.ticker.toUpperCase(),
   );
-  const baseAPY = depositTokenStats.data?.supplyAPR;
-
-  const maxBorrowPercent = Number(depositTokenStats.data?.info.collateralFactor) / 100;
-
-  // APY reward, find the reward for borrowing ar then earning AO or fair launch tokens
-
-  // check if reward has a usd value or is a token reward only
-  const rewardTokenGeckoID =
-    tickerToGeckoMap[strategy.rewardToken.ticker.toUpperCase()];
-
-  let rewardTokenPrice;
-  if (rewardTokenGeckoID === undefined) {
-    rewardTokenPrice = false;
-  } else {
-    rewardTokenPrice = prices?.[rewardTokenGeckoID]?.usd;
-  }
-
-  // check if it is a fair launch reward or AO reward
-  // find arweave usd price
 
   const arTokenGeckoID =
     tickerToGeckoMap[strategy.borrowToken.ticker.toUpperCase()];
-  const arTokenPrice = new Quantity(0n, 12n).fromNumber(
-    prices?.[arTokenGeckoID]?.usd ?? 0,
-  );
-
-  const oneARUSD = arTokenPrice.toNumber();
-
-  const fairLaunchPerAO = useFairLaunchAPY(strategy.fairLaunchID).data;
-
-  const oneHundredDollarsWorthOfARInTokens = 100 / oneARUSD;
-
-  let fairLaunchTokenRewardsPerAR;
-  if (strategy.rewardToken.ticker === "AO") {
-    fairLaunchTokenRewardsPerAR = AOPerAR;
-  } else {
-    // @ts-ignore
-    fairLaunchTokenRewardsPerAR = fairLaunchPerAO * AOPerAR;
-  }
-
-  const tokenRewardsPerOneHundredUSD =
-    oneHundredDollarsWorthOfARInTokens * fairLaunchTokenRewardsPerAR;
-
-  let fairLaunchRewards: { type: "token" | "apy"; reward: number };
-  // fair launch with a price
-  if (rewardTokenPrice !== false) {
-    // find fair launch apy
-
-    const fairLaunchUSDRewardsPerAR =
-        // @ts-ignore
-      fairLaunchTokenRewardsPerAR * rewardTokenPrice;
-
-    const fairLaunchAPY = (fairLaunchUSDRewardsPerAR / oneARUSD) * 100;
-    const fairLaunchAPYMinusCollateralFactor = fairLaunchAPY * maxBorrowPercent;
-
-    fairLaunchRewards = {
-      type: "apy",
-      reward: fairLaunchAPYMinusCollateralFactor,
-    };
-
-    // fair launch with token amount
-  } else {
-        // @ts-ignore
-    fairLaunchRewards = { type: "token", reward: fairLaunchPerAO };
-  }
-
-  // find borrow APR
+  const arTokenPrice = prices?.[arTokenGeckoID]?.usd ?? 0;
 
   const arTokenStats = useProtocolStats(
     strategy.borrowToken.ticker.toUpperCase(),
   );
-      // @ts-ignore
-  const totalBorrowArAPR = arTokenStats.data.borrowAPR * maxBorrowPercent;
 
-  // final APY
-
-  let maxAPY;
-  if (fairLaunchRewards.type === "token") {
-    maxAPY = fairLaunchRewards.reward;
+  const rewardTokenGeckoID =
+    tickerToGeckoMap[strategy.rewardToken.ticker.toUpperCase()];
+  let rewardTokenPrice: number | undefined;
+  if (rewardTokenGeckoID === undefined) {
+    rewardTokenPrice = undefined;
   } else {
-        // @ts-ignore
-    const totalAPY = baseAPY + fairLaunchRewards.reward;
-    maxAPY = totalAPY - totalBorrowArAPR;
+    rewardTokenPrice = prices?.[rewardTokenGeckoID]?.usd ?? 0;
   }
+
+  const fairLaunchPerAO = useFairLaunchAPY(strategy.fairLaunchID).data;
+
+  const maxReward = getMaxReward({
+    depositTokenStats,
+    strategy,
+    rewardTokenPrice,
+    arTokenPrice,
+    fairLaunchPerAO: fairLaunchPerAO || 0,
+    arTokenStats,
+  });
 
   const isLoadingArTokenStats = arTokenStats.isLoading || !arTokenStats.data;
 
@@ -163,7 +106,10 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
               <p className={styles.metricLabel}>
                 $
                 {formatTMB(
-                  Quantity.__mul(arTokenStats.data.unLent, arTokenPrice),
+                  Quantity.__mul(
+                    arTokenStats.data.unLent,
+                    new Quantity(0n, 12n).fromNumber(arTokenPrice),
+                  ),
                 )}
               </p>
             </>
@@ -189,7 +135,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
 
         {/* APY Info */}
         <div className={styles.aprInfo} style={{ width: "205px" }}>
-          {!maxAPY ? (
+          {!maxReward.maxAPY ? (
             <>
               <SkeletonLoading style={{ width: "90px", height: "14px" }} />
               <SkeletonLoading style={{ width: "90px", height: "13px" }} />
@@ -204,13 +150,13 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
                   height={10}
                 />
                 <p className={styles.apr}>
-                  {fairLaunchRewards.type === "token"
-                    ? `No usd price`
-                    : `${maxAPY.toFixed(2)}%`}
+                  {maxReward.type === "token"
+                    ? `No token price`
+                    : `${maxReward.maxAPY.toFixed(2)}%`}
                 </p>
               </div>
               <p className={styles.aprLabel}>
-                {tokenRewardsPerOneHundredUSD.toFixed(4)}{" "}
+                {maxReward.tokenRewardsPerOneHundredUSD.toFixed(4)}{" "}
                 {strategy.rewardToken.ticker} per $100
               </p>
             </>

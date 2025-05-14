@@ -39,9 +39,9 @@ export const TOKEN_COLORS: Record<string, string> = {
 // NOTE: we need to update the permaweb-deploy file after every new page
 
 export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
-  qAR: 3,
-  wAR: 3,
-  wUSDC: 2,
-  wUSDT: 2,
-  wETH: 6,
+  QAR: 3,
+  WAR: 3,
+  WUSDC: 2,
+  WUSDT: 2,
+  WETH: 6,
 };

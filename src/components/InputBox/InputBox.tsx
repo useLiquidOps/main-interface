@@ -45,7 +45,7 @@ const useInputValidation = (
 const useTokenFormatting = (ticker: string) => {
   const formatTokenValue = (value: Quantity, isLiquidationMode = false) => {
     if (value.raw === 0n && isLiquidationMode) return "0";
-    const decimals = TOKEN_DECIMAL_PLACES[ticker] || 2;
+    const decimals = TOKEN_DECIMAL_PLACES[ticker.toUpperCase()] || 2;
     return value.toLocaleString("en-US", {
       maximumFractionDigits: decimals,
       minimumFractionDigits: decimals,

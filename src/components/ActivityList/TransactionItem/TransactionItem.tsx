@@ -1,4 +1,3 @@
-import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useGetResult } from "@/hooks/LiquidOpsData/useGetResult";
@@ -8,6 +7,8 @@ import Image from "next/image";
 import styles from "./TransactionItem.module.css";
 import Tooltip from "@/components/Tooltip/Tooltip";
 import Link from "next/link";
+import { TOKEN_DECIMAL_PLACES } from "@/utils/tokenMappings";
+import { tokenInput } from "liquidops";
 
 export interface Transaction {
   id: string;
@@ -105,6 +106,8 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
     toolTipText = "Loading";
   }
 
+  const { ticker } = tokenInput(tx.tags["token"]);
+
   return (
     <Link
       key={tx.id}
@@ -121,12 +124,12 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
             <div className={styles.actionDetails}>
               <p>{display}</p>
               <p>
-                {formatTMB(
-                  new Quantity(
-                    tx.tags["Quantity"],
-                    getTokenDenomination(tx.tags["token"]),
-                  ),
-                )}
+                {new Quantity(
+                  tx.tags["Quantity"],
+                  getTokenDenomination(tx.tags["token"]),
+                )
+                  .toNumber()
+                  .toFixed(TOKEN_DECIMAL_PLACES[ticker])}
               </p>
             </div>
 

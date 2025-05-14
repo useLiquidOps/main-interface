@@ -9,6 +9,7 @@ export const tickerToGeckoMap: Record<string, string> = {
   WUSDC: "usd-coin",
   WAR: "arweave",
   WUSDT: "tether",
+  WETH: "ethereum",
   // other data
   AR: "arweave",
   AO: "ao-computer",
@@ -21,6 +22,7 @@ export const SUPPORTED_TOKENS = [
   { ticker: "wUSDC", name: "Wrapped USD Circle" },
   { ticker: "wAR", name: "Wrapped Arweave" },
   { ticker: "wUSDT", name: "Wrapped USD Tether" },
+  { ticker: "wETH", name: "Wrapped Ethereum" },
 ];
 
 // NOTE: there is also a SUPPORTED_TOKENS in next-sitemap-config.js
@@ -31,6 +33,7 @@ export const TOKEN_COLORS: Record<string, string> = {
   WUSDC: "#2775ca",
   QAR: "#5f80fe",
   WUSDT: "#26A17B",
+  WETH: "#2d2a28",
 };
 
 // NOTE: we need to update the permaweb-deploy file after every new page
@@ -40,4 +43,5 @@ export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
   wAR: 3,
   wUSDC: 2,
   wUSDT: 2,
+  wETH: 6,
 };

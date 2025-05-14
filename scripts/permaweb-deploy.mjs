@@ -88,6 +88,7 @@ async function deploy() {
       "wAR": manifest.paths["wAR.html"],
       "wUSDC": manifest.paths["wUSDC.html"],
       "wUSDT": manifest.paths["wUSDT.html"],
+      "wETH": manifest.paths["wETH.html"],
     } 
     
     const tags = [

@@ -2,7 +2,8 @@ const SUPPORTED_TOKENS = [
   { ticker: "qAR", name: "Quantum Arweave" },
   { ticker: "wUSDC", name: "Wrapped USD Circle" },
   { ticker: "wAR", name: "Wrapped Arweave" },
-  { ticker: "wUSDT", name: "Wrapped USD Circle" },
+  { ticker: "wUSDT", name: "Wrapped USD Tether" },
+  { ticker: "wETH", name: "Wrapped Ethereum" },
 ];
 
 /** @type {import('next-sitemap').IConfig} */

@@ -137,7 +137,7 @@ export const FairLaunchRow: React.FC<FairLaunchRowProps> = ({
         <div className={styles.aprInfo} style={{ width: "205px" }}>
           {!maxReward.maxAPY ? (
             <>
-              <SkeletonLoading style={{ width: "90px", height: "14px" }} />
+              <SkeletonLoading style={{ width: "60px", height: "14px" }} />
               <SkeletonLoading style={{ width: "90px", height: "13px" }} />
             </>
           ) : (

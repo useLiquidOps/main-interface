@@ -137,7 +137,7 @@ async function deploy() {
     console.log(`📜 LOG > Deployed TxId ${txId}, `);
 
     const slackMessage = `Deployed Permasite TxId ${txId}, ${irys.utils.fromAtomic(balance)} ${irys.token}`
-    await slackPing(slackMessage, SLACK_CHANNEL_ID, SLACK_TOKEN)
+    console.log(await slackPing(slackMessage, SLACK_CHANNEL_ID, SLACK_TOKEN))
     
   } catch (error) {
     console.error(error);

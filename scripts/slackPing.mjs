@@ -1,4 +1,5 @@
 import axios from "axios";
+import "dotenv/config";
 
 export async function slackPing(message) {
   if (!process.env.SLACK_CHANNEL_ID || !process.env.SLACK_TOKEN) {

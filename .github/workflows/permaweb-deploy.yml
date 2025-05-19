@@ -35,4 +35,6 @@ jobs:
         env:
           DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
           DEPLOY_WALLET: ${{ secrets.DEPLOY_WALLET }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}

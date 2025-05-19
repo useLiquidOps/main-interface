@@ -128,3 +128,23 @@
 .repayButton:hover {
   background-color: #a6c45d;
 }
+
+.actionButtonsContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.deprecatedNotice {
+  display: flex;
+  align-items: center;
+}
+
+
+.deprecated {
+    color: var(--secondary-periwinkle);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+
+}

@@ -9,6 +9,7 @@ import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
 import { Quantity } from "ao-tokens";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
+import { DEPRECATED_TOKENS } from "@/utils/tokenMappings";
 
 const TickerInfo: React.FC<{
   ticker: string;
@@ -25,6 +26,9 @@ const TickerInfo: React.FC<{
   const { price: tokenPrice, isLoading: isLoadingPrice } = useTokenPrice(
     ticker.toUpperCase(),
   );
+
+  // Check if the token is deprecated
+  const isDeprecated = asset ? DEPRECATED_TOKENS.includes(asset.ticker) : false;
 
   const modal = useModal();
 
@@ -114,35 +118,46 @@ const TickerInfo: React.FC<{
         </div>
       </div>
 
-      <div className={styles.actionButtons}>
-        <button
-          className={styles.supplyButton}
-          onClick={handleSupply}
-          type="button"
-        >
-          Supply
-        </button>
-        <button
-          className={styles.borrowButton}
-          onClick={handleBorrow}
-          type="button"
-        >
-          Borrow
-        </button>
-        <button
-          className={styles.withdrawButton}
-          onClick={handleWithdraw}
-          type="button"
-        >
-          Withdraw
-        </button>
-        <button
-          className={styles.repayButton}
-          onClick={handleRepay}
-          type="button"
-        >
-          Repay
-        </button>
+      <div className={styles.actionButtonsContainer}>
+        {isDeprecated && (
+          <div className={styles.deprecatedNotice}>
+            <p className={styles.deprecated}>Deprecated pool</p>
+          </div>
+        )}
+        <div className={styles.actionButtons}>
+          {!isDeprecated && (
+            <>
+              <button
+                className={styles.supplyButton}
+                onClick={handleSupply}
+                type="button"
+              >
+                Supply
+              </button>
+              <button
+                className={styles.borrowButton}
+                onClick={handleBorrow}
+                type="button"
+              >
+                Borrow
+              </button>
+            </>
+          )}
+          <button
+            className={styles.withdrawButton}
+            onClick={handleWithdraw}
+            type="button"
+          >
+            Withdraw
+          </button>
+          <button
+            className={styles.repayButton}
+            onClick={handleRepay}
+            type="button"
+          >
+            Repay
+          </button>
+        </div>
       </div>
     </div>
   );

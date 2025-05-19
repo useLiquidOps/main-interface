@@ -11,6 +11,7 @@ import { SupportedToken } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { useModal } from "@/components/PopUp/PopUp";
 import Link from "next/link";
+import { DEPRECATED_TOKENS } from "@/utils/tokenMappings";
 
 interface AssetRowProps {
   asset: SupportedToken;
@@ -30,6 +31,9 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const currentBalance = mode === "lend" ? lentBalance : positionBalance;
   const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
   const isProtocolStatsLoading = !protocolStats;
+  
+  // Check if the token is deprecated
+  const isDeprecated = DEPRECATED_TOKENS.includes(asset.ticker);
 
   const actionDo = mode === "lend" ? "Supply" : "Borrow";
   const actionReverse = mode === "lend" ? "Withdraw" : "Repay";
@@ -74,59 +78,64 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
         </div>
 
         <div className={styles.aprInfo}>
-          {isProtocolStatsLoading ? (
-            <SkeletonLoading
-              style={{ width: "80px", height: "20px", marginBottom: "8px" }}
-            />
-          ) : (
-            <div className={styles.APYRStarsContainer}>
-              <Image
-                src={`/icons/${mode === "lend" ? "APYStars" : "APRStars"}.svg`}
-                alt={`Stars icon`}
-                width={10}
-                height={10}
+          {isDeprecated ? (
+            <p className={styles.deprecated}>Deprecated</p>
+          ) : isProtocolStatsLoading ? (
+            <>
+              <SkeletonLoading
+                style={{ width: "80px", height: "20px", marginBottom: "8px" }}
               />
-              <p className={styles.apr}>
-                {protocolStats[
-                  mode === "lend" ? "supplyAPR" : "borrowAPR"
-                ].toFixed(2)}
-                %
-              </p>
-            </div>
-          )}
-          {isProtocolStatsLoading ? (
-            <SkeletonLoading style={{ width: "60px", height: "16px" }} />
+              <SkeletonLoading style={{ width: "60px", height: "16px" }} />
+            </>
           ) : (
-            <div className={styles.changeInfo}>
-              <Image
-                src={
-                  protocolStats.percentChange?.outcome
-                    ? "/icons/APRUp.svg"
-                    : "/icons/APRDown.svg"
-                }
-                alt="APR change indicator"
-                width={16}
-                height={16}
-              />
-              <p className={styles.change}>
-                {protocolStats.percentChange?.change !== undefined
-                  ? !isNaN(Number(protocolStats.percentChange?.change))
-                    ? `${protocolStats.percentChange?.change}%`
-                    : "0.00%"
-                  : "0.00%"}
-              </p>
-            </div>
+            <>
+              <div className={styles.APYRStarsContainer}>
+                <Image
+                  src={`/icons/${mode === "lend" ? "APYStars" : "APRStars"}.svg`}
+                  alt={`Stars icon`}
+                  width={10}
+                  height={10}
+                />
+                <p className={styles.apr}>
+                  {protocolStats[
+                    mode === "lend" ? "supplyAPR" : "borrowAPR"
+                  ].toFixed(2)}
+                  %
+                </p>
+              </div>
+              <div className={styles.changeInfo}>
+                <Image
+                  src={
+                    protocolStats.percentChange?.outcome
+                      ? "/icons/APRUp.svg"
+                      : "/icons/APRDown.svg"
+                  }
+                  alt="APR change indicator"
+                  width={16}
+                  height={16}
+                />
+                <p className={styles.change}>
+                  {protocolStats.percentChange?.change !== undefined
+                    ? !isNaN(Number(protocolStats.percentChange?.change))
+                      ? `${protocolStats.percentChange?.change}%`
+                      : "0.00%"
+                    : "0.00%"}
+                </p>
+              </div>
+            </>
           )}
         </div>
 
         <div className={styles.actionButtons}>
-          <button
-            className={styles.supplyBorrowButton}
-            onClick={handleDoAction}
-            type="button"
-          >
-            {actionDo}
-          </button>
+          {!isDeprecated && (
+            <button
+              className={styles.supplyBorrowButton}
+              onClick={handleDoAction}
+              type="button"
+            >
+              {actionDo}
+            </button>
+          )}
           <button
             className={styles.withdrawRepayButton}
             onClick={handleReverseAction}

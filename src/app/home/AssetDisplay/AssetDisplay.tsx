@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./AssetDisplay.module.css";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import AssetRow from "@/app/home/AssetRow/AssetRow";
+import { SUPPORTED_TOKENS } from "@/utils/tokenMappings";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";
@@ -39,6 +40,18 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
     return null;
   }
 
+  // Sort assets based on the assetDisplayOrder defined in SUPPORTED_TOKENS
+  const sortedTokens = [...supportedTokens].sort((a, b) => {
+    const tokenA = SUPPORTED_TOKENS.find((token) => token.ticker === a.ticker);
+    const tokenB = SUPPORTED_TOKENS.find((token) => token.ticker === b.ticker);
+
+    // Default order for tokens not found in SUPPORTED_TOKENS
+    const orderA = tokenA?.assetDisplayOrder || 999;
+    const orderB = tokenB?.assetDisplayOrder || 999;
+
+    return orderA - orderB;
+  });
+
   return (
     <div className={containerClass} ref={componentRef}>
       <div className={styles.header}>
@@ -46,7 +59,7 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
       </div>
 
       <div className={styles.assetsList}>
-        {supportedTokens.map((asset, index) => (
+        {sortedTokens.map((asset, index) => (
           <AssetRow key={`${mode}-${asset.ticker}`} asset={asset} mode={mode} />
         ))}
       </div>

@@ -4,6 +4,7 @@ import { readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import "dotenv/config";
 import { readFileSync } from "node:fs";
+import { slackPing } from "./slackPing.mjs";
 
 const DEPLOY_FOLDER = "./dist";
 const DEPLOY_KEY = process.env.DEPLOY_KEY;
@@ -129,7 +130,10 @@ async function deploy() {
       },
     );
 
-    console.log(`📜 LOG > Deployed TxId ${txId}`);
+    console.log(`📜 LOG > Deployed TxId ${txId}, `);
+
+    await slackPing(`Deployed Permasite TxId ${txId}, ${irys.utils.fromAtomic(balance)} ${irys.token}`)
+    
   } catch (error) {
     console.error(error);
   }

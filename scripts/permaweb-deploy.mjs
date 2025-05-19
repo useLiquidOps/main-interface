@@ -10,6 +10,8 @@ const DEPLOY_FOLDER = "./dist";
 const DEPLOY_KEY = process.env.DEPLOY_KEY;
 const DEPLOY_WALLET = process.env.DEPLOY_WALLET;
 const ANT_PROCESS = "Ayie-yIUDWQZYwt2XFGQYwpbg9je77W9tr6HXMOwDkc";
+const SLACK_CHANNEL_ID = process.env.SLACK_CHANNEL_ID;
+const SLACK_TOKEN = process.env.SLACK_TOKEN;
 
 async function deploy() {
   if (!DEPLOY_KEY) throw new Error("DEPLOY_KEY not configured");

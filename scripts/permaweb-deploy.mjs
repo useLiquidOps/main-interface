@@ -13,8 +13,10 @@ const ANT_PROCESS = "Ayie-yIUDWQZYwt2XFGQYwpbg9je77W9tr6HXMOwDkc";
 
 async function deploy() {
   if (!DEPLOY_KEY) throw new Error("DEPLOY_KEY not configured");
-  if (!DEPLOY_WALLET) throw new Error("ANT_PROCESS not configured");
+  if (!DEPLOY_WALLET) throw new Error("DEPLOY_WALLET not configured");
   if (!ANT_PROCESS) throw new Error("ANT_PROCESS not configured");
+  if (!SLACK_CHANNEL_ID) throw new Error("SLACK_CHANNEL_ID not configured");
+  if (!SLACK_TOKEN) throw new Error("SLACK_TOKEN not configured");
 
   try {
     const jwk = JSON.parse(DEPLOY_KEY);
@@ -132,7 +134,8 @@ async function deploy() {
 
     console.log(`📜 LOG > Deployed TxId ${txId}, `);
 
-    await slackPing(`Deployed Permasite TxId ${txId}, ${irys.utils.fromAtomic(balance)} ${irys.token}`)
+    const slackMessage = `Deployed Permasite TxId ${txId}, ${irys.utils.fromAtomic(balance)} ${irys.token}`
+    await slackPing(slackMessage, SLACK_CHANNEL_ID, SLACK_TOKEN)
     
   } catch (error) {
     console.error(error);

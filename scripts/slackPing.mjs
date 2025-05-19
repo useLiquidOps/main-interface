@@ -1,7 +1,6 @@
 import axios from "axios";
-import "dotenv/config";
 
-export async function slackPing(message) {
+export async function slackPing(message, SLACK_CHANNEL_ID, SLACK_TOKEN) {
   if (!process.env.SLACK_CHANNEL_ID || !process.env.SLACK_TOKEN) {
     throw new Error("Please specify a slack variables in the .env");
   }
@@ -10,12 +9,12 @@ export async function slackPing(message) {
     .post(
       "https://slack.com/api/chat.postMessage",
       {
-        channel: process.env.SLACK_CHANNEL_ID,
+        channel: SLACK_CHANNEL_ID,
         text: message,
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.SLACK_TOKEN}`,
+          Authorization: `Bearer ${SLACK_TOKEN}`,
           "Content-Type": "application/json; charset=utf-8",
         },
       },

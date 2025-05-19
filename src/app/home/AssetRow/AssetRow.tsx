@@ -31,7 +31,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const currentBalance = mode === "lend" ? lentBalance : positionBalance;
   const isLoading = mode === "lend" ? !lentBalance : !positionBalance;
   const isProtocolStatsLoading = !protocolStats;
-  
+
   // Check if the token is deprecated
   const isDeprecated = DEPRECATED_TOKENS.includes(asset.ticker);
 

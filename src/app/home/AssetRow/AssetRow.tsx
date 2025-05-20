@@ -3,10 +3,10 @@ import React from "react";
 import Image from "next/image";
 import styles from "./AssetRow.module.css";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
-import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
+import { useGetPositionBalance } from "@/hooks/LiquidOpsData/useGetPositionBalance";
 import { SupportedToken } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { useModal } from "@/components/PopUp/PopUp";
@@ -19,11 +19,9 @@ interface AssetRowProps {
 }
 
 const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
-  const { tokenAddress, oTokenAddress } = tokenInput(
-    asset.ticker.toUpperCase(),
-  );
+  const { tokenAddress } = tokenInput(asset.ticker.toUpperCase());
   const { data: positionBalance } = useGetPosition(tokenAddress);
-  const { data: lentBalance } = useUserBalance(oTokenAddress);
+  const { data: lentBalance } = useGetPositionBalance(tokenAddress);
   const { data: protocolStats } = useProtocolStats(asset.ticker.toUpperCase());
 
   const modal = useModal();

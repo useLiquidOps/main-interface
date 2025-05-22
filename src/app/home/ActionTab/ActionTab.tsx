@@ -146,6 +146,16 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
         /> */}
       </div>
 
+      <p className={styles.warning}>
+        <Image
+          src="/icons/activity/warning.svg"
+          height={45}
+          width={45}
+          alt="Warning icon"
+        />
+        Warning: this action would trigger a jump rate, increasing the APR to 17%
+      </p>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={

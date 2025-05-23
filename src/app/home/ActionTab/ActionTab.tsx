@@ -85,10 +85,10 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
 
       return Quantity.lt(
         valueLimit,
-        new Quantity(inputValue, BigInt(protocolStats.info.collateralDenomination))
+        new Quantity(0n, BigInt(protocolStats.info.collateralDenomination)).fromString(inputValue)
       );
     },
-    [valueLimit]
+    [valueLimit, protocolStats, inputValue]
   );
 
   const jumpRateData = useMemo<
@@ -290,7 +290,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
-          loadingScreenState.submitStatus === "loading"
+          loadingScreenState.submitStatus === "loading" ||
+          valueLimitReached
         }
         submitText={mode === "supply" ? "Supply" : "Borrow"}
       />

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import InputBox from "@/components/InputBox/InputBox";
@@ -15,6 +15,10 @@ import { tokenInput } from "liquidops";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 import { getBaseDenomination } from "@/utils/LiquidOps/getBaseDenomination";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import { Query } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
+import { warningVariants } from "@/components/DropDown/FramerMotion";
+import { useValueLimit } from "@/hooks/data/useValueLimit";
 
 interface ActionTabProps {
   ticker: string;
@@ -60,6 +64,72 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     const maxAmount = calculateMaxAmount();
     setInputValue(maxAmount.toString());
   };
+
+  const [valueLimit, valueLimitReached] = useValueLimit(inputValue, protocolStats);
+
+  const jumpRateData = useMemo<
+    { active: false } | { active: true; newAPR: number }
+  >(() => {
+    if (!inputValue || isLoadingProtocolStats || !protocolStats) {
+      return { active: false };
+    }
+
+    const collateralDenom = BigInt(protocolStats.info.collateralDenomination);
+    const _hundred = new Quantity(0n, collateralDenom).fromNumber(100);
+
+    const kinkPercentage = new Quantity(0n, collateralDenom).fromString(
+      protocolStats.info.kinkParam || "80",
+    );
+    const qty = new Quantity(0n, collateralDenom).fromString(inputValue);
+    const cash = new Quantity(protocolStats.info.cash, collateralDenom);
+    const totalBorrows = new Quantity(
+      protocolStats.info.totalBorrows,
+      collateralDenom,
+    );
+    const reserves = new Quantity(
+      protocolStats.info.totalReserves,
+      collateralDenom,
+    );
+
+    const utilizationRateAfter = Quantity.__div(
+      Quantity.__mul(Quantity.__add(totalBorrows, qty), _hundred),
+      Quantity.__sub(Quantity.__add(totalBorrows, cash), reserves),
+    );
+
+    // jump rate is active, calculate the new APR
+    if (Quantity.lt(kinkPercentage, utilizationRateAfter)) {
+      const initRate = new Quantity(0n, collateralDenom).fromString(
+        protocolStats.info.initRate,
+      );
+      const baseRate = new Quantity(0n, collateralDenom).fromString(
+        protocolStats.info.baseRate,
+      );
+      const jumpRate = new Quantity(0n, collateralDenom).fromString(
+        protocolStats.info.jumpRate,
+      );
+
+      const aprAfter = Quantity.__add(
+        initRate,
+        Quantity.__add(
+          Quantity.__div(Quantity.__mul(baseRate, kinkPercentage), _hundred),
+          Quantity.__div(
+            Quantity.__mul(
+              jumpRate,
+              Quantity.__sub(utilizationRateAfter, kinkPercentage),
+            ),
+            _hundred,
+          ),
+        ),
+      ).toNumber();
+
+      return {
+        active: true,
+        newAPR: aprAfter,
+      };
+    }
+
+    return { active: false };
+  }, [inputValue, protocolStats, isLoadingProtocolStats]);
 
   const handleSubmit = () => {
     if (!inputValue || !walletBalance) return;
@@ -146,12 +216,58 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
         /> */}
       </div>
 
+      <AnimatePresence>
+        {jumpRateData.active && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Warning icon"
+            />
+            Warning: this action would trigger a jump rate, increasing the APR
+            to{" "}
+            {jumpRateData.newAPR.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
+            %
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {valueLimitReached && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You can only {mode + " "} up to {valueLimit.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + ticker}.
+          </motion.p>
+        )}
+      </AnimatePresence>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
-          loadingScreenState.submitStatus === "loading"
+          loadingScreenState.submitStatus === "loading" ||
+          valueLimitReached
         }
         submitText={mode === "supply" ? "Supply" : "Borrow"}
       />

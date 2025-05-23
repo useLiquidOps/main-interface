@@ -33,3 +33,14 @@ export const overlayVariants = {
     },
   },
 };
+
+export const warningVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.87,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+  },
+};

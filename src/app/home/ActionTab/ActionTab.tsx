@@ -18,6 +18,7 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { Query } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
+import { useValueLimit } from "@/hooks/data/useValueLimit";
 
 interface ActionTabProps {
   ticker: string;
@@ -64,32 +65,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     setInputValue(maxAmount.toString());
   };
 
-  const valueLimit = useMemo(
-    () => {
-      if (isLoadingProtocolStats || !protocolStats) {
-        return new Quantity(0n, 0n);
-      }
-
-      return new Quantity(
-        protocolStats.info.valueLimit,
-        BigInt(protocolStats.info.collateralDenomination)
-      );
-    },
-    [isLoadingProtocolStats, protocolStats]
-  );
-  const valueLimitReached = useMemo(
-    () => {
-      if (Quantity.eq(valueLimit, new Quantity(0n, 0n)) || !protocolStats || !inputValue) {
-        return false;
-      }
-
-      return Quantity.lt(
-        valueLimit,
-        new Quantity(0n, BigInt(protocolStats.info.collateralDenomination)).fromString(inputValue)
-      );
-    },
-    [valueLimit, protocolStats, inputValue]
-  );
+  const [valueLimit, valueLimitReached] = useValueLimit(inputValue, protocolStats);
 
   const jumpRateData = useMemo<
     { active: false } | { active: true; newAPR: number }

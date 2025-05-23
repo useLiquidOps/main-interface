@@ -72,6 +72,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     }
 
     const collateralDenom = BigInt(protocolStats.info.collateralDenomination);
+    const _hundred = new Quantity(0n, collateralDenom).fromNumber(100);
 
     const kinkPercentage = new Quantity(0n, collateralDenom).fromString(
       protocolStats.info.kinkParam || "80",
@@ -88,8 +89,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     );
 
     const utilizationRateAfter = Quantity.__div(
-      Quantity.__add(totalBorrows, qty),
-      Quantity.__div(Quantity.__add(totalBorrows, cash), reserves),
+      Quantity.__mul(Quantity.__add(totalBorrows, qty), _hundred),
+      Quantity.__sub(Quantity.__add(totalBorrows, cash), reserves),
     );
 
     // jump rate is active, calculate the new APR
@@ -103,7 +104,6 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
       const jumpRate = new Quantity(0n, collateralDenom).fromString(
         protocolStats.info.jumpRate,
       );
-      const _hundred = new Quantity(0n, collateralDenom).fromNumber(100);
 
       const aprAfter = Quantity.__add(
         initRate,
@@ -228,7 +228,12 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
               width={45}
               alt="Warning icon"
             />
-            Warning: this action would trigger a jump rate, increasing the APR to {jumpRateData.newAPR.toLocaleString(undefined, { maximumFractionDigits: 2 })}%
+            Warning: this action would trigger a jump rate, increasing the APR
+            to{" "}
+            {jumpRateData.newAPR.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
+            %
           </motion.p>
         )}
       </AnimatePresence>

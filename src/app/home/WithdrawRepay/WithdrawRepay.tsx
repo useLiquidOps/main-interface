@@ -200,7 +200,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
-          loadingScreenState.submitStatus === "loading"
+          loadingScreenState.submitStatus === "loading" ||
+          (mode === "withdraw" && valueLimitReached)
         }
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}
       />

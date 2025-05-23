@@ -64,6 +64,33 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     setInputValue(maxAmount.toString());
   };
 
+  const valueLimit = useMemo(
+    () => {
+      if (isLoadingProtocolStats || !protocolStats) {
+        return new Quantity(0n, 0n);
+      }
+
+      return new Quantity(
+        protocolStats.info.valueLimit,
+        BigInt(protocolStats.info.collateralDenomination)
+      );
+    },
+    [isLoadingProtocolStats, protocolStats]
+  );
+  const valueLimitReached = useMemo(
+    () => {
+      if (Quantity.eq(valueLimit, new Quantity(0n, 0n)) || !protocolStats || !inputValue) {
+        return false;
+      }
+
+      return Quantity.lt(
+        valueLimit,
+        new Quantity(inputValue, BigInt(protocolStats.info.collateralDenomination))
+      );
+    },
+    [valueLimit]
+  );
+
   const jumpRateData = useMemo<
     { active: false } | { active: true; newAPR: number }
   >(() => {
@@ -234,6 +261,26 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
               maximumFractionDigits: 2,
             })}
             %
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {valueLimitReached && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You can only {mode + " "} up to {valueLimit.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + ticker}.
           </motion.p>
         )}
       </AnimatePresence>

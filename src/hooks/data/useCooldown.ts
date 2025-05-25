@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 
-export function useCooldown(mode: "borrow" | "repay" | "withdraw" | "supply", token: string) {
+type ActionMode = "borrow" | "repay" | "withdraw" | "supply";
+
+export function useCooldown(mode: ActionMode, token: string) {
   const { data: walletAddress } = useWalletAddress();
 
   return useQuery({

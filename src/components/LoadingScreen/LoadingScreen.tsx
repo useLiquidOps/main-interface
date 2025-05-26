@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./LoadingScreen.module.css";
 import Spinner from "../Spinner/Spinner";
 import { motion, AnimatePresence } from "framer-motion";
-import { overlayVariants, dropdownVariants } from "../DropDown/FramerMotion";
+import { overlayVariants, dropdownVariants, loadingBoxVariants } from "../DropDown/FramerMotion";
 
 type LoadingState = "signing" | "pending" | "success" | "failed" | "loading";
 type Action =
@@ -21,7 +21,9 @@ interface LoadingScreenProps {
   amount: string;
   txId: string;
   isOpen: boolean;
+  isMinimized: boolean;
   onClose: () => void;
+  onMinimize: () => void;
   error?: Error | null;
 }
 
@@ -32,101 +34,144 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
   amount,
   txId,
   isOpen,
+  isMinimized,
   onClose,
+  onMinimize,
   error,
 }) => {
+  const closeOrMinimize = () => {
+    if (loadingState === "failed" || loadingState === "success") {
+      onClose();
+    }
+
+    onMinimize();
+  };
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className={styles.overlay}
-          variants={overlayVariants}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          onClick={onClose}
-        >
+    <>
+      <AnimatePresence>
+        {isOpen && !isMinimized && (
           <motion.div
-            className={styles.screen}
-            variants={dropdownVariants}
+            className={styles.overlay}
+            variants={overlayVariants}
             initial="hidden"
             animate="visible"
             exit="hidden"
-            onClick={(e) => e.stopPropagation()}
+            onClick={closeOrMinimize}
           >
-            <div className={styles.closeContainer}>
-              <button className={styles.closeButton} onClick={onClose}>
-                <Image
-                  src="/icons/close-icon.svg"
-                  height={9}
-                  width={9}
-                  alt="Close"
-                />
-              </button>
-            </div>
-            <div className={styles.statusContainer}>
-              {loadingState === "loading" ? (
-                <Spinner size="80px" />
-              ) : (
-                <Image
-                  src={formatStateImage(loadingState)}
-                  width={100}
-                  height={100}
-                  alt="Loading State"
-                />
-              )}
-
-              {loadingState === "signing" ? (
-                <div className={styles.signingContainer}>
-                  <p className={styles.loadingState}>Signing</p>
-                  <Spinner size="20px" />
-                </div>
-              ) : (
-                <p className={styles.loadingState}>
-                  {formatState(loadingState)}
-                </p>
-              )}
-
-              {loadingState === "failed" && error?.message ? (
-                <p className={styles.stateMessage}>{error.message}</p>
-              ) : (
-                loadingState !== "success" && (
-                  <p className={styles.stateMessage}>
-                    {formatStateMessage(loadingState)}
-                  </p>
-                )
-              )}
-
-              <div className={styles.actionContainer}>
-                <p>{formatAction(action)}</p>
-                <p>{amount}</p>
-                <Image
-                  src={`/tokens/${tokenTicker}.svg`}
-                  height={15}
-                  width={15}
-                  alt={tokenTicker}
-                />
+            <motion.div
+              className={styles.screen}
+              variants={dropdownVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={styles.closeContainer}>
+                <button className={styles.closeButton} onClick={closeOrMinimize}>
+                  <Image
+                    src="/icons/close-icon.svg"
+                    height={9}
+                    width={9}
+                    alt="Close"
+                  />
+                </button>
               </div>
-              {loadingState !== "loading" &&
-                loadingState !== "signing" &&
-                loadingState !== "failed" && (
-                  <a
-                    className={styles.viewLink}
-                    href={`https://www.ao.link/#/message/${txId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View on ao.link
-                  </a>
+              <div className={styles.statusContainer}>
+                {loadingState === "loading" ? (
+                  <Spinner size="80px" />
+                ) : (
+                  <Image
+                    src={formatStateImage(loadingState)}
+                    width={100}
+                    height={100}
+                    alt="Loading State"
+                  />
                 )}
-            </div>
-            <button className={styles.okButton} onClick={onClose}>
-              Close
-            </button>
+
+                {loadingState === "signing" ? (
+                  <div className={styles.signingContainer}>
+                    <p className={styles.loadingState}>Signing</p>
+                    <Spinner size="20px" />
+                  </div>
+                ) : (
+                  <p className={styles.loadingState}>
+                    {formatState(loadingState)}
+                  </p>
+                )}
+
+                {loadingState === "failed" && error?.message ? (
+                  <p className={styles.stateMessage}>{error.message}</p>
+                ) : (
+                  loadingState !== "success" && (
+                    <p className={styles.stateMessage}>
+                      {formatStateMessage(loadingState)}
+                    </p>
+                  )
+                )}
+
+                <div className={styles.actionContainer}>
+                  <p>{formatAction(action)}</p>
+                  <p>{amount}</p>
+                  <Image
+                    src={`/tokens/${tokenTicker}.svg`}
+                    height={15}
+                    width={15}
+                    alt={tokenTicker}
+                  />
+                </div>
+                {loadingState !== "loading" &&
+                  loadingState !== "signing" &&
+                  loadingState !== "failed" && (
+                    <a
+                      className={styles.viewLink}
+                      href={`https://www.ao.link/#/message/${txId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View on ao.link
+                    </a>
+                  )}
+              </div>
+              <button className={styles.okButton} onClick={closeOrMinimize}>
+                Close
+              </button>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isOpen && isMinimized && (
+          <motion.div
+            className={styles.loadingBox}
+            variants={loadingBoxVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={onMinimize}
+          >
+            {(loadingState === "loading" && <Spinner size="22px" />) || (
+              <Image
+                src={formatStateImage(loadingState as LoadingStateWithoutLoading)}
+                width={22}
+                height={22}
+                alt="Loading State"
+              />
+            )}
+            <div className={styles.actionContainer}>
+              <p>{formatAction(action)}</p>
+              <p>{amount}</p>
+              <Image
+                src={`/tokens/${tokenTicker}.svg`}
+                height={15}
+                width={15}
+                alt={tokenTicker}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

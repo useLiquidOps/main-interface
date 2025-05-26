@@ -33,3 +33,14 @@ export const overlayVariants = {
     },
   },
 };
+
+export const loadingBoxVariants = {
+  hidden: {
+    opacity: 0,
+    y: "140%"
+  },
+  visible: {
+    opacity: 1,
+    y: 0
+  }
+};

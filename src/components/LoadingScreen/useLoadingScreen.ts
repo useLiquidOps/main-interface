@@ -16,6 +16,7 @@ export const useLoadingScreen = (
   resetInput: () => void,
 ) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [state, setState] = useState<LoadingState>("loading");
   const [transactionAmount, setTransactionAmount] = useState("");
   const [transactionId, setTransactionId] = useState("");
@@ -47,6 +48,7 @@ export const useLoadingScreen = (
   ) => {
     setTransactionAmount(amount);
     setIsOpen(true);
+    setIsMinimized(false);
     setState("loading");
     setSubmitStatus("loading");
     setError(null);
@@ -99,9 +101,14 @@ export const useLoadingScreen = (
     setIsOpen(false);
   };
 
+  const toggleMinimized = () => {
+    setIsMinimized(val => !val);
+  };
+
   return {
     state: {
       isOpen,
+      isMinimized,
       state,
       transactionAmount,
       transactionId,
@@ -111,6 +118,7 @@ export const useLoadingScreen = (
     actions: {
       executeTransaction,
       closeLoadingScreen,
+      toggleMinimized
     },
   };
 };

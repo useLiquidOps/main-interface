@@ -16,11 +16,11 @@ export function useCooldown(mode: ActionMode, token: string) {
 
       return await LiquidOpsClient.getCooldown({
         recipient: walletAddress,
-        token
+        token,
       });
     },
     enabled: !!walletAddress,
     staleTime: 2 * 60 * 1000,
-    gcTime: 5 * 60 * 1000
+    gcTime: 5 * 60 * 1000,
   });
 }

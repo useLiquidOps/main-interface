@@ -68,7 +68,10 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     setInputValue(maxAmount.toString());
   };
 
-  const [valueLimit, valueLimitReached] = useValueLimit(inputValue, protocolStats);
+  const [valueLimit, valueLimitReached] = useValueLimit(
+    inputValue,
+    protocolStats,
+  );
 
   const jumpRateData = useMemo<
     { active: false } | { active: true; newAPR: number }
@@ -259,13 +262,19 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
               width={45}
               alt="Error icon"
             />
-            You can only {mode + " "} up to {valueLimit.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + ticker}.
+            You can only {mode + " "} up to{" "}
+            {valueLimit.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            }) +
+              " " +
+              ticker}
+            .
           </motion.p>
         )}
       </AnimatePresence>
 
       <AnimatePresence>
-        {cooldownData.onCooldown && (
+        {cooldownData && cooldownData.onCooldown && (
           <motion.p
             variants={warningVariants}
             initial="hidden"
@@ -279,7 +288,10 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
               width={45}
               alt="Error icon"
             />
-            You are on a cooldown for {cooldownData.remainingBlocks.toString() + " "} block(s).
+            You are on a cooldown for{" "}
+            {/*
+            // @ts-ignore */}
+            {cooldownData.remainingBlocks.toString() + " "} block(s).
           </motion.p>
         )}
       </AnimatePresence>

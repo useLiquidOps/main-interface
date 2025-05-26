@@ -18,6 +18,7 @@ import { useValueLimit } from "@/hooks/data/useValueLimit";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { AnimatePresence, motion } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
+import { useCooldown } from "@/hooks/data/useCooldown";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -54,6 +55,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     null,
   );
 
+  const { data: cooldownData } = useCooldown(mode, ticker);
+
   // Reset input callback
   const resetInput = useCallback(() => {
     setInputValue("");
@@ -70,7 +73,10 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
   const { data: protocolStats, isLoading: isLoadingProtocolStats } =
     useProtocolStats(ticker.toUpperCase());
-  const [valueLimit, valueLimitReached] = useValueLimit(inputValue, protocolStats);
+  const [valueLimit, valueLimitReached] = useValueLimit(
+    inputValue,
+    protocolStats,
+  );
 
   const calculateMaxAmount = () => {
     if (isLoadingCurrentBalance || !currentBalance)
@@ -190,7 +196,36 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
               width={45}
               alt="Error icon"
             />
-            You can only {mode + " "} up to {valueLimit.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + ticker}.
+            You can only {mode + " "} up to{" "}
+            {valueLimit.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            }) +
+              " " +
+              ticker}
+            .
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {cooldownData && cooldownData.onCooldown && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You are on a cooldown for{" "}
+            {/*
+            // @ts-ignore */}
+            {cooldownData.remainingBlocks.toString() + " "} block(s).
           </motion.p>
         )}
       </AnimatePresence>
@@ -201,7 +236,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
           loadingScreenState.submitStatus === "loading" ||
-          (mode === "withdraw" && valueLimitReached)
+          (mode === "withdraw" && valueLimitReached) ||
+          cooldownData?.onCooldown
         }
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}
       />

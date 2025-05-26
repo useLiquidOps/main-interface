@@ -7,20 +7,22 @@ import { useMemo, useState } from "react";
 import { Quantity } from "ao-tokens";
 
 const MarketDetails: React.FC<{
-  ticker: string
+  ticker: string;
 }> = ({ ticker }) => {
-  const { data: protocolStats, isLoading } = useProtocolStats(ticker.toUpperCase());
-
-  const jumpRateActive = useMemo(
-    () => {
-      if (isLoading || !protocolStats) return false;
-      return Quantity.lt(
-        new Quantity(0n, BigInt(protocolStats.info.collateralDenomination)).fromString(protocolStats.info.kinkParam),
-        protocolStats.utilizationRate
-      );
-    },
-    [protocolStats, isLoading]
+  const { data: protocolStats, isLoading } = useProtocolStats(
+    ticker.toUpperCase(),
   );
+
+  const jumpRateActive = useMemo(() => {
+    if (isLoading || !protocolStats) return false;
+    return Quantity.lt(
+      new Quantity(
+        0n,
+        BigInt(protocolStats.info.collateralDenomination),
+      ).fromString(protocolStats.info.kinkParam),
+      protocolStats.utilizationRate,
+    );
+  }, [protocolStats, isLoading]);
 
   const [tooltipContent, setTooltipContent] = useState<string>("");
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -48,17 +50,28 @@ const MarketDetails: React.FC<{
               {isLoading && (
                 <SkeletonLoading
                   className={styles.value}
-                  style={{ width: "60px", height: "22.5px", borderRadius: "8px" }}
+                  style={{
+                    width: "60px",
+                    height: "22.5px",
+                    borderRadius: "8px",
+                  }}
                 />
               )}
               {protocolStats && (
                 <p className={styles.value + " " + styles.flexboxValue}>
-                  {parseFloat(protocolStats.info.collateralFactor).toLocaleString(undefined, {
-                    maximumFractionDigits: 2
+                  {parseFloat(
+                    protocolStats.info.collateralFactor,
+                  ).toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
                   })}
                   %
                   <span
-                    onMouseMove={(e) => handleMouseMove(e, "The maximum percentage of your collateral that can be borrowed")}
+                    onMouseMove={(e) =>
+                      handleMouseMove(
+                        e,
+                        "The maximum percentage of your collateral that can be borrowed",
+                      )
+                    }
                     onMouseLeave={handleMouseLeave}
                   >
                     <Image
@@ -79,17 +92,28 @@ const MarketDetails: React.FC<{
               {isLoading && (
                 <SkeletonLoading
                   className={styles.value}
-                  style={{ width: "60px", height: "22.5px", borderRadius: "8px" }}
+                  style={{
+                    width: "60px",
+                    height: "22.5px",
+                    borderRadius: "8px",
+                  }}
                 />
               )}
               {protocolStats && (
                 <p className={styles.value + " " + styles.flexboxValue}>
-                  {parseFloat(protocolStats.info.liquidationThreshold).toLocaleString(undefined, {
-                    maximumFractionDigits: 2
+                  {parseFloat(
+                    protocolStats.info.liquidationThreshold,
+                  ).toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
                   })}
                   %
                   <span
-                    onMouseMove={(e) => handleMouseMove(e, "The percentage of collateralization where your position becomes eligible for liquidation.")}
+                    onMouseMove={(e) =>
+                      handleMouseMove(
+                        e,
+                        "The percentage of collateralization where your position becomes eligible for liquidation.",
+                      )
+                    }
                     onMouseLeave={handleMouseLeave}
                   >
                     <Image
@@ -110,17 +134,29 @@ const MarketDetails: React.FC<{
               {isLoading && (
                 <SkeletonLoading
                   className={styles.value}
-                  style={{ width: "60px", height: "22.5px", borderRadius: "8px" }}
+                  style={{
+                    width: "60px",
+                    height: "22.5px",
+                    borderRadius: "8px",
+                  }}
                 />
               )}
               {protocolStats && (
                 <p className={styles.value + " " + styles.flexboxValue}>
-                  {parseFloat(protocolStats.info.kinkParam).toLocaleString(undefined, {
-                    maximumFractionDigits: 2
-                  })}
+                  {parseFloat(protocolStats.info.kinkParam).toLocaleString(
+                    undefined,
+                    {
+                      maximumFractionDigits: 2,
+                    },
+                  )}
                   %
                   <span
-                    onMouseMove={(e) => handleMouseMove(e, "Beyond this utilization rate, the interest rate rises sharply.")}
+                    onMouseMove={(e) =>
+                      handleMouseMove(
+                        e,
+                        "Beyond this utilization rate, the interest rate rises sharply.",
+                      )
+                    }
                     onMouseLeave={handleMouseLeave}
                   >
                     <Image
@@ -146,37 +182,70 @@ const MarketDetails: React.FC<{
               {isLoading && (
                 <SkeletonLoading
                   className={styles.value}
-                  style={{ width: "60px", height: "22.5px", borderRadius: "8px" }}
+                  style={{
+                    width: "60px",
+                    height: "22.5px",
+                    borderRadius: "8px",
+                  }}
                 />
               )}
               {protocolStats && (
                 <p className={styles.value}>
                   {(!jumpRateActive && (
                     <>
-                      {parseFloat(protocolStats.info.initRate).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(protocolStats.info.initRate).toLocaleString(
+                        undefined,
+                        { maximumFractionDigits: 2 },
+                      )}
                       {"% + "}
-                      {parseFloat(protocolStats.info.baseRate).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(protocolStats.info.baseRate).toLocaleString(
+                        undefined,
+                        { maximumFractionDigits: 2 },
+                      )}
                       {"% × "}
-                      {parseFloat(protocolStats.info.utilization).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(
+                        protocolStats.info.utilization,
+                      ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                       {"% ≈ "}
-                      {protocolStats.borrowAPR.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {protocolStats.borrowAPR.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
                       {"%"}
                     </>
                   )) || (
                     <>
-                      {parseFloat(protocolStats.info.initRate).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(protocolStats.info.initRate).toLocaleString(
+                        undefined,
+                        { maximumFractionDigits: 2 },
+                      )}
                       {"% + "}
-                      {parseFloat(protocolStats.info.baseRate).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(protocolStats.info.baseRate).toLocaleString(
+                        undefined,
+                        { maximumFractionDigits: 2 },
+                      )}
                       {"% × "}
-                      {parseFloat(protocolStats.info.kinkParam).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(protocolStats.info.kinkParam).toLocaleString(
+                        undefined,
+                        { maximumFractionDigits: 2 },
+                      )}
                       {"% + "}
-                      {parseFloat(protocolStats.info.jumpRate).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(protocolStats.info.jumpRate).toLocaleString(
+                        undefined,
+                        { maximumFractionDigits: 2 },
+                      )}
                       {"% × ("}
-                      {parseFloat(protocolStats.info.utilization).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(
+                        protocolStats.info.utilization,
+                      ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                       {"% - "}
-                      {parseFloat(protocolStats.info.kinkParam).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseFloat(protocolStats.info.kinkParam).toLocaleString(
+                        undefined,
+                        { maximumFractionDigits: 2 },
+                      )}
                       {"%) ≈ "}
-                      {protocolStats.borrowAPR.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {protocolStats.borrowAPR.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
                       {"%"}
                     </>
                   )}
@@ -184,6 +253,8 @@ const MarketDetails: React.FC<{
               )}
             </div>
           </div>
+
+          {/* interest rate model graph here */}
         </div>
       </div>
 

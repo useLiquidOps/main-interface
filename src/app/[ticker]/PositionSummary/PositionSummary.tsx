@@ -264,6 +264,8 @@ const PositionSummary: React.FC<{
             </div>
           </div>
 
+          {/* health factor here */}
+
           {extraData && (
             <div className={styles.metric}>
               <div className={styles.metricInfo}>

@@ -1,0 +1,9 @@
+.jumpRateActive {
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: var(--failed-red);
+  color: var(--failed-red-text);
+  padding: 2px 5px 1px;
+  border-radius: 2px;
+}

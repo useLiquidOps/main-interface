@@ -94,7 +94,7 @@ const TickerInfo: React.FC<{
         </div>
         <div className={styles.detailContainer}>
           <div className={styles.indicatorContainer}>
-            <p className={styles.detailTitle}>Total Borrows</p>
+            <p className={styles.detailTitle}>Total Borrowed</p>
             <div className={styles.indicatorBlue}></div>
           </div>
           {isLoading ? (

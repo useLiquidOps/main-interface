@@ -82,6 +82,12 @@
   margin: 0;
 }
 
+.flexboxValue {
+  display: flex;
+  align-items: center;
+  gap: .28rem;
+}
+
 .progressContainer {
   width: 125px;
   height: 4px;

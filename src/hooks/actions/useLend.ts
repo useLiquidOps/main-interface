@@ -16,11 +16,30 @@ export function useLend() {
   const lendMutation = useMutation({
     mutationFn: async ({ token, quantity }: LendParams) => {
       try {
-        const res = await LiquidOpsClient.lend({
+        return await LiquidOpsClient.lend({
           token,
           quantity,
         });
-        queryClient.refetchQueries({
+      } catch (error) {
+        throw error;
+      }
+    },
+    onSuccess: async (_, { token }) => {
+      try {
+        // we need to fetch the wallet address here, because useMutation
+        // will not use the up-to-date address, if we access it through
+        // a hook/state (will use the value at render time)
+        // @ts-expect-error
+        const walletAddress = await arweaveWallet.getActiveAddress();
+        const { tokenAddress } = tokenInput(token.toUpperCase());
+
+        invalidateData([
+          `user-balance-${tokenAddress}-${walletAddress}`,
+          `user-position-${tokenAddress}-${walletAddress}`,
+          `user-position-balance-${tokenAddress}-${walletAddress}`,
+          `global-position-${walletAddress}`
+        ]);
+        await queryClient.refetchQueries({
           queryKey: [
             "global-position",
             "position",
@@ -28,12 +47,8 @@ export function useLend() {
             "user-balance"
           ]
         });
-
-        return res;
-      } catch (error) {
-        throw error;
-      }
-    },
+      } catch {}
+    }
   });
 
   const unlendMutation = useMutation({

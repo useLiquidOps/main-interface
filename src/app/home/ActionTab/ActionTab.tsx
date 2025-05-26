@@ -18,6 +18,7 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { Query } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
+import { useValueLimit } from "@/hooks/data/useValueLimit";
 
 interface ActionTabProps {
   ticker: string;
@@ -63,6 +64,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     const maxAmount = calculateMaxAmount();
     setInputValue(maxAmount.toString());
   };
+
+  const [valueLimit, valueLimitReached] = useValueLimit(inputValue, protocolStats);
 
   const jumpRateData = useMemo<
     { active: false } | { active: true; newAPR: number }
@@ -238,12 +241,33 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {valueLimitReached && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You can only {mode + " "} up to {valueLimit.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + ticker}.
+          </motion.p>
+        )}
+      </AnimatePresence>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
-          loadingScreenState.submitStatus === "loading"
+          loadingScreenState.submitStatus === "loading" ||
+          valueLimitReached
         }
         submitText={mode === "supply" ? "Supply" : "Borrow"}
       />

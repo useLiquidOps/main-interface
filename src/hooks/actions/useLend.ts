@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 
 interface LendParams {
@@ -9,13 +9,25 @@ interface LendParams {
 type UnlendParams = LendParams;
 
 export function useLend() {
+  const queryClient = useQueryClient();
+
   const lendMutation = useMutation({
     mutationFn: async ({ token, quantity }: LendParams) => {
       try {
-        return await LiquidOpsClient.lend({
+        const res = await LiquidOpsClient.lend({
           token,
           quantity,
         });
+        queryClient.refetchQueries({
+          queryKey: [
+            "global-position",
+            "position",
+            "position-balance",
+            "user-balance"
+          ]
+        });
+
+        return res;
       } catch (error) {
         throw error;
       }
@@ -25,10 +37,20 @@ export function useLend() {
   const unlendMutation = useMutation({
     mutationFn: async ({ token, quantity }: UnlendParams) => {
       try {
-        return await LiquidOpsClient.unLend({
+        const res = await LiquidOpsClient.unLend({
           token,
           quantity,
         });
+        queryClient.refetchQueries({
+          queryKey: [
+            "global-position",
+            "position",
+            "position-balance",
+            "user-balance"
+          ]
+        });
+
+        return res;
       } catch (error) {
         throw error;
       }

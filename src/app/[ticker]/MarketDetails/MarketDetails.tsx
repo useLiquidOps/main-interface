@@ -47,17 +47,7 @@ const MarketDetails: React.FC<{
           <div className={styles.metric}>
             <div className={styles.metricInfo}>
               <p className={styles.label}>Maximum LTV</p>
-              {isLoading && (
-                <SkeletonLoading
-                  className={styles.value}
-                  style={{
-                    width: "60px",
-                    height: "22.5px",
-                    borderRadius: "8px",
-                  }}
-                />
-              )}
-              {protocolStats && (
+              {(protocolStats && (
                 <p className={styles.value + " " + styles.flexboxValue}>
                   {parseFloat(
                     protocolStats.info.collateralFactor,
@@ -82,14 +72,7 @@ const MarketDetails: React.FC<{
                     />
                   </span>
                 </p>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.metric}>
-            <div className={styles.metricInfo}>
-              <p className={styles.label}>Liquidation LTV</p>
-              {isLoading && (
+              )) || (
                 <SkeletonLoading
                   className={styles.value}
                   style={{
@@ -99,7 +82,13 @@ const MarketDetails: React.FC<{
                   }}
                 />
               )}
-              {protocolStats && (
+            </div>
+          </div>
+
+          <div className={styles.metric}>
+            <div className={styles.metricInfo}>
+              <p className={styles.label}>Liquidation LTV</p>
+              {(protocolStats && (
                 <p className={styles.value + " " + styles.flexboxValue}>
                   {parseFloat(
                     protocolStats.info.liquidationThreshold,
@@ -124,14 +113,7 @@ const MarketDetails: React.FC<{
                     />
                   </span>
                 </p>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.metric}>
-            <div className={styles.metricInfo}>
-              <p className={styles.label}>Jump Rate Trigger</p>
-              {isLoading && (
+              )) || (
                 <SkeletonLoading
                   className={styles.value}
                   style={{
@@ -141,7 +123,13 @@ const MarketDetails: React.FC<{
                   }}
                 />
               )}
-              {protocolStats && (
+            </div>
+          </div>
+
+          <div className={styles.metric}>
+            <div className={styles.metricInfo}>
+              <p className={styles.label}>Jump Rate Trigger</p>
+              {(protocolStats && (
                 <p className={styles.value + " " + styles.flexboxValue}>
                   {parseFloat(protocolStats.info.kinkParam).toLocaleString(
                     undefined,
@@ -172,14 +160,7 @@ const MarketDetails: React.FC<{
                     </span>
                   )}
                 </p>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.metric}>
-            <div className={styles.metricInfo}>
-              <p className={styles.label}>Interest Rate Model for Borrows</p>
-              {isLoading && (
+              )) || (
                 <SkeletonLoading
                   className={styles.value}
                   style={{
@@ -189,24 +170,57 @@ const MarketDetails: React.FC<{
                   }}
                 />
               )}
-              {protocolStats && (
+            </div>
+          </div>
+
+          <div className={styles.metric}>
+            <div className={styles.metricInfo}>
+              <p className={styles.label}>Interest Rate Model for Borrows</p>
+              {(protocolStats && (
                 <p className={styles.value}>
                   {(!jumpRateActive && (
                     <>
-                      {parseFloat(protocolStats.info.initRate).toLocaleString(
-                        undefined,
-                        { maximumFractionDigits: 2 },
-                      )}
-                      {"% + "}
-                      {parseFloat(protocolStats.info.baseRate).toLocaleString(
-                        undefined,
-                        { maximumFractionDigits: 2 },
-                      )}
-                      {"% × "}
-                      {parseFloat(
-                        protocolStats.info.utilization,
-                      ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                      {"% ≈ "}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Init Rate")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(protocolStats.info.initRate).toLocaleString(
+                          undefined,
+                          { maximumFractionDigits: 2 },
+                        )}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {" + "}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Base Rate")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(protocolStats.info.baseRate).toLocaleString(
+                          undefined,
+                          { maximumFractionDigits: 2 },
+                        )}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {" × "}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Utilization")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(
+                          protocolStats.info.utilization,
+                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {" ≈ "}
                       {protocolStats.borrowAPR.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })}
@@ -214,35 +228,89 @@ const MarketDetails: React.FC<{
                     </>
                   )) || (
                     <>
-                      {parseFloat(protocolStats.info.initRate).toLocaleString(
-                        undefined,
-                        { maximumFractionDigits: 2 },
-                      )}
-                      {"% + "}
-                      {parseFloat(protocolStats.info.baseRate).toLocaleString(
-                        undefined,
-                        { maximumFractionDigits: 2 },
-                      )}
-                      {"% × "}
-                      {parseFloat(protocolStats.info.kinkParam).toLocaleString(
-                        undefined,
-                        { maximumFractionDigits: 2 },
-                      )}
-                      {"% + "}
-                      {parseFloat(protocolStats.info.jumpRate).toLocaleString(
-                        undefined,
-                        { maximumFractionDigits: 2 },
-                      )}
-                      {"% × ("}
-                      {parseFloat(
-                        protocolStats.info.utilization,
-                      ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                      {"% - "}
-                      {parseFloat(protocolStats.info.kinkParam).toLocaleString(
-                        undefined,
-                        { maximumFractionDigits: 2 },
-                      )}
-                      {"%) ≈ "}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Init Rate")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(protocolStats.info.initRate).toLocaleString(
+                          undefined,
+                          { maximumFractionDigits: 2 },
+                        )}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {" + "}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Base Rate")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(protocolStats.info.baseRate).toLocaleString(
+                          undefined,
+                          { maximumFractionDigits: 2 },
+                        )}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {" × "}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Jump Rate Trigger Utilization")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(protocolStats.info.kinkParam).toLocaleString(
+                          undefined,
+                          { maximumFractionDigits: 2 },
+                        )}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {" + "}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Jump Rate")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(protocolStats.info.jumpRate).toLocaleString(
+                          undefined,
+                          { maximumFractionDigits: 2 },
+                        )}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {" × ("}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Utilization")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(
+                          protocolStats.info.utilization,
+                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {" - "}
+                      <span
+                        className={marketDetailsStyles.rate}
+                        onMouseMove={(e) => handleMouseMove(e, "Jump Rate Trigger Utilization")}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {parseFloat(protocolStats.info.kinkParam).toLocaleString(
+                          undefined,
+                          { maximumFractionDigits: 2 },
+                        )}
+                      </span>
+                      <span className={marketDetailsStyles.percentage}>
+                        %
+                      </span>
+                      {") ≈ "}
                       {protocolStats.borrowAPR.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })}
@@ -250,6 +318,15 @@ const MarketDetails: React.FC<{
                     </>
                   )}
                 </p>
+              )) || (
+                <SkeletonLoading
+                  className={styles.value}
+                  style={{
+                    width: "60px",
+                    height: "22.5px",
+                    borderRadius: "8px",
+                  }}
+                />
               )}
             </div>
           </div>

@@ -16,20 +16,10 @@ export function useBorrow() {
   const borrowMutation = useMutation({
     mutationFn: async ({ token, quantity }: BorrowParams) => {
       try {
-        const res = await LiquidOpsClient.borrow({
+        return await LiquidOpsClient.borrow({
           token,
           quantity,
         });
-        queryClient.refetchQueries({
-          queryKey: [
-            "global-position",
-            "position",
-            "position-balance",
-            "user-balance"
-          ]
-        });
-
-        return res;
       } catch (error) {
         throw error;
       }

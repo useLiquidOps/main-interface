@@ -29,6 +29,24 @@
   border: 0;
 }
 
+.okButton {
+  margin: 1rem auto 0;
+  padding: 11px 24px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  transition: all 0.18s ease;
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+}
+
+.okButton:hover {
+  background-color: #322ece;
+}
+
 .statusContainer {
   display: flex;
   justify-content: center;

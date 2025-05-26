@@ -120,6 +120,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                   </a>
                 )}
             </div>
+            <button className={styles.okButton} onClick={onClose}>
+              Close
+            </button>
           </motion.div>
         </motion.div>
       )}
@@ -157,7 +160,7 @@ const formatStateMessage = (state: LoadingStateWithoutSuccess): string => {
     signing: "Please sign the transaction in your wallet.",
     pending: "We couldn't confirm your transaction, please check later.",
     failed: "Transaction failed, please check status in profile tab.",
-    loading: "Please wait while we confirm your transaction.",
+    loading: "Your transaction is being processed. You can close this window.",
   };
   return stateMap[state];
 };

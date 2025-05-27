@@ -19,6 +19,7 @@ import { Query } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useValueLimit } from "@/hooks/data/useValueLimit";
+import { useCooldown } from "@/hooks/data/useCooldown";
 
 interface ActionTabProps {
   ticker: string;
@@ -41,6 +42,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+
+  const { data: cooldownData } = useCooldown(mode, ticker);
 
   // Reset input callback
   const resetInput = useCallback(() => {
@@ -270,13 +273,37 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {cooldownData && cooldownData.onCooldown && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You are on a cooldown for{" "}
+            {/*
+            // @ts-ignore */}
+            {cooldownData.remainingBlocks.toString() + " "} block(s).
+          </motion.p>
+        )}
+      </AnimatePresence>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
           loadingScreenState.submitStatus === "loading" ||
-          valueLimitReached
+          valueLimitReached ||
+          cooldownData?.onCooldown
         }
         submitText={mode === "supply" ? "Supply" : "Borrow"}
       />

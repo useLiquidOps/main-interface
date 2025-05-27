@@ -190,9 +190,7 @@ const MarketDetails: React.FC<{
                           { maximumFractionDigits: 2 },
                         )}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {" + "}
                       <span
                         className={marketDetailsStyles.rate}
@@ -204,9 +202,7 @@ const MarketDetails: React.FC<{
                           { maximumFractionDigits: 2 },
                         )}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {" × "}
                       <span
                         className={marketDetailsStyles.rate}
@@ -215,11 +211,11 @@ const MarketDetails: React.FC<{
                       >
                         {parseFloat(
                           protocolStats.info.utilization,
-                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                        ).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {" ≈ "}
                       {protocolStats.borrowAPR.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
@@ -238,9 +234,7 @@ const MarketDetails: React.FC<{
                           { maximumFractionDigits: 2 },
                         )}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {" + "}
                       <span
                         className={marketDetailsStyles.rate}
@@ -252,23 +246,22 @@ const MarketDetails: React.FC<{
                           { maximumFractionDigits: 2 },
                         )}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {" × "}
                       <span
                         className={marketDetailsStyles.rate}
-                        onMouseMove={(e) => handleMouseMove(e, "Jump Rate Trigger Utilization")}
+                        onMouseMove={(e) =>
+                          handleMouseMove(e, "Jump Rate Trigger Utilization")
+                        }
                         onMouseLeave={handleMouseLeave}
                       >
-                        {parseFloat(protocolStats.info.kinkParam).toLocaleString(
-                          undefined,
-                          { maximumFractionDigits: 2 },
-                        )}
+                        {parseFloat(
+                          protocolStats.info.kinkParam,
+                        ).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {" + "}
                       <span
                         className={marketDetailsStyles.rate}
@@ -280,9 +273,7 @@ const MarketDetails: React.FC<{
                           { maximumFractionDigits: 2 },
                         )}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {" × ("}
                       <span
                         className={marketDetailsStyles.rate}
@@ -291,25 +282,26 @@ const MarketDetails: React.FC<{
                       >
                         {parseFloat(
                           protocolStats.info.utilization,
-                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                        ).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {" - "}
                       <span
                         className={marketDetailsStyles.rate}
-                        onMouseMove={(e) => handleMouseMove(e, "Jump Rate Trigger Utilization")}
+                        onMouseMove={(e) =>
+                          handleMouseMove(e, "Jump Rate Trigger Utilization")
+                        }
                         onMouseLeave={handleMouseLeave}
                       >
-                        {parseFloat(protocolStats.info.kinkParam).toLocaleString(
-                          undefined,
-                          { maximumFractionDigits: 2 },
-                        )}
+                        {parseFloat(
+                          protocolStats.info.kinkParam,
+                        ).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })}
                       </span>
-                      <span className={marketDetailsStyles.percentage}>
-                        %
-                      </span>
+                      <span className={marketDetailsStyles.percentage}>%</span>
                       {") ≈ "}
                       {protocolStats.borrowAPR.toLocaleString(undefined, {
                         maximumFractionDigits: 2,

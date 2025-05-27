@@ -115,6 +115,23 @@ const PositionSummary: React.FC<{
     return "liquidation";
   }, [healthFactor]);
 
+  const ltv = useMemo(() => {
+    if (!globalPosition || Quantity.eq(globalPosition.collateralValueUSD, new Quantity(0n, 12n))) {
+      return new Quantity(0n, 12n);
+    }
+
+    return Quantity.__div(
+      Quantity.__mul(
+        Quantity.__sub(
+          globalPosition.borrowCapacityUSD,
+          globalPosition.availableToBorrowUSD,
+        ),
+        new Quantity(0n, globalPosition.borrowCapacityUSD.denomination).fromNumber(100)
+      ),
+      globalPosition.collateralValueUSD
+    );
+  }, [globalPosition]);
+
   if (!tokenData) {
     return <></>;
   }
@@ -231,24 +248,35 @@ const PositionSummary: React.FC<{
               )}
             </div>
           </div>
-
-            <div className={styles.metric}>
-              <div className={styles.metricInfo}>
-                <p className={styles.label}>Health Factor</p>
-                {isLoadingPosition || !globalPosition ? (
-                  <SkeletonLoading style={{ width: "140px", height: "24px" }} />
-                ) : (
-                  <p className={styles.value + " " + styles.flexboxValue}>
-                    {(healthFactor && (
-                      <>
-                        {healthFactor.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                        <span className={styles.riskIndicator + " " + styles[risk]}>{risk}</span>
-                      </>
-                    )) || "--"}
-                  </p>
-                )}
-              </div>
+          <div className={styles.metric}>
+            <div className={styles.metricInfo}>
+              <p className={styles.label}>Loan to Value Ratio</p>
+              {isLoadingPosition || !globalPosition ? (
+                <SkeletonLoading style={{ width: "140px", height: "24px" }} />
+              ) : (
+                <p className={styles.value + " " + styles.flexboxValue}>
+                  {ltv.toLocaleString(undefined, { maximumFractionDigits: 2 })}%
+                </p>
+              )}
             </div>
+          </div>
+          <div className={styles.metric}>
+            <div className={styles.metricInfo}>
+              <p className={styles.label}>Health Factor</p>
+              {isLoadingPosition || !globalPosition ? (
+                <SkeletonLoading style={{ width: "140px", height: "24px" }} />
+              ) : (
+                <p className={styles.value + " " + styles.flexboxValue}>
+                  {(healthFactor && (
+                    <>
+                      {healthFactor.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      <span className={styles.riskIndicator + " " + styles[risk]}>{risk}</span>
+                    </>
+                  )) || "--"}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 

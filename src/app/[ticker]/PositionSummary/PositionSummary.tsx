@@ -5,6 +5,7 @@ import { Quantity } from "ao-tokens";
 import { useGlobalPosition } from "@/hooks/LiquidOpsData/useGlobalPosition";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import { Query } from "@tanstack/react-query";
 
 const PositionSummary: React.FC<{
   ticker: string;
@@ -38,23 +39,24 @@ const PositionSummary: React.FC<{
     [globalPosition],
   );
 
-  const getProgressWidth = (): string => {
-    const currentBorrow = Quantity.__sub(
-      maxBorrow,
-      globalPosition?.availableToBorrowUSD ||
-        new Quantity(0n, maxBorrow.denomination),
+  const progressWidth = useMemo(() => {
+    const zero = new Quantity(0n, 12n);
+    const hundred = new Quantity(100n, 12n);
+
+    if (Quantity.eq(maxBorrow, zero) || !globalPosition) {
+      return "0%";
+    }
+
+    const available = globalPosition?.availableToBorrowUSD || new Quantity(0n, maxBorrow.denomination);
+    const currentBorrow = Quantity.__sub(maxBorrow, available);
+
+    const percentage = Quantity.__div(
+      Quantity.__mul(currentBorrow, hundred),
+      maxBorrow
     );
-    if (maxBorrow.toNumber() === 0) return "0%";
-    return (
-      Quantity.__div(
-        Quantity.__mul(
-          currentBorrow,
-          new Quantity(0n, denomination).fromNumber(100),
-        ),
-        maxBorrow,
-      ).toLocaleString(undefined, { maximumFractionDigits: 2 }) + "%"
-    );
-  };
+
+    return percentage.toNumber().toFixed(3) + "%";
+  }, [maxBorrow, globalPosition]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -222,9 +224,7 @@ const PositionSummary: React.FC<{
                 <>
                   <div
                     className={styles.progressPrimary}
-                    style={{
-                      width: getProgressWidth(),
-                    }}
+                    style={{ width: progressWidth }}
                   />
                   <div className={styles.progressBackground} />
                 </>

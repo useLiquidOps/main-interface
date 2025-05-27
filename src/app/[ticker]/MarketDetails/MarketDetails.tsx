@@ -5,6 +5,8 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Quantity } from "ao-tokens";
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { parse } from "next/dist/build/swc";
 
 const MarketDetails: React.FC<{
   ticker: string;
@@ -37,6 +39,31 @@ const MarketDetails: React.FC<{
   const handleMouseLeave = () => {
     setShowTooltip(false);
   };
+
+  const interestRateModelData = useMemo(() => {
+    if (!protocolStats) return undefined;
+
+    const kinkParam = parseFloat(protocolStats.info.kinkParam);
+    const baseRate = parseFloat(protocolStats.info.baseRate);
+    const jumpRate = parseFloat(protocolStats.info.jumpRate);
+    const initRate = parseFloat(protocolStats.info.initRate);
+    const data = [];
+
+    for (let i = 0; i < 100; i++) {
+      const utilization = i / 100;
+      let apy = initRate;
+
+      if (utilization <= kinkParam) {
+        apy += utilization * baseRate;
+      } else {
+        apy += kinkParam * baseRate / 100 + (utilization - kinkParam / 100) * jumpRate;
+      }
+
+      data.push({ apy, utilization });
+    }
+
+    return data;
+  }, [protocolStats]);
 
   return (
     <div className={styles.body}>
@@ -323,7 +350,26 @@ const MarketDetails: React.FC<{
             </div>
           </div>
 
-          {/* interest rate model graph here */}
+          {interestRateModelData && (
+            <ResponsiveContainer width="100%" height="100px">
+              <LineChart data={interestRateModelData}>
+                <YAxis
+                  domain={["dataMin", "dataMax + 0.01"]}
+                  hide={true}
+                />
+                <XAxis dataKey="utilization" hide />
+                <Line
+                  type="monotone"
+                  dataKey="apy"
+                  stroke="var(--primary-palatinate-blue)"
+                  strokeWidth={3}
+                  dot={false}
+                  activeDot={{ r: 6, fill: "var(--primary-palatinate-blue)" }}
+                />
+                <Tooltip content={<></>} cursor={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
 

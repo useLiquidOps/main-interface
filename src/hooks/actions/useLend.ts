@@ -1,5 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
+import { invalidateData } from "@/utils/caches/cacheUtils";
+import { tokenInput } from "liquidops";
 
 interface LendParams {
   token: string;
@@ -9,6 +11,8 @@ interface LendParams {
 type UnlendParams = LendParams;
 
 export function useLend() {
+  const queryClient = useQueryClient();
+
   const lendMutation = useMutation({
     mutationFn: async ({ token, quantity }: LendParams) => {
       try {
@@ -20,6 +24,31 @@ export function useLend() {
         throw error;
       }
     },
+    onSuccess: async (_, { token }) => {
+      try {
+        // we need to fetch the wallet address here, because useMutation
+        // will not use the up-to-date address, if we access it through
+        // a hook/state (will use the value at render time)
+        // @ts-expect-error
+        const walletAddress = await arweaveWallet.getActiveAddress();
+        const { tokenAddress } = tokenInput(token.toUpperCase());
+
+        invalidateData([
+          `user-balance-${tokenAddress}-${walletAddress}`,
+          `user-position-${tokenAddress}-${walletAddress}`,
+          `user-position-balance-${tokenAddress}-${walletAddress}`,
+          `global-position-${walletAddress}`
+        ]);
+        await queryClient.refetchQueries({
+          queryKey: [
+            "global-position",
+            "position",
+            "position-balance",
+            "user-balance"
+          ]
+        });
+      } catch {}
+    }
   });
 
   const unlendMutation = useMutation({
@@ -33,6 +62,31 @@ export function useLend() {
         throw error;
       }
     },
+    onSuccess: async (_, { token }) => {
+      try {
+        // we need to fetch the wallet address here, because useMutation
+        // will not use the up-to-date address, if we access it through
+        // a hook/state (will use the value at render time)
+        // @ts-expect-error
+        const walletAddress = await arweaveWallet.getActiveAddress();
+        const { tokenAddress } = tokenInput(token.toUpperCase());
+
+        invalidateData([
+          `user-balance-${tokenAddress}-${walletAddress}`,
+          `user-position-${tokenAddress}-${walletAddress}`,
+          `user-position-balance-${tokenAddress}-${walletAddress}`,
+          `global-position-${walletAddress}`
+        ]);
+        await queryClient.refetchQueries({
+          queryKey: [
+            "global-position",
+            "position",
+            "position-balance",
+            "user-balance"
+          ]
+        });
+      } catch {}
+    }
   });
 
   return {

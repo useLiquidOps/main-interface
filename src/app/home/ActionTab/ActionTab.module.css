@@ -64,3 +64,15 @@
 .customiseIcon {
   cursor: not-allowed;
 }
+
+.warning {
+  background-color: var(--failed-red);
+  color: var(--failed-red-text);
+  padding: 0.6rem 1.05rem;
+  margin: 1rem 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 500;
+}

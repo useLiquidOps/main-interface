@@ -76,6 +76,16 @@ export function cacheData<K extends string>({
   }
 }
 
+export function invalidateData<K extends DataKeys>(dataKey: K | K[]) {
+  if (Array.isArray(dataKey)) {
+    for (const key of dataKey) {
+      localStorage.removeItem(key);
+    }
+  } else {
+    localStorage.removeItem(dataKey);
+  }
+}
+
 export function wrapQuantity(quantity: Quantity): WrappedQuantity {
   return {
     value: quantity.raw.toString(),

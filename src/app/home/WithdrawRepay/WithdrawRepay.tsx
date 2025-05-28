@@ -14,6 +14,11 @@ import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
+import { useValueLimit } from "@/hooks/data/useValueLimit";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
+import { AnimatePresence, motion } from "framer-motion";
+import { warningVariants } from "@/components/DropDown/FramerMotion";
+import { useCooldown } from "@/hooks/data/useCooldown";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -50,6 +55,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     null,
   );
 
+  const { data: cooldownData } = useCooldown(mode, ticker);
+
   // Reset input callback
   const resetInput = useCallback(() => {
     setInputValue("");
@@ -63,6 +70,13 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
       mode === "withdraw" ? unlendError : repayError,
       resetInput,
     );
+
+  const { data: protocolStats, isLoading: isLoadingProtocolStats } =
+    useProtocolStats(ticker.toUpperCase());
+  const [valueLimit, valueLimitReached] = useValueLimit(
+    inputValue,
+    protocolStats,
+  );
 
   const calculateMaxAmount = () => {
     if (isLoadingCurrentBalance || !currentBalance)
@@ -167,12 +181,63 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         <span className={styles.infoLabel}>Network fee: {networkFee} AO</span>
       </div>
 
+      <AnimatePresence>
+        {valueLimitReached && mode === "withdraw" && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You can only {mode + " "} up to{" "}
+            {valueLimit.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            }) +
+              " " +
+              ticker}
+            .
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {cooldownData && cooldownData.onCooldown && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You are on a cooldown for{" "}
+            {/*
+            // @ts-ignore */}
+            {cooldownData.remainingBlocks.toString() + " "} block(s).
+          </motion.p>
+        )}
+      </AnimatePresence>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
-          loadingScreenState.submitStatus === "loading"
+          loadingScreenState.submitStatus === "loading" ||
+          (mode === "withdraw" && valueLimitReached) ||
+          cooldownData?.onCooldown
         }
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}
       />

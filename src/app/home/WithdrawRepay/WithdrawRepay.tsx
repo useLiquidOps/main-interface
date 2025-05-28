@@ -164,6 +164,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         walletBalance={currentBalance}
         onMaxClick={handleMaxClick}
         denomination={currentBalance?.denomination || 12n}
+        bypassBalanceCheck={mode === "withdraw"}
       />
 
       <PercentagePicker

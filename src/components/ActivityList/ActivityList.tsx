@@ -11,6 +11,8 @@ import Link from "next/link";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useHighestAPY } from "@/hooks/LiquidOpsData/useHighestAPY";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import { PendingItem } from "./PendingItem/PendingItem";
+import { Quantity } from "ao-tokens";
 
 interface ActivityListProps {
   transactions: Transaction[];
@@ -148,6 +150,26 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   return (
     <div className={styles.activityContainer}>
+      <div className={styles.activityTitleContainer}>
+        <div className={styles.left}>
+          <p className={styles.activityTitle}>Pending Transactions</p>
+        </div>
+      </div>
+
+      <div className={styles.activity}>
+        <div className={styles.pendingItems}>
+          <PendingItem
+            tx={{
+              id: "test",
+              timestamp: Date.now(),
+              qty: new Quantity(12345n, 3n),
+              ticker: "WUSDT",
+              action: "repay"
+            }}
+          />
+        </div>
+      </div>
+
       <div className={styles.activityTitleContainer}>
         <div className={styles.left}>
           <p className={styles.activityTitle}>Transactions</p>

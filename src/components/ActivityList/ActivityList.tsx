@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Image from "next/image";
 import styles from "./ActivityList.module.css";
 import {
@@ -12,7 +12,7 @@ import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useHighestAPY } from "@/hooks/LiquidOpsData/useHighestAPY";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { PendingItem } from "./PendingItem/PendingItem";
-import { Quantity } from "ao-tokens";
+import { PendingTxContext } from "../PendingTransactions/PendingTransactions";
 
 interface ActivityListProps {
   transactions: Transaction[];
@@ -77,6 +77,17 @@ const ActivityList: React.FC<ActivityListProps> = ({
       }
     };
   }, [displayLimit, isLoading, transactions.length]);
+
+  const [pendingTransactions, setPendingTransactions] = useContext(PendingTxContext);
+
+  useEffect(() => {
+    if (!transactions || isLoading) return;
+    setPendingTransactions(
+      (pendingTxs) => pendingTxs.filter(
+        (t1) => !transactions.find(t2 => t2.id === t1.id)
+      )
+    );
+  }, [transactions, setPendingTransactions, isLoading]);
 
   const renderContent = () => {
     if (isLoading && (!transactions || transactions.length === 0)) {
@@ -150,25 +161,23 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   return (
     <div className={styles.activityContainer}>
-      <div className={styles.activityTitleContainer}>
-        <div className={styles.left}>
-          <p className={styles.activityTitle}>Pending Transactions</p>
-        </div>
-      </div>
+      {pendingTransactions.length > 0 && (
+        <>
+          <div className={styles.activityTitleContainer}>
+            <div className={styles.left}>
+              <p className={styles.activityTitle}>Pending Transactions</p>
+            </div>
+          </div>
 
-      <div className={styles.activity}>
-        <div className={styles.pendingItems}>
-          <PendingItem
-            tx={{
-              id: "test",
-              timestamp: Date.now(),
-              qty: new Quantity(12345n, 3n),
-              ticker: "WUSDT",
-              action: "repay"
-            }}
-          />
-        </div>
-      </div>
+          <div className={styles.activity}>
+            <div className={styles.pendingItems}>
+              {pendingTransactions.map((tx, i) => (
+                <PendingItem tx={tx} key={i} />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       <div className={styles.activityTitleContainer}>
         <div className={styles.left}>

@@ -5,8 +5,7 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Quantity } from "ao-tokens";
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { parse } from "next/dist/build/swc";
+import { CartesianGrid, Line, LineChart, ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const MarketDetails: React.FC<{
   ticker: string;
@@ -40,29 +39,69 @@ const MarketDetails: React.FC<{
     setShowTooltip(false);
   };
 
-  const interestRateModelData = useMemo(() => {
-    if (!protocolStats) return undefined;
+  const interestModel = useMemo(
+    () => {
+      if (!protocolStats) return undefined;
+      return {
+        kinkParam: parseFloat(protocolStats.info.kinkParam),
+        baseRate: parseFloat(protocolStats.info.baseRate),
+        jumpRate: parseFloat(protocolStats.info.jumpRate),
+        initRate: parseFloat(protocolStats.info.initRate),
+      };
+    },
+    [protocolStats]
+  );
 
-    const kinkParam = parseFloat(protocolStats.info.kinkParam);
-    const baseRate = parseFloat(protocolStats.info.baseRate);
-    const jumpRate = parseFloat(protocolStats.info.jumpRate);
-    const initRate = parseFloat(protocolStats.info.initRate);
+  const [hoveredUtilization, setHoveredUtilization] = useState<number | undefined>();
+  const hoveredAPY = useMemo(() => {
+    if (!hoveredUtilization || !interestModel) return undefined;
+
+    const {
+      initRate,
+      kinkParam,
+      baseRate,
+      jumpRate
+    } = interestModel;
+    let apy = initRate;
+
+    if (hoveredUtilization <= kinkParam) {
+      apy += hoveredUtilization * baseRate / 100;
+    } else {
+      apy += kinkParam * baseRate / 100 + (hoveredUtilization - kinkParam) * jumpRate / 100;
+    }
+
+    return apy;
+  }, [hoveredUtilization]);
+
+  const interestRateModelData = useMemo(() => {
+    if (!interestModel) return undefined;
+
+    const {
+      initRate,
+      kinkParam,
+      baseRate,
+      jumpRate
+    } = interestModel;
     const data = [];
 
-    for (let i = 0; i < 100; i++) {
-      const utilization = i / 100;
+    for (let u = 0; u <= 100; u++) {
       let apy = initRate;
 
-      if (utilization <= kinkParam) {
-        apy += utilization * baseRate;
+      if (u <= kinkParam) {
+        apy += u * baseRate / 100;
       } else {
-        apy += kinkParam * baseRate / 100 + (utilization - kinkParam / 100) * jumpRate;
+        apy += kinkParam * baseRate / 100 + (u - kinkParam) * jumpRate / 100;
       }
 
-      data.push({ apy, utilization });
+      data.push({ apy, utilization: u });
     }
 
     return data;
+  }, [interestModel]);
+
+  const referenceUtilization = useMemo(() => {
+    if (!protocolStats?.info?.utilization) return undefined;
+    return parseInt(protocolStats.info.utilization);
   }, [protocolStats]);
 
   return (
@@ -205,7 +244,7 @@ const MarketDetails: React.FC<{
               <p className={styles.label}>Interest Rate Model for Borrows</p>
               {(protocolStats && (
                 <p className={styles.value}>
-                  {(!jumpRateActive && (
+                  {(!jumpRateActive && (!hoveredUtilization || hoveredUtilization <= parseFloat(protocolStats.info.kinkParam)) && (
                     <>
                       <span
                         className={marketDetailsStyles.rate}
@@ -236,15 +275,13 @@ const MarketDetails: React.FC<{
                         onMouseMove={(e) => handleMouseMove(e, "Utilization")}
                         onMouseLeave={handleMouseLeave}
                       >
-                        {parseFloat(
-                          protocolStats.info.utilization,
-                        ).toLocaleString(undefined, {
+                        {(hoveredUtilization || protocolStats.utilizationRate).toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                         })}
                       </span>
                       <span className={marketDetailsStyles.percentage}>%</span>
                       {" ≈ "}
-                      {protocolStats.borrowAPR.toLocaleString(undefined, {
+                      {(hoveredAPY || protocolStats.borrowAPR).toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })}
                       {"%"}
@@ -307,9 +344,7 @@ const MarketDetails: React.FC<{
                         onMouseMove={(e) => handleMouseMove(e, "Utilization")}
                         onMouseLeave={handleMouseLeave}
                       >
-                        {parseFloat(
-                          protocolStats.info.utilization,
-                        ).toLocaleString(undefined, {
+                        {(hoveredUtilization || protocolStats.utilizationRate).toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                         })}
                       </span>
@@ -330,7 +365,7 @@ const MarketDetails: React.FC<{
                       </span>
                       <span className={marketDetailsStyles.percentage}>%</span>
                       {") ≈ "}
-                      {protocolStats.borrowAPR.toLocaleString(undefined, {
+                      {(hoveredAPY || protocolStats.borrowAPR).toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })}
                       {"%"}
@@ -350,26 +385,64 @@ const MarketDetails: React.FC<{
             </div>
           </div>
 
-          {interestRateModelData && (
-            <ResponsiveContainer width="100%" height="100px">
-              <LineChart data={interestRateModelData}>
-                <YAxis
-                  domain={["dataMin", "dataMax + 0.01"]}
-                  hide={true}
-                />
-                <XAxis dataKey="utilization" hide />
-                <Line
-                  type="monotone"
-                  dataKey="apy"
-                  stroke="var(--primary-palatinate-blue)"
-                  strokeWidth={3}
-                  dot={false}
-                  activeDot={{ r: 6, fill: "var(--primary-palatinate-blue)" }}
-                />
-                <Tooltip content={<></>} cursor={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          )}
+          <div className={marketDetailsStyles.interestRateChart}>
+            {interestRateModelData && (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={interestRateModelData}
+                  onMouseMove={(e) => setHoveredUtilization(e.activeTooltipIndex)}
+                  onMouseLeave={() => setHoveredUtilization(undefined)}
+                  margin={{ bottom: 0, left: 0, right: 0 }}
+                >
+                  <YAxis domain={["dataMin", "dataMax"]} hide />
+                  <XAxis
+                    dataKey="utilization"
+                    ticks={[0, ...([referenceUtilization, hoveredUtilization].filter(v => !!v).sort()), , 100] as number[]}
+                    tickFormatter={(v) => {
+                      if (v === hoveredUtilization) {
+                        return "Utilization: " + v.toString() + "%"
+                      }
+                      if (v === referenceUtilization) {
+                        return (protocolStats?.utilizationRate?.toLocaleString(undefined, { maximumFractionDigits: 2 }) || referenceUtilization) + "%";
+                      }
+
+                      return v;
+                    }}
+                    fontSize={10}
+                    interval="preserveStartEnd"
+                  />
+                  <CartesianGrid vertical={false} opacity={.34} />
+                  <Tooltip
+                    content={<></>}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="apy"
+                    stroke="var(--secondary-periwinkle)"
+                    strokeWidth={2}
+                    dot={false}
+                    activeDot={{ r: 4, fill: "var(--primary-palatinate-blue)" }}
+                  />
+                  {referenceUtilization && (
+                    <>
+                      <ReferenceLine
+                        x={referenceUtilization}
+                        stroke="var(--primary-ultramarine)"
+                      />
+                      <ReferenceDot
+                        x={referenceUtilization}
+                        y={interestRateModelData[referenceUtilization].apy}
+                        r={4}
+                        fill="var(--primary-palatinate-blue)"
+                        stroke="#fff"
+                        strokeWidth={2}
+                      />
+                    </>
+                  )}
+                </LineChart>
+              </ResponsiveContainer>
+            )}
+          </div>
         </div>
       </div>
 

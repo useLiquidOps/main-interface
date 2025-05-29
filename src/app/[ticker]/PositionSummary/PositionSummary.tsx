@@ -47,12 +47,14 @@ const PositionSummary: React.FC<{
       return "0%";
     }
 
-    const available = globalPosition?.availableToBorrowUSD || new Quantity(0n, maxBorrow.denomination);
+    const available =
+      globalPosition?.availableToBorrowUSD ||
+      new Quantity(0n, maxBorrow.denomination);
     const currentBorrow = Quantity.__sub(maxBorrow, available);
 
     const percentage = Quantity.__div(
       Quantity.__mul(currentBorrow, hundred),
-      maxBorrow
+      maxBorrow,
     );
 
     return percentage.toNumber().toFixed(3) + "%";

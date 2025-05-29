@@ -36,9 +36,7 @@ export function Providers({ children }: Props) {
           appInfo={walletInfo}
           muUrl="https://mu.ao-testnet.xyz"
         >
-          <PendingTransactions>
-            {children}
-          </PendingTransactions>
+          <PendingTransactions>{children}</PendingTransactions>
         </AOSyncProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

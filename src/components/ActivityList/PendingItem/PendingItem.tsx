@@ -24,13 +24,20 @@ export const PendingItem: React.FC<{ tx: PendingTransaction }> = ({ tx }) => {
     >
       <div className={styles.activityItemContainer}>
         <div className={styles.left}>
-          <Image src={`./tokens/${tx.ticker}.svg`} alt="activity" width={25} height={25} />
+          <Image
+            src={`./tokens/${tx.ticker}.svg`}
+            alt="activity"
+            width={25}
+            height={25}
+          />
 
           <div className={styles.actionDetailsContainer}>
             <div className={styles.actionDetails}>
               <p>{action}</p>
               <p>
-                {tx.qty.toLocaleString(undefined, { maximumFractionDigits: TOKEN_DECIMAL_PLACES[tx.ticker] as any })}
+                {tx.qty.toLocaleString(undefined, {
+                  maximumFractionDigits: TOKEN_DECIMAL_PLACES[tx.ticker] as any,
+                })}
               </p>
             </div>
 

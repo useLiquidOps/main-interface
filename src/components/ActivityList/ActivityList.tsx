@@ -78,14 +78,13 @@ const ActivityList: React.FC<ActivityListProps> = ({
     };
   }, [displayLimit, isLoading, transactions.length]);
 
-  const [pendingTransactions, setPendingTransactions] = useContext(PendingTxContext);
+  const [pendingTransactions, setPendingTransactions] =
+    useContext(PendingTxContext);
 
   useEffect(() => {
     if (!transactions || isLoading) return;
-    setPendingTransactions(
-      (pendingTxs) => pendingTxs.filter(
-        (t1) => !transactions.find(t2 => t2.id === t1.id)
-      )
+    setPendingTransactions((pendingTxs) =>
+      pendingTxs.filter((t1) => !transactions.find((t2) => t2.id === t1.id)),
     );
   }, [transactions, setPendingTransactions, isLoading]);
 

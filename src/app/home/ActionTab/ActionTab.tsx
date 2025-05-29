@@ -146,12 +146,15 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
       token: ticker.toUpperCase(),
       quantity: new Quantity(0n, baseDenomination).fromString(inputValue).raw,
     };
+    const onSettled = () => {
+      // TODO: finish loading
+      onClose();
+    };
 
-    // Execute appropriate action based on mode
     if (mode === "supply") {
-      loadingScreenActions.executeTransaction(inputValue, params, lend);
+      lend(params, { onSettled });
     } else {
-      loadingScreenActions.executeTransaction(inputValue, params, borrow);
+      borrow(params, { onSettled });
     }
   };
 

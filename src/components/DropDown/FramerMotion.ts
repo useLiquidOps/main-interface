@@ -44,3 +44,14 @@ export const warningVariants = {
     scale: 1,
   },
 };
+
+export const pendingNotificationVariants = {
+  hidden: {
+    opacity: 0,
+    y: "140%"
+  },
+  visible: {
+    opacity: 1,
+    y: 0
+  }
+};

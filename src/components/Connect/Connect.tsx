@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./Connect.module.css";
 import { useClickOutside } from "../utils/utils";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { overlayVariants } from "@/components/DropDown/FramerMotion";
+import { overlayVariants, pendingNotificationVariants } from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
@@ -13,6 +13,8 @@ import { walletInfo } from "@/utils/Wallets/wallets";
 import { useWallet } from "@vela-ventures/aosync-sdk-react";
 import { useAccountTab } from "./accountTabContext";
 import { shortenAddress } from "@/utils/Wallets/wallets";
+import { PendingTxContext } from "../PendingTransactions/PendingTransactions";
+import Spinner from "../Spinner/Spinner";
 
 declare global {
   interface Window {
@@ -141,6 +143,8 @@ const Connect: React.FC = () => {
     }
   }, [isConnected]);
 
+  const [pendingTransactions] = useContext(PendingTxContext);
+
   return (
     <>
       <AnimatePresence>
@@ -216,6 +220,38 @@ const Connect: React.FC = () => {
               isProfileLoading={isProfileLoading}
               profile={profile}
             />
+
+            {!isOpen && (
+              <div className={styles.notificationsWrapper}>
+                <AnimatePresence>
+                  {pendingTransactions.slice(0, 3).map((pending, i) => (
+                    <motion.div
+                      variants={pendingNotificationVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      className={styles.notification}
+                      onClick={() => setAccountTab(true)}
+                      key={i}
+                    >
+                      <Spinner size="22px" />
+                      <div className={styles.notificationContent}>
+                        <p>{formatAction(pending.action)}</p>
+                        <p>
+                          {pending.qty.toLocaleString(undefined, { maximumFractionDigits: 4 })}
+                        </p>
+                        <Image
+                          src={`/tokens/${pending.ticker}.svg`}
+                          height={15}
+                          width={15}
+                          alt={pending.ticker}
+                        />
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
         ) : (
           <button className={styles.connectButton} onClick={handleConnect}>
@@ -232,6 +268,16 @@ const Connect: React.FC = () => {
       />
     </>
   );
+};
+
+const formatAction = (action: string): string => {
+  const actionMap: Record<string, string> = {
+    lend: "Lending",
+    unlend: "Unlending",
+    borrow: "Borrowing",
+    repay: "Repaying",
+  };
+  return actionMap[action];
 };
 
 export default Connect;

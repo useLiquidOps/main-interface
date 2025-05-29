@@ -1,7 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { invalidateData } from "@/utils/caches/cacheUtils";
-import { tokenInput } from "liquidops";
+import { tokenData, tokenInput } from "liquidops";
+import { Quantity } from "ao-tokens";
+import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
+import { useContext } from "react";
 
 interface LendParams {
   token: string;
@@ -12,6 +15,7 @@ type UnlendParams = LendParams;
 
 export function useLend() {
   const queryClient = useQueryClient();
+  const [, setPendingTransactions] = useContext(PendingTxContext);
 
   const lendMutation = useMutation({
     mutationFn: async ({ token, quantity }: LendParams) => {
@@ -19,36 +23,50 @@ export function useLend() {
         return await LiquidOpsClient.lend({
           token,
           quantity,
+          noResult: true
         });
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (_, { token }) => {
+    onSuccess: async (transferId: string, { token, quantity }) => {
       try {
+        const ticker = token.toUpperCase();
+
         // we need to fetch the wallet address here, because useMutation
         // will not use the up-to-date address, if we access it through
         // a hook/state (will use the value at render time)
         // @ts-expect-error
         const walletAddress = await arweaveWallet.getActiveAddress();
-        const { tokenAddress } = tokenInput(token.toUpperCase());
+        const { tokenAddress } = tokenInput(ticker);
 
         invalidateData([
           `user-balance-${tokenAddress}-${walletAddress}`,
           `user-position-${tokenAddress}-${walletAddress}`,
           `user-position-balance-${tokenAddress}-${walletAddress}`,
-          `global-position-${walletAddress}`
+          `global-position-${walletAddress}`,
         ]);
         await queryClient.refetchQueries({
           queryKey: [
             "global-position",
             "position",
             "position-balance",
-            "user-balance"
-          ]
+            "user-balance",
+          ],
         });
+
+        setPendingTransactions((pending) => [
+          ...pending,
+          {
+            id: transferId,
+            ticker: ticker,
+            timestamp: Date.now(),
+            qty: new Quantity(quantity, tokenData[ticker].denomination),
+            action: "borrow",
+          },
+        ]);
       } catch {}
-    }
+    },
   });
 
   const unlendMutation = useMutation({
@@ -57,36 +75,50 @@ export function useLend() {
         return await LiquidOpsClient.unLend({
           token,
           quantity,
+          noResult: true
         });
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (_, { token }) => {
+    onSuccess: async (transferId, { token, quantity }) => {
       try {
+        const ticker = token.toUpperCase();
+
         // we need to fetch the wallet address here, because useMutation
         // will not use the up-to-date address, if we access it through
         // a hook/state (will use the value at render time)
         // @ts-expect-error
         const walletAddress = await arweaveWallet.getActiveAddress();
-        const { tokenAddress } = tokenInput(token.toUpperCase());
+        const { tokenAddress } = tokenInput(ticker);
 
         invalidateData([
           `user-balance-${tokenAddress}-${walletAddress}`,
           `user-position-${tokenAddress}-${walletAddress}`,
           `user-position-balance-${tokenAddress}-${walletAddress}`,
-          `global-position-${walletAddress}`
+          `global-position-${walletAddress}`,
         ]);
         await queryClient.refetchQueries({
           queryKey: [
             "global-position",
             "position",
             "position-balance",
-            "user-balance"
-          ]
+            "user-balance",
+          ],
         });
+
+        setPendingTransactions((pending) => [
+          ...pending,
+          {
+            id: transferId,
+            ticker: ticker,
+            timestamp: Date.now(),
+            qty: new Quantity(quantity, tokenData[ticker].denomination),
+            action: "borrow",
+          },
+        ]);
       } catch {}
-    }
+    },
   });
 
   return {

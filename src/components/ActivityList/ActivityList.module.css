@@ -80,6 +80,10 @@
   height: 100%;
 }
 
+.pendingItems {
+  padding: 0 8px 20px 0;
+}
+
 /* no transactions found  */
 
 .statusMessage {

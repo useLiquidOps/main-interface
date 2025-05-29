@@ -1,3 +1,4 @@
+import { usePendingTxSync } from "@/hooks/LiquidOpsData/useSyncPendingTransactions";
 import { unWrapQuantity, wrapQuantity } from "@/utils/caches/cacheUtils";
 import { Quantity } from "ao-tokens";
 import {
@@ -20,6 +21,7 @@ export default function PendingTransactions({
   const [state, setState] = useState<PendingTransaction[]>([]);
   const [loadedCache, setLoadedCache] = useState(false);
 
+  // load
   useEffect(() => {
     const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
     const loaded: PendingTransaction[] = [];
@@ -34,6 +36,7 @@ export default function PendingTransactions({
     setLoadedCache(true);
   }, []);
 
+  // save
   useEffect(() => {
     if (!loadedCache) return;
     const raw = [];
@@ -47,10 +50,20 @@ export default function PendingTransactions({
 
   return (
     <PendingTxContext.Provider value={[state, setState]}>
-      {children}
+      <SyncComponent>
+        {children}
+      </SyncComponent>
     </PendingTxContext.Provider>
   );
 }
+
+// consumer for pending tx context
+const SyncComponent = ({ children }: PropsWithChildren<{}>) => {
+  // sync
+  usePendingTxSync();
+
+  return children;
+};
 
 export interface PendingTransaction {
   id: string;

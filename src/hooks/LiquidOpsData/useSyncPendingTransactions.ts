@@ -10,21 +10,24 @@ export function usePendingTxSync() {
   const { data, isSuccess } = useQuery({
     queryKey: ["pending-transactions", pendingTxs],
     queryFn: async () => {
-      console.log(pendingTxs)
-      return (await Promise.all(pendingTxs.map(async (tx) => {
-        let status: GetResultRes = "pending";
-        try {
-          status = await LiquidOpsClient.getResult({
-            transferID: tx.id,
-            tokenAddress: tokenInput(tx.ticker).tokenAddress,
-            action: tx.action === "unlend" ? "unLend" : tx.action
-          });
-        } catch {
-          status = "pending";
-        }
+      return (
+        await Promise.all(
+          pendingTxs.map(async (tx) => {
+            let status: GetResultRes = "pending";
+            try {
+              status = await LiquidOpsClient.getResult({
+                transferID: tx.id,
+                tokenAddress: tokenInput(tx.ticker).tokenAddress,
+                action: tx.action === "unlend" ? "unLend" : tx.action,
+              });
+            } catch {
+              status = "pending";
+            }
 
-        return { id: tx.id, status };
-      })))
+            return { id: tx.id, status };
+          }),
+        )
+      )
         .filter((tx) => tx.status !== "pending")
         .map((tx) => tx.id);
     },
@@ -33,8 +36,8 @@ export function usePendingTxSync() {
 
   useEffect(() => {
     if (!isSuccess || !data) return;
-    setPendingTxs(
-      (pendingTxs) => pendingTxs.filter((tx1) => !data.includes(tx1.id))
+    setPendingTxs((pendingTxs) =>
+      pendingTxs.filter((tx1) => !data.includes(tx1.id)),
     );
   }, [data, isSuccess]);
 }

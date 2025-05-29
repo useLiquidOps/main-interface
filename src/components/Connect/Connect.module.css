@@ -82,10 +82,10 @@
 .notification {
   display: flex;
   align-items: center;
-  gap: .43rem;
+  gap: 0.43rem;
   background-color: #fff;
   border-radius: 12px;
-  padding: .8rem 1.35rem;
+  padding: 0.8rem 1.35rem;
   cursor: pointer;
   z-index: 10000;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;

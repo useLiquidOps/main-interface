@@ -23,7 +23,7 @@ export function useBorrow() {
         return await LiquidOpsClient.borrow({
           token,
           quantity,
-          noResult: true
+          noResult: true,
         });
       } catch (error) {
         throw error;
@@ -75,7 +75,7 @@ export function useBorrow() {
         return await LiquidOpsClient.repay({
           token,
           quantity,
-          noResult: true
+          noResult: true,
         });
       } catch (error) {
         throw error;
@@ -114,7 +114,7 @@ export function useBorrow() {
             ticker: ticker,
             timestamp: Date.now(),
             qty: new Quantity(quantity, tokenData[ticker].denomination),
-            action: "borrow",
+            action: "repay",
           },
         ]);
       } catch {}

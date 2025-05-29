@@ -4,7 +4,10 @@ import styles from "./Connect.module.css";
 import { useClickOutside } from "../utils/utils";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { overlayVariants, pendingNotificationVariants } from "@/components/DropDown/FramerMotion";
+import {
+  overlayVariants,
+  pendingNotificationVariants,
+} from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
@@ -238,7 +241,9 @@ const Connect: React.FC = () => {
                       <div className={styles.notificationContent}>
                         <p>{formatAction(pending.action)}</p>
                         <p>
-                          {pending.qty.toLocaleString(undefined, { maximumFractionDigits: 4 })}
+                          {pending.qty.toLocaleString(undefined, {
+                            maximumFractionDigits: 4,
+                          })}
                         </p>
                         <Image
                           src={`/tokens/${pending.ticker}.svg`}

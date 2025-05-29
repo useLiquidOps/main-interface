@@ -48,10 +48,10 @@ export const warningVariants = {
 export const pendingNotificationVariants = {
   hidden: {
     opacity: 0,
-    y: "140%"
+    y: "140%",
   },
   visible: {
     opacity: 1,
-    y: 0
-  }
+    y: 0,
+  },
 };

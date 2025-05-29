@@ -50,9 +50,7 @@ export default function PendingTransactions({
 
   return (
     <PendingTxContext.Provider value={[state, setState]}>
-      <SyncComponent>
-        {children}
-      </SyncComponent>
+      <SyncComponent>{children}</SyncComponent>
     </PendingTxContext.Provider>
   );
 }

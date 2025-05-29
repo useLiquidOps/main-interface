@@ -23,7 +23,7 @@ export function useLend() {
         return await LiquidOpsClient.lend({
           token,
           quantity,
-          noResult: true
+          noResult: true,
         });
       } catch (error) {
         throw error;
@@ -62,7 +62,7 @@ export function useLend() {
             ticker: ticker,
             timestamp: Date.now(),
             qty: new Quantity(quantity, tokenData[ticker].denomination),
-            action: "borrow",
+            action: "lend",
           },
         ]);
       } catch {}
@@ -75,7 +75,7 @@ export function useLend() {
         return await LiquidOpsClient.unLend({
           token,
           quantity,
-          noResult: true
+          noResult: true,
         });
       } catch (error) {
         throw error;
@@ -114,7 +114,7 @@ export function useLend() {
             ticker: ticker,
             timestamp: Date.now(),
             qty: new Quantity(quantity, tokenData[ticker].denomination),
-            action: "borrow",
+            action: "unlend",
           },
         ]);
       } catch {}

@@ -5,7 +5,6 @@ import { Quantity } from "ao-tokens";
 import { useGlobalPosition } from "@/hooks/LiquidOpsData/useGlobalPosition";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
-import { Query } from "@tanstack/react-query";
 
 const PositionSummary: React.FC<{
   ticker: string;

@@ -714,6 +714,7 @@
 
     "liquidops": ["liquidops@1.1.2", "", { "dependencies": { "ar-gql": "^2.0.2", "arbundles": "^0.11.2" }, "peerDependencies": { "@permaweb/aoconnect": ">= 0.0.77 < 1", "ao-tokens": ">= 0.0.6" } }, "sha512-k/NfSflAs7qqlD42ZdrFQpVIRl68cCdVmhwxeIcGVyyDNk71oo0T0ycnGJLVlhRgQ11caNuhajWWV71+XaanVA=="],
 
+
     "locate-path": ["locate-path@5.0.0", "", { "dependencies": { "p-locate": "^4.1.0" } }, "sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g=="],
 
     "lodash": ["lodash@4.17.21", "", {}, "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="],

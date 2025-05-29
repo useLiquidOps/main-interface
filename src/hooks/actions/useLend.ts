@@ -37,18 +37,18 @@ export function useLend() {
           `user-balance-${tokenAddress}-${walletAddress}`,
           `user-position-${tokenAddress}-${walletAddress}`,
           `user-position-balance-${tokenAddress}-${walletAddress}`,
-          `global-position-${walletAddress}`
+          `global-position-${walletAddress}`,
         ]);
         await queryClient.refetchQueries({
           queryKey: [
             "global-position",
             "position",
             "position-balance",
-            "user-balance"
-          ]
+            "user-balance",
+          ],
         });
       } catch {}
-    }
+    },
   });
 
   const unlendMutation = useMutation({
@@ -75,18 +75,18 @@ export function useLend() {
           `user-balance-${tokenAddress}-${walletAddress}`,
           `user-position-${tokenAddress}-${walletAddress}`,
           `user-position-balance-${tokenAddress}-${walletAddress}`,
-          `global-position-${walletAddress}`
+          `global-position-${walletAddress}`,
         ]);
         await queryClient.refetchQueries({
           queryKey: [
             "global-position",
             "position",
             "position-balance",
-            "user-balance"
-          ]
+            "user-balance",
+          ],
         });
       } catch {}
-    }
+    },
   });
 
   return {

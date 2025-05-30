@@ -103,20 +103,31 @@ const PositionSummary: React.FC<{
       globalPosition.borrowCapacityUSD,
       globalPosition.availableToBorrowUSD,
     );
-    if (Quantity.eq(borrowed, new Quantity(0n, globalPosition.borrowCapacityUSD.denomination)))
+    if (
+      Quantity.eq(
+        borrowed,
+        new Quantity(0n, globalPosition.borrowCapacityUSD.denomination),
+      )
+    )
       return undefined;
 
-    return Quantity.__div(globalPosition.liquidationPointUSD, borrowed).toNumber();
+    return Quantity.__div(
+      globalPosition.liquidationPointUSD,
+      borrowed,
+    ).toNumber();
   }, [globalPosition]);
 
   const risk = useMemo<"safe" | "risky" | "liquidation">(() => {
-    if (!healthFactor ||  healthFactor > 1.3) return "safe";
+    if (!healthFactor || healthFactor > 1.3) return "safe";
     if (healthFactor >= 1) return "risky";
     return "liquidation";
   }, [healthFactor]);
 
   const ltv = useMemo(() => {
-    if (!globalPosition || Quantity.eq(globalPosition.collateralValueUSD, new Quantity(0n, 12n))) {
+    if (
+      !globalPosition ||
+      Quantity.eq(globalPosition.collateralValueUSD, new Quantity(0n, 12n))
+    ) {
       return new Quantity(0n, 12n);
     }
 
@@ -126,9 +137,12 @@ const PositionSummary: React.FC<{
           globalPosition.borrowCapacityUSD,
           globalPosition.availableToBorrowUSD,
         ),
-        new Quantity(0n, globalPosition.borrowCapacityUSD.denomination).fromNumber(100)
+        new Quantity(
+          0n,
+          globalPosition.borrowCapacityUSD.denomination,
+        ).fromNumber(100),
       ),
-      globalPosition.collateralValueUSD
+      globalPosition.collateralValueUSD,
     );
   }, [globalPosition]);
 
@@ -269,10 +283,17 @@ const PositionSummary: React.FC<{
                 <p className={styles.value + " " + styles.flexboxValue}>
                   {(healthFactor && (
                     <>
-                      {healthFactor.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                      <span className={styles.riskIndicator + " " + styles[risk]}>{risk}</span>
+                      {healthFactor.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                      <span
+                        className={styles.riskIndicator + " " + styles[risk]}
+                      >
+                        {risk}
+                      </span>
                     </>
-                  )) || "--"}
+                  )) ||
+                    "--"}
                 </p>
               )}
             </div>

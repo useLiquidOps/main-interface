@@ -6,7 +6,6 @@ import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
 import InputBox from "@/components/InputBox/InputBox";
 import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 import Image from "next/image";
-import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
@@ -19,6 +18,7 @@ import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { AnimatePresence, motion } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useCooldown } from "@/hooks/data/useCooldown";
+import { useGetPositionBalance } from "@/hooks/LiquidOpsData/useGetPositionBalance";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -33,11 +33,11 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 }) => {
   const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
 
-  const { tokenAddress, oTokenAddress } = tokenInput(ticker.toUpperCase());
+  const { tokenAddress } = tokenInput(ticker.toUpperCase());
   const { data: positionBalance, isLoading: isLoadingPosition } =
     useGetPosition(tokenAddress);
   const { data: lentBalance, isLoading: isLoadingBalance } =
-    useUserBalance(oTokenAddress);
+  useGetPositionBalance(tokenAddress);
 
   const currentBalance = mode === "withdraw" ? lentBalance : positionBalance;
   const isLoadingCurrentBalance =

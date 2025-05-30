@@ -19,6 +19,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useCooldown } from "@/hooks/data/useCooldown";
 import { useGetPositionBalance } from "@/hooks/LiquidOpsData/useGetPositionBalance";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -33,11 +34,13 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 }) => {
   const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
 
-  const { tokenAddress } = tokenInput(ticker.toUpperCase());
+  const { tokenAddress, oTokenAddress } = tokenInput(ticker.toUpperCase());
   const { data: positionBalance, isLoading: isLoadingPosition } =
     useGetPosition(tokenAddress);
   const { data: lentBalance, isLoading: isLoadingBalance } =
-  useGetPositionBalance(tokenAddress);
+    useGetPositionBalance(tokenAddress);
+  const { data: oTokenBalance, isLoading: isLoadingOTokenBalance } =
+    useUserBalance(oTokenAddress);
 
   const currentBalance = mode === "withdraw" ? lentBalance : positionBalance;
   const isLoadingCurrentBalance =
@@ -79,6 +82,13 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   );
 
   const calculateMaxAmount = () => {
+    if (mode === "repay") {
+      if (!oTokenBalance) {
+        throw new Error("Not loaded oTokenBalance!");
+      }
+      return oTokenBalance;
+    }
+
     if (isLoadingCurrentBalance || !currentBalance)
       return new Quantity(0n, 12n);
     return currentBalance;
@@ -123,11 +133,37 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const handleSubmit = () => {
     if (!inputValue) return;
 
+
+    if (isLoadingOTokenBalance || isLoadingBalance) {
+      throw new Error("Not loaded userOTokenRate!");
+    }
+
+    const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
+
+    if (!userOTokenRate) {
+      throw new Error("Not loaded userOTokenRate!");
+    }
+
+
+    if (!currentBalance) {
+      throw new Error("Not loaded currentBalance!");
+    }
+
+    let quantity = new Quantity(0n, currentBalance?.denomination).fromString(
+      inputValue,
+    );
+
+    // If unlending (withdrawing), multiply by the oToken rate
+    if (mode === "withdraw") {
+      const oTokenAmount = Number(quantity) * userOTokenRate;
+      quantity = new Quantity(0n, currentBalance?.denomination).fromNumber(
+        oTokenAmount,
+      );
+    }
+
     const params = {
       token: ticker.toUpperCase(),
-      quantity: new Quantity(0n, currentBalance?.denomination).fromString(
-        inputValue,
-      ).raw,
+      quantity: quantity.raw,
     };
 
     if (mode === "withdraw") {

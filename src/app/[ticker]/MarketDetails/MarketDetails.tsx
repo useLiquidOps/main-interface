@@ -5,7 +5,17 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Quantity } from "ao-tokens";
-import { CartesianGrid, Line, LineChart, ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ReferenceDot,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const MarketDetails: React.FC<{
   ticker: string;
@@ -39,35 +49,31 @@ const MarketDetails: React.FC<{
     setShowTooltip(false);
   };
 
-  const interestModel = useMemo(
-    () => {
-      if (!protocolStats) return undefined;
-      return {
-        kinkParam: parseFloat(protocolStats.info.kinkParam),
-        baseRate: parseFloat(protocolStats.info.baseRate),
-        jumpRate: parseFloat(protocolStats.info.jumpRate),
-        initRate: parseFloat(protocolStats.info.initRate),
-      };
-    },
-    [protocolStats]
-  );
+  const interestModel = useMemo(() => {
+    if (!protocolStats) return undefined;
+    return {
+      kinkParam: parseFloat(protocolStats.info.kinkParam),
+      baseRate: parseFloat(protocolStats.info.baseRate),
+      jumpRate: parseFloat(protocolStats.info.jumpRate),
+      initRate: parseFloat(protocolStats.info.initRate),
+    };
+  }, [protocolStats]);
 
-  const [hoveredUtilization, setHoveredUtilization] = useState<number | undefined>();
+  const [hoveredUtilization, setHoveredUtilization] = useState<
+    number | undefined
+  >();
   const hoveredAPY = useMemo(() => {
     if (!hoveredUtilization || !interestModel) return undefined;
 
-    const {
-      initRate,
-      kinkParam,
-      baseRate,
-      jumpRate
-    } = interestModel;
+    const { initRate, kinkParam, baseRate, jumpRate } = interestModel;
     let apy = initRate;
 
     if (hoveredUtilization <= kinkParam) {
-      apy += hoveredUtilization * baseRate / 100;
+      apy += (hoveredUtilization * baseRate) / 100;
     } else {
-      apy += kinkParam * baseRate / 100 + (hoveredUtilization - kinkParam) * jumpRate / 100;
+      apy +=
+        (kinkParam * baseRate) / 100 +
+        ((hoveredUtilization - kinkParam) * jumpRate) / 100;
     }
 
     return apy;
@@ -76,21 +82,17 @@ const MarketDetails: React.FC<{
   const interestRateModelData = useMemo(() => {
     if (!interestModel) return undefined;
 
-    const {
-      initRate,
-      kinkParam,
-      baseRate,
-      jumpRate
-    } = interestModel;
+    const { initRate, kinkParam, baseRate, jumpRate } = interestModel;
     const data = [];
 
     for (let u = 0; u <= 100; u++) {
       let apy = initRate;
 
       if (u <= kinkParam) {
-        apy += u * baseRate / 100;
+        apy += (u * baseRate) / 100;
       } else {
-        apy += kinkParam * baseRate / 100 + (u - kinkParam) * jumpRate / 100;
+        apy +=
+          (kinkParam * baseRate) / 100 + ((u - kinkParam) * jumpRate) / 100;
       }
 
       data.push({ apy, utilization: u });
@@ -244,49 +246,65 @@ const MarketDetails: React.FC<{
               <p className={styles.label}>Interest Rate Model for Borrows</p>
               {(protocolStats && (
                 <p className={styles.value}>
-                  {(!jumpRateActive && (!hoveredUtilization || hoveredUtilization <= parseFloat(protocolStats.info.kinkParam)) && (
-                    <>
-                      <span
-                        className={marketDetailsStyles.rate}
-                        onMouseMove={(e) => handleMouseMove(e, "Init Rate")}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        {parseFloat(protocolStats.info.initRate).toLocaleString(
+                  {(!jumpRateActive &&
+                    (!hoveredUtilization ||
+                      hoveredUtilization <=
+                        parseFloat(protocolStats.info.kinkParam)) && (
+                      <>
+                        <span
+                          className={marketDetailsStyles.rate}
+                          onMouseMove={(e) => handleMouseMove(e, "Init Rate")}
+                          onMouseLeave={handleMouseLeave}
+                        >
+                          {parseFloat(
+                            protocolStats.info.initRate,
+                          ).toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                        <span className={marketDetailsStyles.percentage}>
+                          %
+                        </span>
+                        {" + "}
+                        <span
+                          className={marketDetailsStyles.rate}
+                          onMouseMove={(e) => handleMouseMove(e, "Base Rate")}
+                          onMouseLeave={handleMouseLeave}
+                        >
+                          {parseFloat(
+                            protocolStats.info.baseRate,
+                          ).toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                        <span className={marketDetailsStyles.percentage}>
+                          %
+                        </span>
+                        {" × "}
+                        <span
+                          className={marketDetailsStyles.rate}
+                          onMouseMove={(e) => handleMouseMove(e, "Utilization")}
+                          onMouseLeave={handleMouseLeave}
+                        >
+                          {(
+                            hoveredUtilization || protocolStats.utilizationRate
+                          ).toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                        <span className={marketDetailsStyles.percentage}>
+                          %
+                        </span>
+                        {" ≈ "}
+                        {(hoveredAPY || protocolStats.borrowAPR).toLocaleString(
                           undefined,
-                          { maximumFractionDigits: 2 },
+                          {
+                            maximumFractionDigits: 2,
+                          },
                         )}
-                      </span>
-                      <span className={marketDetailsStyles.percentage}>%</span>
-                      {" + "}
-                      <span
-                        className={marketDetailsStyles.rate}
-                        onMouseMove={(e) => handleMouseMove(e, "Base Rate")}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        {parseFloat(protocolStats.info.baseRate).toLocaleString(
-                          undefined,
-                          { maximumFractionDigits: 2 },
-                        )}
-                      </span>
-                      <span className={marketDetailsStyles.percentage}>%</span>
-                      {" × "}
-                      <span
-                        className={marketDetailsStyles.rate}
-                        onMouseMove={(e) => handleMouseMove(e, "Utilization")}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        {(hoveredUtilization || protocolStats.utilizationRate).toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })}
-                      </span>
-                      <span className={marketDetailsStyles.percentage}>%</span>
-                      {" ≈ "}
-                      {(hoveredAPY || protocolStats.borrowAPR).toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })}
-                      {"%"}
-                    </>
-                  )) || (
+                        {"%"}
+                      </>
+                    )) || (
                     <>
                       <span
                         className={marketDetailsStyles.rate}
@@ -344,7 +362,9 @@ const MarketDetails: React.FC<{
                         onMouseMove={(e) => handleMouseMove(e, "Utilization")}
                         onMouseLeave={handleMouseLeave}
                       >
-                        {(hoveredUtilization || protocolStats.utilizationRate).toLocaleString(undefined, {
+                        {(
+                          hoveredUtilization || protocolStats.utilizationRate
+                        ).toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                         })}
                       </span>
@@ -365,9 +385,12 @@ const MarketDetails: React.FC<{
                       </span>
                       <span className={marketDetailsStyles.percentage}>%</span>
                       {") ≈ "}
-                      {(hoveredAPY || protocolStats.borrowAPR).toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })}
+                      {(hoveredAPY || protocolStats.borrowAPR).toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 2,
+                        },
+                      )}
                       {"%"}
                     </>
                   )}
@@ -390,20 +413,36 @@ const MarketDetails: React.FC<{
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   data={interestRateModelData}
-                  onMouseMove={(e) => setHoveredUtilization(e.activeTooltipIndex)}
+                  onMouseMove={(e) =>
+                    setHoveredUtilization(e.activeTooltipIndex)
+                  }
                   onMouseLeave={() => setHoveredUtilization(undefined)}
                   margin={{ bottom: 0, left: 0, right: 0 }}
                 >
                   <YAxis domain={["dataMin", "dataMax"]} hide />
                   <XAxis
                     dataKey="utilization"
-                    ticks={[0, ...([referenceUtilization, hoveredUtilization].filter(v => !!v).sort()), , 100] as number[]}
+                    ticks={
+                      [
+                        0,
+                        ...[referenceUtilization, hoveredUtilization]
+                          .filter((v) => !!v)
+                          .sort(),
+                        ,
+                        100,
+                      ] as number[]
+                    }
                     tickFormatter={(v) => {
                       if (v === hoveredUtilization) {
-                        return "Utilization: " + v.toString() + "%"
+                        return "Utilization: " + v.toString() + "%";
                       }
                       if (v === referenceUtilization) {
-                        return (protocolStats?.utilizationRate?.toLocaleString(undefined, { maximumFractionDigits: 2 }) || referenceUtilization) + "%";
+                        return (
+                          (protocolStats?.utilizationRate?.toLocaleString(
+                            undefined,
+                            { maximumFractionDigits: 2 },
+                          ) || referenceUtilization) + "%"
+                        );
                       }
 
                       return v;
@@ -411,10 +450,8 @@ const MarketDetails: React.FC<{
                     fontSize={10}
                     interval="preserveStartEnd"
                   />
-                  <CartesianGrid vertical={false} opacity={.34} />
-                  <Tooltip
-                    content={<></>}
-                  />
+                  <CartesianGrid vertical={false} opacity={0.34} />
+                  <Tooltip content={<></>} />
                   <Line
                     type="monotone"
                     dataKey="apy"

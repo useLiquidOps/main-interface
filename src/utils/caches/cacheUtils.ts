@@ -7,6 +7,7 @@ import { GlobalPositionCache } from "@/hooks/LiquidOpsData/useGlobalPosition";
 import { TransactionCache } from "@/hooks/LiquidOpsData/useTransactions";
 import { ResultCache } from "@/hooks/LiquidOpsData/useGetResult";
 import { tokenData } from "liquidops";
+import { EarningsCache } from "@/hooks/data/useEarnings";
 
 interface DataTypeMap {
   prices: Prices;
@@ -23,6 +24,7 @@ interface DataTypeMap {
   "leverage-strategies": any;
   [key: `fairlaunch-apy-${string}`]: any;
   "dune-ao-bridge-stats": any;
+  [key: `user-earnings-${string}-${string}`]: EarningsCache;
 }
 
 type DataKeys = keyof DataTypeMap;

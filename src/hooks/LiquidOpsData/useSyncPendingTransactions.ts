@@ -15,6 +15,8 @@ export function usePendingTxSync() {
           pendingTxs.map(async (tx) => {
             let status: GetResultRes = "pending";
             try {
+              // check if the interaction is on the gateway
+              //
               status = await LiquidOpsClient.getResult({
                 transferID: tx.id,
                 tokenAddress: tokenInput(tx.ticker).tokenAddress,

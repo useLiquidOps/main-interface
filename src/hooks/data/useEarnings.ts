@@ -1,21 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 import { useMemo } from "react";
-import { cacheData, isDataCachedValid, unWrapQuantity, WrappedQuantity, wrapQuantity } from "@/utils/caches/cacheUtils";
+import { cacheData, isDataCachedValid } from "@/utils/caches/cacheUtils";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { Quantity } from "ao-tokens";
 
 export interface EarningsCache {
-  base: WrappedQuantity;
-  profit: WrappedQuantity;
+  base: string;
+  profit: string;
 }
 
-interface Earnings {
-  base: Quantity;
-  profit: Quantity;
-}
-
-export function useEarnings(token: string, collateralization: Quantity, overrideCache?: boolean) {
+export function useEarnings(token: string, overrideCache?: boolean) {
   const { data: walletAddress } = useWalletAddress();
 
   const DATA_KEY = useMemo(
@@ -24,46 +18,35 @@ export function useEarnings(token: string, collateralization: Quantity, override
   );
 
   return useQuery({
-    queryKey: ["user-earnings", token, walletAddress, DATA_KEY, overrideCache, collateralization],
+    queryKey: ["user-earnings", token, walletAddress, DATA_KEY, overrideCache],
     queryFn: async () => {
-      if (!walletAddress || !collateralization) {
-        return {
-          profit: new Quantity(0n, collateralization?.denomination || 0n),
-          base: new Quantity(0n, collateralization?.denomination || 0n),
-        };
+      if (!walletAddress) {
+        return { profit: 0n, base: 0n };
       }
 
       const checkCache = isDataCachedValid(DATA_KEY as `user-earnings-${string}-${string}`);
-      let cache: Earnings | undefined;
 
       if (!!checkCache && !overrideCache) {
-        cache = {
-          profit: checkCache.profit ? unWrapQuantity(checkCache.profit) : new Quantity(0n, 0n),
-          base: checkCache.base ? unWrapQuantity(checkCache.base) : new Quantity(0n, 0n),
+        return {
+          profit: BigInt(checkCache.profit),
+          base: BigInt(checkCache.profit),
         };
-      }
-
-      if (cache && Quantity.eq(collateralization, Quantity.__add(cache.base, cache.profit))) {
-        return cache;
       } else {
+        const position = await LiquidOpsClient.getPosition({ recipient: walletAddress, token });
         const earnings = await LiquidOpsClient.getEarnings({
           token,
-          collateralization: collateralization.raw,
+          collateralization: BigInt(position.collateralization),
           walletAddress
         });
-        const res = {
-          profit: new Quantity(earnings.profit, collateralization.denomination),
-          base: new Quantity(earnings.base, collateralization.denomination),
-        };
 
         cacheData({
           dataKey: DATA_KEY,
           data: {
-            profit: wrapQuantity(res.profit),
-            base: wrapQuantity(res.base)
+            profit: earnings.base.toString(),
+            base: earnings.base.toString()
           }
         });
-        return res;
+        return earnings;
       }
     },
     enabled: !!walletAddress,

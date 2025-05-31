@@ -141,3 +141,7 @@
   font-weight: 600;
   margin: 0;
 }
+
+.earned {
+  color: var(--APY-green);
+}

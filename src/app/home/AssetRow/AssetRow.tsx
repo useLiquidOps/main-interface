@@ -82,9 +82,15 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
               <p className={styles.amount}>
                 {(mode === "lend" && (
                   <>
-                    {qtyEarnings?.base?.toLocaleString(undefined, { maximumFractionDigits: 2 }) || "0"}
-                    {" + "}
-                    {qtyEarnings?.profit?.toLocaleString(undefined, { maximumFractionDigits: Number(asset?.denomination) as any || 12 }) || "0"}
+                    {qtyEarnings?.base?.toLocaleString(undefined, { maximumFractionDigits: 10 }) || "0"}
+                    {qtyEarnings?.profit && !Quantity.eq(qtyEarnings.profit, new Quantity(0n, 0n)) && (
+                      <>
+                        {" + "}
+                        <span className={styles.earned}>
+                          {qtyEarnings?.profit?.toLocaleString(undefined, { maximumFractionDigits: Number(asset?.denomination) as any || 12 }) || "0"}
+                        </span>
+                      </>
+                    )}
                   </>
                 )) || formattedBalance}
                 {" "}

@@ -133,7 +133,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const handleSubmit = () => {
     if (!inputValue) return;
 
-
     if (isLoadingOTokenBalance || isLoadingBalance) {
       throw new Error("Not loaded userOTokenRate!");
     }
@@ -143,7 +142,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     if (!userOTokenRate) {
       throw new Error("Not loaded userOTokenRate!");
     }
-
 
     if (!currentBalance) {
       throw new Error("Not loaded currentBalance!");

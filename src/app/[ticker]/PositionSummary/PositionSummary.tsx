@@ -22,18 +22,12 @@ const PositionSummary: React.FC<{
   const { data: globalPosition } = useGlobalPosition();
   const isLoadingPosition = !globalPosition;
 
-  const denomination = 12n;
+  const denomination = 12n; // USD denomination
   const maxBorrow = useMemo(
     () =>
       !globalPosition
         ? new Quantity(0n, 12n)
-        : Quantity.__div(
-            Quantity.__mul(
-              globalPosition.collateralValueUSD,
-              new Quantity(0n, denomination).fromNumber(3),
-            ),
-            new Quantity(0n, denomination).fromNumber(4),
-          ),
+        : new Quantity(globalPosition.borrowCapacityUSD || 0, denomination).fromNumber(4),
     [globalPosition],
   );
 

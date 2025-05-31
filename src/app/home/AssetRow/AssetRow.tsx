@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import styles from "./AssetRow.module.css";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
@@ -12,6 +12,8 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { useModal } from "@/components/PopUp/PopUp";
 import Link from "next/link";
 import { DEPRECATED_TOKENS } from "@/utils/tokenMappings";
+import { useEarnings } from "@/hooks/data/useEarnings";
+import { Quantity } from "ao-tokens";
 
 interface AssetRowProps {
   asset: SupportedToken;
@@ -23,6 +25,15 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const { data: positionBalance } = useGetPosition(tokenAddress);
   const { data: lentBalance } = useGetPositionBalance(tokenAddress);
   const { data: protocolStats } = useProtocolStats(asset.ticker.toUpperCase());
+  const { data: earnings } = useEarnings(asset.ticker.toUpperCase());
+
+  const qtyEarnings = useMemo(
+    () => ({
+      base: new Quantity(earnings?.base || 0n, asset?.baseDenomination || 0n),
+      profit: new Quantity(earnings?.profit || 0n, asset?.baseDenomination || 0n)
+    }),
+    [earnings, asset]
+  );
 
   const modal = useModal();
 
@@ -69,7 +80,21 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
               />
             ) : (
               <p className={styles.amount}>
-                {formattedBalance} {asset?.ticker}
+                {(mode === "lend" && (
+                  <>
+                    {qtyEarnings?.base?.toLocaleString(undefined, { maximumFractionDigits: 2 }) || "0"}
+                    {qtyEarnings?.profit && !Quantity.eq(qtyEarnings.profit, new Quantity(0n, 0n)) && (
+                      <>
+                        {" + "}
+                        <span className={styles.earned}>
+                          {qtyEarnings?.profit?.toLocaleString(undefined, { maximumFractionDigits: Number(asset?.denomination) as any || 12 }) || "0"}
+                        </span>
+                      </>
+                    )}
+                  </>
+                )) || formattedBalance}
+                {" "}
+                {asset?.ticker || ""}
               </p>
             )}
           </div>

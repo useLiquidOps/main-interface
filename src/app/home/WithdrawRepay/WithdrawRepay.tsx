@@ -6,7 +6,6 @@ import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
 import InputBox from "@/components/InputBox/InputBox";
 import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 import Image from "next/image";
-import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
@@ -14,6 +13,13 @@ import { Quantity } from "ao-tokens";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
+import { useValueLimit } from "@/hooks/data/useValueLimit";
+import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
+import { AnimatePresence, motion } from "framer-motion";
+import { warningVariants } from "@/components/DropDown/FramerMotion";
+import { useCooldown } from "@/hooks/data/useCooldown";
+import { useGetPositionBalance } from "@/hooks/LiquidOpsData/useGetPositionBalance";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -32,6 +38,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { data: positionBalance, isLoading: isLoadingPosition } =
     useGetPosition(tokenAddress);
   const { data: lentBalance, isLoading: isLoadingBalance } =
+    useGetPositionBalance(tokenAddress);
+  const { data: oTokenBalance, isLoading: isLoadingOTokenBalance } =
     useUserBalance(oTokenAddress);
 
   const currentBalance = mode === "withdraw" ? lentBalance : positionBalance;
@@ -50,6 +58,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     null,
   );
 
+  const { data: cooldownData } = useCooldown(mode, ticker);
+
   // Reset input callback
   const resetInput = useCallback(() => {
     setInputValue("");
@@ -64,7 +74,21 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
       resetInput,
     );
 
+  const { data: protocolStats, isLoading: isLoadingProtocolStats } =
+    useProtocolStats(ticker.toUpperCase());
+  const [valueLimit, valueLimitReached] = useValueLimit(
+    inputValue,
+    protocolStats,
+  );
+
   const calculateMaxAmount = () => {
+    if (mode === "repay") {
+      if (!oTokenBalance) {
+        throw new Error("Not loaded oTokenBalance!");
+      }
+      return oTokenBalance;
+    }
+
     if (isLoadingCurrentBalance || !currentBalance)
       return new Quantity(0n, 12n);
     return currentBalance;
@@ -109,11 +133,35 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const handleSubmit = () => {
     if (!inputValue) return;
 
+    if (isLoadingOTokenBalance || isLoadingBalance) {
+      throw new Error("Not loaded userOTokenRate!");
+    }
+
+    const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
+
+    if (!userOTokenRate) {
+      throw new Error("Not loaded userOTokenRate!");
+    }
+
+    if (!currentBalance) {
+      throw new Error("Not loaded currentBalance!");
+    }
+
+    let quantity = new Quantity(0n, currentBalance?.denomination).fromString(
+      inputValue,
+    );
+
+    // If unlending (withdrawing), multiply by the oToken rate
+    if (mode === "withdraw") {
+      const oTokenAmount = Number(quantity) * userOTokenRate;
+      quantity = new Quantity(0n, currentBalance?.denomination).fromNumber(
+        oTokenAmount,
+      );
+    }
+
     const params = {
       token: ticker.toUpperCase(),
-      quantity: new Quantity(0n, currentBalance?.denomination).fromString(
-        inputValue,
-      ).raw,
+      quantity: quantity.raw,
     };
 
     if (mode === "withdraw") {
@@ -167,12 +215,63 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         <span className={styles.infoLabel}>Network fee: {networkFee} AO</span>
       </div>
 
+      <AnimatePresence>
+        {valueLimitReached && mode === "withdraw" && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You can only {mode + " "} up to{" "}
+            {valueLimit.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            }) +
+              " " +
+              ticker}
+            .
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {cooldownData && cooldownData.onCooldown && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            You are on a cooldown for{" "}
+            {/*
+            // @ts-ignore */}
+            {cooldownData.remainingBlocks.toString() + " "} block(s).
+          </motion.p>
+        )}
+      </AnimatePresence>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={
           !inputValue ||
           parseFloat(inputValue) <= 0 ||
-          loadingScreenState.submitStatus === "loading"
+          loadingScreenState.submitStatus === "loading" ||
+          (mode === "withdraw" && valueLimitReached) ||
+          cooldownData?.onCooldown
         }
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}
       />

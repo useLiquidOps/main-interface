@@ -22,6 +22,7 @@ import {
   dropdownVariants,
 } from "@/components/DropDown/FramerMotion";
 import { useModal } from "@/components/PopUp/PopUp";
+import MarketDetails from "./MarketDetails/MarketDetails";
 
 const TickerContent = ({
   params,
@@ -83,7 +84,7 @@ const TickerContent = ({
 
           <div className={styles.grid}>
             <PositionSummary ticker={ticker} />
-            <div></div>
+            <MarketDetails ticker={ticker} />
           </div>
         </div>
       </div>

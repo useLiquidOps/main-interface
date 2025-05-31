@@ -6,7 +6,7 @@ import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import { GetInfoRes, TokenInput } from "liquidops";
 import { getSupplyAPRCache } from "../../utils/caches/getSupplyAPRCache";
 
-interface ProtocolStats {
+export interface ProtocolStats {
   denomination: bigint;
   unLent: Quantity;
   borrows: Quantity;

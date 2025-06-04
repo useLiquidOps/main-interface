@@ -9,6 +9,7 @@ interface AssetDisplayProps {
   mode: "lend" | "borrow";
 }
 
+
 const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const [showContent, setShowContent] = useState(false);
   const { data: supportedTokens = [] } = useSupportedTokens();

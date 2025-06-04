@@ -41,18 +41,17 @@ const PositionSummary: React.FC<{
     if (Quantity.eq(maxBorrow, zero) || !globalPosition) {
       return "0%";
     }
+      const currentBorrow = new Quantity(globalPosition?.borrowBalanceUSD, denomination)
 
-    const available =
-      globalPosition?.availableToBorrowUSD ||
-      new Quantity(0n, maxBorrow.denomination);
-    const currentBorrow = Quantity.__sub(maxBorrow, available);
-
+      const formattedCurrentBorrow = Quantity.__mul(currentBorrow, hundred)
     const percentage = Quantity.__div(
-      Quantity.__mul(currentBorrow, hundred),
+      formattedCurrentBorrow,
       maxBorrow,
     );
 
-    return percentage.toNumber().toFixed(3) + "%";
+    const formatPercent = percentage.toString()
+
+    return `${Number(formatPercent).toFixed(3)}%`;
   }, [maxBorrow, globalPosition]);
 
   const handleMouseMove = (e: React.MouseEvent) => {

@@ -61,7 +61,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
 
   let formattedBalance;
   if (currentBalance) {
-    formattedBalance = formatTMB(currentBalance);
+    formattedBalance =  Number(currentBalance).toFixed(Number(asset.baseDenomination) / 2);
   }
 
   return (

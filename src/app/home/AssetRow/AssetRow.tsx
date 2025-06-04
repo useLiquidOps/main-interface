@@ -42,7 +42,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const isProtocolStatsLoading = !protocolStats;
 
   // Check if the token is deprecated
-  const isDeprecated = DEPRECATED_TOKENS.includes(asset.ticker);
+  const isDeprecated = DEPRECATED_TOKENS.includes(asset.cleanTicker);
 
   const actionDo = mode === "lend" ? "Supply" : "Borrow";
   const actionReverse = mode === "lend" ? "Withdraw" : "Repay";
@@ -61,11 +61,12 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
 
   let formattedBalance;
   if (currentBalance) {
-    formattedBalance = Number(currentBalance).toFixed(
-      Number(asset.baseDenomination) / 2,
-    );
+    const decimals = Number(asset.baseDenomination) / 2;
+    formattedBalance = Number(currentBalance).toLocaleString("en-US", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
   }
-
   return (
     <div className={styles.assetRowWrapper}>
       <Link href={`/${asset.ticker}`} className={styles.assetRow}>
@@ -95,7 +96,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
                     )}
                   </>
                 )) || formattedBalance} */}
-                {formattedBalance} {asset?.ticker}
+                {formattedBalance} {asset?.cleanTicker}
               </p>
             )}
           </div>

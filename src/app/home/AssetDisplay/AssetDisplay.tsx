@@ -42,8 +42,8 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
 
   // Sort assets based on the assetDisplayOrder defined in SUPPORTED_TOKENS
   const sortedTokens = [...supportedTokens].sort((a, b) => {
-    const tokenA = SUPPORTED_TOKENS.find((token) => token.ticker === a.ticker);
-    const tokenB = SUPPORTED_TOKENS.find((token) => token.ticker === b.ticker);
+    const tokenA = SUPPORTED_TOKENS.find((token) => token.ticker.toUpperCase() === a.ticker.toUpperCase() );
+    const tokenB = SUPPORTED_TOKENS.find((token) => token.ticker.toUpperCase()  === b.ticker.toUpperCase() );
 
     // Default order for tokens not found in SUPPORTED_TOKENS
     const orderA = tokenA?.assetDisplayOrder || 999;

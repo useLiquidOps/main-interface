@@ -61,7 +61,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
 
   let formattedBalance;
   if (currentBalance) {
-    const decimals = Number(asset.baseDenomination) / 2;
+    const decimals = Number(asset.baseDenomination) / 3;
     formattedBalance = Number(currentBalance).toLocaleString("en-US", {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,

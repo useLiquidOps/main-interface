@@ -59,7 +59,6 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
     modal.openModal(mode === "lend" ? "withdraw" : "repay", asset);
   };
 
-
   let formattedBalance;
   if (currentBalance) {
     const decimals = Number(asset.baseDenomination) / 3;

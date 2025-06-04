@@ -27,7 +27,10 @@ const PositionSummary: React.FC<{
     () =>
       !globalPosition
         ? new Quantity(0n, 12n)
-        : new Quantity(globalPosition.borrowCapacityUSD || 0, denomination).fromNumber(4),
+        : new Quantity(
+            globalPosition.borrowCapacityUSD || 0,
+            denomination,
+          ).fromNumber(4),
     [globalPosition],
   );
 

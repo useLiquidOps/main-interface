@@ -25,15 +25,15 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const { data: positionBalance } = useGetPosition(tokenAddress);
   const { data: lentBalance } = useGetPositionBalance(tokenAddress);
   const { data: protocolStats } = useProtocolStats(asset.ticker.toUpperCase());
-  const { data: earnings } = useEarnings(asset.ticker.toUpperCase());
+  // const { data: earnings } = useEarnings(asset.ticker.toUpperCase());
 
-  const qtyEarnings = useMemo(
-    () => ({
-      base: new Quantity(earnings?.base || 0n, asset?.baseDenomination || 0n),
-      profit: new Quantity(earnings?.profit || 0n, asset?.baseDenomination || 0n)
-    }),
-    [earnings, asset]
-  );
+  // const qtyEarnings = useMemo(
+  //   () => ({
+  //     base: new Quantity(earnings?.base || 0n, asset?.baseDenomination || 0n),
+  //     profit: new Quantity(earnings?.profit || 0n, asset?.baseDenomination || 0n)
+  //   }),
+  //   [earnings, asset]
+  // );
 
   const modal = useModal();
 
@@ -80,7 +80,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
               />
             ) : (
               <p className={styles.amount}>
-                {(mode === "lend" && (
+                {/* {(mode === "lend" && (
                   <>
                     {qtyEarnings?.base?.toLocaleString(undefined, { maximumFractionDigits: 2 }) || "0"}
                     {qtyEarnings?.profit && !Quantity.eq(qtyEarnings.profit, new Quantity(0n, 0n)) && (
@@ -92,9 +92,8 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
                       </>
                     )}
                   </>
-                )) || formattedBalance}
-                {" "}
-                {asset?.ticker || ""}
+                )) || formattedBalance} */}
+                {formattedBalance} {asset?.ticker}
               </p>
             )}
           </div>

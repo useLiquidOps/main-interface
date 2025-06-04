@@ -14,7 +14,7 @@ export function useEarnings(token: string, overrideCache?: boolean) {
 
   const DATA_KEY = useMemo(
     () => `user-earnings-${token}-${walletAddress || ""}`,
-    [walletAddress, token]
+    [walletAddress, token],
   );
 
   return useQuery({
@@ -24,7 +24,9 @@ export function useEarnings(token: string, overrideCache?: boolean) {
         return { profit: 0n, base: 0n };
       }
 
-      const checkCache = isDataCachedValid(DATA_KEY as `user-earnings-${string}-${string}`);
+      const checkCache = isDataCachedValid(
+        DATA_KEY as `user-earnings-${string}-${string}`,
+      );
 
       if (!!checkCache && !overrideCache) {
         return {
@@ -32,19 +34,22 @@ export function useEarnings(token: string, overrideCache?: boolean) {
           base: BigInt(checkCache.profit),
         };
       } else {
-        const position = await LiquidOpsClient.getPosition({ recipient: walletAddress, token });
+        const position = await LiquidOpsClient.getPosition({
+          recipient: walletAddress,
+          token,
+        });
         const earnings = await LiquidOpsClient.getEarnings({
           token,
           collateralization: BigInt(position.collateralization),
-          walletAddress
+          walletAddress,
         });
 
         cacheData({
           dataKey: DATA_KEY,
           data: {
             profit: earnings.base.toString(),
-            base: earnings.base.toString()
-          }
+            base: earnings.base.toString(),
+          },
         });
         return earnings;
       }

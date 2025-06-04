@@ -3,12 +3,13 @@ name: Deploy to Permaweb
 on:
   push:
     branches:
-      - main # This triggers when code is pushed to main (including merged PRs)
-  workflow_dispatch: # This allows manual actions triggering
+      - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'permaweb')
 
     steps:
       - name: Checkout repository

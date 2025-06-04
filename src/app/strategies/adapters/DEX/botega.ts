@@ -9,7 +9,7 @@ export interface BotegaStrategy {
 export const botegaStrategies: BotegaStrategy[] = [
   {
     depositToken: tokenMap["USDC"],
-    borrowToken: tokenMap["qAR"],
+    borrowToken: tokenMap["wAR"],
     rewardToken: tokenMap["AO"],
   },
 ];

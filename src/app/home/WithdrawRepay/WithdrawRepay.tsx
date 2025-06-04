@@ -88,27 +88,27 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
       }
       return oTokenBalance;
     }
-  
+
     if (isLoadingCurrentBalance || !currentBalance) {
       return new Quantity(0n, 12n);
     }
     return currentBalance;
   };
-  
+
   const handleMaxClick = () => {
     // Don't allow max click while data is loading
     if (mode === "repay" && isLoadingOTokenBalance) return;
     if (mode === "withdraw" && isLoadingCurrentBalance) return;
-    
+
     const maxAmount = calculateMaxAmount();
     setInputValue(maxAmount.toString());
   };
-  
+
   const handlePercentageClick = (percentage: number) => {
     // Don't allow percentage selection while data is loading
     if (mode === "repay" && isLoadingOTokenBalance) return;
     if (mode === "withdraw" && isLoadingCurrentBalance) return;
-    
+
     const maxAmount = calculateMaxAmount();
     const amount = Quantity.__div(
       Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),

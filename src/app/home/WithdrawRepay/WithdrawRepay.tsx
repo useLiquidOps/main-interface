@@ -80,26 +80,35 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     inputValue,
     protocolStats,
   );
-
   const calculateMaxAmount = () => {
     if (mode === "repay") {
-      if (!oTokenBalance) {
-        throw new Error("Not loaded oTokenBalance!");
+      // Return zero quantity while loading or if no balance
+      if (isLoadingOTokenBalance || !oTokenBalance) {
+        return new Quantity(0n, 12n);
       }
       return oTokenBalance;
     }
-
-    if (isLoadingCurrentBalance || !currentBalance)
+  
+    if (isLoadingCurrentBalance || !currentBalance) {
       return new Quantity(0n, 12n);
+    }
     return currentBalance;
   };
-
+  
   const handleMaxClick = () => {
+    // Don't allow max click while data is loading
+    if (mode === "repay" && isLoadingOTokenBalance) return;
+    if (mode === "withdraw" && isLoadingCurrentBalance) return;
+    
     const maxAmount = calculateMaxAmount();
     setInputValue(maxAmount.toString());
   };
-
+  
   const handlePercentageClick = (percentage: number) => {
+    // Don't allow percentage selection while data is loading
+    if (mode === "repay" && isLoadingOTokenBalance) return;
+    if (mode === "withdraw" && isLoadingCurrentBalance) return;
+    
     const maxAmount = calculateMaxAmount();
     const amount = Quantity.__div(
       Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),
@@ -108,7 +117,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     setInputValue(amount.toString());
     setSelectedPercentage(percentage);
   };
-
   const getCurrentPercentage = () => {
     const maxAmount = calculateMaxAmount();
     if (!inputValue || Quantity.eq(maxAmount, new Quantity(0n, 12n))) return 0;

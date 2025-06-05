@@ -10,21 +10,60 @@ interface LendParams {
 
 type UnlendParams = LendParams;
 
-export function useLend() {
+interface Params {
+  onSuccess?: () => void;
+}
+
+export function useLend({ onSuccess }: Params = {}) {
   const queryClient = useQueryClient();
 
   const lendMutation = useMutation({
     mutationFn: async ({ token, quantity }: LendParams) => {
       try {
-        return await LiquidOpsClient.lend({
+        const walletAddress = await window.arweaveWallet.getActiveAddress();
+        const transferId = await LiquidOpsClient.lend({
           token,
           quantity,
+          noResult: true,
         });
+
+        const { tokenAddress, oTokenAddress } = tokenInput(token);
+        const res = await LiquidOpsClient.trackResult({
+          process: tokenAddress,
+          message: transferId,
+          targetProcess: oTokenAddress,
+          match: {
+            success: {
+              Target: walletAddress,
+              Tags: [{ name: "Action", values: "Mint-Confirmation" }],
+            },
+            fail: {
+              Target: walletAddress,
+              Tags: [
+                { name: "Action", values: ["Mint-Error", "Transfer-Error"] },
+              ],
+            },
+          },
+        });
+
+        if (!res) {
+          throw new Error("Failed to find lend result onchain.");
+        } else if (res.match === "fail") {
+          const errorMessage =
+            res.message.Tags.find((tag) => tag.name === "Error")?.value ||
+            "Unknown error";
+
+          throw new Error(errorMessage);
+        }
+
+        return "Lent assets";
       } catch (error) {
         throw error;
       }
     },
     onSuccess: async (_, { token }) => {
+      if (onSuccess) onSuccess();
+
       try {
         // we need to fetch the wallet address here, because useMutation
         // will not use the up-to-date address, if we access it through
@@ -63,6 +102,8 @@ export function useLend() {
       }
     },
     onSuccess: async (_, { token }) => {
+      if (onSuccess) onSuccess();
+
       try {
         // we need to fetch the wallet address here, because useMutation
         // will not use the up-to-date address, if we access it through

@@ -47,7 +47,7 @@ export function useLend({ onSuccess }: Params = {}) {
         });
 
         if (!res) {
-          throw new Error("Failed to find lend result onchain.");
+          throw new Error("Failed to find lend result onchain. Your action might have failed.");
         } else if (res.match === "fail") {
           const errorMessage =
             res.message.Tags.find((tag) => tag.name === "Error")?.value ||
@@ -93,10 +93,42 @@ export function useLend({ onSuccess }: Params = {}) {
   const unlendMutation = useMutation({
     mutationFn: async ({ token, quantity }: UnlendParams) => {
       try {
-        return await LiquidOpsClient.unLend({
+        const walletAddress = await window.arweaveWallet.getActiveAddress();
+        const messageId = await LiquidOpsClient.unLend({
           token,
           quantity,
+          noResult: true
         });
+
+        const { oTokenAddress } = tokenInput(token);
+        const res = await LiquidOpsClient.trackResult({
+          process: oTokenAddress,
+          message: messageId,
+          match: {
+            success: {
+              Target: walletAddress,
+              Tags: [{ name: "Action", values: "Redeem-Confirmation" }],
+            },
+            fail: {
+              Target: walletAddress,
+              Tags: [
+                { name: "Action", values: "Redeem-Error" },
+              ],
+            },
+          },
+        });
+
+        if (!res) {
+          throw new Error("Failed to find unlend result onchain. Your action might have failed.");
+        } else if (res.match === "fail") {
+          const errorMessage =
+            res.message.Tags.find((tag) => tag.name === "Error")?.value ||
+            "Unknown error";
+
+          throw new Error(errorMessage);
+        }
+
+        return "Unlent assets";
       } catch (error) {
         throw error;
       }

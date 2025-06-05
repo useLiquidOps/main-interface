@@ -46,7 +46,9 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const isLoadingCurrentBalance =
     mode === "withdraw" ? isLoadingBalance : isLoadingPosition;
 
-  const { unlend, isUnlending, unlendError } = useLend();
+  const { unlend, isUnlending, unlendError } = useLend({
+    onSuccess: onClose,
+  });
   const { repay, isRepaying, repayError } = useBorrow();
 
   const networkFee = 0;
@@ -173,9 +175,11 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     };
 
     if (mode === "withdraw") {
-      loadingScreenActions.executeTransaction(inputValue, params, unlend);
+      //loadingScreenActions.executeTransaction(inputValue, params, unlend);
+      unlend(params);
     } else {
-      loadingScreenActions.executeTransaction(inputValue, params, repay);
+      //loadingScreenActions.executeTransaction(inputValue, params, repay);
+      repay(params);
     }
   };
 
@@ -272,6 +276,26 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {(repayError || unlendError) && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            {(repayError || unlendError)?.message || "Unknown error"}
+          </motion.p>
+        )}
+      </AnimatePresence>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={
@@ -281,6 +305,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
           (mode === "withdraw" && valueLimitReached) ||
           cooldownData?.onCooldown
         }
+        loading={isRepaying || isUnlending}
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}
       />
 

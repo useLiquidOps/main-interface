@@ -37,7 +37,9 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
   const { lend, isLending, lendError } = useLend({
     onSuccess: onClose,
   });
-  const { borrow, isBorrowing, borrowError } = useBorrow();
+  const { borrow, isBorrowing, borrowError } = useBorrow({
+    onSuccess: onClose,
+  });
 
   const networkFee = 0;
 

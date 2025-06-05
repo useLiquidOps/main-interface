@@ -49,7 +49,9 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { unlend, isUnlending, unlendError } = useLend({
     onSuccess: onClose,
   });
-  const { repay, isRepaying, repayError } = useBorrow();
+  const { repay, isRepaying, repayError } = useBorrow({
+    onSuccess: onClose,
+  });
 
   const networkFee = 0;
   const interestOwed = 0.01;

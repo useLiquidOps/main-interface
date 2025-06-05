@@ -3,7 +3,6 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import styles from "./AssetRow.module.css";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
-import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useGetPositionBalance } from "@/hooks/LiquidOpsData/useGetPositionBalance";

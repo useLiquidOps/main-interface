@@ -47,7 +47,9 @@ export function useLend({ onSuccess }: Params = {}) {
         });
 
         if (!res) {
-          throw new Error("Failed to find lend result onchain. Your action might have failed.");
+          throw new Error(
+            "Failed to find lend result onchain. Your action might have failed.",
+          );
         } else if (res.match === "fail") {
           const errorMessage =
             res.message.Tags.find((tag) => tag.name === "Error")?.value ||
@@ -97,7 +99,7 @@ export function useLend({ onSuccess }: Params = {}) {
         const messageId = await LiquidOpsClient.unLend({
           token,
           quantity,
-          noResult: true
+          noResult: true,
         });
 
         const { oTokenAddress } = tokenInput(token);
@@ -111,15 +113,15 @@ export function useLend({ onSuccess }: Params = {}) {
             },
             fail: {
               Target: walletAddress,
-              Tags: [
-                { name: "Action", values: "Redeem-Error" },
-              ],
+              Tags: [{ name: "Action", values: "Redeem-Error" }],
             },
           },
         });
 
         if (!res) {
-          throw new Error("Failed to find unlend result onchain. Your action might have failed.");
+          throw new Error(
+            "Failed to find unlend result onchain. Your action might have failed.",
+          );
         } else if (res.match === "fail") {
           const errorMessage =
             res.message.Tags.find((tag) => tag.name === "Error")?.value ||

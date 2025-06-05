@@ -24,7 +24,7 @@ export function useBorrow({ onSuccess }: Params = {}) {
         const messageId = await LiquidOpsClient.borrow({
           token,
           quantity,
-          noResult: true
+          noResult: true,
         });
 
         const { oTokenAddress } = tokenInput(token);
@@ -38,15 +38,15 @@ export function useBorrow({ onSuccess }: Params = {}) {
             },
             fail: {
               Target: walletAddress,
-              Tags: [
-                { name: "Action", values: "Borrow-Error" },
-              ],
+              Tags: [{ name: "Action", values: "Borrow-Error" }],
             },
           },
         });
 
         if (!res) {
-          throw new Error("Failed to find borrow result onchain. Your action might have failed.");
+          throw new Error(
+            "Failed to find borrow result onchain. Your action might have failed.",
+          );
         } else if (res.match === "fail") {
           const errorMessage =
             res.message.Tags.find((tag) => tag.name === "Error")?.value ||
@@ -96,7 +96,7 @@ export function useBorrow({ onSuccess }: Params = {}) {
         const transferId = await LiquidOpsClient.repay({
           token,
           quantity,
-          noResult: true
+          noResult: true,
         });
 
         const { tokenAddress, oTokenAddress } = tokenInput(token);
@@ -119,7 +119,9 @@ export function useBorrow({ onSuccess }: Params = {}) {
         });
 
         if (!res) {
-          throw new Error("Failed to find repay result onchain. Your action might have failed.");
+          throw new Error(
+            "Failed to find repay result onchain. Your action might have failed.",
+          );
         } else if (res.match === "fail") {
           const errorMessage =
             res.message.Tags.find((tag) => tag.name === "Error")?.value ||

@@ -7,15 +7,10 @@ import { Quantity } from "ao-tokens";
 import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { Prices } from "@/hooks/data/useTokenPrice";
-
-interface Token {
-  ticker: string;
-  name: string;
-  icon: string;
-}
+import { SupportedToken } from "@/hooks/data/useSupportedTokens";
 
 interface MarketRowProps {
-  token: Token;
+  token: SupportedToken;
   prices: Prices | undefined;
 }
 
@@ -37,7 +32,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
     : stats.data;
 
   return (
-    <Link href={`/${token.ticker}`} className={styles.marketLink}>
+    <Link href={`/${token.cleanTicker}`} className={styles.marketLink}>
       <div className={styles.marketRowWrapper}>
         <div className={styles.marketRow}>
           {/* Asset Info */}
@@ -45,14 +40,14 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
             <div className={styles.iconWrapper}>
               <Image
                 src={token.icon}
-                alt={token.name || token.ticker}
+                alt={token.name}
                 width={40}
                 height={40}
               />
             </div>
             <div className={styles.nameSymbol}>
-              <h2 className={styles.name}>{token.name || token.ticker}</h2>
-              <p className={styles.symbol}>{token.ticker}</p>
+              <h2 className={styles.name}>{token.name}</h2>
+              <p className={styles.symbol}>{token.cleanTicker}</p>
             </div>
           </div>
 

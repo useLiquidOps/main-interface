@@ -68,7 +68,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   }
   return (
     <div className={styles.assetRowWrapper}>
-      <Link href={`/${asset.ticker}`} className={styles.assetRow}>
+      <Link href={`/${asset.cleanTicker}`} className={styles.assetRow}>
         <div className={styles.assetInfo}>
           <div className={styles.iconWrapper}>
             <Image src={asset.icon} alt={asset.name} width={40} height={40} />

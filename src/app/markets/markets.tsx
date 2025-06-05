@@ -2,18 +2,12 @@
 import styles from "./markets.module.css";
 import Header from "../../components/Header/Header";
 import { usePrices } from "@/hooks/data/useTokenPrice";
-import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
+import { useSupportedTokens, SupportedToken } from "@/hooks/data/useSupportedTokens";
 import { MarketStats } from "./MarketStats/MarketStats";
 import { MarketRow } from "./MarketRow/MarketRow";
 import Footer from "@/components/Footer/Footer";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import { SUPPORTED_TOKENS } from "@/utils/tokenMappings";
-
-interface Token {
-  ticker: string;
-  name: string;
-  icon: string;
-}
 
 const Markets: React.FC = () => {
   const { data: supportedTokens = [] } = useSupportedTokens();
@@ -41,9 +35,9 @@ const Markets: React.FC = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
-          <MarketStats tokens={sortedTokens as Token[]} prices={prices} />
+          <MarketStats tokens={sortedTokens as SupportedToken[]} prices={prices} />
           <div className={styles.marketsList}>
-            {(sortedTokens as Token[]).map((token) => (
+            {(sortedTokens as SupportedToken[]).map((token) => (
               <MarketRow key={token.ticker} token={token} prices={prices} />
             ))}
           </div>

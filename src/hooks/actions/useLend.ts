@@ -62,12 +62,12 @@ export function useLend({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return "Lent assets";
+        return transferId;
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (_, { token }) => {
+    onSuccess: async (transferId, { token, quantity }) => {
       if (onSuccess) onSuccess();
 
       try {
@@ -147,12 +147,12 @@ export function useLend({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return "Unlent assets";
+        return messageId;
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (_, { token }) => {
+    onSuccess: async (messageId, { token, quantity }) => {
       if (onSuccess) onSuccess();
 
       try {
@@ -183,7 +183,7 @@ export function useLend({ onSuccess }: Params = {}) {
         setPendingTransactions((pending) => [
           ...pending,
           {
-            id: transferId,
+            id: messageId,
             ticker: ticker,
             timestamp: Date.now(),
             qty: new Quantity(quantity, tokenData[ticker].denomination),

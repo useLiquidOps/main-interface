@@ -82,6 +82,12 @@
   margin: 0;
 }
 
+.flexboxValue {
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+
 .progressContainer {
   width: 125px;
   height: 4px;
@@ -123,20 +129,26 @@
 }
 
 .riskIndicator {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 6px;
-  background-color: var(--failed-red-text);
-  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 2px 5px 1px;
+  border-radius: 2px;
 }
 
-.riskContainer {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  gap: 8px;
+.liquidation {
+  background-color: var(--failed-red);
+  color: var(--failed-red-text);
+}
+
+.risky {
+  background-color: #fce5c3;
+  color: #ff9800;
+}
+
+.safe {
+  background-color: #e6fae6;
+  color: #099609;
 }
 
 .tooltip {

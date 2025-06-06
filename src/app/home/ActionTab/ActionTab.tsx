@@ -15,7 +15,6 @@ import { tokenInput } from "liquidops";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 import { getBaseDenomination } from "@/utils/LiquidOps/getBaseDenomination";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
-import { Query } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useValueLimit } from "@/hooks/data/useValueLimit";
@@ -35,8 +34,12 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
   const { data: walletBalance, isLoading: isLoadingBalance } =
     useUserBalance(tokenAddress);
 
-  const { lend, isLending, lendError } = useLend();
-  const { borrow, isBorrowing, borrowError } = useBorrow();
+  const { lend, isLending, lendError } = useLend({
+    onSuccess: onClose,
+  });
+  const { borrow, isBorrowing, borrowError } = useBorrow({
+    onSuccess: onClose,
+  });
 
   const networkFee = 0;
 
@@ -146,15 +149,13 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
       token: ticker.toUpperCase(),
       quantity: new Quantity(0n, baseDenomination).fromString(inputValue).raw,
     };
-    const onSettled = () => {
-      // TODO: finish loading
-      onClose();
-    };
 
     if (mode === "supply") {
-      lend(params, { onSettled });
+      // loadingScreenActions.executeTransaction(inputValue, params, lend);
+      lend(params);
     } else {
-      borrow(params, { onSettled });
+      // loadingScreenActions.executeTransaction(inputValue, params, borrow);
+      borrow(params);
     }
   };
 
@@ -299,6 +300,26 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {(lendError || borrowError) && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            {(lendError || borrowError)?.message || "Unknown error"}
+          </motion.p>
+        )}
+      </AnimatePresence>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={
@@ -308,6 +329,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
           valueLimitReached ||
           cooldownData?.onCooldown
         }
+        loading={isLending || isBorrowing}
         submitText={mode === "supply" ? "Supply" : "Borrow"}
       />
 

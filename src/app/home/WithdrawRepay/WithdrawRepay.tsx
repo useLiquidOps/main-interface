@@ -6,7 +6,6 @@ import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
 import InputBox from "@/components/InputBox/InputBox";
 import LoadingScreen from "@/components/LoadingScreen/LoadingScreen";
 import Image from "next/image";
-import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
@@ -19,6 +18,8 @@ import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { AnimatePresence, motion } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useCooldown } from "@/hooks/data/useCooldown";
+import { useGetPositionBalance } from "@/hooks/LiquidOpsData/useGetPositionBalance";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
 
 interface WithdrawRepayProps {
   mode: "withdraw" | "repay";
@@ -37,14 +38,20 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { data: positionBalance, isLoading: isLoadingPosition } =
     useGetPosition(tokenAddress);
   const { data: lentBalance, isLoading: isLoadingBalance } =
+    useGetPositionBalance(tokenAddress);
+  const { data: oTokenBalance, isLoading: isLoadingOTokenBalance } =
     useUserBalance(oTokenAddress);
 
   const currentBalance = mode === "withdraw" ? lentBalance : positionBalance;
   const isLoadingCurrentBalance =
     mode === "withdraw" ? isLoadingBalance : isLoadingPosition;
 
-  const { unlend, isUnlending, unlendError } = useLend();
-  const { repay, isRepaying, repayError } = useBorrow();
+  const { unlend, isUnlending, unlendError } = useLend({
+    onSuccess: onClose,
+  });
+  const { repay, isRepaying, repayError } = useBorrow({
+    onSuccess: onClose,
+  });
 
   const networkFee = 0;
   const interestOwed = 0.01;
@@ -77,19 +84,35 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     inputValue,
     protocolStats,
   );
-
   const calculateMaxAmount = () => {
-    if (isLoadingCurrentBalance || !currentBalance)
+    if (mode === "repay") {
+      // Return zero quantity while loading or if no balance
+      if (isLoadingOTokenBalance || !oTokenBalance) {
+        return new Quantity(0n, 12n);
+      }
+      return oTokenBalance;
+    }
+
+    if (isLoadingCurrentBalance || !currentBalance) {
       return new Quantity(0n, 12n);
+    }
     return currentBalance;
   };
 
   const handleMaxClick = () => {
+    // Don't allow max click while data is loading
+    if (mode === "repay" && isLoadingOTokenBalance) return;
+    if (mode === "withdraw" && isLoadingCurrentBalance) return;
+
     const maxAmount = calculateMaxAmount();
     setInputValue(maxAmount.toString());
   };
 
   const handlePercentageClick = (percentage: number) => {
+    // Don't allow percentage selection while data is loading
+    if (mode === "repay" && isLoadingOTokenBalance) return;
+    if (mode === "withdraw" && isLoadingCurrentBalance) return;
+
     const maxAmount = calculateMaxAmount();
     const amount = Quantity.__div(
       Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),
@@ -98,7 +121,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     setInputValue(amount.toString());
     setSelectedPercentage(percentage);
   };
-
   const getCurrentPercentage = () => {
     const maxAmount = calculateMaxAmount();
     if (!inputValue || Quantity.eq(maxAmount, new Quantity(0n, 12n))) return 0;
@@ -123,17 +145,43 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const handleSubmit = () => {
     if (!inputValue) return;
 
+    if (isLoadingOTokenBalance || isLoadingBalance) {
+      throw new Error("Not loaded userOTokenRate!");
+    }
+
+    const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
+
+    if (!userOTokenRate) {
+      throw new Error("Not loaded userOTokenRate!");
+    }
+
+    if (!currentBalance) {
+      throw new Error("Not loaded currentBalance!");
+    }
+
+    let quantity = new Quantity(0n, currentBalance?.denomination).fromString(
+      inputValue,
+    );
+
+    // If unlending (withdrawing), multiply by the oToken rate
+    if (mode === "withdraw") {
+      const oTokenAmount = Number(quantity) * userOTokenRate;
+      quantity = new Quantity(0n, currentBalance?.denomination).fromNumber(
+        oTokenAmount,
+      );
+    }
+
     const params = {
       token: ticker.toUpperCase(),
-      quantity: new Quantity(0n, currentBalance?.denomination).fromString(
-        inputValue,
-      ).raw,
+      quantity: quantity.raw,
     };
 
     if (mode === "withdraw") {
-      loadingScreenActions.executeTransaction(inputValue, params, unlend);
+      //loadingScreenActions.executeTransaction(inputValue, params, unlend);
+      unlend(params);
     } else {
-      loadingScreenActions.executeTransaction(inputValue, params, repay);
+      //loadingScreenActions.executeTransaction(inputValue, params, repay);
+      repay(params);
     }
   };
 
@@ -230,6 +278,26 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {(repayError || unlendError) && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            {(repayError || unlendError)?.message || "Unknown error"}
+          </motion.p>
+        )}
+      </AnimatePresence>
+
       <SubmitButton
         onSubmit={handleSubmit}
         disabled={
@@ -239,6 +307,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
           (mode === "withdraw" && valueLimitReached) ||
           cooldownData?.onCooldown
         }
+        loading={isRepaying || isUnlending}
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}
       />
 

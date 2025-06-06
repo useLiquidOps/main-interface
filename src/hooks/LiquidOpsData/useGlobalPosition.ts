@@ -28,6 +28,7 @@ export interface GlobalPositionCache {
   collateralLogos: string[];
   collateralValueUSD: WrappedQuantity;
   borrowCapacityUSD: WrappedQuantity;
+  borrowBalanceUSD: WrappedQuantity;
   liquidationPointUSD: WrappedQuantity;
   availableToBorrowUSD: WrappedQuantity;
   tokenPositions: {
@@ -47,6 +48,7 @@ export interface GlobalPositionResult {
   collateralLogos: string[];
   collateralValueUSD: Quantity;
   borrowCapacityUSD: Quantity;
+  borrowBalanceUSD: Quantity;
   liquidationPointUSD: Quantity;
   availableToBorrowUSD: Quantity;
   tokenPositions: {
@@ -75,6 +77,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
           collateralLogos: checkCache.collateralLogos,
           collateralValueUSD: unWrapQuantity(checkCache.collateralValueUSD),
           borrowCapacityUSD: unWrapQuantity(checkCache.borrowCapacityUSD),
+          borrowBalanceUSD: unWrapQuantity(checkCache.borrowBalanceUSD),
           liquidationPointUSD: unWrapQuantity(checkCache.liquidationPointUSD),
           availableToBorrowUSD: unWrapQuantity(checkCache.availableToBorrowUSD),
           tokenPositions: unWrapTokenPositions(checkCache),
@@ -139,6 +142,10 @@ export function useGlobalPosition(overrideCache?: boolean) {
             globalPosition.capacityUSD,
             globalPosition.usdDenomination,
           ),
+          borrowBalanceUSD: new Quantity(
+            globalPosition.borrowBalanceUSD,
+            globalPosition.usdDenomination,
+          ),
           liquidationPointUSD: new Quantity(
             globalPosition.liquidationLimitUSD,
             globalPosition.usdDenomination,
@@ -155,6 +162,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
           collateralLogos,
           collateralValueUSD: wrapQuantity(result.collateralValueUSD),
           borrowCapacityUSD: wrapQuantity(result.borrowCapacityUSD),
+          borrowBalanceUSD: wrapQuantity(result.borrowBalanceUSD),
           liquidationPointUSD: wrapQuantity(result.liquidationPointUSD),
           availableToBorrowUSD: wrapQuantity(result.availableToBorrowUSD),
           tokenPositions: wrapTokenPositions(globalPosition),

@@ -13,23 +13,63 @@ interface LendParams {
 
 type UnlendParams = LendParams;
 
-export function useLend() {
+interface Params {
+  onSuccess?: () => void;
+}
+
+export function useLend({ onSuccess }: Params = {}) {
   const queryClient = useQueryClient();
   const [, setPendingTransactions] = useContext(PendingTxContext);
 
   const lendMutation = useMutation({
     mutationFn: async ({ token, quantity }: LendParams) => {
       try {
-        return await LiquidOpsClient.lend({
+        const walletAddress = await window.arweaveWallet.getActiveAddress();
+        const transferId = await LiquidOpsClient.lend({
           token,
           quantity,
           noResult: true,
         });
+
+        const { tokenAddress, oTokenAddress } = tokenInput(token);
+        const res = await LiquidOpsClient.trackResult({
+          process: tokenAddress,
+          message: transferId,
+          targetProcess: oTokenAddress,
+          match: {
+            success: {
+              Target: walletAddress,
+              Tags: [{ name: "Action", values: "Mint-Confirmation" }],
+            },
+            fail: {
+              Target: walletAddress,
+              Tags: [
+                { name: "Action", values: ["Mint-Error", "Transfer-Error"] },
+              ],
+            },
+          },
+        });
+
+        if (!res) {
+          throw new Error(
+            "Failed to find lend result onchain. Your action might have failed.",
+          );
+        } else if (res.match === "fail") {
+          const errorMessage =
+            res.message.Tags.find((tag) => tag.name === "Error")?.value ||
+            "Unknown error";
+
+          throw new Error(errorMessage);
+        }
+
+        return "Lent assets";
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (transferId: string, { token, quantity }) => {
+    onSuccess: async (_, { token }) => {
+      if (onSuccess) onSuccess();
+
       try {
         const ticker = token.toUpperCase();
 
@@ -72,16 +112,49 @@ export function useLend() {
   const unlendMutation = useMutation({
     mutationFn: async ({ token, quantity }: UnlendParams) => {
       try {
-        return await LiquidOpsClient.unLend({
+        const walletAddress = await window.arweaveWallet.getActiveAddress();
+        const messageId = await LiquidOpsClient.unLend({
           token,
           quantity,
           noResult: true,
         });
+
+        const { oTokenAddress } = tokenInput(token);
+        const res = await LiquidOpsClient.trackResult({
+          process: oTokenAddress,
+          message: messageId,
+          match: {
+            success: {
+              Target: walletAddress,
+              Tags: [{ name: "Action", values: "Redeem-Confirmation" }],
+            },
+            fail: {
+              Target: walletAddress,
+              Tags: [{ name: "Action", values: "Redeem-Error" }],
+            },
+          },
+        });
+
+        if (!res) {
+          throw new Error(
+            "Failed to find unlend result onchain. Your action might have failed.",
+          );
+        } else if (res.match === "fail") {
+          const errorMessage =
+            res.message.Tags.find((tag) => tag.name === "Error")?.value ||
+            "Unknown error";
+
+          throw new Error(errorMessage);
+        }
+
+        return "Unlent assets";
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (transferId, { token, quantity }) => {
+    onSuccess: async (_, { token }) => {
+      if (onSuccess) onSuccess();
+
       try {
         const ticker = token.toUpperCase();
 

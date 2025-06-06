@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import styles from "./AssetRow.module.css";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
-import { formatTMB } from "@/components/utils/utils";
 import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useGetPositionBalance } from "@/hooks/LiquidOpsData/useGetPositionBalance";
@@ -12,6 +11,8 @@ import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { useModal } from "@/components/PopUp/PopUp";
 import Link from "next/link";
 import { DEPRECATED_TOKENS } from "@/utils/tokenMappings";
+import { useEarnings } from "@/hooks/data/useEarnings";
+import { Quantity } from "ao-tokens";
 
 interface AssetRowProps {
   asset: SupportedToken;
@@ -23,6 +24,15 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const { data: positionBalance } = useGetPosition(tokenAddress);
   const { data: lentBalance } = useGetPositionBalance(tokenAddress);
   const { data: protocolStats } = useProtocolStats(asset.ticker.toUpperCase());
+  // const { data: earnings } = useEarnings(asset.ticker.toUpperCase());
+
+  // const qtyEarnings = useMemo(
+  //   () => ({
+  //     base: new Quantity(earnings?.base || 0n, asset?.baseDenomination || 0n),
+  //     profit: new Quantity(earnings?.profit || 0n, asset?.baseDenomination || 0n)
+  //   }),
+  //   [earnings, asset]
+  // );
 
   const modal = useModal();
 
@@ -31,7 +41,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const isProtocolStatsLoading = !protocolStats;
 
   // Check if the token is deprecated
-  const isDeprecated = DEPRECATED_TOKENS.includes(asset.ticker);
+  const isDeprecated = DEPRECATED_TOKENS.includes(asset.cleanTicker);
 
   const actionDo = mode === "lend" ? "Supply" : "Borrow";
   const actionReverse = mode === "lend" ? "Withdraw" : "Repay";
@@ -50,12 +60,15 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
 
   let formattedBalance;
   if (currentBalance) {
-    formattedBalance = formatTMB(currentBalance);
+    const decimals = Number(asset.baseDenomination) / 3;
+    formattedBalance = Number(currentBalance).toLocaleString("en-US", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
   }
-
   return (
     <div className={styles.assetRowWrapper}>
-      <Link href={`/${asset.ticker}`} className={styles.assetRow}>
+      <Link href={`/${asset.cleanTicker}`} className={styles.assetRow}>
         <div className={styles.assetInfo}>
           <div className={styles.iconWrapper}>
             <Image src={asset.icon} alt={asset.name} width={40} height={40} />
@@ -69,7 +82,20 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
               />
             ) : (
               <p className={styles.amount}>
-                {formattedBalance} {asset?.ticker}
+                {/* {(mode === "lend" && (
+                  <>
+                    {qtyEarnings?.base?.toLocaleString(undefined, { maximumFractionDigits: 2 }) || "0"}
+                    {qtyEarnings?.profit && !Quantity.eq(qtyEarnings.profit, new Quantity(0n, 0n)) && (
+                      <>
+                        {" + "}
+                        <span className={styles.earned}>
+                          {qtyEarnings?.profit?.toLocaleString(undefined, { maximumFractionDigits: Number(asset?.denomination) as any || 12 }) || "0"}
+                        </span>
+                      </>
+                    )}
+                  </>
+                )) || formattedBalance} */}
+                {formattedBalance} {asset?.cleanTicker}
               </p>
             )}
           </div>

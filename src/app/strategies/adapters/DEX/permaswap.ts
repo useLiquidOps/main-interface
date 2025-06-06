@@ -9,7 +9,7 @@ export interface PermaswapStrategy {
 export const permaswapStrategies: PermaswapStrategy[] = [
   {
     depositToken: tokenMap["USDC"],
-    borrowToken: tokenMap["qAR"],
+    borrowToken: tokenMap["wAR"],
     rewardToken: tokenMap["AO"],
   },
 ];

@@ -9,7 +9,7 @@ export interface DexiStrategy {
 export const dexiStrategies: DexiStrategy[] = [
   {
     depositToken: tokenMap["USDC"],
-    borrowToken: tokenMap["qAR"],
+    borrowToken: tokenMap["wAR"],
     rewardToken: tokenMap["AO"],
   },
 ];

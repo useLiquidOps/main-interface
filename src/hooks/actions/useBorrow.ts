@@ -13,23 +13,60 @@ interface BorrowParams {
 
 type RepayParams = BorrowParams;
 
-export function useBorrow() {
+interface Params {
+  onSuccess?: () => void;
+}
+
+export function useBorrow({ onSuccess }: Params = {}) {
   const queryClient = useQueryClient();
   const [, setPendingTransactions] = useContext(PendingTxContext);
 
   const borrowMutation = useMutation({
     mutationFn: async ({ token, quantity }: BorrowParams) => {
       try {
-        return await LiquidOpsClient.borrow({
+        const walletAddress = await window.arweaveWallet.getActiveAddress();
+        const messageId = await LiquidOpsClient.borrow({
           token,
           quantity,
           noResult: true,
         });
+
+        const { oTokenAddress } = tokenInput(token);
+        const res = await LiquidOpsClient.trackResult({
+          process: oTokenAddress,
+          message: messageId,
+          match: {
+            success: {
+              Target: walletAddress,
+              Tags: [{ name: "Action", values: "Borrow-Confirmation" }],
+            },
+            fail: {
+              Target: walletAddress,
+              Tags: [{ name: "Action", values: "Borrow-Error" }],
+            },
+          },
+        });
+
+        if (!res) {
+          throw new Error(
+            "Failed to find borrow result onchain. Your action might have failed.",
+          );
+        } else if (res.match === "fail") {
+          const errorMessage =
+            res.message.Tags.find((tag) => tag.name === "Error")?.value ||
+            "Unknown error";
+
+          throw new Error(errorMessage);
+        }
+
+        return "Borrowed assets";
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (transferId, { token, quantity }) => {
+    onSuccess: async (_, { token }) => {
+      if (onSuccess) onSuccess();
+
       try {
         const ticker = token.toUpperCase();
 
@@ -72,16 +109,52 @@ export function useBorrow() {
   const repayMutation = useMutation({
     mutationFn: async ({ token, quantity }: RepayParams) => {
       try {
-        return await LiquidOpsClient.repay({
+        const walletAddress = await window.arweaveWallet.getActiveAddress();
+        const transferId = await LiquidOpsClient.repay({
           token,
           quantity,
           noResult: true,
         });
+
+        const { tokenAddress, oTokenAddress } = tokenInput(token);
+        const res = await LiquidOpsClient.trackResult({
+          process: tokenAddress,
+          message: transferId,
+          targetProcess: oTokenAddress,
+          match: {
+            success: {
+              Target: walletAddress,
+              Tags: [{ name: "Action", values: "Repay-Confirmation" }],
+            },
+            fail: {
+              Target: walletAddress,
+              Tags: [
+                { name: "Action", values: ["Repay-Error", "Transfer-Error"] },
+              ],
+            },
+          },
+        });
+
+        if (!res) {
+          throw new Error(
+            "Failed to find repay result onchain. Your action might have failed.",
+          );
+        } else if (res.match === "fail") {
+          const errorMessage =
+            res.message.Tags.find((tag) => tag.name === "Error")?.value ||
+            "Unknown error";
+
+          throw new Error(errorMessage);
+        }
+
+        return "Repaid assets";
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (transferId, { token, quantity }) => {
+    onSuccess: async (_, { token }) => {
+      if (onSuccess) onSuccess();
+
       try {
         const ticker = token.toUpperCase();
 

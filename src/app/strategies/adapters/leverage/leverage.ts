@@ -8,31 +8,6 @@ export interface LeverageStrategy {
 }
 
 export const leverageStrategies: LeverageStrategy[] = [
-  // qAR
-  {
-    type: "Long",
-    baseToken: tokenMap["qAR"],
-    leverageToken: tokenMap["qAR"],
-    borrowToken: tokenMap["wUSDC"],
-  },
-  {
-    type: "Long",
-    baseToken: tokenMap["qAR"],
-    leverageToken: tokenMap["qAR"],
-    borrowToken: tokenMap["wUSDT"],
-  },
-  {
-    type: "Short",
-    baseToken: tokenMap["qAR"],
-    leverageToken: tokenMap["wUSDC"],
-    borrowToken: tokenMap["qAR"],
-  },
-  {
-    type: "Short",
-    baseToken: tokenMap["qAR"],
-    leverageToken: tokenMap["wUSDT"],
-    borrowToken: tokenMap["qAR"],
-  },
   // wAR
   {
     type: "Long",

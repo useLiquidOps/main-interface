@@ -16,11 +16,6 @@ const tokens: TokenDetails[] = [
     fairLaunchID: "",
   },
   {
-    name: "Quantum Arweave",
-    ticker: "qAR",
-    fairLaunchID: "",
-  },
-  {
     name: "Wrapped Arweave",
     ticker: "wAR",
     fairLaunchID: "",

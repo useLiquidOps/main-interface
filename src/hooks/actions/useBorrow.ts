@@ -147,7 +147,7 @@ export function useBorrow({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return transferId
+        return transferId;
       } catch (error) {
         throw error;
       }

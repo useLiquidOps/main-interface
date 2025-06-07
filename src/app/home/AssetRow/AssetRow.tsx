@@ -58,23 +58,26 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
     modal.openModal(mode === "lend" ? "withdraw" : "repay", asset);
   };
 
-  const formattedBalance = useMemo(
-    () => {
-      if (!currentBalance || Quantity.eq(currentBalance, new Quantity(0n, 0n)) || !asset) {
-        return "0.0";
-      }
-      const decimals = Quantity.lt(
-        currentBalance,
-        new Quantity(0n, asset.baseDenomination).fromNumber(1),
-      ) ? Math.max(Number(asset.baseDenomination), 6) : 2;
+  const formattedBalance = useMemo(() => {
+    if (
+      !currentBalance ||
+      Quantity.eq(currentBalance, new Quantity(0n, 0n)) ||
+      !asset
+    ) {
+      return "0.0";
+    }
+    const decimals = Quantity.lt(
+      currentBalance,
+      new Quantity(0n, asset.baseDenomination).fromNumber(1),
+    )
+      ? Math.max(Number(asset.baseDenomination), 6)
+      : 2;
 
-      return currentBalance.toLocaleString("en-US", {
-        // @ts-expect-error
-        maximumFractionDigits: decimals,
-      });
-    },
-    [asset, currentBalance]
-  );
+    return currentBalance.toLocaleString("en-US", {
+      // @ts-expect-error
+      maximumFractionDigits: decimals,
+    });
+  }, [asset, currentBalance]);
 
   return (
     <div className={styles.assetRowWrapper}>

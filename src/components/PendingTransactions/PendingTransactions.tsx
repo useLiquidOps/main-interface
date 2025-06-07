@@ -1,4 +1,3 @@
-import { usePendingTxSync } from "@/hooks/LiquidOpsData/useSyncPendingTransactions";
 import { unWrapQuantity, wrapQuantity } from "@/utils/caches/cacheUtils";
 import { Quantity } from "ao-tokens";
 import {
@@ -50,18 +49,10 @@ export default function PendingTransactions({
 
   return (
     <PendingTxContext.Provider value={[state, setState]}>
-      <SyncComponent>{children}</SyncComponent>
+      {children}
     </PendingTxContext.Provider>
   );
 }
-
-// consumer for pending tx context
-const SyncComponent = ({ children }: PropsWithChildren<{}>) => {
-  // sync
-  usePendingTxSync();
-
-  return children;
-};
 
 export interface PendingTransaction {
   id: string;

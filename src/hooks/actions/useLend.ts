@@ -5,6 +5,7 @@ import { tokenData, tokenInput } from "liquidops";
 import { Quantity } from "ao-tokens";
 import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
 import { useContext } from "react";
+import { NotificationContext } from "@/components/notifications/NotificationProvider";
 
 interface LendParams {
   token: string;
@@ -20,6 +21,7 @@ interface Params {
 export function useLend({ onSuccess }: Params = {}) {
   const queryClient = useQueryClient();
   const [, setPendingTransactions] = useContext(PendingTxContext);
+  const [, notify] = useContext(NotificationContext);
 
   const lendMutation = useMutation({
     mutationFn: async ({ token, quantity }: LendParams) => {
@@ -70,15 +72,22 @@ export function useLend({ onSuccess }: Params = {}) {
     onSuccess: async (transferId, { token, quantity }) => {
       if (onSuccess) onSuccess();
 
-      try {
-        const ticker = token.toUpperCase();
+      const ticker = token.toUpperCase();
+      const { tokenAddress } = tokenInput(ticker);
+      const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
+      const maximumFractionDigits = (Quantity.lt(qty, new Quantity(1n, 0n)) ? Number(qty.denomination) : 2) as BigIntToLocaleStringOptions["maximumFractionDigits"];
+      notify({
+        type: "success",
+        content: "You've lent " + qty.toLocaleString(undefined, { maximumFractionDigits }) + " " + ticker
+      });
+
+      try {
         // we need to fetch the wallet address here, because useMutation
         // will not use the up-to-date address, if we access it through
         // a hook/state (will use the value at render time)
         // @ts-expect-error
         const walletAddress = await arweaveWallet.getActiveAddress();
-        const { tokenAddress } = tokenInput(ticker);
 
         invalidateData([
           `user-balance-${tokenAddress}-${walletAddress}`,
@@ -101,7 +110,7 @@ export function useLend({ onSuccess }: Params = {}) {
             id: transferId,
             ticker: ticker,
             timestamp: Date.now(),
-            qty: new Quantity(quantity, tokenData[ticker].denomination),
+            qty,
             action: "lend",
           },
         ]);
@@ -155,15 +164,22 @@ export function useLend({ onSuccess }: Params = {}) {
     onSuccess: async (messageId, { token, quantity }) => {
       if (onSuccess) onSuccess();
 
-      try {
-        const ticker = token.toUpperCase();
+      const ticker = token.toUpperCase();
+      const { tokenAddress } = tokenInput(ticker);
+      const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
+      const maximumFractionDigits = (Quantity.lt(qty, new Quantity(1n, 0n)) ? Number(qty.denomination) : 2) as BigIntToLocaleStringOptions["maximumFractionDigits"];
+      notify({
+        type: "success",
+        content: "You've withdrawn " + qty.toLocaleString(undefined, { maximumFractionDigits }) + " " + ticker
+      });
+
+      try {
         // we need to fetch the wallet address here, because useMutation
         // will not use the up-to-date address, if we access it through
         // a hook/state (will use the value at render time)
         // @ts-expect-error
         const walletAddress = await arweaveWallet.getActiveAddress();
-        const { tokenAddress } = tokenInput(ticker);
 
         invalidateData([
           `user-balance-${tokenAddress}-${walletAddress}`,
@@ -186,7 +202,7 @@ export function useLend({ onSuccess }: Params = {}) {
             id: messageId,
             ticker: ticker,
             timestamp: Date.now(),
-            qty: new Quantity(quantity, tokenData[ticker].denomination),
+            qty,
             action: "unlend",
           },
         ]);

@@ -8,7 +8,7 @@ export interface Notification {
 }
 
 export const NotificationContext = createContext<
-  [Notification[], (notification: Notification) => void]
+  [Notification[], (notification: Omit<Notification, "id">) => void]
 >([[], () => {}]);
 
 export default function NotificationProvider({
@@ -19,7 +19,7 @@ export default function NotificationProvider({
   const notify = (notification: Omit<Notification, "id">) => {
     const id = Date.now();
     setState((nots) => [...nots, { id, ...notification }]);
-    setTimeout(() => setState((nots) => nots.filter(n => n.id !== id)), 5000);
+    setTimeout(() => setState((nots) => nots.filter(n => n.id !== id)), 3000);
   };
 
   return (

@@ -7,8 +7,6 @@ import Image from "next/image";
 import styles from "./TransactionItem.module.css";
 import Tooltip from "@/components/Tooltip/Tooltip";
 import Link from "next/link";
-import { TOKEN_DECIMAL_PLACES } from "@/utils/tokenMappings";
-import { tokenInput } from "liquidops";
 
 export interface Transaction {
   id: string;
@@ -106,7 +104,14 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
     toolTipText = "Loading";
   }
 
-  const { ticker } = tokenInput(tx.tags["token"]);
+  const formatQty = (qty: Quantity) => {
+    let maximumFractionDigits: BigIntToLocaleStringOptions["maximumFractionDigits"] = 2;
+    if (Quantity.lt(qty, new Quantity(1n, 0n))) {
+      maximumFractionDigits = 6;
+    }
+
+    return qty.toLocaleString(undefined, { maximumFractionDigits });
+  };
 
   return (
     <Link
@@ -124,12 +129,10 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
             <div className={styles.actionDetails}>
               <p>{display}</p>
               <p>
-                {new Quantity(
-                  tx.tags["Quantity"],
-                  getTokenDenomination(tx.tags["token"]),
-                )
-                  .toNumber()
-                  .toFixed(TOKEN_DECIMAL_PLACES[ticker])}
+                {formatQty(new Quantity(
+                  tx.tags["Quantity"] || 0n,
+                  getTokenDenomination(tx.tags["token"]) || 0n,
+                ))}
               </p>
             </div>
 

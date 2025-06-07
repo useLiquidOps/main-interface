@@ -150,7 +150,6 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
       quantity: new Quantity(0n, baseDenomination).fromString(inputValue).raw,
     };
 
-    // Execute appropriate action based on mode
     if (mode === "supply") {
       // loadingScreenActions.executeTransaction(inputValue, params, lend);
       lend(params);

@@ -38,12 +38,7 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
           {/* Asset Info */}
           <div className={styles.assetInfo}>
             <div className={styles.iconWrapper}>
-              <Image
-                src={token.icon}
-                alt={token.name}
-                width={40}
-                height={40}
-              />
+              <Image src={token.icon} alt={token.name} width={40} height={40} />
             </div>
             <div className={styles.nameSymbol}>
               <h2 className={styles.name}>{token.name}</h2>

@@ -5,6 +5,8 @@ import { useState } from "react";
 import { AOSyncProvider } from "@vela-ventures/aosync-sdk-react";
 import { walletInfo } from "@/utils/Wallets/wallets";
 import { AccountTabProvider } from "@/components/Connect/accountTabContext";
+import PendingTransactions from "@/components/PendingTransactions/PendingTransactions";
+import NotificationProvider from "@/components/notifications/NotificationProvider";
 
 type Props = {
   children: React.ReactNode;
@@ -35,7 +37,9 @@ export function Providers({ children }: Props) {
           appInfo={walletInfo}
           muUrl="https://mu.ao-testnet.xyz"
         >
-          {children}
+          <NotificationProvider>
+            <PendingTransactions>{children}</PendingTransactions>
+          </NotificationProvider>
         </AOSyncProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

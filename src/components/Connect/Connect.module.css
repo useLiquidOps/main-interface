@@ -68,3 +68,39 @@
   height: 32px;
   border-radius: 50%;
 }
+
+.notificationsWrapper {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 1rem;
+  z-index: 1000;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 0.43rem;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 0.8rem 1.35rem;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.notificationContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.notificationContent p {
+  margin: 0;
+  color: var(--secondary-slate-blue);
+  font-size: 15px;
+  font-weight: 500;
+}

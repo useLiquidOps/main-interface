@@ -168,12 +168,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
             </div>
           </div>
 
-          <div className={styles.activity}>
-            <div className={styles.pendingItems}>
-              {pendingTransactions.map((tx, i) => (
-                <PendingItem tx={tx} key={i} />
-              ))}
-            </div>
+          <div className={styles.pendingItems}>
+            {pendingTransactions.map((tx, i) => (
+              <PendingItem tx={tx} key={i} />
+            ))}
           </div>
         </>
       )}

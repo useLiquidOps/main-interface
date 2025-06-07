@@ -223,40 +223,6 @@ const Connect: React.FC = () => {
               isProfileLoading={isProfileLoading}
               profile={profile}
             />
-
-            {!isOpen && (
-              <div className={styles.notificationsWrapper}>
-                <AnimatePresence>
-                  {pendingTransactions.slice(0, 3).map((pending, i) => (
-                    <motion.div
-                      variants={pendingNotificationVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                      className={styles.notification}
-                      onClick={() => setAccountTab(true)}
-                      key={i}
-                    >
-                      <Spinner size="22px" />
-                      <div className={styles.notificationContent}>
-                        <p>{formatAction(pending.action)}</p>
-                        <p>
-                          {pending.qty.toLocaleString(undefined, {
-                            maximumFractionDigits: 4,
-                          })}
-                        </p>
-                        <Image
-                          src={`/tokens/${pending.ticker}.svg`}
-                          height={15}
-                          width={15}
-                          alt={pending.ticker}
-                        />
-                      </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-            )}
           </div>
         ) : (
           <button className={styles.connectButton} onClick={handleConnect}>

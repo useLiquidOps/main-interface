@@ -1,0 +1,73 @@
+.notificationsWrapper {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: .8rem;
+  top: 2rem;
+  left: 50%;
+  z-index: 1000;
+  transform: translateX(-50%);
+}
+
+.notification {
+  position: relative;
+  display: flex;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 500;
+  gap: .5rem;
+  align-items: center;
+  padding: 1rem 1.55rem;
+  border-radius: 2rem;
+  background-color: #333336;
+  overflow: hidden;
+}
+
+.notification p {
+  margin: 0;
+  z-index: 2;
+}
+
+.notificationProgress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, .5);
+  animation: notification-progress 5s;
+}
+
+.notificationProgress::after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+}
+
+.notificationProgress.info::after {
+  background-color: var(--primary-palatinate-blue);
+}
+
+.notificationProgress.error::after {
+  background-color: var(--failed-red-text);
+}
+
+.notificationProgress.success::after {
+  background-color: var(--submit-green);
+}
+
+@keyframes notification-progress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}

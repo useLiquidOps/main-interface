@@ -44,9 +44,7 @@ export const PendingItem: React.FC<{ tx: PendingTransaction }> = ({ tx }) => {
           <div className={styles.actionDetailsContainer}>
             <div className={styles.actionDetails}>
               <p>{action}</p>
-              <p>
-                {formatQty(tx.qty)}
-              </p>
+              <p>{formatQty(tx.qty)}</p>
             </div>
 
             <p className={styles.timestamp}>

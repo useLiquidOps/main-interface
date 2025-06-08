@@ -18,10 +18,10 @@ export default function Notifications() {
             exit="after"
             key={i}
           >
-            <p>
-              {notification.content}
-            </p>
-            <span className={styles.notificationProgress + " " + styles["info"]} />
+            <p>{notification.content}</p>
+            <span
+              className={styles.notificationProgress + " " + styles["info"]}
+            />
           </motion.div>
         ))}
       </AnimatePresence>
@@ -32,14 +32,14 @@ export default function Notifications() {
 const notificationVariants: Variants = {
   before: {
     opacity: 0,
-    y: "100vh"
+    y: "100vh",
   },
   shown: {
     opacity: 1,
-    y: 0
+    y: 0,
   },
   after: {
     opacity: 0,
-    y: "-20vh"
-  }
+    y: "-20vh",
+  },
 };

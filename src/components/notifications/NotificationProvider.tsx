@@ -12,14 +12,14 @@ export const NotificationContext = createContext<
 >([[], () => {}]);
 
 export default function NotificationProvider({
-  children
+  children,
 }: PropsWithChildren<{}>) {
   const [state, setState] = useState<Notification[]>([]);
 
   const notify = (notification: Omit<Notification, "id">) => {
     const id = Date.now();
     setState((nots) => [...nots, { id, ...notification }]);
-    setTimeout(() => setState((nots) => nots.filter(n => n.id !== id)), 3000);
+    setTimeout(() => setState((nots) => nots.filter((n) => n.id !== id)), 3000);
   };
 
   return (

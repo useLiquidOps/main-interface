@@ -129,10 +129,12 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
             <div className={styles.actionDetails}>
               <p>{display}</p>
               <p>
-                {formatQty(new Quantity(
-                  tx.tags["Quantity"] || 0n,
-                  getTokenDenomination(tx.tags["token"]) || 0n,
-                ))}
+                {formatQty(
+                  new Quantity(
+                    tx.tags["Quantity"] || 0n,
+                    getTokenDenomination(tx.tags["token"]) || 0n,
+                  ),
+                )}
               </p>
             </div>
 

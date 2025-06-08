@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: .8rem;
+  gap: 0.8rem;
   top: 2rem;
   left: 50%;
   z-index: 1000;
@@ -16,7 +16,7 @@
   font-size: 1rem;
   color: #fff;
   font-weight: 500;
-  gap: .5rem;
+  gap: 0.5rem;
   align-items: center;
   padding: 1rem 1.55rem;
   border-radius: 2rem;
@@ -37,7 +37,7 @@
   height: 100%;
   width: 0%;
   z-index: 1;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   animation: notification-progress 4s;
 }
 

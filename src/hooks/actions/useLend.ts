@@ -76,10 +76,16 @@ export function useLend({ onSuccess }: Params = {}) {
       const { tokenAddress } = tokenInput(ticker);
       const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
-      const maximumFractionDigits = (Quantity.lt(qty, new Quantity(1n, 0n)) ? Number(qty.denomination) : 2) as BigIntToLocaleStringOptions["maximumFractionDigits"];
+      const maximumFractionDigits = (
+        Quantity.lt(qty, new Quantity(1n, 0n)) ? Number(qty.denomination) : 2
+      ) as BigIntToLocaleStringOptions["maximumFractionDigits"];
       notify({
         type: "success",
-        content: "You've lent " + qty.toLocaleString(undefined, { maximumFractionDigits }) + " " + ticker
+        content:
+          "You've lent " +
+          qty.toLocaleString(undefined, { maximumFractionDigits }) +
+          " " +
+          ticker,
       });
 
       try {
@@ -168,10 +174,16 @@ export function useLend({ onSuccess }: Params = {}) {
       const { tokenAddress } = tokenInput(ticker);
       const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
-      const maximumFractionDigits = (Quantity.lt(qty, new Quantity(1n, 0n)) ? Number(qty.denomination) : 2) as BigIntToLocaleStringOptions["maximumFractionDigits"];
+      const maximumFractionDigits = (
+        Quantity.lt(qty, new Quantity(1n, 0n)) ? Number(qty.denomination) : 2
+      ) as BigIntToLocaleStringOptions["maximumFractionDigits"];
       notify({
         type: "success",
-        content: "You've withdrawn " + qty.toLocaleString(undefined, { maximumFractionDigits }) + " " + ticker
+        content:
+          "You've withdrawn " +
+          qty.toLocaleString(undefined, { maximumFractionDigits }) +
+          " " +
+          ticker,
       });
 
       try {

@@ -48,8 +48,8 @@ const Connect: React.FC = () => {
   );
 
   const copyToClipboard = async (text: string) => {
+    if (typeof navigator === "undefined") return;
     try {
-      // @ts-ignore
       await navigator.clipboard.writeText(text);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 150);

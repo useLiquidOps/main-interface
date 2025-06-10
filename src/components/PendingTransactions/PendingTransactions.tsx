@@ -1,5 +1,3 @@
-import { unWrapQuantity, wrapQuantity } from "@/utils/caches/cacheUtils";
-import { Quantity } from "ao-tokens";
 import {
   createContext,
   Dispatch,
@@ -22,31 +20,15 @@ export default function PendingTransactions({
 
   // load
   useEffect(() => {
-    if (typeof "navigator" === "undefined") return;
     const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
-    const loaded: PendingTransaction[] = [];
-
-    if (cached) {
-      for (const raw of cached) {
-        loaded.push({ ...raw, qty: unWrapQuantity(raw.qty) });
-      }
-
-      setState(loaded);
-    }
+    setState(cached);
     setLoadedCache(true);
   }, []);
 
   // save
   useEffect(() => {
-    if (typeof "navigator" === "undefined") return;
     if (!loadedCache) return;
-    const raw = [];
-
-    for (const pending of state) {
-      raw.push({ ...pending, qty: wrapQuantity(pending.qty) });
-    }
-
-    localStorage.setItem(CACHE_KEY, JSON.stringify(raw));
+    localStorage.setItem(CACHE_KEY, JSON.stringify(state));
   }, [state, loadedCache]);
 
   return (
@@ -59,7 +41,7 @@ export default function PendingTransactions({
 export interface PendingTransaction {
   id: string;
   timestamp: number;
-  qty: Quantity;
+  qty: string;
   ticker: string;
   action: "borrow" | "repay" | "lend" | "unlend";
 }

@@ -6,6 +6,7 @@ import { PendingTxContext } from "@/components/PendingTransactions/PendingTransa
 import { useContext } from "react";
 import { Quantity } from "ao-tokens";
 import { NotificationContext } from "@/components/notifications/NotificationProvider";
+import { formatQty } from "@/utils/LiquidOps/tokenFormat";
 
 interface BorrowParams {
   token: string;
@@ -113,7 +114,7 @@ export function useBorrow({ onSuccess }: Params = {}) {
             id: messageId,
             ticker: ticker,
             timestamp: Date.now(),
-            qty,
+            qty: formatQty(qty),
             action: "borrow",
           },
         ]);
@@ -214,7 +215,7 @@ export function useBorrow({ onSuccess }: Params = {}) {
             id: transferId,
             ticker: ticker,
             timestamp: Date.now(),
-            qty,
+            qty: formatQty(qty),
             action: "repay",
           },
         ]);

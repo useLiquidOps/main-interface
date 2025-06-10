@@ -6,6 +6,7 @@ import { Quantity } from "ao-tokens";
 import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
 import { useContext } from "react";
 import { NotificationContext } from "@/components/notifications/NotificationProvider";
+import { formatQty } from "@/utils/LiquidOps/tokenFormat";
 
 interface LendParams {
   token: string;
@@ -116,7 +117,7 @@ export function useLend({ onSuccess }: Params = {}) {
             id: transferId,
             ticker: ticker,
             timestamp: Date.now(),
-            qty,
+            qty: formatQty(qty),
             action: "lend",
           },
         ]);
@@ -214,7 +215,7 @@ export function useLend({ onSuccess }: Params = {}) {
             id: messageId,
             ticker: ticker,
             timestamp: Date.now(),
-            qty,
+            qty: formatQty(qty),
             action: "unlend",
           },
         ]);

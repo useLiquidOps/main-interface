@@ -7,8 +7,7 @@ import Image from "next/image";
 import styles from "./TransactionItem.module.css";
 import Tooltip from "@/components/Tooltip/Tooltip";
 import Link from "next/link";
-import { TOKEN_DECIMAL_PLACES } from "@/utils/tokenMappings";
-import { tokenInput } from "liquidops";
+import { formatQty } from "@/utils/LiquidOps/tokenFormat";
 
 export interface Transaction {
   id: string;
@@ -106,8 +105,6 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
     toolTipText = "Loading";
   }
 
-  const { ticker } = tokenInput(tx.tags["token"]);
-
   return (
     <Link
       key={tx.id}
@@ -124,12 +121,12 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
             <div className={styles.actionDetails}>
               <p>{display}</p>
               <p>
-                {new Quantity(
-                  tx.tags["Quantity"],
-                  getTokenDenomination(tx.tags["token"]),
-                )
-                  .toNumber()
-                  .toFixed(TOKEN_DECIMAL_PLACES[ticker])}
+                {formatQty(
+                  new Quantity(
+                    tx.tags["Quantity"] || 0n,
+                    getTokenDenomination(tx.tags["token"]) || 0n,
+                  ),
+                )}
               </p>
             </div>
 

@@ -1,7 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { tokenInput } from "liquidops";
+import { tokenInput, tokenData } from "liquidops";
 import { invalidateData } from "@/utils/caches/cacheUtils";
+import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
+import { useContext } from "react";
+import { Quantity } from "ao-tokens";
+import { NotificationContext } from "@/components/notifications/NotificationProvider";
+import { formatQty } from "@/utils/LiquidOps/tokenFormat";
 
 interface BorrowParams {
   token: string;
@@ -16,6 +21,8 @@ interface Params {
 
 export function useBorrow({ onSuccess }: Params = {}) {
   const queryClient = useQueryClient();
+  const [, setPendingTransactions] = useContext(PendingTxContext);
+  const [, notify] = useContext(NotificationContext);
 
   const borrowMutation = useMutation({
     mutationFn: async ({ token, quantity }: BorrowParams) => {
@@ -55,13 +62,29 @@ export function useBorrow({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return "Borrowed assets";
+        return messageId;
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (_, { token }) => {
+    onSuccess: async (messageId, { token, quantity }) => {
       if (onSuccess) onSuccess();
+
+      const ticker = token.toUpperCase();
+      const { tokenAddress } = tokenInput(ticker);
+      const qty = new Quantity(quantity, tokenData[ticker].denomination);
+
+      const maximumFractionDigits = (
+        Quantity.lt(qty, new Quantity(1n, 0n)) ? Number(qty.denomination) : 2
+      ) as BigIntToLocaleStringOptions["maximumFractionDigits"];
+      notify({
+        type: "success",
+        content:
+          "You've borrowed " +
+          qty.toLocaleString(undefined, { maximumFractionDigits }) +
+          " " +
+          ticker,
+      });
 
       try {
         // we need to fetch the wallet address here, because useMutation
@@ -69,7 +92,6 @@ export function useBorrow({ onSuccess }: Params = {}) {
         // a hook/state (will use the value at render time)
         // @ts-expect-error
         const walletAddress = await arweaveWallet.getActiveAddress();
-        const { tokenAddress } = tokenInput(token.toUpperCase());
 
         invalidateData([
           `user-balance-${tokenAddress}-${walletAddress}`,
@@ -85,6 +107,17 @@ export function useBorrow({ onSuccess }: Params = {}) {
             "user-balance",
           ],
         });
+
+        setPendingTransactions((pending) => [
+          ...pending,
+          {
+            id: messageId,
+            ticker: ticker,
+            timestamp: Date.now(),
+            qty: formatQty(qty),
+            action: "borrow",
+          },
+        ]);
       } catch {}
     },
   });
@@ -130,13 +163,29 @@ export function useBorrow({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return "Repaid assets";
+        return transferId;
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (_, { token }) => {
+    onSuccess: async (transferId, { token, quantity }) => {
       if (onSuccess) onSuccess();
+
+      const ticker = token.toUpperCase();
+      const { tokenAddress } = tokenInput(ticker);
+      const qty = new Quantity(quantity, tokenData[ticker].denomination);
+
+      const maximumFractionDigits = (
+        Quantity.lt(qty, new Quantity(1n, 0n)) ? Number(qty.denomination) : 2
+      ) as BigIntToLocaleStringOptions["maximumFractionDigits"];
+      notify({
+        type: "success",
+        content:
+          "You've repaid " +
+          qty.toLocaleString(undefined, { maximumFractionDigits }) +
+          " " +
+          ticker,
+      });
 
       try {
         // we need to fetch the wallet address here, because useMutation
@@ -144,7 +193,6 @@ export function useBorrow({ onSuccess }: Params = {}) {
         // a hook/state (will use the value at render time)
         // @ts-expect-error
         const walletAddress = await arweaveWallet.getActiveAddress();
-        const { tokenAddress } = tokenInput(token.toUpperCase());
 
         invalidateData([
           `user-balance-${tokenAddress}-${walletAddress}`,
@@ -160,6 +208,17 @@ export function useBorrow({ onSuccess }: Params = {}) {
             "user-balance",
           ],
         });
+
+        setPendingTransactions((pending) => [
+          ...pending,
+          {
+            id: transferId,
+            ticker: ticker,
+            timestamp: Date.now(),
+            qty: formatQty(qty),
+            action: "repay",
+          },
+        ]);
       } catch {}
     },
   });

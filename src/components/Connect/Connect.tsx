@@ -1,10 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./Connect.module.css";
 import { useClickOutside } from "../utils/utils";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { overlayVariants } from "@/components/DropDown/FramerMotion";
+import {
+  overlayVariants,
+  pendingNotificationVariants,
+} from "@/components/DropDown/FramerMotion";
 import ProfileDropDown from "../ProfileDropDown/ProfileDropDown";
 import { useAOProfile } from "@/hooks/data/useAOProfile";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
@@ -13,6 +16,8 @@ import { walletInfo } from "@/utils/Wallets/wallets";
 import { useWallet } from "@vela-ventures/aosync-sdk-react";
 import { useAccountTab } from "./accountTabContext";
 import { shortenAddress } from "@/utils/Wallets/wallets";
+import { PendingTxContext } from "../PendingTransactions/PendingTransactions";
+import Spinner from "../Spinner/Spinner";
 
 declare global {
   interface Window {
@@ -43,6 +48,7 @@ const Connect: React.FC = () => {
   );
 
   const copyToClipboard = async (text: string) => {
+    if (typeof navigator === "undefined") return;
     try {
       await navigator.clipboard.writeText(text);
       setIsCopied(true);
@@ -141,6 +147,8 @@ const Connect: React.FC = () => {
     }
   }, [isConnected]);
 
+  const [pendingTransactions] = useContext(PendingTxContext);
+
   return (
     <>
       <AnimatePresence>
@@ -232,6 +240,16 @@ const Connect: React.FC = () => {
       />
     </>
   );
+};
+
+const formatAction = (action: string): string => {
+  const actionMap: Record<string, string> = {
+    lend: "Lending",
+    unlend: "Unlending",
+    borrow: "Borrowing",
+    repay: "Repaying",
+  };
+  return actionMap[action];
 };
 
 export default Connect;

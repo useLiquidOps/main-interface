@@ -7,6 +7,7 @@ import Image from "next/image";
 import styles from "./TransactionItem.module.css";
 import Tooltip from "@/components/Tooltip/Tooltip";
 import Link from "next/link";
+import { formatQty } from "@/utils/LiquidOps/tokenFormat";
 
 export interface Transaction {
   id: string;
@@ -103,15 +104,6 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
   } else {
     toolTipText = "Loading";
   }
-
-  const formatQty = (qty: Quantity) => {
-    let maximumFractionDigits: BigIntToLocaleStringOptions["maximumFractionDigits"] = 2;
-    if (Quantity.lt(qty, new Quantity(1n, 0n))) {
-      maximumFractionDigits = 6;
-    }
-
-    return qty.toLocaleString(undefined, { maximumFractionDigits });
-  };
 
   return (
     <Link

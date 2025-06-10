@@ -1,3 +1,4 @@
+"use client";
 import { unWrapQuantity, wrapQuantity } from "@/utils/caches/cacheUtils";
 import { Quantity } from "ao-tokens";
 import {

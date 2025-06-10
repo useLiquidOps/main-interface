@@ -1,3 +1,4 @@
+"use client";
 import { createContext, PropsWithChildren, useState } from "react";
 import Notifications from "./Notifications";
 

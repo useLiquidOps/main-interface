@@ -1,5 +1,4 @@
-"use client";
-import { unWrapQuantity, wrapQuantity } from "@/utils/caches/cacheUtils";
+// import { unWrapQuantity, wrapQuantity } from "@/utils/caches/cacheUtils";
 import { Quantity } from "ao-tokens";
 import {
   createContext,
@@ -22,31 +21,31 @@ export default function PendingTransactions({
   const [loadedCache, setLoadedCache] = useState(false);
 
   // load
-  useEffect(() => {
-    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
-    const loaded: PendingTransaction[] = [];
+  // useEffect(() => {
+  //   const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
+  //   const loaded: PendingTransaction[] = [];
 
-    if (cached) {
-      for (const raw of cached) {
-        loaded.push({ ...raw, qty: unWrapQuantity(raw.qty) });
-      }
+  //   if (cached) {
+  //     for (const raw of cached) {
+  //       loaded.push({ ...raw, qty: unWrapQuantity(raw.qty) });
+  //     }
 
-      setState(loaded);
-    }
-    setLoadedCache(true);
-  }, []);
+  //     setState(loaded);
+  //   }
+  //   setLoadedCache(true);
+  // }, []);
 
-  // save
-  useEffect(() => {
-    if (!loadedCache) return;
-    const raw = [];
+  // // save
+  // useEffect(() => {
+  //   if (!loadedCache) return;
+  //   const raw = [];
 
-    for (const pending of state) {
-      raw.push({ ...pending, qty: wrapQuantity(pending.qty) });
-    }
+  //   for (const pending of state) {
+  //     raw.push({ ...pending, qty: wrapQuantity(pending.qty) });
+  //   }
 
-    localStorage.setItem(CACHE_KEY, JSON.stringify(raw));
-  }, [state, loadedCache]);
+  //   localStorage.setItem(CACHE_KEY, JSON.stringify(raw));
+  // }, [state, loadedCache]);
 
   return (
     <PendingTxContext.Provider value={[state, setState]}>

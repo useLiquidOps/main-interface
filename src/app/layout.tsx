@@ -7,7 +7,6 @@ import { siteWideSEO } from "@/utils/SEO/SEO";
 const title = "LiquidOps | Home";
 const imagePath = "https://liquidops.io/SEO/home.png";
 
-
 export const metadata: Metadata = {
   title: title,
   description: siteWideSEO.description,

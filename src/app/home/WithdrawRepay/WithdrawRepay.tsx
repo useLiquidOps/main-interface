@@ -249,7 +249,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
               maximumFractionDigits: 2,
             }) +
               " " +
-              ticker}
+              ticker +
+              " per transaction"}
             .
           </motion.p>
         )}

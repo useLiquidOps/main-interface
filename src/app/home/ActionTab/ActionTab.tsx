@@ -271,7 +271,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
               maximumFractionDigits: 2,
             }) +
               " " +
-              ticker}
+              ticker +
+              " per transaction"}
             .
           </motion.p>
         )}

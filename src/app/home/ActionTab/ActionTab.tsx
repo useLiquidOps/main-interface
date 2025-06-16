@@ -79,7 +79,12 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
   const jumpRateData = useMemo<
     { active: false } | { active: true; newAPR: number }
   >(() => {
-    if (!inputValue || isLoadingProtocolStats || !protocolStats) {
+    if (
+      mode === "supply" ||
+      !inputValue ||
+      isLoadingProtocolStats ||
+      !protocolStats
+    ) {
       return { active: false };
     }
 
@@ -138,7 +143,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     }
 
     return { active: false };
-  }, [inputValue, protocolStats, isLoadingProtocolStats]);
+  }, [inputValue, protocolStats, isLoadingProtocolStats, mode]);
 
   const handleSubmit = () => {
     if (!inputValue || !walletBalance) return;

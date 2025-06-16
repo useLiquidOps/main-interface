@@ -6,7 +6,7 @@ import { walletInfo } from "@/utils/Wallets/wallets";
 import { AccountTabProvider } from "@/components/Connect/accountTabContext";
 import PendingTransactions from "@/components/PendingTransactions/PendingTransactions";
 import NotificationProvider from "@/components/notifications/NotificationProvider";
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { persister } from "@/utils/caches/persister";
 import { useState } from "react";
 
@@ -15,15 +15,18 @@ type Props = {
 };
 
 export function Providers({ children }: Props) {
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 60 * 1000,
-        refetchInterval: 60 * 1000,
-        gcTime: 5 * 60 * 1000
-      },
-    },
-  }));
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+            refetchInterval: 60 * 1000,
+            gcTime: 5 * 60 * 1000,
+          },
+        },
+      }),
+  );
 
   return (
     <AccountTabProvider>
@@ -32,8 +35,8 @@ export function Providers({ children }: Props) {
         persistOptions={{
           persister,
           dehydrateOptions: {
-            shouldDehydrateQuery: () => true
-          }
+            shouldDehydrateQuery: () => true,
+          },
         }}
       >
         <AOSyncProvider

@@ -1,15 +1,17 @@
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-// import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens";
 import { get, set, del } from "idb-keyval";
 
 function deepSerialize(data: any): any {
-  // if (data instanceof Quantity) {
-  //   return {
-  //     __type: "Quantity",
-  //     raw: data.raw.toString(),
-  //     denomination: data.denomination.toString()
-  //   };
-  // }
+  if (data && typeof data === 'object' &&
+        'raw' in data && 'denomination' in data &&
+        typeof data.raw !== 'undefined' && typeof data.denomination !== 'undefined') {
+    return {
+      __type: "Quantity",
+      raw: data.raw.toString(),
+      denomination: data.denomination.toString()
+    };
+  }
 
   if (Array.isArray(data)) {
     return data.map(deepSerialize);
@@ -34,12 +36,12 @@ function deepDeserialize(data: any): any {
   }
 
   if (data && typeof data === "object") {
-    // if (data.__type === "Quantity") {
-    //   return new Quantity(
-    //     data.raw,
-    //     BigInt(data.denomination)
-    //   );
-    // }
+    if (data.__type === "Quantity") {
+      return new Quantity(
+        data.raw,
+        BigInt(data.denomination)
+      );
+    }
 
     const deserialized: Record<string, any> = {};
 

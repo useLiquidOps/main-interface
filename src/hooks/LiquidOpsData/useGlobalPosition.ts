@@ -89,8 +89,7 @@ export function useGlobalPosition(overrideCache?: boolean) {
         .filter((icon): icon is string => !!icon);
 
       // turn Bigints to Quantities
-      const formattedTokenResult: { [token: string]: TokenPositionResult } =
-        {};
+      const formattedTokenResult: { [token: string]: TokenPositionResult } = {};
 
       for (const [ticker, position] of Object.entries(
         globalPosition.tokenPositions,

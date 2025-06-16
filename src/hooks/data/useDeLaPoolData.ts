@@ -15,7 +15,7 @@ export function useDeLaPoolData(ticker: string, overrideCache?: boolean) {
           "Error in getAPRGraph: Please specify a Defi Llama pool ID",
         );
 
-      return await getAPRGraph(defiLlamaId);;
+      return await getAPRGraph(defiLlamaId);
     },
   });
 }

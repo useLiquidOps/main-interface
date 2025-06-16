@@ -1,11 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import {
   WrappedQuantity,
-  unWrapQuantity,
-  wrapQuantity,
 } from "@/utils/caches/cacheUtils";
 import { getDenomination } from "@/utils/caches/cacheUtils";
 import { Quantity } from "ao-tokens";

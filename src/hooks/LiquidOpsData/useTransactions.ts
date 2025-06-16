@@ -15,8 +15,6 @@ export function useTransactions(overrideCache?: boolean) {
 
   const { data: supportedTokens = [] } = useSupportedTokens();
 
-  const DATA_KEY = `allTransactions-${walletAddress}` as const;
-
   return useQuery({
     queryKey: ["allTransactions", walletAddress],
     queryFn: async () => {
@@ -24,47 +22,35 @@ export function useTransactions(overrideCache?: boolean) {
         throw new Error("Wallet address not available");
       }
 
-      const checkCache = isDataCachedValid(DATA_KEY);
-
-      if (checkCache !== false && overrideCache !== true) {
-        return checkCache;
-      } else {
-        const allTransactions = [];
-        for (let token of supportedTokens) {
-          for (let action of ACTIONS) {
-            let ticker = token["ticker"];
-            try {
-              const result = await LiquidOpsClient.getTransactions({
-                token: ticker.toUpperCase(),
-                action,
-                walletAddress,
-              });
-              allTransactions.push(...result.transactions);
-            } catch (error) {
-              console.error(
-                `Error fetching transactions for ${token} ${action}:`,
-                error,
-              );
-            }
+      const allTransactions = [];
+      for (let token of supportedTokens) {
+        for (let action of ACTIONS) {
+          let ticker = token["ticker"];
+          try {
+            const result = await LiquidOpsClient.getTransactions({
+              token: ticker.toUpperCase(),
+              action,
+              walletAddress,
+            });
+            allTransactions.push(...result.transactions);
+          } catch (error) {
+            console.error(
+              `Error fetching transactions for ${token} ${action}:`,
+              error,
+            );
           }
         }
-
-        const filteredTransactions = allTransactions
-          .filter((tx) => tx.tags?.timestamp)
-          .sort((a, b) => {
-            const timestampA = parseInt(a.tags.timestamp);
-            const timestampB = parseInt(b.tags.timestamp);
-            return timestampB - timestampA;
-          });
-
-        const transactionsCache = {
-          dataKey: DATA_KEY,
-          data: filteredTransactions,
-        };
-        cacheData(transactionsCache);
-
-        return filteredTransactions;
       }
+
+      const filteredTransactions = allTransactions
+        .filter((tx) => tx.tags?.timestamp)
+        .sort((a, b) => {
+          const timestampA = parseInt(a.tags.timestamp);
+          const timestampB = parseInt(b.tags.timestamp);
+          return timestampB - timestampA;
+        });
+
+      return filteredTransactions;
     },
     enabled: !!walletAddress,
     staleTime: 30 * 1000,

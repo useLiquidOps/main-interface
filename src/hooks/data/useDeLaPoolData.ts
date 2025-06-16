@@ -15,21 +15,7 @@ export function useDeLaPoolData(ticker: string, overrideCache?: boolean) {
           "Error in getAPRGraph: Please specify a Defi Llama pool ID",
         );
 
-      const checkCache = isDataCachedValid(DATA_KEY);
-
-      if (checkCache !== false && overrideCache !== true) {
-        return checkCache;
-      } else {
-        const data = await getAPRGraph(defiLlamaId);
-
-        const poolCache = {
-          dataKey: DATA_KEY,
-          data,
-        };
-        cacheData(poolCache);
-
-        return data;
-      }
+      return await getAPRGraph(defiLlamaId);;
     },
   });
 }

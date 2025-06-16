@@ -16,25 +16,11 @@ export function useHistoricalAPR(token: string, overrideCache?: boolean) {
   return useQuery({
     queryKey: ["historical-apr", token],
     queryFn: async (): Promise<HistoricalAPRRes> => {
-      const checkCache = isDataCachedValid(DATA_KEY);
+      const data = await LiquidOpsClient.getHistoricalAPR({
+        token,
+      });
 
-      if (checkCache !== false && overrideCache !== true) {
-        return checkCache;
-      } else {
-        const data = await LiquidOpsClient.getHistoricalAPR({
-          token,
-        });
-
-        const formattedData = formatHistoricalAPR(data);
-
-        const historicalAPRCache = {
-          dataKey: DATA_KEY,
-          data: formattedData,
-        };
-        cacheData(historicalAPRCache);
-
-        return formattedData;
-      }
+      return formatHistoricalAPR(data);
     },
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,

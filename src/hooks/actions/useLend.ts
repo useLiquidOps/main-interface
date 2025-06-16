@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { invalidateData } from "@/utils/caches/cacheUtils";
 import { tokenData, tokenInput } from "liquidops";
 import { Quantity } from "ao-tokens";
 import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
@@ -74,7 +73,6 @@ export function useLend({ onSuccess }: Params = {}) {
       if (onSuccess) onSuccess();
 
       const ticker = token.toUpperCase();
-      const { tokenAddress } = tokenInput(ticker);
       const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
       const maximumFractionDigits = (
@@ -90,18 +88,6 @@ export function useLend({ onSuccess }: Params = {}) {
       });
 
       try {
-        // we need to fetch the wallet address here, because useMutation
-        // will not use the up-to-date address, if we access it through
-        // a hook/state (will use the value at render time)
-        // @ts-expect-error
-        const walletAddress = await arweaveWallet.getActiveAddress();
-
-        invalidateData([
-          `user-balance-${tokenAddress}-${walletAddress}`,
-          `user-position-${tokenAddress}-${walletAddress}`,
-          `user-position-balance-${tokenAddress}-${walletAddress}`,
-          `global-position-${walletAddress}`,
-        ]);
         await queryClient.refetchQueries({
           queryKey: [
             "global-position",
@@ -172,7 +158,6 @@ export function useLend({ onSuccess }: Params = {}) {
       if (onSuccess) onSuccess();
 
       const ticker = token.toUpperCase();
-      const { tokenAddress } = tokenInput(ticker);
       const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
       const maximumFractionDigits = (
@@ -188,18 +173,6 @@ export function useLend({ onSuccess }: Params = {}) {
       });
 
       try {
-        // we need to fetch the wallet address here, because useMutation
-        // will not use the up-to-date address, if we access it through
-        // a hook/state (will use the value at render time)
-        // @ts-expect-error
-        const walletAddress = await arweaveWallet.getActiveAddress();
-
-        invalidateData([
-          `user-balance-${tokenAddress}-${walletAddress}`,
-          `user-position-${tokenAddress}-${walletAddress}`,
-          `user-position-balance-${tokenAddress}-${walletAddress}`,
-          `global-position-${walletAddress}`,
-        ]);
         await queryClient.refetchQueries({
           queryKey: [
             "global-position",

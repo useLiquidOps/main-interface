@@ -8,29 +8,14 @@ export interface Prices {
 }
 
 export function usePrices(overrideCache?: boolean) {
-  const DATA_KEY = "prices" as const;
-
   return useQuery({
     queryKey: ["prices"],
     queryFn: async (): Promise<Prices> => {
-      const checkCache = isDataCachedValid(DATA_KEY);
+      const gekoURL = `https://api.coingecko.com/api/v3/simple/price?ids=${Array.from(new Set(Object.values(tickerToGeckoMap))).join(",")}&vs_currencies=usd`;
+      const response = await fetch(gekoURL);
+      const geckoResponse = await response.json();
 
-      if (checkCache !== false && overrideCache !== true) {
-        return checkCache;
-      } else {
-        const gekoURL = `https://api.coingecko.com/api/v3/simple/price?ids=${Array.from(new Set(Object.values(tickerToGeckoMap))).join(",")}&vs_currencies=usd`;
-
-        const response = await fetch(gekoURL);
-
-        const geckoResponse = await response.json();
-
-        cacheData({
-          dataKey: DATA_KEY,
-          data: geckoResponse,
-        });
-
-        return geckoResponse;
-      }
+      return geckoResponse;
     },
   });
 }

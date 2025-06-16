@@ -11,20 +11,7 @@ export function useFairLaunches(overrideCache?: boolean) {
   return useQuery({
     queryKey: ["fair-launch-strategies"],
     queryFn: async (): Promise<FairLaunchStrategy[]> => {
-      const checkCache = isDataCachedValid(DATA_KEY);
-
-      if (checkCache !== false && overrideCache !== true) {
-        return checkCache;
-      } else {
-        const fairLaunches = await fairLaunchAdapter();
-
-        cacheData({
-          dataKey: DATA_KEY,
-          data: fairLaunches,
-        });
-
-        return fairLaunches;
-      }
+      return await fairLaunchAdapter();
     },
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,

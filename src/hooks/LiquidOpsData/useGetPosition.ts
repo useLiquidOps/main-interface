@@ -10,9 +10,6 @@ export type PositionCache = GetPositionRes;
 export function useGetPosition(tokenAddress: string, overrideCache?: boolean) {
   const { data: walletAddress } = useWalletAddress();
 
-  const DATA_KEY =
-    `user-position-${tokenAddress}-${walletAddress || ""}` as const;
-
   return useQuery({
     queryKey: ["position", tokenAddress, walletAddress],
     queryFn: async (): Promise<Quantity> => {
@@ -20,23 +17,10 @@ export function useGetPosition(tokenAddress: string, overrideCache?: boolean) {
         throw new Error("Wallet address not available");
       }
 
-      const cachedData = isDataCachedValid(DATA_KEY);
-
-      let positionData: PositionCache;
-
-      if (cachedData !== false && overrideCache !== true) {
-        positionData = cachedData;
-      } else {
-        positionData = await LiquidOpsClient.getPosition({
-          token: tokenAddress,
-          recipient: walletAddress,
-        });
-
-        cacheData({
-          dataKey: DATA_KEY,
-          data: positionData,
-        });
-      }
+      let positionData = await LiquidOpsClient.getPosition({
+        token: tokenAddress,
+        recipient: walletAddress,
+      });
 
       return new Quantity(
         positionData.borrowBalance,

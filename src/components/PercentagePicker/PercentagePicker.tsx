@@ -8,8 +8,6 @@ interface PercentagePickerProps {
   selectedPercentage: number | null;
   currentPercentage: number;
   onPercentageClick: (percentage: number) => void;
-  interestOwed?: number;
-  onInterestClick?: () => void;
   walletBalance: Quantity;
 }
 
@@ -18,8 +16,6 @@ const PercentagePicker: React.FC<PercentagePickerProps> = ({
   selectedPercentage,
   currentPercentage,
   onPercentageClick,
-  interestOwed,
-  onInterestClick,
   walletBalance,
 }) => {
   const percentageOptions =
@@ -59,16 +55,6 @@ const PercentagePicker: React.FC<PercentagePickerProps> = ({
             {percentage}%
           </button>
         ))}
-        {mode === "repay" && interestOwed && onInterestClick && (
-          // <button
-          //   className={styles.percentageButton}
-          //   onClick={onInterestClick}
-          //   disabled={!walletBalance}
-          // >
-          //   Interest
-          // </button>
-          <></>
-        )}
       </div>
     </>
   );

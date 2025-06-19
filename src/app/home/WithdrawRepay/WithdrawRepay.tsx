@@ -54,7 +54,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   });
 
   const networkFee = 0;
-  const interestOwed = 0.01;
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -137,11 +136,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     return Math.min(100, Math.max(0, percentage.toNumber()));
   };
 
-  const handleInterestClick = () => {
-    setInputValue(interestOwed.toString());
-    setSelectedPercentage(null);
-  };
-
   const handleSubmit = () => {
     if (!inputValue) return;
 
@@ -219,8 +213,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         selectedPercentage={selectedPercentage}
         currentPercentage={getCurrentPercentage()}
         onPercentageClick={handlePercentageClick}
-        interestOwed={interestOwed}
-        onInterestClick={handleInterestClick}
         // @ts-ignore, logic relies on undefined to disable percentage picker
         walletBalance={currentBalance}
       />

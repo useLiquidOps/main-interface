@@ -227,7 +227,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
       </div>
 
       <AnimatePresence>
-        {jumpRateData.active && (
+        {jumpRateData.active && mode === "borrow" && (
           <motion.p
             variants={warningVariants}
             initial="hidden"

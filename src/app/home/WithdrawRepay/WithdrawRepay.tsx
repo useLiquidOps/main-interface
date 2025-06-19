@@ -60,6 +60,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
     null,
   );
+  const [notLoadedBalance, setNotLoadedBalance] = useState<string | boolean>(true);
 
   const { data: cooldownData } = useCooldown(mode, ticker);
 
@@ -84,34 +85,28 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     protocolStats,
   );
   const calculateMaxAmount = () => {
-
     if (mode === "withdraw" && isLoadingOTokenBalance) {
-      alert("Not loaded oToken balance, please wait a moment and try again.");
-      throw new Error("Not loaded oTokenBalance.");
+      setNotLoadedBalance("oToken");
     }
     if (mode === "withdraw") {
       return oTokenBalance;
     }
     if (mode === "repay" && isLoadingCurrentBalance) {
-      alert("Not loaded current balance, please wait a moment and try again.");
-      throw new Error("Not loaded currentBalance.");
+      setNotLoadedBalance("token");
     }
     return currentBalance;
-  
   };
 
   const handleMaxClick = () => {
-
     const maxAmount = calculateMaxAmount();
     // @ts-ignore
     setInputValue(maxAmount.toString());
   };
 
   const handlePercentageClick = (percentage: number) => {
-
     const maxAmount = calculateMaxAmount();
     const amount = Quantity.__div(
-          // @ts-ignore
+      // @ts-ignore
       Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),
       new Quantity(0n, 12n).fromNumber(100),
     );
@@ -120,19 +115,19 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   };
   const getCurrentPercentage = () => {
     const maxAmount = calculateMaxAmount();
-        // @ts-ignore
+    // @ts-ignore
     if (!inputValue || Quantity.eq(maxAmount, new Quantity(0n, 12n))) return 0;
 
     if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
 
     const percentage = Quantity.__div(
       Quantity.__mul(
-            // @ts-ignore
+        // @ts-ignore
         new Quantity(0n, maxAmount.denomination).fromString(inputValue),
-            // @ts-ignore
+        // @ts-ignore
         new Quantity(0n, maxAmount.denomination).fromNumber(100),
       ),
-          // @ts-ignore
+      // @ts-ignore
       maxAmount,
     );
     return Math.min(100, Math.max(0, percentage.toNumber()));
@@ -148,14 +143,12 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
       inputValue,
     );
 
-    
     // If unlending (withdrawing), multiply by the oToken rate to send correct oToken amount to protocol
-        if (mode === "withdraw" && isLoadingOTokenBalance) {
-      alert("Not loaded oToken balance, please wait a moment and try again.");
-      throw new Error("Not loaded oTokenBalance.");
+    if (mode === "withdraw" && isLoadingOTokenBalance) {
+      setNotLoadedBalance("oToken");
     }
     if (mode === "withdraw") {
-          const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
+      const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
       const oTokenAmount = Number(quantity) * userOTokenRate;
       quantity = new Quantity(0n, currentBalance?.denomination).fromNumber(
         oTokenAmount,
@@ -264,6 +257,28 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
             {/*
             // @ts-ignore */}
             {cooldownData.remainingBlocks.toString() + " "} block(s).
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      {/* data is still loading error */}
+      <AnimatePresence>
+        {notLoadedBalance && (
+          <motion.p
+            variants={warningVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={styles.warning}
+          >
+            <Image
+              src="/icons/activity/warning.svg"
+              height={45}
+              width={45}
+              alt="Error icon"
+            />
+            Not loaded {notLoadedBalance} balance, please wait a moment and try
+            again.
           </motion.p>
         )}
       </AnimatePresence>

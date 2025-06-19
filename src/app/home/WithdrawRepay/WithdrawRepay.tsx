@@ -87,21 +87,30 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     if (mode === "repay") {
       // Return zero quantity while loading or if no balance
       if (isLoadingOTokenBalance || !oTokenBalance) {
-        return new Quantity(0n, 12n);
+        alert("Not loaded oToken balance, please wait a moment and try again.");
+      throw new Error("Not loaded oTokenBalance.");
       }
       return oTokenBalance;
     }
 
     if (isLoadingCurrentBalance || !currentBalance) {
-      return new Quantity(0n, 12n);
+      alert("Not loaded current balance, please wait a moment and try again.");
+      throw new Error("Not loaded currentBalance.");
     }
+    
     return currentBalance;
   };
 
   const handleMaxClick = () => {
     // Don't allow max click while data is loading
-    if (mode === "repay" && isLoadingOTokenBalance) return;
-    if (mode === "withdraw" && isLoadingCurrentBalance) return;
+if (mode === "repay" && isLoadingOTokenBalance) {
+      alert("Not loaded oToken balance, please wait a moment and try again.");
+      throw new Error("Not loaded oTokenBalance.");
+    }
+    if (mode === "withdraw" && isLoadingCurrentBalance) {
+      alert("Not loaded current balance, please wait a moment and try again.");
+      throw new Error("Not loaded currentBalance.");
+    }
 
     const maxAmount = calculateMaxAmount();
     setInputValue(maxAmount.toString());
@@ -109,8 +118,14 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
   const handlePercentageClick = (percentage: number) => {
     // Don't allow percentage selection while data is loading
-    if (mode === "repay" && isLoadingOTokenBalance) return;
-    if (mode === "withdraw" && isLoadingCurrentBalance) return;
+    if (mode === "repay" && isLoadingOTokenBalance) {
+      alert("Not loaded oToken balance, please wait a moment and try again.");
+      throw new Error("Not loaded oTokenBalance.");
+    }
+    if (mode === "withdraw" && isLoadingCurrentBalance) {
+      alert("Not loaded current balance, please wait a moment and try again.");
+      throw new Error("Not loaded currentBalance.");
+    }
 
     const maxAmount = calculateMaxAmount();
     const amount = Quantity.__div(

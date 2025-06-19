@@ -137,20 +137,16 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   };
 
   const handleSubmit = () => {
-    if (!inputValue) return;
-
-    if (isLoadingOTokenBalance || isLoadingBalance) {
-      throw new Error("Not loaded userOTokenRate!");
+    if (!inputValue) { 
+      alert("Please enter an amount to " + mode + ".");
+      throw new Error("No input amount specified.");
     }
 
     const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
 
-    if (!userOTokenRate) {
-      throw new Error("Not loaded userOTokenRate!");
-    }
-
     if (!currentBalance) {
-      throw new Error("Not loaded currentBalance!");
+      alert("Not loaded currentBalance, please wait a moment and try again.");
+      throw new Error("Not loaded currentBalance.");
     }
 
     let quantity = new Quantity(0n, currentBalance?.denomination).fromString(

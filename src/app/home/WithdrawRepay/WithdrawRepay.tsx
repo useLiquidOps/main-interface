@@ -84,51 +84,34 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     protocolStats,
   );
   const calculateMaxAmount = () => {
-    if (mode === "repay") {
-      // Return zero quantity while loading or if no balance
-      if (isLoadingOTokenBalance || !oTokenBalance) {
-        alert("Not loaded oToken balance, please wait a moment and try again.");
-      throw new Error("Not loaded oTokenBalance.");
-      }
-      return oTokenBalance;
-    }
 
-    if (isLoadingCurrentBalance || !currentBalance) {
-      alert("Not loaded current balance, please wait a moment and try again.");
-      throw new Error("Not loaded currentBalance.");
-    }
-    
-    return currentBalance;
-  };
-
-  const handleMaxClick = () => {
-    // Don't allow max click while data is loading
-if (mode === "repay" && isLoadingOTokenBalance) {
+    if (mode === "withdraw" && isLoadingOTokenBalance) {
       alert("Not loaded oToken balance, please wait a moment and try again.");
       throw new Error("Not loaded oTokenBalance.");
     }
-    if (mode === "withdraw" && isLoadingCurrentBalance) {
+    if (mode === "withdraw") {
+      return oTokenBalance;
+    }
+    if (mode === "repay" && isLoadingCurrentBalance) {
       alert("Not loaded current balance, please wait a moment and try again.");
       throw new Error("Not loaded currentBalance.");
     }
+    return currentBalance;
+  
+  };
+
+  const handleMaxClick = () => {
 
     const maxAmount = calculateMaxAmount();
+    // @ts-ignore
     setInputValue(maxAmount.toString());
   };
 
   const handlePercentageClick = (percentage: number) => {
-    // Don't allow percentage selection while data is loading
-    if (mode === "repay" && isLoadingOTokenBalance) {
-      alert("Not loaded oToken balance, please wait a moment and try again.");
-      throw new Error("Not loaded oTokenBalance.");
-    }
-    if (mode === "withdraw" && isLoadingCurrentBalance) {
-      alert("Not loaded current balance, please wait a moment and try again.");
-      throw new Error("Not loaded currentBalance.");
-    }
 
     const maxAmount = calculateMaxAmount();
     const amount = Quantity.__div(
+          // @ts-ignore
       Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),
       new Quantity(0n, 12n).fromNumber(100),
     );
@@ -137,39 +120,42 @@ if (mode === "repay" && isLoadingOTokenBalance) {
   };
   const getCurrentPercentage = () => {
     const maxAmount = calculateMaxAmount();
+        // @ts-ignore
     if (!inputValue || Quantity.eq(maxAmount, new Quantity(0n, 12n))) return 0;
 
     if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
 
     const percentage = Quantity.__div(
       Quantity.__mul(
+            // @ts-ignore
         new Quantity(0n, maxAmount.denomination).fromString(inputValue),
+            // @ts-ignore
         new Quantity(0n, maxAmount.denomination).fromNumber(100),
       ),
+          // @ts-ignore
       maxAmount,
     );
     return Math.min(100, Math.max(0, percentage.toNumber()));
   };
 
   const handleSubmit = () => {
-    if (!inputValue) { 
+    if (!inputValue) {
       alert("Please enter an amount to " + mode + ".");
       throw new Error("No input amount specified.");
-    }
-
-    const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
-
-    if (!currentBalance) {
-      alert("Not loaded currentBalance, please wait a moment and try again.");
-      throw new Error("Not loaded currentBalance.");
     }
 
     let quantity = new Quantity(0n, currentBalance?.denomination).fromString(
       inputValue,
     );
 
-    // If unlending (withdrawing), multiply by the oToken rate
+    
+    // If unlending (withdrawing), multiply by the oToken rate to send correct oToken amount to protocol
+        if (mode === "withdraw" && isLoadingOTokenBalance) {
+      alert("Not loaded oToken balance, please wait a moment and try again.");
+      throw new Error("Not loaded oTokenBalance.");
+    }
     if (mode === "withdraw") {
+          const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
       const oTokenAmount = Number(quantity) * userOTokenRate;
       quantity = new Quantity(0n, currentBalance?.denomination).fromNumber(
         oTokenAmount,

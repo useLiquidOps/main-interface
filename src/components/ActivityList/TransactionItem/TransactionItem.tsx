@@ -50,7 +50,7 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
       (token) => token.address === tokenAddress,
     );
 
-    return token ? token.ticker : "unknown";
+    return token ? token.cleanTicker : "unknown";
   };
 
   const getTransactionInfo = (tags: Transaction["tags"]) => {
@@ -83,7 +83,10 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
 
   const { display, action } = getTransactionInfo(tx.tags);
   const tokenTicker = getTokenTicker(tx.tags["token"]);
-  const activityIcon = `./tokens/${tokenTicker}.svg`;
+  const activityIcon =
+    display === "Unlent"
+      ? `./oTokens/${tokenTicker}.png`
+      : `./tokens/${tokenTicker}.svg`;
 
   const { data: resultData, isLoading: resultIsLoading } = useGetResult(
     tx.id,
@@ -128,6 +131,8 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
                   ),
                 )}
               </p>
+              <p>{tokenTicker}</p>
+              <p>{display === "Unlent" ? "oTokens" : ""}</p>
             </div>
 
             <p className={styles.timestamp}>

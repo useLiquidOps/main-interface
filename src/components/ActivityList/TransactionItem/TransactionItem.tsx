@@ -131,8 +131,9 @@ export const TransactionItem = ({ tx }: { tx: Transaction }) => {
                   ),
                 )}
               </p>
-              <p>{tokenTicker}</p>
-              <p>{display === "Unlent" ? "oTokens" : ""}</p>
+              <p>
+                {display === "Unlent" ? `o${tokenTicker}` : `${tokenTicker}`}
+              </p>
             </div>
 
             <p className={styles.timestamp}>

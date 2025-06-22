@@ -225,9 +225,10 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         ticker={ticker}
         tokenPrice={tokenPrice}
         // @ts-ignore, logic relies on undefined to show skeleton loading
-        walletBalance={currentBalance}
+        walletBalance={mode === "withdraw" ? oTokenBalance : currentBalance}
         onMaxClick={handleMaxClick}
         denomination={currentBalance?.denomination || 12n}
+        oToken={mode === "withdraw" ? true : false}
       />
 
       <PercentagePicker

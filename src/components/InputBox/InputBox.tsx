@@ -22,6 +22,7 @@ interface InputBoxProps {
   liquidationMode?: boolean;
   liquidationDiscount?: number;
   bypassBalanceCheck?: boolean;
+  oToken?: boolean;
 }
 
 const useInputValidation = (
@@ -102,6 +103,7 @@ const InputBox: React.FC<InputBoxProps> = ({
   liquidationDiscount = 0,
   denomination,
   bypassBalanceCheck = false,
+  oToken = false,
 }) => {
   const { showError, validateInput } = useInputValidation(
     walletBalance,
@@ -198,12 +200,12 @@ const InputBox: React.FC<InputBoxProps> = ({
   const renderTokenInfo = () => (
     <div className={styles.tokenSelector}>
       <Image
-        src={`/tokens/${ticker}.svg`}
+        src={oToken ? `/oTokens/${ticker}.png` : `/tokens/${ticker}.svg`}
         height={20}
         width={20}
         alt={ticker}
       />
-      <span>{ticker}</span>
+      <span>{oToken ? `o${ticker}` : ticker}</span>
     </div>
   );
 
@@ -218,7 +220,7 @@ const InputBox: React.FC<InputBoxProps> = ({
           />
         ) : (
           <span className={styles.balanceAmount}>
-            {formatTMB(walletBalance)} {ticker}
+            {formatTMB(walletBalance)} {oToken ? `o${ticker}` : ticker}
           </span>
         )}
         <span className={styles.separator}>|</span>

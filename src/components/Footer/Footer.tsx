@@ -125,6 +125,18 @@ const Footer = () => {
                 width={15}
               />
             </a>
+            <a
+              href="https://linktr.ee/LiquidOps"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="/socials/linktree.svg"
+                alt="Linktree"
+                height={12}
+                width={12}
+              />
+            </a>
           </div>
         </div>
       </div>

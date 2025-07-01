@@ -41,7 +41,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.modalHeader}>
-              <p className={styles.modalTitle}>Select wallet</p>
+              <p className={styles.modalTitle}>Select AR/AO wallet</p>
               <button className={styles.closeButton} onClick={onClose}>
                 <Image
                   src="/icons/close-icon.svg"
@@ -63,7 +63,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
                 <div className={styles.walletInfo}>
                   <p className={styles.walletName}>Wander</p>
                   <p className={styles.walletDescription}>
-                    Chrome based AO/AR wallet.
+                    Chrome/IOS/Android support.
                   </p>
                 </div>
               </div>
@@ -77,15 +77,13 @@ const WalletModal: React.FC<WalletModalProps> = ({
                 />
                 <div className={styles.walletInfo}>
                   <p className={styles.walletName}>Beacon</p>
-                  <p className={styles.walletDescription}>
-                    IOS based AO/AR wallet.
-                  </p>
+                  <p className={styles.walletDescription}>IOS support.</p>
                 </div>
               </div>
             </div>
 
             <div className={styles.noWallet}>
-              <p className={styles.noWalletTitle}>Don't have a wallet?</p>
+              <p className={styles.noWalletTitle}>Don't have a AR/AO wallet?</p>
               <a
                 className={styles.noWalletButton}
                 href="https://2hsfyi4t5fiqdcanybdez4e4admrjeqghts22viz7uuo3d5k2nna.arweave.net/0eRcI5PpUQGIDcBGTPCcANkUkgY85a1VGf0o7Y-q01o/#/en/wallets"

@@ -53,7 +53,11 @@ const WalletModal: React.FC<WalletModalProps> = ({
             </div>
 
             <div className={styles.walletOptions}>
-              <div className={styles.walletOption} onClick={onConnectWander}>
+              <div
+                className={styles.walletOption}
+                style={{ backgroundColor: "#6b57f9" }}
+                onClick={onConnectWander}
+              >
                 <Image
                   src="/partners/wander.svg"
                   height={40}
@@ -63,21 +67,26 @@ const WalletModal: React.FC<WalletModalProps> = ({
                 <div className={styles.walletInfo}>
                   <p className={styles.walletName}>Wander</p>
                   <p className={styles.walletDescription}>
-                    Chrome/IOS/Android support.
+                    Chrome/IOS/Android support
                   </p>
                 </div>
               </div>
 
-              <div className={styles.walletOption} onClick={onConnectBeacon}>
+              <div
+                className={styles.walletOption}
+                style={{ backgroundColor: "#1D2BC2" }}
+                onClick={onConnectBeacon}
+              >
                 <Image
                   src="/partners/beacon.svg"
                   height={40}
                   width={40}
                   alt="Beacon"
+                  style={{ border: "1px solid white", borderRadius: "12px" }}
                 />
                 <div className={styles.walletInfo}>
                   <p className={styles.walletName}>Beacon</p>
-                  <p className={styles.walletDescription}>IOS support.</p>
+                  <p className={styles.walletDescription}>IOS support</p>
                 </div>
               </div>
             </div>
@@ -86,7 +95,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
               <p className={styles.noWalletTitle}>Don't have a AR/AO wallet?</p>
               <a
                 className={styles.noWalletButton}
-                href="https://2hsfyi4t5fiqdcanybdez4e4admrjeqghts22viz7uuo3d5k2nna.arweave.net/0eRcI5PpUQGIDcBGTPCcANkUkgY85a1VGf0o7Y-q01o/#/en/wallets"
+                href="https://www.wander.app/"
                 target="_blank"
               >
                 Get wallet

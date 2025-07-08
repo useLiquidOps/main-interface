@@ -13,6 +13,7 @@ interface WalletModalProps {
   onClose: () => void;
   onConnectWander: () => void;
   onConnectBeacon: () => void;
+  onConnectOuro: () => void;
 }
 
 const WalletModal: React.FC<WalletModalProps> = ({
@@ -20,6 +21,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
   onClose,
   onConnectWander,
   onConnectBeacon,
+  onConnectOuro,
 }) => {
   return (
     <AnimatePresence>
@@ -87,6 +89,30 @@ const WalletModal: React.FC<WalletModalProps> = ({
                 <div className={styles.walletInfo}>
                   <p className={styles.walletName}>Beacon</p>
                   <p className={styles.walletDescription}>IOS support</p>
+                </div>
+              </div>
+
+              <div
+                className={styles.walletOption}
+                style={{ backgroundColor: "#bbfba9" }}
+                onClick={onConnectOuro}
+              >
+                <Image
+                  src="/partners/ouro.png"
+                  height={40}
+                  width={40}
+                  alt="Ouro"
+                />
+                <div className={styles.walletInfo}>
+                  <p className={styles.walletName} style={{ color: "black" }}>
+                    Ouro
+                  </p>
+                  <p
+                    className={styles.walletDescription}
+                    style={{ color: "black" }}
+                  >
+                    Chrome support
+                  </p>
                 </div>
               </div>
             </div>

@@ -12,7 +12,7 @@ import { useModal } from "@/components/PopUp/PopUp";
 import Link from "next/link";
 import { DEPRECATED_TOKENS } from "@/utils/tokenMappings";
 import { useEarnings } from "@/hooks/data/useEarnings";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 
 interface AssetRowProps {
   asset: SupportedToken;

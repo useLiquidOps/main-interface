@@ -1,4 +1,4 @@
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { useGetResult } from "@/hooks/LiquidOpsData/useGetResult";
 import { GetResultRes } from "liquidops";

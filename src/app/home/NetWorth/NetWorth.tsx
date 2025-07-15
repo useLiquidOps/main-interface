@@ -3,7 +3,7 @@ import styles from "./NetWorth.module.css";
 import Image from "next/image";
 import PieChart from "@/components/PieChat/PieChart";
 import { useGlobalPosition } from "@/hooks/LiquidOpsData/useGlobalPosition";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { formatTMB } from "@/components/utils/utils";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { TOKEN_COLORS } from "@/utils/tokenMappings";

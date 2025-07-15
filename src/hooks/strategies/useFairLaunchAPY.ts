@@ -11,20 +11,7 @@ export function useFairLaunchAPY(
   return useQuery({
     queryKey: ["fairlaunch-apy", fairLaunchID],
     queryFn: async (): Promise<number> => {
-      const checkCache = isDataCachedValid(DATA_KEY);
-
-      if (checkCache !== false && overrideCache !== true) {
-        return checkCache;
-      } else {
-        const apy = await getFairlaunchAPY(fairLaunchID);
-
-        cacheData({
-          dataKey: DATA_KEY,
-          data: apy,
-        });
-
-        return apy;
-      }
+      return await getFairlaunchAPY(fairLaunchID);
     },
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,

@@ -11,20 +11,7 @@ export function useLeverage(overrideCache?: boolean) {
   return useQuery({
     queryKey: ["leverage-strategies"],
     queryFn: async (): Promise<LeverageStrategy[]> => {
-      const checkCache = isDataCachedValid(DATA_KEY);
-
-      if (checkCache !== false && overrideCache !== true) {
-        return checkCache;
-      } else {
-        const leverageStrategies = await leverageAdapter();
-
-        cacheData({
-          dataKey: DATA_KEY,
-          data: leverageStrategies,
-        });
-
-        return leverageStrategies;
-      }
+      return await leverageAdapter();
     },
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,

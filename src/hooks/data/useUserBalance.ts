@@ -1,54 +1,32 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "./useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
-import {
-  WrappedQuantity,
-  unWrapQuantity,
-  wrapQuantity,
-} from "@/utils/caches/cacheUtils";
+import { WrappedQuantity } from "@/utils/caches/cacheUtils";
 import { getDenomination } from "@/utils/caches/cacheUtils";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 
 export type UserBalanceCache = WrappedQuantity;
 
 export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
   const { data: walletAddress } = useWalletAddress();
 
-  const DATA_KEY =
-    `user-balance-${tokenAddress}-${walletAddress || ""}` as const;
-
   return useQuery({
     queryKey: ["user-balance", tokenAddress, walletAddress],
     queryFn: async () => {
       if (!walletAddress) throw new Error("Wallet address not available");
 
-      const checkCache = isDataCachedValid(DATA_KEY);
+      const balance = await LiquidOpsClient.getBalance({
+        tokenAddress,
+        walletAddress,
+      });
 
-      if (checkCache !== false && overrideCache !== true) {
-        return unWrapQuantity(checkCache);
-      } else {
-        const balance = await LiquidOpsClient.getBalance({
-          tokenAddress,
-          walletAddress,
-        });
-
-        const denomination = getDenomination(tokenAddress);
-        if (denomination === undefined) {
-          throw new Error(
-            "Cannot find token address denomination in useUserBalance.ts",
-          );
-        }
-        const scaledBalance = new Quantity(balance, denomination);
-
-        const balanceCache = {
-          dataKey: DATA_KEY,
-          data: wrapQuantity(scaledBalance),
-        };
-        cacheData(balanceCache);
-
-        return scaledBalance;
+      const denomination = getDenomination(tokenAddress);
+      if (denomination === undefined) {
+        throw new Error(
+          "Cannot find token address denomination in useUserBalance.ts",
+        );
       }
+      return new Quantity(balance.raw, balance.denomination);
     },
     enabled: !!walletAddress,
     staleTime: 30 * 1000,

@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { tokenInput, tokenData } from "liquidops";
-import { invalidateData } from "@/utils/caches/cacheUtils";
 import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
 import { useContext } from "react";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { NotificationContext } from "@/components/notifications/NotificationProvider";
 import { formatQty } from "@/utils/LiquidOps/tokenFormat";
 
@@ -62,16 +61,16 @@ export function useBorrow({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return messageId;
+        return { messageId, walletAddress };
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (messageId, { token, quantity }) => {
+    onSuccess: async ({ messageId, walletAddress }, { token, quantity }) => {
       if (onSuccess) onSuccess();
 
+      const { tokenAddress } = tokenInput(token);
       const ticker = token.toUpperCase();
-      const { tokenAddress } = tokenInput(ticker);
       const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
       const maximumFractionDigits = (
@@ -87,26 +86,28 @@ export function useBorrow({ onSuccess }: Params = {}) {
       });
 
       try {
-        // we need to fetch the wallet address here, because useMutation
-        // will not use the up-to-date address, if we access it through
-        // a hook/state (will use the value at render time)
-        // @ts-expect-error
-        const walletAddress = await arweaveWallet.getActiveAddress();
-
-        invalidateData([
-          `user-balance-${tokenAddress}-${walletAddress}`,
-          `user-position-${tokenAddress}-${walletAddress}`,
-          `user-position-balance-${tokenAddress}-${walletAddress}`,
-          `global-position-${walletAddress}`,
+        await Promise.all([
+          queryClient.refetchQueries({
+            queryKey: ["global-position", walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["position", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["position-balance", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["user-balance", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["protocol-stats", ticker],
+            exact: true,
+          }),
         ]);
-        await queryClient.refetchQueries({
-          queryKey: [
-            "global-position",
-            "position",
-            "position-balance",
-            "user-balance",
-          ],
-        });
 
         setPendingTransactions((pending) => [
           ...pending,
@@ -163,16 +164,16 @@ export function useBorrow({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return transferId;
+        return { transferId, walletAddress };
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (transferId, { token, quantity }) => {
+    onSuccess: async ({ transferId, walletAddress }, { token, quantity }) => {
       if (onSuccess) onSuccess();
 
+      const { tokenAddress } = tokenInput(token);
       const ticker = token.toUpperCase();
-      const { tokenAddress } = tokenInput(ticker);
       const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
       const maximumFractionDigits = (
@@ -188,26 +189,28 @@ export function useBorrow({ onSuccess }: Params = {}) {
       });
 
       try {
-        // we need to fetch the wallet address here, because useMutation
-        // will not use the up-to-date address, if we access it through
-        // a hook/state (will use the value at render time)
-        // @ts-expect-error
-        const walletAddress = await arweaveWallet.getActiveAddress();
-
-        invalidateData([
-          `user-balance-${tokenAddress}-${walletAddress}`,
-          `user-position-${tokenAddress}-${walletAddress}`,
-          `user-position-balance-${tokenAddress}-${walletAddress}`,
-          `global-position-${walletAddress}`,
+        await Promise.all([
+          queryClient.refetchQueries({
+            queryKey: ["global-position", walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["position", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["position-balance", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["user-balance", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["protocol-stats", ticker],
+            exact: true,
+          }),
         ]);
-        await queryClient.refetchQueries({
-          queryKey: [
-            "global-position",
-            "position",
-            "position-balance",
-            "user-balance",
-          ],
-        });
 
         setPendingTransactions((pending) => [
           ...pending,

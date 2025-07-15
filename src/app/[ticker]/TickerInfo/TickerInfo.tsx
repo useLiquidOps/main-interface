@@ -7,7 +7,7 @@ import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import { DEPRECATED_TOKENS } from "@/utils/tokenMappings";
 

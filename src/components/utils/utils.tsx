@@ -1,4 +1,4 @@
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { useEffect, useRef } from "react";
 
 // click outside of a popup

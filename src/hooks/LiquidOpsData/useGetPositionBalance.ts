@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWalletAddress } from "../data/useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import { GetPositionRes } from "liquidops";
 
@@ -13,9 +13,6 @@ export function useGetPositionBalance(
 ) {
   const { data: walletAddress } = useWalletAddress();
 
-  const DATA_KEY =
-    `user-position-balance-${tokenAddress}-${walletAddress || ""}` as const;
-
   return useQuery({
     queryKey: ["position-balance", tokenAddress, walletAddress],
     queryFn: async (): Promise<Quantity> => {
@@ -23,23 +20,10 @@ export function useGetPositionBalance(
         throw new Error("Wallet address not available");
       }
 
-      const cachedData = isDataCachedValid(DATA_KEY);
-
-      let positionData: PositionCache;
-
-      if (cachedData !== false && overrideCache !== true) {
-        positionData = cachedData;
-      } else {
-        positionData = await LiquidOpsClient.getPosition({
-          token: tokenAddress,
-          recipient: walletAddress,
-        });
-
-        cacheData({
-          dataKey: DATA_KEY,
-          data: positionData,
-        });
-      }
+      let positionData = await LiquidOpsClient.getPosition({
+        token: tokenAddress,
+        recipient: walletAddress,
+      });
 
       return new Quantity(
         positionData.collateralization,

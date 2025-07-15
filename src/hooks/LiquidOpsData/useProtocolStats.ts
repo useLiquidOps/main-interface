@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { useHistoricalAPR, HistoricalAPRRes } from "./useHistoricalAPR";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import { GetInfoRes, TokenInput } from "liquidops";
@@ -26,29 +26,15 @@ export type ProtocolStatsCache = GetInfoRes;
 export function useProtocolStats(token: string, overrideCache?: boolean) {
   const { data: historicalAPR } = useHistoricalAPR(token);
 
-  const DATA_KEY = `protocol-stats-${token}` as const;
-
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
-      const checkCache = isDataCachedValid(DATA_KEY);
       const safeHistoricalAPR = historicalAPR ?? [];
+      const [getInfoRes] = await Promise.all([
+        LiquidOpsClient.getInfo({ token }),
+      ]);
 
-      if (checkCache !== false && overrideCache !== true) {
-        return await getProtocolStatsData(checkCache, safeHistoricalAPR, token);
-      } else {
-        const [getInfoRes] = await Promise.all([
-          LiquidOpsClient.getInfo({ token }),
-        ]);
-
-        const protocolStatsCache = {
-          dataKey: DATA_KEY,
-          data: getInfoRes,
-        };
-        cacheData(protocolStatsCache);
-
-        return await getProtocolStatsData(getInfoRes, safeHistoricalAPR, token);
-      }
+      return await getProtocolStatsData(getInfoRes, safeHistoricalAPR, token);
     },
     enabled: !!historicalAPR,
     staleTime: 30 * 1000,

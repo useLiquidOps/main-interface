@@ -1,7 +1,7 @@
 import { Transaction } from "@/components/ActivityList/TransactionItem/TransactionItem";
 import { formatTMB } from "@/components/utils/utils";
 import { tokens } from "liquidops";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 
 export const exportTransactionsAsJSON = (
   transactions: Transaction[],

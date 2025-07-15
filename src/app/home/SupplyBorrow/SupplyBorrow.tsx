@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./SupplyBorrow.module.css";
 import { useGlobalPosition } from "@/hooks/LiquidOpsData/useGlobalPosition";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { formatTMB } from "@/components/utils/utils";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 

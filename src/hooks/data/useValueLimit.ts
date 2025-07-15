@@ -1,5 +1,5 @@
 import { ProtocolStats } from "../LiquidOpsData/useProtocolStats";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { useMemo } from "react";
 
 export function useValueLimit(

@@ -10,7 +10,7 @@ import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { useLend } from "@/hooks/actions/useLend";
 import { useBorrow } from "@/hooks/actions/useBorrow";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { tokenInput } from "liquidops";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 import { getBaseDenomination } from "@/utils/LiquidOps/getBaseDenomination";
@@ -79,7 +79,12 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
   const jumpRateData = useMemo<
     { active: false } | { active: true; newAPR: number }
   >(() => {
-    if (!inputValue || isLoadingProtocolStats || !protocolStats) {
+    if (
+      mode === "supply" ||
+      !inputValue ||
+      isLoadingProtocolStats ||
+      !protocolStats
+    ) {
       return { active: false };
     }
 
@@ -138,7 +143,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     }
 
     return { active: false };
-  }, [inputValue, protocolStats, isLoadingProtocolStats]);
+  }, [inputValue, protocolStats, isLoadingProtocolStats, mode]);
 
   const handleSubmit = () => {
     if (!inputValue || !walletBalance) return;

@@ -2,7 +2,7 @@ import { ProtocolStatsCache } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { Prices } from "@/hooks/data/useTokenPrice";
 import { UserBalanceCache } from "@/hooks/data/useUserBalance";
 import { PositionCache } from "@/hooks/LiquidOpsData/useGetPosition";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { GlobalPositionCache } from "@/hooks/LiquidOpsData/useGlobalPosition";
 import { TransactionCache } from "@/hooks/LiquidOpsData/useTransactions";
 import { ResultCache } from "@/hooks/LiquidOpsData/useGetResult";

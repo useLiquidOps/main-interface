@@ -35,7 +35,7 @@ const MoreDropdown: React.FC<MoreDropdownProps> = ({ items, label }) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {item.label === "Bridge" && (
+              {label === "Bridge" && (
                 <Image
                   src={"/partners/aox.svg"}
                   alt={`AOX`}

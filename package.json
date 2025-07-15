@@ -21,7 +21,7 @@
     "@tanstack/react-query-devtools": "^5.62.11",
     "@tanstack/react-query-persist-client": "^5.80.7",
     "@vela-ventures/aosync-sdk-react": "^1.0.22",
-    "ao-tokens-lite": "^0.0.7",
+    "ao-tokens-lite": "^0.0.9",
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

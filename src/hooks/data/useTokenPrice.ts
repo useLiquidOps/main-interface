@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { isDataCachedValid, cacheData } from "@/utils/caches/cacheUtils";
 import { tickerToGeckoMap } from "@/utils/tokenMappings";
 

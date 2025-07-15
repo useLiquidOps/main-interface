@@ -1,15 +1,13 @@
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { get, set, del } from "idb-keyval";
 
 function deepSerialize(data: any): any {
-  if (data && typeof data === 'object' &&
-        'raw' in data && 'denomination' in data &&
-        typeof data.raw !== 'undefined' && typeof data.denomination !== 'undefined') {
+  if (data instanceof Quantity) {
     return {
       __type: "Quantity",
       raw: data.raw.toString(),
-      denomination: data.denomination.toString()
+      denomination: data.denomination.toString(),
     };
   }
 
@@ -37,10 +35,7 @@ function deepDeserialize(data: any): any {
 
   if (data && typeof data === "object") {
     if (data.__type === "Quantity") {
-      return new Quantity(
-        data.raw,
-        BigInt(data.denomination)
-      );
+      return new Quantity(data.raw, BigInt(data.denomination));
     }
 
     const deserialized: Record<string, any> = {};
@@ -59,8 +54,8 @@ export const persister = createAsyncStoragePersister({
   storage: {
     getItem: get,
     setItem: set,
-    removeItem: del
+    removeItem: del,
   },
   serialize: (data) => deepSerialize(data),
-  deserialize: (data) => deepDeserialize(data)
+  deserialize: (data) => deepDeserialize(data),
 });

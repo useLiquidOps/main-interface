@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { useWalletAddress } from "../data/useWalletAddress";
 import {

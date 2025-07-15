@@ -1,4 +1,4 @@
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 
 export function formatQty(qty: Quantity) {
   let maximumFractionDigits: BigIntToLocaleStringOptions["maximumFractionDigits"] = 2;

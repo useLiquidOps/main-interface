@@ -3,7 +3,7 @@ import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { tokenInput, tokenData } from "liquidops";
 import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
 import { useContext } from "react";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { NotificationContext } from "@/components/notifications/NotificationProvider";
 import { formatQty } from "@/utils/LiquidOps/tokenFormat";
 

@@ -1,5 +1,5 @@
 import { TokenDetails, tokenMap } from "../../tokens";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { getData } from "@/utils/AO/getData";
 
 export interface FairLaunchStrategy {

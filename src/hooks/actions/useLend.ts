@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { tokenData, tokenInput } from "liquidops";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
 import { useContext } from "react";
 import { NotificationContext } from "@/components/notifications/NotificationProvider";

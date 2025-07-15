@@ -3,7 +3,7 @@ import { useWalletAddress } from "./useWalletAddress";
 import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { WrappedQuantity } from "@/utils/caches/cacheUtils";
 import { getDenomination } from "@/utils/caches/cacheUtils";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 
 export type UserBalanceCache = WrappedQuantity;
 

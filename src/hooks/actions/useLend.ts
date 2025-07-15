@@ -90,11 +90,26 @@ export function useLend({ onSuccess }: Params = {}) {
 
       try {
         await Promise.all([
-          queryClient.refetchQueries({ queryKey: ["global-position", walletAddress], exact: true }),
-          queryClient.refetchQueries({ queryKey: ["position", tokenAddress, walletAddress], exact: true }),
-          queryClient.refetchQueries({ queryKey: ["position-balance", tokenAddress, walletAddress], exact: true }),
-          queryClient.refetchQueries({ queryKey: ["user-balance", tokenAddress, walletAddress], exact: true }),
-          queryClient.refetchQueries({ queryKey: ["protocol-stats", ticker], exact: true }),
+          queryClient.refetchQueries({
+            queryKey: ["global-position", walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["position", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["position-balance", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["user-balance", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["protocol-stats", ticker],
+            exact: true,
+          }),
         ]);
 
         setPendingTransactions((pending) => [
@@ -175,11 +190,26 @@ export function useLend({ onSuccess }: Params = {}) {
 
       try {
         await Promise.all([
-          queryClient.refetchQueries({ queryKey: ["global-position", walletAddress], exact: true }),
-          queryClient.refetchQueries({ queryKey: ["position", tokenAddress, walletAddress], exact: true }),
-          queryClient.refetchQueries({ queryKey: ["position-balance", tokenAddress, walletAddress], exact: true }),
-          queryClient.refetchQueries({ queryKey: ["user-balance", tokenAddress, walletAddress], exact: true }),
-          queryClient.refetchQueries({ queryKey: ["protocol-stats", ticker], exact: true }),
+          queryClient.refetchQueries({
+            queryKey: ["global-position", walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["position", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["position-balance", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["user-balance", tokenAddress, walletAddress],
+            exact: true,
+          }),
+          queryClient.refetchQueries({
+            queryKey: ["protocol-stats", ticker],
+            exact: true,
+          }),
         ]);
 
         setPendingTransactions((pending) => [

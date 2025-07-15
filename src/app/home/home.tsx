@@ -85,7 +85,7 @@ function HomeContent() {
               {(modalType === "withdraw" || modalType === "repay") && (
                 <WithdrawRepay
                   mode={modalType}
-                  ticker={assetData?.ticker}
+                  ticker={assetData?.cleanTicker}
                   onClose={closeModal}
                 />
               )}
@@ -93,7 +93,7 @@ function HomeContent() {
               {(modalType === "supply" || modalType === "borrow") && (
                 <ActionTab
                   mode={modalType as "supply" | "borrow"}
-                  ticker={assetData?.ticker}
+                  ticker={assetData?.cleanTicker}
                   onClose={closeModal}
                 />
               )}

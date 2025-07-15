@@ -156,10 +156,8 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
     };
 
     if (mode === "supply") {
-      // loadingScreenActions.executeTransaction(inputValue, params, lend);
       lend(params);
     } else {
-      // loadingScreenActions.executeTransaction(inputValue, params, borrow);
       borrow(params);
     }
   };
@@ -232,7 +230,7 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
       </div>
 
       <AnimatePresence>
-        {jumpRateData.active && (
+        {jumpRateData.active && mode === "borrow" && (
           <motion.p
             variants={warningVariants}
             initial="hidden"

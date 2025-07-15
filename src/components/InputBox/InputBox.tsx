@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./InputBox.module.css";
 import { formatInputNumber, calculateUsdValue } from "../utils/utils";
 import { formatTMB } from "../utils/utils";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { SkeletonLoading } from "../SkeletonLoading/SkeletonLoading";
 import { TOKEN_DECIMAL_PLACES } from "@/utils/tokenMappings";
 

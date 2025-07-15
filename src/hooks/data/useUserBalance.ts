@@ -26,7 +26,7 @@ export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
           "Cannot find token address denomination in useUserBalance.ts",
         );
       }
-      return new Quantity(balance, denomination);
+      return new Quantity(balance.raw, denomination);
     },
     enabled: !!walletAddress,
     staleTime: 30 * 1000,

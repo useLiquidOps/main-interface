@@ -2,7 +2,7 @@
 import styles from "./MarketStats.module.css";
 import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { formatTMB } from "@/components/utils/utils";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import PieChart from "@/components/PieChat/PieChart";

@@ -4,7 +4,7 @@ import marketDetailsStyles from "./MarketDetails.module.css";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 import {
   CartesianGrid,
   Line,

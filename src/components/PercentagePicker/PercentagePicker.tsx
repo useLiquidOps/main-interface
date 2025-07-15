@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import styles from "./PercentagePicker.module.css";
-import { Quantity } from "ao-tokens";
+import { Quantity } from "ao-tokens-lite";
 
 interface PercentagePickerProps {
   mode: "withdraw" | "repay";

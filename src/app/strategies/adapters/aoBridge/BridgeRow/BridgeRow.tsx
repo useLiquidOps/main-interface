@@ -6,7 +6,7 @@
 // import { tickerToGeckoMap } from "@/utils/tokenMappings";
 // import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 // import { formatTMB } from "@/components/utils/utils";
-// import { Quantity } from "ao-tokens";
+// import { Quantity } from "ao-tokens-lite";
 
 // interface AoBridgeRowProps {
 //   bridgeArb: AoBridgeStrategy;

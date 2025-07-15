@@ -64,14 +64,15 @@ export function useLend({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return transferId;
+        return { transferId, walletAddress };
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (transferId, { token, quantity }) => {
+    onSuccess: async ({ transferId, walletAddress }, { token, quantity }) => {
       if (onSuccess) onSuccess();
 
+      const { tokenAddress } = tokenInput(token);
       const ticker = token.toUpperCase();
       const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
@@ -88,14 +89,13 @@ export function useLend({ onSuccess }: Params = {}) {
       });
 
       try {
-        await queryClient.refetchQueries({
-          queryKey: [
-            "global-position",
-            "position",
-            "position-balance",
-            "user-balance",
-          ],
-        });
+        await Promise.all([
+          queryClient.refetchQueries({ queryKey: ["global-position", walletAddress], exact: true }),
+          queryClient.refetchQueries({ queryKey: ["position", tokenAddress, walletAddress], exact: true }),
+          queryClient.refetchQueries({ queryKey: ["position-balance", tokenAddress, walletAddress], exact: true }),
+          queryClient.refetchQueries({ queryKey: ["user-balance", tokenAddress, walletAddress], exact: true }),
+          queryClient.refetchQueries({ queryKey: ["protocol-stats", ticker], exact: true }),
+        ]);
 
         setPendingTransactions((pending) => [
           ...pending,
@@ -149,14 +149,15 @@ export function useLend({ onSuccess }: Params = {}) {
           throw new Error(errorMessage);
         }
 
-        return messageId;
+        return { messageId, walletAddress };
       } catch (error) {
         throw error;
       }
     },
-    onSuccess: async (messageId, { token, quantity }) => {
+    onSuccess: async ({ messageId, walletAddress }, { token, quantity }) => {
       if (onSuccess) onSuccess();
 
+      const { tokenAddress } = tokenInput(token);
       const ticker = token.toUpperCase();
       const qty = new Quantity(quantity, tokenData[ticker].denomination);
 
@@ -173,14 +174,13 @@ export function useLend({ onSuccess }: Params = {}) {
       });
 
       try {
-        await queryClient.refetchQueries({
-          queryKey: [
-            "global-position",
-            "position",
-            "position-balance",
-            "user-balance",
-          ],
-        });
+        await Promise.all([
+          queryClient.refetchQueries({ queryKey: ["global-position", walletAddress], exact: true }),
+          queryClient.refetchQueries({ queryKey: ["position", tokenAddress, walletAddress], exact: true }),
+          queryClient.refetchQueries({ queryKey: ["position-balance", tokenAddress, walletAddress], exact: true }),
+          queryClient.refetchQueries({ queryKey: ["user-balance", tokenAddress, walletAddress], exact: true }),
+          queryClient.refetchQueries({ queryKey: ["protocol-stats", ticker], exact: true }),
+        ]);
 
         setPendingTransactions((pending) => [
           ...pending,

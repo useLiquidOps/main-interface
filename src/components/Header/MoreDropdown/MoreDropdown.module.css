@@ -37,13 +37,15 @@
   color: var(--primary-palatinate-blue);
   padding: 10px 15px;
   text-decoration: none;
-  display: block;
   width: 100%;
-  text-align: left;
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.18s ease;
   cursor: pointer !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .moreDropdownItem:hover {

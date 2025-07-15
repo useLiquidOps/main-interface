@@ -18,6 +18,8 @@ const Header: React.FC<HeaderProps> = () => {
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const bridgeItems = [{ label: "AOX", href: "https://aox.xyz/#/bridge" }];
+
   const moreMenuItems = [
     {
       label: "Docs",
@@ -81,7 +83,8 @@ const Header: React.FC<HeaderProps> = () => {
             >
               <p>Strategies</p>
             </Link>
-            <MoreDropdown items={moreMenuItems} />
+            <MoreDropdown label="Bridge" items={bridgeItems} />
+            <MoreDropdown label="More" items={moreMenuItems} />
           </nav>
         </div>
         <Connect />

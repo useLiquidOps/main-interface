@@ -25,7 +25,7 @@ const Markets: React.FC = () => {
     if (!Array.isArray(supportedTokens)) {
       return [];
     }
-    
+
     return [...supportedTokens].sort((a, b) => {
       const tokenA = SUPPORTED_TOKENS.find(
         (token) => token.ticker.toUpperCase() === a.ticker.toUpperCase(),
@@ -47,9 +47,9 @@ const Markets: React.FC = () => {
     if (!Array.isArray(sortedTokens)) {
       return [];
     }
-    
-    return showDeprecated 
-      ? sortedTokens 
+
+    return showDeprecated
+      ? sortedTokens
       : sortedTokens.filter((token) => !token.deprecated);
   }, [sortedTokens, showDeprecated]);
 
@@ -66,11 +66,7 @@ const Markets: React.FC = () => {
           />
           <div className={styles.marketsList}>
             {(visibleTokens as SupportedToken[]).map((token) => (
-              <MarketRow 
-                key={token.ticker} 
-                token={token} 
-                prices={prices} 
-              />
+              <MarketRow key={token.ticker} token={token} prices={prices} />
             ))}
           </div>
         </div>

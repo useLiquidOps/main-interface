@@ -104,6 +104,33 @@ const Connect: React.FC = () => {
     }
   };
 
+  // Ouro connector
+  const handleConnectOuro = async () => {
+    if (typeof window === "undefined" || !window.arweaveWallet) {
+      alert(
+        `Please ensure you have the Ouro wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to bit.ly/OuroWallet`,
+      );
+      return;
+    }
+
+    try {
+      await window.arweaveWallet.connect(
+        ["ACCESS_ADDRESS", "SIGN_TRANSACTION"],
+        walletInfo,
+      );
+      const permissions = await window.arweaveWallet.getPermissions();
+      if (permissions.length > 0) {
+        const addr = await window.arweaveWallet.getActiveAddress();
+        setAddress(addr);
+        setConnected(true);
+      }
+
+      setIsWalletModalOpen(false);
+    } catch (error) {
+      console.error("Connection error:", error);
+    }
+  };
+
   // Beacon connector
   const { isConnected, connect } = useWallet();
   const handleConnectBeacon = async () => {
@@ -237,6 +264,7 @@ const Connect: React.FC = () => {
         onClose={handleCloseWalletModal}
         onConnectWander={handleConnectWander}
         onConnectBeacon={connect}
+        onConnectOuro={handleConnectOuro}
       />
     </>
   );

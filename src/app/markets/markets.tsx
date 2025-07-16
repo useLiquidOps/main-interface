@@ -59,10 +59,11 @@ const Markets: React.FC = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
-          {/* Temporarily comment out MarketStats to test */}
-          <div style={{ padding: '20px', background: '#f0f0f0', margin: '20px 0' }}>
-            MarketStats temporarily disabled for debugging
-          </div>
+          <MarketStats
+            tokens={sortedTokens as SupportedToken[]}
+            prices={prices}
+            showDeprecated={showDeprecated}
+          />
           <div className={styles.marketsList}>
             {(visibleTokens as SupportedToken[]).map((token) => (
               <MarketRow 

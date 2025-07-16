@@ -62,8 +62,11 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
   prices,
   showDeprecated,
 }) => {
+  // Safety check: ensure tokens is always an array
+  const safeTokens = Array.isArray(tokens) ? tokens : [];
+
   // ALWAYS call useTokenStats for ALL tokens to maintain stable hook calls
-  const allTokenStats = tokens.map((token) => useTokenStats(token, prices));
+  const allTokenStats = safeTokens.map((token) => useTokenStats(token, prices));
 
   // Then filter and calculate based on showDeprecated flag
   const { totalCollateral, totalBorrows, tvl, isLoading, tokenStatsArray } =
@@ -76,7 +79,9 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
 
       // Process all token stats but only include non-deprecated ones in calculations if showDeprecated is false
       allTokenStats.forEach((tokenStats, index) => {
-        const token = tokens[index];
+        const token = safeTokens[index];
+        if (!token) return; // Safety check
+
         const { stats, price, isLoading: tokenIsLoading } = tokenStats;
 
         // If any token is loading, set isLoading true
@@ -122,7 +127,7 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
         isLoading,
         tokenStatsArray,
       };
-    }, [allTokenStats, tokens, prices, showDeprecated]);
+    }, [allTokenStats, safeTokens, prices, showDeprecated]);
 
   // Filter token stats for pie charts based on showDeprecated flag
   const visibleTokenStats = useMemo(() => {

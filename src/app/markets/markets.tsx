@@ -22,6 +22,11 @@ const MarketsContent: React.FC = () => {
 
   // Always sort ALL tokens, never filter them for MarketStats to maintain stable hook calls
   const sortedTokens = useMemo(() => {
+    // Safety check: ensure supportedTokens is an array
+    if (!Array.isArray(supportedTokens)) {
+      return [];
+    }
+
     return [...supportedTokens].sort((a, b) => {
       const tokenA = SUPPORTED_TOKENS.find(
         (token) => token.ticker.toUpperCase() === a.ticker.toUpperCase(),
@@ -40,6 +45,10 @@ const MarketsContent: React.FC = () => {
 
   // Filter only for display in the list
   const visibleTokens = useMemo(() => {
+    if (!Array.isArray(sortedTokens)) {
+      return [];
+    }
+
     return showDeprecated
       ? sortedTokens
       : sortedTokens.filter((token) => !token.deprecated);

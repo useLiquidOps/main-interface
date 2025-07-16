@@ -109,20 +109,15 @@ function HomeContent() {
           </div>
         ) : (
           <div className={styles.connectPrompt}>
-            <button
-              className={styles.connectButton}
-              onClick={handleConnectClick}
-            >
-              Login
-            </button>
+            
             <p className={styles.connectWalletTitle}>
               Please connect your wallet
             </p>
+            
             <div className={styles.highestAPY}>
-              <span>Supplying liquidity can</span>
 
               <div className={styles.highestAPYText}>
-                <span>earn you up to</span>
+                <span>Supplying liquidity can earn you up to</span>
                 {isApyLoading ||
                 highestAPY === undefined ||
                 highestAPY === null ? (
@@ -134,6 +129,12 @@ function HomeContent() {
                 )}
               </div>
             </div>
+            <button
+              className={styles.connectButton}
+              onClick={handleConnectClick}
+            >
+              Login
+            </button>
           </div>
         )}
       </div>

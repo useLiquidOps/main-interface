@@ -8,6 +8,7 @@ import PendingTransactions from "@/components/PendingTransactions/PendingTransac
 import NotificationProvider from "@/components/notifications/NotificationProvider";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { persister } from "@/utils/caches/persister";
+import { DeprecatedTokensProvider } from "@/contexts/DeprecatedTokensContext";
 import { useState } from "react";
 
 type Props = {
@@ -49,7 +50,9 @@ export function Providers({ children }: Props) {
           muUrl="https://mu.ao-testnet.xyz"
         >
           <NotificationProvider>
-            <PendingTransactions>{children}</PendingTransactions>
+            <DeprecatedTokensProvider>
+              <PendingTransactions>{children}</PendingTransactions>
+            </DeprecatedTokensProvider>
           </NotificationProvider>
         </AOSyncProvider>
         <ReactQueryDevtools initialIsOpen={false} />

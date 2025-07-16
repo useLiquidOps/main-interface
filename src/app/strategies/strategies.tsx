@@ -11,9 +11,8 @@ import { useLeverage } from "@/hooks/strategies/useLeverage";
 import { LeverageStrategy } from "./adapters/leverage/leverage";
 import { LeverageRow } from "./adapters/leverage/LeverageRow/LeverageRow";
 import OtherYield from "./OtherYield/OtherYield";
-import { DeprecatedTokensProvider } from "@/contexts/DeprecatedTokensContext";
 
-const MarketsContent: React.FC = () => {
+const Markets: React.FC = () => {
   const { data: fairLaunchStrategies = [] } = useFairLaunches(true);
   const { data: leverageStrategies = [] } = useLeverage(true);
   const { data: prices } = usePrices();
@@ -67,15 +66,6 @@ const MarketsContent: React.FC = () => {
       </div>
       <Footer />
     </div>
-  );
-};
-
-// Wrap the Markets component with the context provider
-const Markets: React.FC = () => {
-  return (
-    <DeprecatedTokensProvider>
-      <MarketsContent />
-    </DeprecatedTokensProvider>
   );
 };
 

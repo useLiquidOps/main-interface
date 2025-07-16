@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./home.module.css";
 import Header from "../../components/Header/Header";
 import AssetDisplay from "./AssetDisplay/AssetDisplay";
@@ -17,10 +17,32 @@ import { useAccountTab } from "@/components/Connect/accountTabContext";
 import NetWorth from "./NetWorth/NetWorth";
 import SupplyBorrow from "./SupplyBorrow/SupplyBorrow";
 import Strategies from "./Strategies/Strategies";
+import { checkConnection } from "@/utils/Wallets/checkConnection";
 
 function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
   const { setAccountTab } = useAccountTab();
+  const [isConnected, setIsConnected] = useState(false);
+  const [triggerConnect, setTriggerConnect] = useState(false);
+
+  useEffect(() => {
+    const checkWalletConnection = async () => {
+      try {
+        const connected = await checkConnection();
+        setIsConnected(connected);
+      } catch (error) {
+        console.error("Error checking wallet connection:", error);
+        setIsConnected(false);
+      }
+    };
+
+    checkWalletConnection();
+
+    // Check connection status periodically
+    const interval = setInterval(checkWalletConnection, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleOpenAccountTab = async () => {
     const permissions = await window.arweaveWallet.getPermissions();
@@ -31,37 +53,62 @@ function HomeContent() {
     }
   };
 
+  const handleWalletConnected = () => {
+    setIsConnected(true);
+  };
+
+  const handleConnectClick = () => {
+    // Trigger the connect modal in the header
+    setTriggerConnect(true);
+    // Reset the trigger after a short delay
+    setTimeout(() => setTriggerConnect(false), 100);
+  };
+
   return (
     <div className={styles.page}>
       <BetaDisclaimer />
-      <Header />
+      <Header
+        triggerConnect={triggerConnect}
+        onWalletConnected={handleWalletConnected}
+      />
       <div className={styles.body}>
-        <div className={styles.bodyContainer}>
-          <div className={styles.widgetContainer}>
-            <div className={styles.widgetLeftContainer}>
-              {/* <NetWorth />
+        {isConnected ? (
+          <div className={styles.bodyContainer}>
+            <div className={styles.widgetContainer}>
+              <div className={styles.widgetLeftContainer}>
+                {/* <NetWorth />
               <SupplyBorrow /> */}
-              <div></div>
-              <div></div>
+                <div></div>
+                <div></div>
+              </div>
+
+              <div className={styles.widgetRightContainer}>
+                {/* <Strategies /> */}
+                <div></div>
+                <button
+                  className={styles.viewTxns}
+                  onClick={handleOpenAccountTab}
+                >
+                  View transactions
+                </button>
+              </div>
             </div>
 
-            <div className={styles.widgetRightContainer}>
-              {/* <Strategies /> */}
-              <div></div>
-              <button
-                className={styles.viewTxns}
-                onClick={handleOpenAccountTab}
-              >
-                View transactions
-              </button>
+            <div className={styles.grid}>
+              <AssetDisplay mode="lend" />
+              <AssetDisplay mode="borrow" />
             </div>
           </div>
-
-          <div className={styles.grid}>
-            <AssetDisplay mode="lend" />
-            <AssetDisplay mode="borrow" />
+        ) : (
+          <div className={styles.connectPrompt}>
+            <button
+              className={styles.connectButton}
+              onClick={handleConnectClick}
+            >
+              Login
+            </button>
           </div>
-        </div>
+        )}
       </div>
 
       <AnimatePresence>

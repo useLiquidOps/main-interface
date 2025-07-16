@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import styles from "./Connect.module.css";
 import { useClickOutside } from "../utils/utils";
 import Image from "next/image";
@@ -26,258 +32,271 @@ declare global {
   }
 }
 
-const Connect: React.FC = () => {
-  const [connected, setConnected] = useState(false);
-  const [address, setAddress] = useState<string | null>(null);
-  const [isCopied, setIsCopied] = useState(false);
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+// Define the ref interface
+export interface ConnectRef {
+  openWalletModal: () => void;
+}
 
-  const { isOpen, setAccountTab } = useAccountTab();
+// Define the props interface
+interface ConnectProps {
+  onWalletConnected?: () => void;
+}
 
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
+const Connect = forwardRef<ConnectRef, ConnectProps>(
+  ({ onWalletConnected }, ref) => {
+    const [connected, setConnected] = useState(false);
+    const [address, setAddress] = useState<string | null>(null);
+    const [isCopied, setIsCopied] = useState(false);
+    const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+
+    const { isOpen, setAccountTab } = useAccountTab();
+
+    useEffect(() => {
+      document.body.style.overflow = isOpen ? "hidden" : "";
+      return () => {
+        document.body.style.overflow = "";
+      };
+    }, [isOpen]); // disable scroll when profile is visible
+
+    const { data: profile, isLoading: isProfileLoading } = useAOProfile();
+
+    const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() =>
+      setAccountTab(false),
+    );
+
+    // Expose the openWalletModal function to parent components
+    useImperativeHandle(ref, () => ({
+      openWalletModal: () => setIsWalletModalOpen(true),
+    }));
+
+    const copyToClipboard = async (text: string) => {
+      if (typeof navigator === "undefined") return;
+      try {
+        await navigator.clipboard.writeText(text);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 150);
+      } catch (err) {
+        console.error("Failed to copy address:", err);
+      }
     };
-  }, [isOpen]); // disable scroll when profile is visible
 
-  const { data: profile, isLoading: isProfileLoading } = useAOProfile();
+    const handleLogout = async () => {
+      try {
+        await window.arweaveWallet.disconnect();
+        setConnected(false);
+        setAddress(null);
+        setAccountTab(false);
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
+    };
 
-  const { ref: dropdownRef } = useClickOutside<HTMLDivElement>(() =>
-    setAccountTab(false),
-  );
+    const handleConnect = () => {
+      setIsWalletModalOpen(true);
+    };
 
-  const copyToClipboard = async (text: string) => {
-    if (typeof navigator === "undefined") return;
-    try {
-      await navigator.clipboard.writeText(text);
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 150);
-    } catch (err) {
-      console.error("Failed to copy address:", err);
-    }
-  };
+    const handleCloseWalletModal = () => {
+      setIsWalletModalOpen(false);
+    };
 
-  const handleLogout = async () => {
-    try {
-      await window.arweaveWallet.disconnect();
-      setConnected(false);
-      setAddress(null);
-      setAccountTab(false);
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
-  const handleConnect = () => {
-    setIsWalletModalOpen(true);
-  };
-
-  const handleCloseWalletModal = () => {
-    setIsWalletModalOpen(false);
-  };
-
-  // Wander connector
-  const handleConnectWander = async () => {
-    if (typeof window === "undefined" || !window.arweaveWallet) {
-      alert(
-        `Please ensure you have the Wander wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to wander.app/download`,
-      );
-      return;
-    }
-
-    try {
-      await window.arweaveWallet.connect(
-        ["ACCESS_ADDRESS", "SIGN_TRANSACTION"],
-        walletInfo,
-      );
-      const permissions = await window.arweaveWallet.getPermissions();
-      if (permissions.length > 0) {
-        const addr = await window.arweaveWallet.getActiveAddress();
-        setAddress(addr);
-        setConnected(true);
+    // Wander connector
+    const handleConnectWander = async () => {
+      if (typeof window === "undefined" || !window.arweaveWallet) {
+        alert(
+          `Please ensure you have the Wander wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to wander.app/download`,
+        );
+        return;
       }
 
-      setIsWalletModalOpen(false);
-    } catch (error) {
-      console.error("Connection error:", error);
-    }
-  };
-
-  // Ouro connector
-  const handleConnectOuro = async () => {
-    if (typeof window === "undefined" || !window.arweaveWallet) {
-      alert(
-        `Please ensure you have the Ouro wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to bit.ly/OuroWallet`,
-      );
-      return;
-    }
-
-    try {
-      await window.arweaveWallet.connect(
-        ["ACCESS_ADDRESS", "SIGN_TRANSACTION"],
-        walletInfo,
-      );
-      const permissions = await window.arweaveWallet.getPermissions();
-      if (permissions.length > 0) {
-        const addr = await window.arweaveWallet.getActiveAddress();
-        setAddress(addr);
-        setConnected(true);
-      }
-
-      setIsWalletModalOpen(false);
-    } catch (error) {
-      console.error("Connection error:", error);
-    }
-  };
-
-  // Beacon connector
-  const { isConnected, connect } = useWallet();
-  const handleConnectBeacon = async () => {
-    try {
-      const permissions = await window.arweaveWallet.getPermissions();
-      if (permissions.length > 0) {
-        const addr = await window.arweaveWallet.getActiveAddress();
-        setAddress(addr);
-        setConnected(true);
-      }
-      setIsWalletModalOpen(false);
-    } catch (error) {
-      console.error("Connection error:", error);
-    }
-  };
-
-  // Check for existing wallet connection on component mount
-  useEffect(() => {
-    const checkConnection = async () => {
-      if (typeof window !== "undefined" && window.arweaveWallet) {
-        try {
-          const permissions = await window.arweaveWallet.getPermissions();
-          if (permissions.length > 0) {
-            const addr = await window.arweaveWallet.getActiveAddress();
-            setAddress(addr);
-            setConnected(true);
-          }
-        } catch (error) {
-          console.error("Error checking wallet connection:", error);
+      try {
+        await window.arweaveWallet.connect(
+          ["ACCESS_ADDRESS", "SIGN_TRANSACTION"],
+          walletInfo,
+        );
+        const permissions = await window.arweaveWallet.getPermissions();
+        if (permissions.length > 0) {
+          const addr = await window.arweaveWallet.getActiveAddress();
+          setAddress(addr);
+          setConnected(true);
+          onWalletConnected?.(); // Notify parent component
         }
+
+        setIsWalletModalOpen(false);
+      } catch (error) {
+        console.error("Connection error:", error);
       }
     };
 
-    checkConnection();
-  }, []);
+    // Ouro connector
+    const handleConnectOuro = async () => {
+      if (typeof window === "undefined" || !window.arweaveWallet) {
+        alert(
+          `Please ensure you have the Ouro wallet and it is properly installed on your device.\n\nFor new users, you can download the wallet by going to bit.ly/OuroWallet`,
+        );
+        return;
+      }
 
-  // Handle Beacon wallet connection
-  useEffect(() => {
-    if (isConnected) {
-      handleConnectBeacon();
-    }
-  }, [isConnected]);
+      try {
+        await window.arweaveWallet.connect(
+          ["ACCESS_ADDRESS", "SIGN_TRANSACTION"],
+          walletInfo,
+        );
+        const permissions = await window.arweaveWallet.getPermissions();
+        if (permissions.length > 0) {
+          const addr = await window.arweaveWallet.getActiveAddress();
+          setAddress(addr);
+          setConnected(true);
+          onWalletConnected?.(); // Notify parent component
+        }
 
-  const [pendingTransactions] = useContext(PendingTxContext);
+        setIsWalletModalOpen(false);
+      } catch (error) {
+        console.error("Connection error:", error);
+      }
+    };
 
-  return (
-    <>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className={styles.overlay}
-            variants={overlayVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            onClick={() => setAccountTab(false)}
-          />
-        )}
-      </AnimatePresence>
-      <div className={styles.connectContainer} ref={dropdownRef}>
-        {connected && address ? (
-          <div
-            className={styles.profileContainer}
-            onClick={(e) => {
-              e.stopPropagation();
-              setAccountTab(!isOpen);
-            }}
-          >
-            <div className={styles.profileSectionContainer}>
-              {isProfileLoading ? (
-                <SkeletonLoading style={{ width: "60px", height: "15px" }} />
-              ) : (
-                <p className={styles.profileName}>
-                  {!isProfileLoading && profile?.displayName
-                    ? `${profile.displayName}`
-                    : shortenAddress(address)}
-                </p>
-              )}
+    // Beacon connector
+    const { isConnected, connect } = useWallet();
+    const handleConnectBeacon = async () => {
+      try {
+        const permissions = await window.arweaveWallet.getPermissions();
+        if (permissions.length > 0) {
+          const addr = await window.arweaveWallet.getActiveAddress();
+          setAddress(addr);
+          setConnected(true);
+          onWalletConnected?.(); // Notify parent component
+        }
+        setIsWalletModalOpen(false);
+      } catch (error) {
+        console.error("Connection error:", error);
+      }
+    };
 
-              <Image
-                src={"/icons/dropdownUpDown.svg"}
-                alt="Dropdown"
-                width={7}
-                height={7}
-                className={styles.dropdownIcon}
-              />
+    // Check for existing wallet connection on component mount
+    useEffect(() => {
+      const checkConnection = async () => {
+        if (typeof window !== "undefined" && window.arweaveWallet) {
+          try {
+            const permissions = await window.arweaveWallet.getPermissions();
+            if (permissions.length > 0) {
+              const addr = await window.arweaveWallet.getActiveAddress();
+              setAddress(addr);
+              setConnected(true);
+              onWalletConnected?.(); // Notify parent component
+            }
+          } catch (error) {
+            console.error("Error checking wallet connection:", error);
+          }
+        }
+      };
 
-              <div className={styles.profileImageWrapper}>
-                {isProfileLoading ? (
-                  <SkeletonLoading className="h-full w-full rounded-full" />
-                ) : (
-                  <img
-                    src={
-                      profile?.thumbnail
-                        ? `https://arweave.net/${profile.thumbnail}`
-                        : "/icons/user.svg"
-                    }
-                    alt="Profile image"
-                    width={32}
-                    height={32}
-                    className={styles.connectImage}
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/icons/user.svg";
-                    }}
-                  />
-                )}
-              </div>
-            </div>
+      checkConnection();
+    }, [onWalletConnected]);
 
-            <ProfileDropDown
-              isOpen={isOpen}
-              onClose={() => setAccountTab(false)}
-              address={address}
-              isCopied={isCopied}
-              onCopy={copyToClipboard}
-              onLogout={handleLogout}
-              isProfileLoading={isProfileLoading}
-              profile={profile}
+    // Handle Beacon wallet connection
+    useEffect(() => {
+      if (isConnected) {
+        handleConnectBeacon();
+      }
+    }, [isConnected]);
+
+    const [pendingTransactions] = useContext(PendingTxContext);
+
+    return (
+      <>
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              className={styles.overlay}
+              variants={overlayVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              onClick={() => setAccountTab(false)}
             />
-          </div>
-        ) : (
-          <button className={styles.connectButton} onClick={handleConnect}>
-            Login
-          </button>
-        )}
-      </div>
+          )}
+        </AnimatePresence>
+        <div className={styles.connectContainer} ref={dropdownRef}>
+          {connected && address ? (
+            <div
+              className={styles.profileContainer}
+              onClick={(e) => {
+                e.stopPropagation();
+                setAccountTab(!isOpen);
+              }}
+            >
+              <div className={styles.profileSectionContainer}>
+                {isProfileLoading ? (
+                  <SkeletonLoading style={{ width: "60px", height: "15px" }} />
+                ) : (
+                  <p className={styles.profileName}>
+                    {!isProfileLoading && profile?.displayName
+                      ? `${profile.displayName}`
+                      : shortenAddress(address)}
+                  </p>
+                )}
 
-      <WalletModal
-        isOpen={isWalletModalOpen}
-        onClose={handleCloseWalletModal}
-        onConnectWander={handleConnectWander}
-        onConnectBeacon={connect}
-        onConnectOuro={handleConnectOuro}
-      />
-    </>
-  );
-};
+                <Image
+                  src={"/icons/dropdownUpDown.svg"}
+                  alt="Dropdown"
+                  width={7}
+                  height={7}
+                  className={styles.dropdownIcon}
+                />
 
-const formatAction = (action: string): string => {
-  const actionMap: Record<string, string> = {
-    lend: "Lending",
-    unlend: "Unlending",
-    borrow: "Borrowing",
-    repay: "Repaying",
-  };
-  return actionMap[action];
-};
+                <div className={styles.profileImageWrapper}>
+                  {isProfileLoading ? (
+                    <SkeletonLoading className="h-full w-full rounded-full" />
+                  ) : (
+                    <img
+                      src={
+                        profile?.thumbnail
+                          ? `https://arweave.net/${profile.thumbnail}`
+                          : "/icons/user.svg"
+                      }
+                      alt="Profile image"
+                      width={32}
+                      height={32}
+                      className={styles.connectImage}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "/icons/user.svg";
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <ProfileDropDown
+                isOpen={isOpen}
+                onClose={() => setAccountTab(false)}
+                address={address}
+                isCopied={isCopied}
+                onCopy={copyToClipboard}
+                onLogout={handleLogout}
+                isProfileLoading={isProfileLoading}
+                profile={profile}
+              />
+            </div>
+          ) : (
+            <button className={styles.connectButton} onClick={handleConnect}>
+              Login
+            </button>
+          )}
+        </div>
+
+        <WalletModal
+          isOpen={isWalletModalOpen}
+          onClose={handleCloseWalletModal}
+          onConnectWander={handleConnectWander}
+          onConnectBeacon={connect}
+          onConnectOuro={handleConnectOuro}
+        />
+      </>
+    );
+  },
+);
+
+Connect.displayName = "Connect";
 
 export default Connect;

@@ -95,3 +95,28 @@
   background: white;
   border-radius: 24px;
 }
+
+.connectPrompt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 150px);
+  width: 100%;
+}
+
+.connectButton {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+  padding: 7px 10px;
+  font-size: 13px;
+  background: var(--primary-palatinate-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.connectButton:hover {
+  opacity: 0.87;
+}

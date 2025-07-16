@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./Header.module.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -12,11 +12,22 @@ import MoreDropdown from "./MoreDropdown/MoreDropdown";
 interface HeaderProps {
   currentToken?: string;
   mode?: "ticker" | "supply" | "borrow";
+  triggerConnect?: boolean;
+  onWalletConnected?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = () => {
+// Create a ref interface for the Connect component
+export interface ConnectRef {
+  openWalletModal: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({
+  triggerConnect,
+  onWalletConnected,
+}) => {
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const connectRef = useRef<ConnectRef>(null);
 
   const bridgeItems = [{ label: "AOX", href: "https://aox.xyz/#/bridge" }];
 
@@ -33,6 +44,13 @@ const Header: React.FC<HeaderProps> = () => {
     const firstPathSegment = pathname.split("/")[1];
     return "/" + firstPathSegment === path;
   };
+
+  // Handle the trigger from Home component
+  React.useEffect(() => {
+    if (triggerConnect && connectRef.current) {
+      connectRef.current.openWalletModal();
+    }
+  }, [triggerConnect]);
 
   return (
     <>
@@ -87,7 +105,7 @@ const Header: React.FC<HeaderProps> = () => {
             <MoreDropdown label="More" items={moreMenuItems} />
           </nav>
         </div>
-        <Connect />
+        <Connect ref={connectRef} onWalletConnected={onWalletConnected} />
       </header>
     </>
   );

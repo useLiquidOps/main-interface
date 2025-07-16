@@ -3,7 +3,7 @@ import styles from "./OtherYield.module.css";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 import Link from "next/link";
 import Image from "next/image";
-import { useDuneAOBridge } from "@/hooks/data/useDuneAOBridge";
+import { useAOBridge } from "@/hooks/data/useAOBridge";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 
 const OtherYield: React.FC = () => {
@@ -14,13 +14,31 @@ const OtherYield: React.FC = () => {
   const { price: daiPrice, isLoading: isLoadingDaiPrice } =
     useTokenPrice("DAI");
 
-  const { data: duneData, isLoading: isLoadingDuneData } = useDuneAOBridge();
+  const { price: usdsPrice, isLoading: isLoadingUsdsPrice } =
+    useTokenPrice("USDS");
+
+  const { data: AOBridgeData, isLoading: isLoadingAOBridgeData } =
+    useAOBridge();
 
   const AOPerAR = aoAPY(aoPrice.toNumber(), arPrice.toNumber());
 
-  const AOPerETH = ethAPY(aoPrice.toNumber(), ethPrice.toNumber(), duneData);
+  const AOPerETH = ethAPY(
+    aoPrice.toNumber(),
+    ethPrice.toNumber(),
+    AOBridgeData,
+  );
 
-  const AOPerDAI = daiAPY(aoPrice.toNumber(), daiPrice.toNumber(), duneData);
+  const AOPerDAI = daiAPY(
+    aoPrice.toNumber(),
+    daiPrice.toNumber(),
+    AOBridgeData,
+  );
+
+  const AOPerUSDS = usdsAPY(
+    aoPrice.toNumber(),
+    usdsPrice.toNumber(),
+    AOBridgeData,
+  );
 
   return (
     <div className={styles.container}>
@@ -91,7 +109,76 @@ const OtherYield: React.FC = () => {
           className={styles.card}
         >
           <div className={styles.detailsContainer}>
-            <Image src={"/tokens/stETH.svg"} alt="AO" width={30} height={30} />
+            <Image src={"/tokens/USDS.svg"} alt="USDS" width={30} height={30} />
+            <div className={styles.titleContainer}>
+              <p className={styles.tokenTitle}>1 USDS</p>
+              {isLoadingUsdsPrice ? (
+                <SkeletonLoading style={{ width: "20px", height: "13px" }} />
+              ) : (
+                <p className={styles.usdAmount}>
+                  $
+                  {usdsPrice.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
+              )}
+            </div>
+            <div className={styles.titleContainer}>
+              {!AOPerUSDS.rewardPerToken && !isLoadingAOBridgeData ? (
+                <SkeletonLoading
+                  style={{ width: "50px", height: "17px", marginBottom: "5px" }}
+                />
+              ) : (
+                <p className={styles.tokenTitle}>
+                  {AOPerUSDS.rewardPerToken.toLocaleString()} AO
+                </p>
+              )}
+              {aoPrice && !AOPerUSDS.rewardPerToken ? (
+                <SkeletonLoading style={{ width: "50px", height: "13px" }} />
+              ) : (
+                <p className={styles.usdAmount}>
+                  $
+                  {(
+                    aoPrice.toNumber() * AOPerUSDS.rewardPerToken
+                  ).toLocaleString("en-US", {
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3,
+                  })}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className={styles.yieldTitleContainer}>
+            <p className={styles.yieldTitle}>AO pre-bridge</p>
+            <div className={styles.tokenYield}>
+              <Image
+                src={`/icons/APYStars.svg`}
+                alt={`Stars icon`}
+                width={10}
+                height={10}
+              />
+              {!AOPerUSDS.APY ? (
+                <SkeletonLoading style={{ width: "40px", height: "13px" }} />
+              ) : (
+                <p>{AOPerUSDS.APY.toFixed(2)}% APY</p>
+              )}
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          href="https://ao.arweave.dev/#/mint/deposits/"
+          target="_blank"
+          className={styles.card}
+        >
+          <div className={styles.detailsContainer}>
+            <Image
+              src={"/tokens/stETH.svg"}
+              alt="stETH"
+              width={30}
+              height={30}
+            />
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>1 stETH</p>
               {isLoadingEthPrice ? (
@@ -107,7 +194,7 @@ const OtherYield: React.FC = () => {
               )}
             </div>
             <div className={styles.titleContainer}>
-              {!AOPerETH.rewardPerToken && isLoadingDuneData ? (
+              {!AOPerETH.rewardPerToken && !isLoadingAOBridgeData ? (
                 <SkeletonLoading
                   style={{ width: "50px", height: "17px", marginBottom: "5px" }}
                 />
@@ -116,9 +203,7 @@ const OtherYield: React.FC = () => {
                   {AOPerETH.rewardPerToken.toLocaleString()} AO
                 </p>
               )}
-              {isLoadingAoPrice &&
-              !AOPerETH.rewardPerToken &&
-              isLoadingDuneData ? (
+              {aoPrice && !AOPerETH.rewardPerToken ? (
                 <SkeletonLoading style={{ width: "50px", height: "13px" }} />
               ) : (
                 <p className={styles.usdAmount}>
@@ -157,7 +242,7 @@ const OtherYield: React.FC = () => {
           className={styles.card}
         >
           <div className={styles.detailsContainer}>
-            <Image src={"/tokens/DAI.svg"} alt="AO" width={30} height={30} />
+            <Image src={"/tokens/DAI.svg"} alt="DAI" width={30} height={30} />
             <div className={styles.titleContainer}>
               <p className={styles.tokenTitle}>1 DAI</p>
               {isLoadingDaiPrice ? (
@@ -173,7 +258,7 @@ const OtherYield: React.FC = () => {
               )}
             </div>
             <div className={styles.titleContainer}>
-              {!AOPerDAI.rewardPerToken && isLoadingDuneData ? (
+              {!AOPerDAI.rewardPerToken && !isLoadingAOBridgeData ? (
                 <SkeletonLoading
                   style={{ width: "50px", height: "17px", marginBottom: "5px" }}
                 />
@@ -182,9 +267,7 @@ const OtherYield: React.FC = () => {
                   {AOPerDAI.rewardPerToken.toLocaleString()} AO
                 </p>
               )}
-              {isLoadingAoPrice &&
-              !AOPerDAI.rewardPerToken &&
-              isLoadingDuneData ? (
+              {aoPrice && !AOPerDAI.rewardPerToken ? (
                 <SkeletonLoading style={{ width: "50px", height: "13px" }} />
               ) : (
                 <p className={styles.usdAmount}>
@@ -229,6 +312,20 @@ function aoAPY(aoPrice: number, arPrice: number) {
   const aoYield = aoPerToken * aoPrice;
 
   const APY = (aoYield / arPrice) * 100;
+
+  return { rewardPerToken: aoPerToken, APY };
+}
+
+function usdsAPY(aoPrice: number, usdsPrice: number, duneData: any) {
+  const data = duneData?.USDS;
+
+  const yearlyProjection = data?.Est_Yearly_AO / data?.Token_Qty;
+
+  const aoPerToken = yearlyProjection;
+
+  const aoYield = aoPerToken * aoPrice;
+
+  const APY = (aoYield / usdsPrice) * 100;
 
   return { rewardPerToken: aoPerToken, APY };
 }

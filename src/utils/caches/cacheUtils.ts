@@ -23,7 +23,7 @@ interface DataTypeMap {
   "fair-launch-strategies": any;
   "leverage-strategies": any;
   [key: `fairlaunch-apy-${string}`]: any;
-  "dune-ao-bridge-stats": any;
+  "ao-bridge-stats": any;
   [key: `user-earnings-${string}-${string}`]: EarningsCache;
 }
 

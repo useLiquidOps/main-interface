@@ -18,12 +18,20 @@ import NetWorth from "./NetWorth/NetWorth";
 import SupplyBorrow from "./SupplyBorrow/SupplyBorrow";
 import Strategies from "./Strategies/Strategies";
 import { checkConnection } from "@/utils/Wallets/checkConnection";
+import { useHighestAPY } from "@/hooks/LiquidOpsData/useHighestAPY";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import Link from "next/link";
 
 function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
   const { setAccountTab } = useAccountTab();
   const [isConnected, setIsConnected] = useState(false);
   const [triggerConnect, setTriggerConnect] = useState(false);
+
+  const { data: highestAPYData, isLoading: isApyLoading } = useHighestAPY();
+
+  const highestAPY = highestAPYData?.highestAPY;
+  const highestTicker = highestAPYData?.highestTicker;
 
   useEffect(() => {
     const checkWalletConnection = async () => {
@@ -107,6 +115,25 @@ function HomeContent() {
             >
               Login
             </button>
+            <p className={styles.connectWalletTitle}>
+              Please connect your wallet
+            </p>
+            <div className={styles.highestAPY}>
+              <span>Supplying liquidity can</span>
+
+              <div className={styles.highestAPYText}>
+                <span>earn you up to</span>
+                {isApyLoading ||
+                highestAPY === undefined ||
+                highestAPY === null ? (
+                  <SkeletonLoading style={{ width: "60px", height: "13px" }} />
+                ) : (
+                  <Link className={styles.apyNumber} href={`/${highestTicker}`}>
+                    {highestAPY.toFixed(2)}% APY
+                  </Link>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>

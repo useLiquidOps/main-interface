@@ -100,8 +100,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   min-height: calc(100vh - 150px);
   width: 100%;
+  gap: 15px;
 }
 
 .connectButton {
@@ -119,4 +121,33 @@
 
 .connectButton:hover {
   opacity: 0.87;
+}
+
+.highestAPY {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  color: var(--secondary-periwinkle);
+  font-size: 13px;
+  flex-direction: column;
+}
+
+.highestAPYText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+}
+
+.apyNumber {
+  text-decoration: underline solid var(--secondary-periwinkle) 1px;
+}
+
+.connectWalletTitle {
+  font-family: "DM Sans", sans-serif;
+  font-size: 20px;
+  color: var(--secondary-slate-blue);
+  font-weight: 600;
+  margin: 0;
 }

@@ -20,13 +20,29 @@ const MarketsContent: React.FC = () => {
   const { data: prices } = usePrices();
   const { showDeprecated } = useDeprecatedTokens();
 
+  // Early return if data isn't ready
+  if (!supportedTokens || !Array.isArray(supportedTokens)) {
+    return (
+      <div className={styles.page}>
+        <BetaDisclaimer />
+        <Header />
+        <div className={styles.body}>
+          <div className={styles.bodyContainer}>
+            <div>Loading...</div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   // Always sort ALL tokens, never filter them for MarketStats to maintain stable hook calls
   const sortedTokens = useMemo(() => {
     // Safety check: ensure supportedTokens is an array
     if (!Array.isArray(supportedTokens)) {
       return [];
     }
-
+    
     return [...supportedTokens].sort((a, b) => {
       const tokenA = SUPPORTED_TOKENS.find(
         (token) => token.ticker.toUpperCase() === a.ticker.toUpperCase(),
@@ -48,9 +64,9 @@ const MarketsContent: React.FC = () => {
     if (!Array.isArray(sortedTokens)) {
       return [];
     }
-
-    return showDeprecated
-      ? sortedTokens
+    
+    return showDeprecated 
+      ? sortedTokens 
       : sortedTokens.filter((token) => !token.deprecated);
   }, [sortedTokens, showDeprecated]);
 
@@ -68,7 +84,11 @@ const MarketsContent: React.FC = () => {
           />
           <div className={styles.marketsList}>
             {(visibleTokens as SupportedToken[]).map((token) => (
-              <MarketRow key={token.ticker} token={token} prices={prices} />
+              <MarketRow 
+                key={token.ticker} 
+                token={token} 
+                prices={prices} 
+              />
             ))}
           </div>
         </div>

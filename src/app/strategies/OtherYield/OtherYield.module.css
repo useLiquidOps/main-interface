@@ -15,8 +15,9 @@
 
 .cardContainer {
   display: flex;
-  width: fit-content;
-  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .card {

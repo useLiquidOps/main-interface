@@ -16,6 +16,7 @@ export const tickerToGeckoMap: Record<string, string> = {
   AO: "ao-computer",
   DAI: "dai",
   STETH: "staked-ether",
+  USDS: "usds",
 };
 
 export const SUPPORTED_TOKENS = [

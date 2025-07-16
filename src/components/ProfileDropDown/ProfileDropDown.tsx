@@ -8,7 +8,9 @@ import { useTransactions } from "@/hooks/LiquidOpsData/useTransactions";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import ClearCache from "../ClearCache/ClearCache";
 import { shortenAddress } from "@/utils/Wallets/wallets";
+import { useDeprecatedTokens } from "@/contexts/DeprecatedTokensContext";
 import Link from "next/link";
+import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 
 interface ProfileDropdownProps {
   isOpen: boolean;
@@ -36,6 +38,7 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
   profile,
 }) => {
   const { data: transactions, isLoading } = useTransactions();
+  const { showDeprecated, toggleDeprecated } = useDeprecatedTokens();
   const [isEditMode, setIsEditMode] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
@@ -208,7 +211,14 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
               >
                 Edit profile
               </Link> */}
+
               <ClearCache />
+              <ToggleSwitch
+                isOn={showDeprecated}
+                onToggle={toggleDeprecated}
+                label="Show deprecated tokens"
+                className={styles.toggleSwitchContainer}
+              />
             </div>
           </div>
 

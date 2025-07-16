@@ -71,7 +71,9 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
 
           {/* Supply APY Info */}
           <div className={styles.aprInfo}>
-            {isLoading ? (
+            {token.deprecated ? (
+              <p className={styles.deprecatedLabel}>Deprecated</p>
+            ) : isLoading ? (
               <>
                 <SkeletonLoading className="h-6 w-16 mb-1" />
                 <p className={styles.aprLabel}>Supply APY</p>
@@ -94,7 +96,9 @@ export const MarketRow: React.FC<MarketRowProps> = ({ token, prices }) => {
 
           {/* Borrow APR Info */}
           <div className={styles.aprInfo}>
-            {isLoading ? (
+            {token.deprecated ? (
+              <p className={styles.deprecatedLabel}></p>
+            ) : isLoading ? (
               <>
                 <SkeletonLoading className="h-6 w-16 mb-1" />
                 <p className={styles.aprLabel}>Borrow APR</p>

@@ -170,9 +170,8 @@
 
 .profileButtons {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   align-items: center;
-  gap: 5px;
 }
 
 .editProfileButton {

@@ -7,11 +7,13 @@ import { tickerToGeckoMap } from "@/utils/tokenMappings";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import PieChart from "@/components/PieChat/PieChart";
 import { TOKEN_COLORS } from "@/utils/tokenMappings";
+import { useMemo } from "react";
 
 interface Token {
   ticker: string;
   name: string;
   icon: string;
+  deprecated?: boolean;
 }
 
 interface PriceData {
@@ -32,6 +34,7 @@ interface TokenStats {
   collateral: Quantity;
   borrows: Quantity;
   color: string;
+  deprecated?: boolean;
 }
 
 const useTokenStats = (
@@ -51,71 +54,97 @@ const useTokenStats = (
 interface MarketStatsProps {
   tokens: Token[];
   prices: PriceData | undefined;
+  showDeprecated: boolean;
 }
 
-export const MarketStats: React.FC<MarketStatsProps> = ({ tokens, prices }) => {
-  let totalCollateral = new Quantity(0n, 12n);
-  let totalBorrows = new Quantity(0n, 12n);
-  let tvl = new Quantity(0n, 12n);
+export const MarketStats: React.FC<MarketStatsProps> = ({
+  tokens,
+  prices,
+  showDeprecated,
+}) => {
+  // ALWAYS call useTokenStats for ALL tokens to maintain stable hook calls
+  const allTokenStats = tokens.map((token) => useTokenStats(token, prices));
 
-  // Create arrays to store data for each token's stats for pie charts
-  const tokenStatsArray: TokenStats[] = [];
+  // Then filter and calculate based on showDeprecated flag
+  const { totalCollateral, totalBorrows, tvl, isLoading, tokenStatsArray } =
+    useMemo(() => {
+      let totalCollateral = new Quantity(0n, 12n);
+      let totalBorrows = new Quantity(0n, 12n);
+      let tvl = new Quantity(0n, 12n);
+      const tokenStatsArray: TokenStats[] = [];
+      let isLoading = false;
 
-  // Check if any token's stats are still loading
-  let isLoading = false;
+      // Process all token stats but only include non-deprecated ones in calculations if showDeprecated is false
+      allTokenStats.forEach((tokenStats, index) => {
+        const token = tokens[index];
+        const { stats, price, isLoading: tokenIsLoading } = tokenStats;
 
-  for (const token of tokens) {
-    const {
-      stats,
-      price,
-      isLoading: tokenIsLoading,
-    } = useTokenStats(token, prices);
+        // If any token is loading, set isLoading true
+        if (tokenIsLoading) {
+          isLoading = true;
+        } else if (stats.data) {
+          const tokenCollateral = Quantity.__mul(stats.data.unLent, price);
+          const tokenBorrows = Quantity.__mul(stats.data.borrows, price);
+          const tokenTvl = Quantity.__add(tokenCollateral, tokenBorrows);
 
-    // If any token is loading, set isLoading true
-    if (tokenIsLoading) {
-      isLoading = true;
-    } else if (stats.data) {
-      const tokenCollateral = Quantity.__mul(stats.data.unLent, price);
-      const tokenBorrows = Quantity.__mul(stats.data.borrows, price);
-      const tokenTvl = Quantity.__add(tokenCollateral, tokenBorrows);
+          // Always store the stats for all tokens
+          const tokenStat: TokenStats = {
+            ticker: token.ticker,
+            tvl: tokenTvl,
+            collateral: tokenCollateral,
+            borrows: tokenBorrows,
+            color: TOKEN_COLORS[token.ticker.toUpperCase()] || "#808080",
+            deprecated: token.deprecated,
+          };
 
-      // Store token specific values
-      tokenStatsArray.push({
-        ticker: token.ticker,
-        tvl: tokenTvl,
-        collateral: tokenCollateral,
-        borrows: tokenBorrows,
-        color: TOKEN_COLORS[token.ticker.toUpperCase()] || "#808080", // Default gray if no color defined
+          tokenStatsArray.push(tokenStat);
+
+          // Only add to totals if we should show this token
+          if (showDeprecated || !token.deprecated) {
+            totalCollateral = Quantity.__add(totalCollateral, tokenCollateral);
+            totalBorrows = Quantity.__add(totalBorrows, tokenBorrows);
+          }
+        }
       });
 
-      // Add to totals
-      totalCollateral = Quantity.__add(totalCollateral, tokenCollateral);
-      totalBorrows = Quantity.__add(totalBorrows, tokenBorrows);
-    }
-  }
+      // Calculate total TVL as sum of collateral and borrows
+      tvl = Quantity.__add(totalCollateral, totalBorrows);
 
-  // Calculate total TVL as sum of collateral and borrows
-  tvl = Quantity.__add(totalCollateral, totalBorrows);
+      // Also consider loading if prices aren't available yet
+      if (!prices) {
+        isLoading = true;
+      }
 
-  // Also consider loading if prices aren't available yet
-  if (!prices) {
-    isLoading = true;
-  }
+      return {
+        totalCollateral,
+        totalBorrows,
+        tvl,
+        isLoading,
+        tokenStatsArray,
+      };
+    }, [allTokenStats, tokens, prices, showDeprecated]);
 
-  // Create data for pie charts using collected token stats
-  const tvlHoldings = tokenStatsArray.map((token) => ({
+  // Filter token stats for pie charts based on showDeprecated flag
+  const visibleTokenStats = useMemo(() => {
+    return showDeprecated
+      ? tokenStatsArray
+      : tokenStatsArray.filter((token) => !token.deprecated);
+  }, [tokenStatsArray, showDeprecated]);
+
+  // Create data for pie charts using filtered token stats
+  const tvlHoldings = visibleTokenStats.map((token) => ({
     token: token.ticker,
     tokenHex: token.color,
     amount: token.tvl.toNumber(),
   }));
 
-  const availableHoldings = tokenStatsArray.map((token) => ({
+  const availableHoldings = visibleTokenStats.map((token) => ({
     token: token.ticker,
     tokenHex: token.color,
     amount: token.collateral.toNumber(),
   }));
 
-  const borrowedHoldings = tokenStatsArray.map((token) => ({
+  const borrowedHoldings = visibleTokenStats.map((token) => ({
     token: token.ticker,
     tokenHex: token.color,
     amount: token.borrows.toNumber(),

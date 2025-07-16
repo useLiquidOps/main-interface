@@ -4,6 +4,7 @@ import styles from "./AssetDisplay.module.css";
 import { useSupportedTokens } from "@/hooks/data/useSupportedTokens";
 import AssetRow from "@/app/home/AssetRow/AssetRow";
 import { SUPPORTED_TOKENS } from "@/utils/tokenMappings";
+import { useDeprecatedTokens } from "@/contexts/DeprecatedTokensContext";
 
 interface AssetDisplayProps {
   mode: "lend" | "borrow";
@@ -12,6 +13,7 @@ interface AssetDisplayProps {
 const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
   const [showContent, setShowContent] = useState(false);
   const { data: supportedTokens = [] } = useSupportedTokens();
+  const { showDeprecated } = useDeprecatedTokens();
   const componentRef = useRef<HTMLDivElement>(null);
 
   // Delay showing content to avoid empty state flash
@@ -40,8 +42,13 @@ const AssetDisplay: React.FC<AssetDisplayProps> = ({ mode }) => {
     return null;
   }
 
+  // Filter out deprecated assets based on showDeprecated flag
+  const activeTokens = showDeprecated
+    ? supportedTokens
+    : supportedTokens.filter((asset) => !asset.deprecated);
+
   // Sort assets based on the assetDisplayOrder defined in SUPPORTED_TOKENS
-  const sortedTokens = [...supportedTokens].sort((a, b) => {
+  const sortedTokens = [...activeTokens].sort((a, b) => {
     const tokenA = SUPPORTED_TOKENS.find(
       (token) => token.ticker.toUpperCase() === a.ticker.toUpperCase(),
     );

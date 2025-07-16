@@ -18,6 +18,7 @@ import NetWorth from "./NetWorth/NetWorth";
 import SupplyBorrow from "./SupplyBorrow/SupplyBorrow";
 import Strategies from "./Strategies/Strategies";
 import { checkConnection } from "@/utils/Wallets/checkConnection";
+import { DeprecatedTokensProvider } from "@/contexts/DeprecatedTokensContext";
 
 function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
@@ -65,91 +66,93 @@ function HomeContent() {
   };
 
   return (
-    <div className={styles.page}>
-      <BetaDisclaimer />
-      <Header
-        triggerConnect={triggerConnect}
-        onWalletConnected={handleWalletConnected}
-      />
-      <div className={styles.body}>
-        {isConnected ? (
-          <div className={styles.bodyContainer}>
-            <div className={styles.widgetContainer}>
-              <div className={styles.widgetLeftContainer}>
-                {/* <NetWorth />
-              <SupplyBorrow /> */}
-                <div></div>
-                <div></div>
+    <DeprecatedTokensProvider>
+      <div className={styles.page}>
+        <BetaDisclaimer />
+        <Header
+          triggerConnect={triggerConnect}
+          onWalletConnected={handleWalletConnected}
+        />
+        <div className={styles.body}>
+          {isConnected ? (
+            <div className={styles.bodyContainer}>
+              <div className={styles.widgetContainer}>
+                <div className={styles.widgetLeftContainer}>
+                  {/* <NetWorth />
+                <SupplyBorrow /> */}
+                  <div></div>
+                  <div></div>
+                </div>
+
+                <div className={styles.widgetRightContainer}>
+                  {/* <Strategies /> */}
+                  <div></div>
+                  <button
+                    className={styles.viewTxns}
+                    onClick={handleOpenAccountTab}
+                  >
+                    View transactions
+                  </button>
+                </div>
               </div>
 
-              <div className={styles.widgetRightContainer}>
-                {/* <Strategies /> */}
-                <div></div>
-                <button
-                  className={styles.viewTxns}
-                  onClick={handleOpenAccountTab}
-                >
-                  View transactions
-                </button>
+              <div className={styles.grid}>
+                <AssetDisplay mode="lend" />
+                <AssetDisplay mode="borrow" />
               </div>
             </div>
-
-            <div className={styles.grid}>
-              <AssetDisplay mode="lend" />
-              <AssetDisplay mode="borrow" />
+          ) : (
+            <div className={styles.connectPrompt}>
+              <button
+                className={styles.connectButton}
+                onClick={handleConnectClick}
+              >
+                Login
+              </button>
             </div>
-          </div>
-        ) : (
-          <div className={styles.connectPrompt}>
-            <button
-              className={styles.connectButton}
-              onClick={handleConnectClick}
-            >
-              Login
-            </button>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      <AnimatePresence>
-        {modalType && (
-          <motion.div
-            className={styles.modalOverlay}
-            variants={overlayVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            onClick={closeModal}
-          >
+        <AnimatePresence>
+          {modalType && (
             <motion.div
-              className={styles.modalContent}
-              variants={dropdownVariants}
+              className={styles.modalOverlay}
+              variants={overlayVariants}
               initial="hidden"
               animate="visible"
               exit="hidden"
-              onClick={(e) => e.stopPropagation()}
+              onClick={closeModal}
             >
-              {(modalType === "withdraw" || modalType === "repay") && (
-                <WithdrawRepay
-                  mode={modalType}
-                  ticker={assetData?.cleanTicker}
-                  onClose={closeModal}
-                />
-              )}
+              <motion.div
+                className={styles.modalContent}
+                variants={dropdownVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {(modalType === "withdraw" || modalType === "repay") && (
+                  <WithdrawRepay
+                    mode={modalType}
+                    ticker={assetData?.cleanTicker}
+                    onClose={closeModal}
+                  />
+                )}
 
-              {(modalType === "supply" || modalType === "borrow") && (
-                <ActionTab
-                  mode={modalType as "supply" | "borrow"}
-                  ticker={assetData?.cleanTicker}
-                  onClose={closeModal}
-                />
-              )}
+                {(modalType === "supply" || modalType === "borrow") && (
+                  <ActionTab
+                    mode={modalType as "supply" | "borrow"}
+                    ticker={assetData?.cleanTicker}
+                    onClose={closeModal}
+                  />
+                )}
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <Footer />
-    </div>
+          )}
+        </AnimatePresence>
+        <Footer />
+      </div>
+    </DeprecatedTokensProvider>
   );
 }
 

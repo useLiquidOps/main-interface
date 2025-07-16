@@ -110,3 +110,12 @@
   font-weight: 500;
   margin: 0;
 }
+
+.deprecatedLabel {
+  color: var(--secondary-periwinkle);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  padding: 8px 0;
+}

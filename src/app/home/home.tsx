@@ -26,6 +26,7 @@ function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
   const { setAccountTab } = useAccountTab();
   const [isConnected, setIsConnected] = useState(false);
+  const [isCheckingConnection, setIsCheckingConnection] = useState(true); // Add loading state
   const [triggerConnect, setTriggerConnect] = useState(false);
 
   const { data: highestAPYData, isLoading: isApyLoading } = useHighestAPY();
@@ -41,13 +42,23 @@ function HomeContent() {
       } catch (error) {
         console.error("Error checking wallet connection:", error);
         setIsConnected(false);
+      } finally {
+        setIsCheckingConnection(false); // Set loading to false after initial check
       }
     };
 
     checkWalletConnection();
 
-    // Check connection status periodically
-    const interval = setInterval(checkWalletConnection, 1000);
+    // Check connection status periodically (but don't show loading after first check)
+    const interval = setInterval(async () => {
+      try {
+        const connected = await checkConnection();
+        setIsConnected(connected);
+      } catch (error) {
+        console.error("Error checking wallet connection:", error);
+        setIsConnected(false);
+      }
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -63,6 +74,7 @@ function HomeContent() {
 
   const handleWalletConnected = () => {
     setIsConnected(true);
+    setIsCheckingConnection(false); // Ensure loading state is cleared
   };
 
   const handleConnectClick = () => {
@@ -80,7 +92,8 @@ function HomeContent() {
         onWalletConnected={handleWalletConnected}
       />
       <div className={styles.body}>
-        {isConnected ? (
+        {isCheckingConnection ? // Show nothing while checking connection
+        null : isConnected ? (
           <div className={styles.bodyContainer}>
             <div className={styles.widgetContainer}>
               <div className={styles.widgetLeftContainer}>

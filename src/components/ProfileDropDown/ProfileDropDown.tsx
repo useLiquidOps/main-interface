@@ -217,7 +217,6 @@ const ProfileDropDown: React.FC<ProfileDropdownProps> = ({
                 isOn={showDeprecated}
                 onToggle={toggleDeprecated}
                 label="Show deprecated tokens"
-                className={styles.toggleSwitchContainer}
               />
             </div>
           </div>

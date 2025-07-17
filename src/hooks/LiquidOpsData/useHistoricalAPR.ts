@@ -24,6 +24,7 @@ export function useHistoricalAPR(token: string, overrideCache?: boolean) {
     },
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,
+    initialData: []
   });
 }
 

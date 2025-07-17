@@ -109,13 +109,11 @@ function HomeContent() {
           </div>
         ) : (
           <div className={styles.connectPrompt}>
-            
             <p className={styles.connectWalletTitle}>
               Please connect your wallet
             </p>
-            
-            <div className={styles.highestAPY}>
 
+            <div className={styles.highestAPY}>
               <div className={styles.highestAPYText}>
                 <span>Supplying liquidity can earn you up to</span>
                 {isApyLoading ||

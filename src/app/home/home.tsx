@@ -92,8 +92,7 @@ function HomeContent() {
         onWalletConnected={handleWalletConnected}
       />
       <div className={styles.body}>
-        {isCheckingConnection ? // Show nothing while checking connection
-        null : isConnected ? (
+        {isCheckingConnection ? null : isConnected ? ( // Show nothing while checking connection
           <div className={styles.bodyContainer}>
             <div className={styles.widgetContainer}>
               <div className={styles.widgetLeftContainer}>

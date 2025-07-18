@@ -117,6 +117,34 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
         <div className={styles.aprInfo}>
           {isDeprecated ? (
             <p className={styles.deprecated}>Deprecated</p>
+          ) : mode === "borrow" && !asset.borrowingEnabled ? (
+            <div className={styles.borrowingDisabledContainer}>
+              <p className={styles.borrowingDisabled}>
+                <span>Borrowing</span> <span>disabled</span>
+              </p>
+              <div className={styles.tooltipContainer}>
+                <Image
+                  src="/icons/info.svg"
+                  alt="Info"
+                  width={15}
+                  height={15}
+                  className={styles.infoIcon}
+                />
+                <div className={styles.tooltip}>
+                  <span>
+                    Borrowing will be re-enabled after the AO airdrop is
+                    completed, wAR lenders would prefer to earn AO yield instead
+                    of native yield from wAR being lent out.
+                  </span>
+
+                  <span>
+                    For now most users are lending wAR to act as collateral to
+                    borrow other tokens ensuing lenders still earn AO while
+                    using LiquidOps.
+                  </span>
+                </div>
+              </div>
+            </div>
           ) : isProtocolStatsLoading ? (
             <>
               <SkeletonLoading
@@ -164,7 +192,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
         </div>
 
         <div className={styles.actionButtons}>
-          {!isDeprecated && (
+          {!isDeprecated && (mode === "lend" || asset.borrowingEnabled) && (
             <button
               className={styles.supplyBorrowButton}
               onClick={handleDoAction}

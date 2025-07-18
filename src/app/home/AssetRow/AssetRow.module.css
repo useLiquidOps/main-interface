@@ -2,6 +2,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 10px;
+  overflow: visible;
 }
 
 .assetRow {
@@ -144,4 +145,83 @@
 
 .earned {
   color: var(--APY-green);
+}
+
+.borrowingDisabledContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.borrowingDisabled {
+  color: var(--secondary-periwinkle);
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  padding: 8px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.tooltipContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  z-index: 10000;
+}
+
+.infoIcon {
+  color: var(--secondary-periwinkle);
+  transition: opacity 0.2s ease;
+}
+
+.infoIcon:hover {
+  opacity: 0.8;
+}
+
+.tooltip {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--primary-ghost-white);
+  color: var(--primary-ultramarine);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  margin-top: 8px;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tooltip::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid var(--primary-ghost-white);
+}
+
+.tooltipContainer:hover .tooltip {
+  opacity: 1;
+  pointer-events: auto;
 }

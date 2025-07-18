@@ -133,14 +133,17 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
                 <div className={styles.tooltip}>
                   <span>
                     Borrowing will be re-enabled after the AO airdrop is
-                    completed, wAR lenders would prefer to earn AO yield instead
-                    of native yield from wAR being lent out.
+                    complete, wAR lenders would prefer to earn AO yield instead
+                    of native yield from wAR being lent out to borrowers.
+                  </span>
+
+                  <span>
+                    This ensures lenders still earn AO while using LiquidOps.
                   </span>
 
                   <span>
                     For now most users are lending wAR to act as collateral to
-                    borrow other tokens ensuing lenders still earn AO while
-                    using LiquidOps.
+                    borrow other tokens rather than earn yield.
                   </span>
                 </div>
               </div>

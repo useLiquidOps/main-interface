@@ -1,20 +1,26 @@
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { siteWideSEO } from "@/utils/SEO/SEO";
+import { metadata as data } from "@/utils/SEO/SEO";
 
 const title = "LiquidOps | Markets";
-const url = "https://liquidops.io/markets";
+const url = `https://liquidops.io/markets`;
 const imagePath = "https://liquidops.io/SEO/markets.png";
+const description = `
+Looking for the best place to lend or borrow? Browse all our markets in one place and see exactly what yields you can earn today. 
 
+LiquidOps gives you the complete picture with real-time rates, backed by the security of over-collateralization on Arweave's L2 AO.
+`;
 export const metadata: Metadata = {
-  title,
-  description: siteWideSEO.marketDescription,
+  ...data,
+  title: {
+    absolute: title,
+  },
   alternates: {
     canonical: url,
   },
   openGraph: {
     title,
-    description: siteWideSEO.marketDescription,
+    description,
     url,
     images: [
       {
@@ -24,12 +30,6 @@ export const metadata: Metadata = {
         alt: title,
       },
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description: siteWideSEO.marketDescription,
-    images: [imagePath],
   },
 };
 

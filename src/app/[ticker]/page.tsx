@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { SUPPORTED_TOKENS } from "@/utils/tokenMappings";
-import { tickerDescription } from "@/utils/SEO/SEO";
+import { tickerDescription, metadata as data } from "@/utils/SEO/SEO";
 
 const title = (ticker: string) => `LiquidOps | ${ticker}`;
 const url = (ticker: string) => `https://liquidops.io/${ticker}`;
@@ -24,15 +24,20 @@ export async function generateMetadata({
     (token) => token.ticker.toLowerCase() === ticker.toLowerCase(),
   );
 
+  const description = tickerDescription(tokenInfo?.name || "", ticker);
+
   return {
-    title: title(ticker),
-    description: tickerDescription(tokenInfo?.name || "", ticker),
+    ...data,
+    title: {
+      absolute: title(ticker),
+    },
+    description,
     alternates: {
       canonical: url(ticker),
     },
     openGraph: {
       title: title(ticker),
-      description: tickerDescription(tokenInfo?.name || "", ticker),
+      description,
       url: url(ticker),
       images: [
         {
@@ -42,12 +47,6 @@ export async function generateMetadata({
           alt: title(ticker),
         },
       ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: title(ticker),
-      description: tickerDescription(tokenInfo?.name || "", ticker),
-      images: [imagePath(ticker)],
     },
   };
 }

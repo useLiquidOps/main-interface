@@ -1,20 +1,27 @@
-import { siteWideSEO } from "@/utils/SEO/SEO";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { metadata as data } from "@/utils/SEO/SEO";
 
-const title = `LiquidOps | Strategies`;
+const title = "LiquidOps | Strategies";
 const url = `https://liquidops.io/strategies`;
 const imagePath = "https://liquidops.io/SEO/strategies.png";
+const description = `
+Supercharge your crypto with LiquidOps' advanced strategies—unlock yield farming, arbitrage opportunities, and leverage positions using your Arweave and AO tokens.
+
+All secured by our over-collateralized lending protocol built natively on Arweave's L2.
+`;
 
 export const metadata: Metadata = {
-  title,
-  description: siteWideSEO.strategiesDescription,
+  ...data,
+  title: {
+    absolute: title,
+  },
   alternates: {
     canonical: url,
   },
   openGraph: {
     title,
-    description: siteWideSEO.strategiesDescription,
+    description,
     url,
     images: [
       {
@@ -24,12 +31,6 @@ export const metadata: Metadata = {
         alt: title,
       },
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description: siteWideSEO.strategiesDescription,
-    images: [imagePath],
   },
 };
 

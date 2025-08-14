@@ -1,21 +1,22 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import styles from "./page.module.css";
-import { siteWideSEO } from "@/utils/SEO/SEO";
+import { metadata as data } from "@/utils/SEO/SEO";
 
 const title = "LiquidOps | 404";
-const url = "https://liquidops.io/404";
+const url = `https://liquidops.io/404`;
 const imagePath = "https://liquidops.io/SEO/notfound.png";
 
 export const metadata: Metadata = {
-  title,
-  description: siteWideSEO.notfoundDescription,
+  ...data,
+  title: {
+    absolute: title,
+  },
   alternates: {
     canonical: url,
   },
   openGraph: {
     title,
-    description: siteWideSEO.notfoundDescription,
     url,
     images: [
       {
@@ -25,12 +26,6 @@ export const metadata: Metadata = {
         alt: title,
       },
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description: siteWideSEO.notfoundDescription,
-    images: [imagePath],
   },
 };
 

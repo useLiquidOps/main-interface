@@ -47,6 +47,13 @@
   gap: 25px;
 }
 
+.assetSquareContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .assetSquare {
   display: flex;
   justify-content: center;
@@ -86,6 +93,22 @@
   font-size: 10px;
   gap: 2.5px;
   color: var(--primary-ultramarine);
+}
+
+.comingSoonBanner {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+  font-size: 8px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .depositAssetPanelContainer {

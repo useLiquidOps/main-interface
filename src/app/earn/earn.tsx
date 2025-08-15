@@ -14,7 +14,7 @@ const Earn: React.FC = () => {
           <h2 className={styles.title}>Choose token to deposit</h2>
           <div className={styles.depositSection}>
             <div className={styles.depositAsset}>
-              {/* --- */}
+              {/* AR - Active */}
               <div
                 className={styles.assetSquare}
                 style={{
@@ -36,54 +36,68 @@ const Earn: React.FC = () => {
                   </p>
                 </div>
               </div>
-              {/* --- */}
-              <div
-                className={styles.assetSquare}
-                style={{
-                  cursor: "not-allowed",
-                }}
-              >
-                <Image
-                  src="/tokens/stETH.svg"
-                  alt="stETH"
-                  height={50}
-                  width={50}
-                />
-                <div className={styles.assetSquareDetails}>
-                  <p className={styles.assetName}>stETH</p>
-                  <p className={styles.assetDetails}>
-                    <Image
-                      src="/icons/APYStars.svg"
-                      alt="Sparkle"
-                      height={10}
-                      width={10}
-                    />
-                    <span>7 LQD per stETH APY</span>
-                  </p>
+
+              {/* stETH - Coming Soon */}
+              <div className={styles.assetSquareContainer}>
+                <div
+                  className={styles.assetSquare}
+                  style={{
+                    cursor: "not-allowed",
+                    opacity: 0.6,
+                  }}
+                >
+                  <Image
+                    src="/tokens/stETH.svg"
+                    alt="stETH"
+                    height={50}
+                    width={50}
+                  />
+                  <div className={styles.assetSquareDetails}>
+                    <p className={styles.assetName}>stETH</p>
+                    <p className={styles.assetDetails}>
+                      <Image
+                        src="/icons/APYStars.svg"
+                        alt="Sparkle"
+                        height={10}
+                        width={10}
+                      />
+                      <span>LQD per stETH APY</span>
+                    </p>
+                  </div>
                 </div>
+                <div className={styles.comingSoonBanner}>Coming Soon</div>
               </div>
-              {/* --- */}
-              <div
-                className={styles.assetSquare}
-                style={{
-                  cursor: "not-allowed",
-                }}
-              >
-                <Image src="/tokens/DAI.svg" alt="DAI" height={50} width={50} />
-                <div className={styles.assetSquareDetails}>
-                  <p className={styles.assetName}>DAI</p>
-                  <p className={styles.assetDetails}>
-                    <Image
-                      src="/icons/APYStars.svg"
-                      alt="Sparkle"
-                      height={10}
-                      width={10}
-                    />
-                    <span>7 LQD per DAI APY</span>
-                  </p>
+
+              {/* DAI - Coming Soon */}
+              <div className={styles.assetSquareContainer}>
+                <div
+                  className={styles.assetSquare}
+                  style={{
+                    cursor: "not-allowed",
+                    opacity: 0.6,
+                  }}
+                >
+                  <Image
+                    src="/tokens/DAI.svg"
+                    alt="DAI"
+                    height={50}
+                    width={50}
+                  />
+                  <div className={styles.assetSquareDetails}>
+                    <p className={styles.assetName}>DAI</p>
+                    <p className={styles.assetDetails}>
+                      <Image
+                        src="/icons/APYStars.svg"
+                        alt="Sparkle"
+                        height={10}
+                        width={10}
+                      />
+                      <span>LQD per DAI APY</span>
+                    </p>
+                  </div>
                 </div>
+                <div className={styles.comingSoonBanner}>Coming Soon</div>
               </div>
-              {/* --- */}
             </div>
             <div className={styles.depositAssetPanelContainer}>
               <div>Deposit panel placeholder</div>

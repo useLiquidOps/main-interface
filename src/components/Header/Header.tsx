@@ -137,7 +137,7 @@ const Header: React.FC<HeaderProps> = ({
               href="/earn"
               className={isLinkActive("/earn") ? styles.activeLink : ""}
             >
-              <p>Earn LQD</p>
+              <p>Earn</p>
             </Link>
             <MoreDropdown label="Bridge" items={bridgeItems} />
             <MoreDropdown label="More" items={moreMenuItems} />

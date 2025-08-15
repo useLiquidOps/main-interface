@@ -36,7 +36,7 @@
 .titleContainer {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 
 .title {
@@ -47,8 +47,13 @@
 
 .totalDeposits {
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--primary-palatinate-blue);
+}
+
+.learnMore {
+  font-size: 0.7rem;
+  font-weight: 500;
 }
 
 .loBalanceContainer {

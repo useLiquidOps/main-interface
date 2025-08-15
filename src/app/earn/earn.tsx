@@ -4,6 +4,7 @@ import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
 import Footer from "@/components/Footer/Footer";
+import ActionPanel from "./ActionPanel/ActionPanel";
 
 const Earn: React.FC = () => {
   return (
@@ -12,12 +13,23 @@ const Earn: React.FC = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
-          <div className={styles.titleContainer}>
-            <h2 className={styles.title}>Choose token to delegate</h2>
-            <p className={styles.totalDeposits}>
-              Total fair launch deposits $1,343,310.33
-            </p>
+          <div className={styles.topSection}>
+            <div className={styles.titleContainer}>
+              <h2 className={styles.title}>Choose token to delegate</h2>
+              <p className={styles.totalDeposits}>
+                Total fair launch deposits $1,343,310.33
+              </p>
+            </div>
+
+            <div className={styles.loBalanceContainer}>
+              <p className={styles.loBalance}>
+                <Image src="/tokens/LQD.svg" alt="LQD" width={20} height={20} />
+                <span>1,323,300.00</span>
+              </p>
+              <p className={styles.loTitle}>Your LQD balance</p>
+            </div>
           </div>
+
           <div className={styles.depositSection}>
             <div className={styles.depositAsset}>
               {/* AR - Active */}
@@ -106,7 +118,7 @@ const Earn: React.FC = () => {
               </div>
             </div>
             <div className={styles.depositAssetPanelContainer}>
-              <div>Deposit panel placeholder</div>
+              <ActionPanel ticker="wAR" mode="delegate" />
             </div>
           </div>
         </div>

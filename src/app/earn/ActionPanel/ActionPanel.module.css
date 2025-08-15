@@ -1,0 +1,78 @@
+.actionTab {
+  background-color: white;
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+}
+
+.title {
+  color: var(--secondary-slate-blue);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--primary-ghost-white);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+}
+
+.infoContainer {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.infoDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+}
+
+.infoLabel {
+  color: var(--secondary-periwinkle);
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.customiseIcon {
+  cursor: not-allowed;
+}
+
+.warning {
+  background-color: var(--failed-red);
+  color: var(--failed-red-text);
+  padding: 0.6rem 1.05rem;
+  margin: 1rem 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 500;
+}

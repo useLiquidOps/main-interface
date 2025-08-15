@@ -27,6 +27,12 @@
   gap: 50px;
 }
 
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .titleContainer {
   display: flex;
   flex-direction: column;
@@ -43,6 +49,28 @@
   font-weight: 500;
   font-size: 0.9rem;
   color: var(--primary-palatinate-blue);
+}
+
+.loBalanceContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.loBalance {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7.5px;
+  font-size: 30px;
+  text-align: right;
+  font-weight: 500;
+}
+
+.loTitle {
+  font-size: 10px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--primary-ultramarine);
 }
 
 .depositSection {

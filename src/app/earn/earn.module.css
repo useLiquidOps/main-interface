@@ -27,10 +27,22 @@
   gap: 50px;
 }
 
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--primary-ultramarine);
+}
+
+.totalDeposits {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--primary-palatinate-blue);
 }
 
 .depositSection {

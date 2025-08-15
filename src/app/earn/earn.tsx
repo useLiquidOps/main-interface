@@ -3,6 +3,7 @@ import styles from "./earn.module.css";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import Header from "../../components/Header/Header";
 import Image from "next/image";
+import Footer from "@/components/Footer/Footer";
 
 const Earn: React.FC = () => {
   return (
@@ -11,7 +12,12 @@ const Earn: React.FC = () => {
       <Header />
       <div className={styles.body}>
         <div className={styles.bodyContainer}>
-          <h2 className={styles.title}>Choose token to deposit</h2>
+          <div className={styles.titleContainer}>
+            <h2 className={styles.title}>Choose token to delegate</h2>
+            <p className={styles.totalDeposits}>
+              Total fair launch deposits $1,343,310.33
+            </p>
+          </div>
           <div className={styles.depositSection}>
             <div className={styles.depositAsset}>
               {/* AR - Active */}
@@ -105,6 +111,7 @@ const Earn: React.FC = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

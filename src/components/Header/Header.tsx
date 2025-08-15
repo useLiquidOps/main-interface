@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./Header.module.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -27,6 +27,8 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isBannerVisible, setIsBannerVisible] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const connectRef = useRef<ConnectRef>(null);
 
   const bridgeItems = [{ label: "AOX", href: "https://aox.xyz/#/bridge" }];
@@ -39,6 +41,18 @@ const Header: React.FC<HeaderProps> = ({
     { label: "Blog", href: "https://labs.liquidops.io/blog" },
     { label: "Labs", href: "https://labs.liquidops.io" },
   ];
+
+  // Handle client-side mounting and localStorage
+  useEffect(() => {
+    setIsClient(true);
+    const bannerDismissed = localStorage.getItem("bannerDismissed") === "true";
+    setIsBannerVisible(!bannerDismissed);
+  }, []);
+
+  const handleBannerDismiss = () => {
+    setIsBannerVisible(false);
+    localStorage.setItem("bannerDismissed", "true");
+  };
 
   const isLinkActive = (path: string) => {
     const firstPathSegment = pathname.split("/")[1];
@@ -54,6 +68,30 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
+      {isClient && isBannerVisible && (
+        <div className={styles.banner}>
+          <div className={styles.bannerContent}>
+            <span className={styles.bannerText}>
+              🚀 The LQD fair launch is now live! Delegate AR tokens{" "}
+              <a
+                style={{ textDecoration: "underline" }}
+                target="_blank"
+                href="https://ao.arweave.net/#/delegate/"
+              >
+                here
+              </a>
+            </span>
+            <button
+              className={styles.bannerCloseButton}
+              onClick={handleBannerDismiss}
+              aria-label="Dismiss banner"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <AnimatePresence>
         {isDropdownOpen && (
           <motion.div

@@ -115,6 +115,7 @@ const Earn: React.FC = () => {
                       />
                       <span>LQD per stETH APY</span>
                     </p>
+                    <p className={styles.assetDetails}>Distributed daily</p>
                   </div>
                 </div>
                 <div className={styles.comingSoonBanner}>Coming Soon</div>
@@ -146,6 +147,7 @@ const Earn: React.FC = () => {
                       />
                       <span>LQD per DAI APY</span>
                     </p>
+                    <p className={styles.assetDetails}>Distributed daily</p>
                   </div>
                 </div>
                 <div className={styles.comingSoonBanner}>Coming Soon</div>

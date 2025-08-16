@@ -42,7 +42,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
     mode,
     borrowingDisabled: asset.borrowingDisabled,
     isDeprecated,
-    asset
+    asset,
   });
 
   const handleDoAction = (e: React.MouseEvent) => {
@@ -79,14 +79,15 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   }, [asset, currentBalance]);
 
   // Add class to hide tooltips when modal is open
-  const wrapperClasses = `${styles.assetRowWrapper} ${modal.isOpen ? 'modal-open' : ''}`;
+  const wrapperClasses = `${styles.assetRowWrapper} ${modal.modalType ? "modal-open" : ""}`;
 
   // DEBUG: Check the condition that shows borrowing disabled
   const showBorrowingDisabled = mode === "borrow" && asset.borrowingDisabled;
   console.log(`[${asset.cleanTicker}] Borrowing disabled check:`, {
     mode,
     borrowingDisabled: asset.borrowingDisabled,
-    showBorrowingDisabled
+    showBorrowingDisabled,
+    modalType: modal.modalType,
   });
 
   return (

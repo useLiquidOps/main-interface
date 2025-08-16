@@ -13,9 +13,6 @@ import Footer from "@/components/Footer/Footer";
 import { useModal, ModalProvider } from "../../components/PopUp/PopUp";
 import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import { useAccountTab } from "@/components/Connect/accountTabContext";
-import NetWorth from "./NetWorth/NetWorth";
-import SupplyBorrow from "./SupplyBorrow/SupplyBorrow";
-import Strategies from "./Strategies/Strategies";
 import ConnectWalletWall from "@/components/ConnectWalletWall/ConnectWalletWall";
 
 function HomeContent() {
@@ -37,26 +34,6 @@ function HomeContent() {
       <ConnectWalletWall customMessage="Please connect your wallet to start lending and borrowing">
         <div className={styles.body}>
           <div className={styles.bodyContainer}>
-            <div className={styles.widgetContainer}>
-              <div className={styles.widgetLeftContainer}>
-                {/* <NetWorth />
-                <SupplyBorrow /> */}
-                <div></div>
-                <div></div>
-              </div>
-
-              <div className={styles.widgetRightContainer}>
-                {/* <Strategies /> */}
-                <div></div>
-                <button
-                  className={styles.viewTxns}
-                  onClick={handleOpenAccountTab}
-                >
-                  View transactions
-                </button>
-              </div>
-            </div>
-
             <div className={styles.grid}>
               <AssetDisplay mode="lend" />
               <AssetDisplay mode="borrow" />

@@ -54,6 +54,7 @@
 .learnMore {
   font-size: 0.7rem;
   font-weight: 500;
+  width: fit-content;
 }
 
 .loBalanceContainer {
@@ -138,6 +139,13 @@
   font-size: 10px;
   gap: 2.5px;
   color: var(--primary-ultramarine);
+}
+
+.lqdPerAOContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5px;
 }
 
 .comingSoonBanner {

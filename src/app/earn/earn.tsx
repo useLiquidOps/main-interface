@@ -9,9 +9,12 @@ import { useUserBalance } from "@/hooks/data/useUserBalance";
 import { formatTMB } from "@/components/utils/utils";
 import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
 import { lqdTokenAddress } from "liquidops";
+import { useLqdPerAO } from "@/hooks/data/useLQDPerAO";
 
 const Earn: React.FC = () => {
   const { data: LQDBalance } = useUserBalance(lqdTokenAddress);
+
+  const { data: lqdPerAO } = useLqdPerAO();
 
   return (
     <div className={styles.page}>
@@ -72,7 +75,18 @@ const Earn: React.FC = () => {
                       height={10}
                       width={10}
                     />
-                    <span>7 LQD per AR APY</span>
+                    <div className={styles.lqdPerAOContainer}>
+                      <span>
+                        {!lqdPerAO ? (
+                          <SkeletonLoading
+                            style={{ width: "10px", height: "10px" }}
+                          />
+                        ) : (
+                          <span>{formatTMB(lqdPerAO)}</span>
+                        )}
+                      </span>
+                      <span>LQD per AO daily</span>
+                    </div>
                   </p>
                 </div>
               </div>

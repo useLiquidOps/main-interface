@@ -24,15 +24,6 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   const { data: positionBalance } = useGetPosition(tokenAddress);
   const { data: lentBalance } = useGetPositionBalance(tokenAddress);
   const { data: protocolStats } = useProtocolStats(asset.ticker.toUpperCase());
-  // const { data: earnings } = useEarnings(asset.ticker.toUpperCase());
-
-  // const qtyEarnings = useMemo(
-  //   () => ({
-  //     base: new Quantity(earnings?.base || 0n, asset?.baseDenomination || 0n),
-  //     profit: new Quantity(earnings?.profit || 0n, asset?.baseDenomination || 0n)
-  //   }),
-  //   [earnings, asset]
-  // );
 
   const modal = useModal();
 
@@ -79,8 +70,11 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
     });
   }, [asset, currentBalance]);
 
+  // Add class to hide tooltips when modal is open
+  const wrapperClasses = `${styles.assetRowWrapper} ${modal.modalType ? "modal-open" : ""}`;
+
   return (
-    <div className={styles.assetRowWrapper}>
+    <div className={wrapperClasses}>
       <Link href={`/${asset.cleanTicker}`} className={styles.assetRow}>
         <div className={styles.assetInfo}>
           <div className={styles.iconWrapper}>
@@ -95,19 +89,6 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
               />
             ) : (
               <p className={styles.amount}>
-                {/* {(mode === "lend" && (
-                  <>
-                    {qtyEarnings?.base?.toLocaleString(undefined, { maximumFractionDigits: 2 }) || "0"}
-                    {qtyEarnings?.profit && !Quantity.eq(qtyEarnings.profit, new Quantity(0n, 0n)) && (
-                      <>
-                        {" + "}
-                        <span className={styles.earned}>
-                          {qtyEarnings?.profit?.toLocaleString(undefined, { maximumFractionDigits: Number(asset?.denomination) as any || 12 }) || "0"}
-                        </span>
-                      </>
-                    )}
-                  </>
-                )) || formattedBalance} */}
                 {formattedBalance} {asset?.cleanTicker}
               </p>
             )}
@@ -117,7 +98,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
         <div className={styles.aprInfo}>
           {isDeprecated ? (
             <p className={styles.deprecated}>Deprecated</p>
-          ) : mode === "borrow" && !asset.borrowingEnabled ? (
+          ) : mode === "borrow" && asset.borrowingDisabled ? (
             <div className={styles.borrowingDisabledContainer}>
               <p className={styles.borrowingDisabled}>
                 <span>Borrowing</span> <span>disabled</span>
@@ -195,7 +176,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
         </div>
 
         <div className={styles.actionButtons}>
-          {!isDeprecated && (mode === "lend" || asset.borrowingEnabled) && (
+          {!isDeprecated && (mode === "lend" || !asset.borrowingDisabled) && (
             <button
               className={styles.supplyBorrowButton}
               onClick={handleDoAction}

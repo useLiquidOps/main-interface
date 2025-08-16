@@ -134,10 +134,10 @@ const Header: React.FC<HeaderProps> = ({
               <p>Markets</p>
             </Link>
             {/* <Link
-              href="/strategies"
-              className={isLinkActive("/strategies") ? styles.activeLink : ""}
+              href="/earn"
+              className={isLinkActive("/earn") ? styles.activeLink : ""}
             >
-              <p>Strategies</p>
+              <p>Earn</p>
             </Link> */}
             <MoreDropdown label="Bridge" items={bridgeItems} />
             <MoreDropdown label="More" items={moreMenuItems} />

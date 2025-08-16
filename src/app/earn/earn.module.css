@@ -1,0 +1,168 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  background-color: var(--background);
+  overflow-y: auto;
+  min-height: calc(100vh - 150px);
+}
+
+.bodyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  width: 1000px;
+  min-height: calc(100vh - 150px);
+  gap: 50px;
+}
+
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-ultramarine);
+}
+
+.learnMore {
+  font-size: 0.7rem;
+  font-weight: 500;
+  width: fit-content;
+  color: var(--secondary-slate-blue);
+}
+
+.loBalanceContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.loBalance {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7.5px;
+  font-size: 30px;
+  text-align: right;
+  font-weight: 500;
+}
+
+.loTitle {
+  font-size: 10px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--primary-ultramarine);
+}
+
+.depositSection {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.depositAsset {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: left;
+  align-items: top;
+  gap: 25px;
+}
+
+.assetSquareContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.assetSquare {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  height: 150px;
+  width: 150px;
+  background-color: white;
+  border-radius: 24px;
+  padding: 15px;
+  border: 4px solid white;
+  cursor: pointer;
+  gap: 5px;
+}
+
+.activeSquare {
+  border: 4px solid var(--primary-palatinate-blue);
+  cursor: default;
+}
+
+.assetSquareDetails {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  gap: 2.5px;
+}
+
+.assetName {
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--primary-ultramarine);
+}
+
+.assetDetails {
+  display: flex;
+  font-weight: 500;
+  font-size: 10px;
+  gap: 2.5px;
+  color: var(--secondary-slate-blue);
+}
+
+.lqdPerAOContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5px;
+}
+
+.comingSoonBanner {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--primary-palatinate-blue);
+  color: white;
+  font-size: 8px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.depositAssetPanelContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+}

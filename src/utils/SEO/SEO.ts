@@ -18,7 +18,7 @@ const imagePath = "https://liquidops.io/SEO/home.png";
 
 // global SEO vars
 export const SEO = {
-  name: "LiquidOps | Home",
+  name: "LiquidOps - Lending and borrowing on Arweave and AO.",
   url: "https://liquidops.io",
   description: siteWideDescription,
   keyWords,

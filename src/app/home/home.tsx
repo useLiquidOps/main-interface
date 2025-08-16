@@ -1,7 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "./home.module.css";
-import Header from "../../components/Header/Header";
 import AssetDisplay from "./AssetDisplay/AssetDisplay";
 import WithdrawRepay from "./WithdrawRepay/WithdrawRepay";
 import ActionTab from "./ActionTab/ActionTab";
@@ -17,51 +16,11 @@ import { useAccountTab } from "@/components/Connect/accountTabContext";
 import NetWorth from "./NetWorth/NetWorth";
 import SupplyBorrow from "./SupplyBorrow/SupplyBorrow";
 import Strategies from "./Strategies/Strategies";
-import { checkConnection } from "@/utils/Wallets/checkConnection";
-import { useHighestAPY } from "@/hooks/LiquidOpsData/useHighestAPY";
-import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
-import Link from "next/link";
+import ConnectWalletWall from "@/components/ConnectWalletWall/ConnectWalletWall";
 
 function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
   const { setAccountTab } = useAccountTab();
-  const [isConnected, setIsConnected] = useState(false);
-  const [isCheckingConnection, setIsCheckingConnection] = useState(true); // Add loading state
-  const [triggerConnect, setTriggerConnect] = useState(false);
-
-  const { data: highestAPYData, isLoading: isApyLoading } = useHighestAPY();
-
-  const highestAPY = highestAPYData?.highestAPY;
-  const highestTicker = highestAPYData?.highestTicker;
-
-  useEffect(() => {
-    const checkWalletConnection = async () => {
-      try {
-        const connected = await checkConnection();
-        setIsConnected(connected);
-      } catch (error) {
-        console.error("Error checking wallet connection:", error);
-        setIsConnected(false);
-      } finally {
-        setIsCheckingConnection(false); // Set loading to false after initial check
-      }
-    };
-
-    checkWalletConnection();
-
-    // Check connection status periodically (but don't show loading after first check)
-    const interval = setInterval(async () => {
-      try {
-        const connected = await checkConnection();
-        setIsConnected(connected);
-      } catch (error) {
-        console.error("Error checking wallet connection:", error);
-        setIsConnected(false);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleOpenAccountTab = async () => {
     const permissions = await window.arweaveWallet.getPermissions();
@@ -72,32 +31,16 @@ function HomeContent() {
     }
   };
 
-  const handleWalletConnected = () => {
-    setIsConnected(true);
-    setIsCheckingConnection(false); // Ensure loading state is cleared
-  };
-
-  const handleConnectClick = () => {
-    // Trigger the connect modal in the header
-    setTriggerConnect(true);
-    // Reset the trigger after a short delay
-    setTimeout(() => setTriggerConnect(false), 100);
-  };
-
   return (
     <div className={styles.page}>
       <BetaDisclaimer />
-      <Header
-        triggerConnect={triggerConnect}
-        onWalletConnected={handleWalletConnected}
-      />
-      <div className={styles.body}>
-        {isCheckingConnection ? null : isConnected ? ( // Show nothing while checking connection
+      <ConnectWalletWall customMessage="Please connect your wallet to start lending and borrowing">
+        <div className={styles.body}>
           <div className={styles.bodyContainer}>
             <div className={styles.widgetContainer}>
               <div className={styles.widgetLeftContainer}>
                 {/* <NetWorth />
-              <SupplyBorrow /> */}
+                <SupplyBorrow /> */}
                 <div></div>
                 <div></div>
               </div>
@@ -119,35 +62,8 @@ function HomeContent() {
               <AssetDisplay mode="borrow" />
             </div>
           </div>
-        ) : (
-          <div className={styles.connectPrompt}>
-            <p className={styles.connectWalletTitle}>
-              Please connect your wallet
-            </p>
-
-            <div className={styles.highestAPY}>
-              <div className={styles.highestAPYText}>
-                <span>Supplying liquidity can earn you up to</span>
-                {isApyLoading ||
-                highestAPY === undefined ||
-                highestAPY === null ? (
-                  <SkeletonLoading style={{ width: "60px", height: "13px" }} />
-                ) : (
-                  <Link className={styles.apyNumber} href={`/${highestTicker}`}>
-                    {highestAPY.toFixed(2)}% APY
-                  </Link>
-                )}
-              </div>
-            </div>
-            <button
-              className={styles.connectButton}
-              onClick={handleConnectClick}
-            >
-              Login
-            </button>
-          </div>
-        )}
-      </div>
+        </div>
+      </ConnectWalletWall>
 
       <AnimatePresence>
         {modalType && (

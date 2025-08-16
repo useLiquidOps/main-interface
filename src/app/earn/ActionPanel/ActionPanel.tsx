@@ -18,10 +18,11 @@ import { useTokenPrice } from "@/hooks/data/useTokenPrice";
 
 interface ActionPanelProps {
   ticker: string;
-  mode: "delegate" | "withdraw";
 }
 
-const ActionPanel: React.FC<ActionPanelProps> = ({ ticker, mode }) => {
+const ActionPanel: React.FC<ActionPanelProps> = ({ ticker }) => {
+  const [mode, setMode] = useState<"delegate" | "withdraw">("delegate");
+
   const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
   const { tokenAddress } = tokenInput(ticker.toUpperCase());
   const { data: walletBalance, isLoading: isLoadingBalance } =
@@ -60,6 +61,12 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ ticker, mode }) => {
     setInputValue(maxAmount.toString());
   };
 
+  const handleModeChange = (newMode: "delegate" | "withdraw") => {
+    setMode(newMode);
+    // Reset input when switching modes
+    resetInput();
+  };
+
   //   const handleSubmit = () => {
   //     if (!inputValue || !walletBalance) return;
 
@@ -79,10 +86,23 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ ticker, mode }) => {
 
   return (
     <div className={styles.actionTab}>
-      <div className={styles.titleContainer}>
-        <p className={styles.title}>
-          {mode === "delegate" ? "Delegate" : "Withdraw"}
-        </p>
+      <div className={styles.toggleContainer}>
+        <button
+          className={`${styles.toggleButton} ${
+            mode === "delegate" ? styles.toggleButtonActive : ""
+          }`}
+          onClick={() => handleModeChange("delegate")}
+        >
+          Delegate
+        </button>
+        <button
+          className={`${styles.toggleButton} ${
+            mode === "withdraw" ? styles.toggleButtonActive : ""
+          }`}
+          onClick={() => handleModeChange("withdraw")}
+        >
+          Withdraw
+        </button>
       </div>
 
       <InputBox

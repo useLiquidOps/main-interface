@@ -5,8 +5,14 @@ import Header from "../../components/Header/Header";
 import Image from "next/image";
 import Footer from "@/components/Footer/Footer";
 import ActionPanel from "./ActionPanel/ActionPanel";
+import { useUserBalance } from "@/hooks/data/useUserBalance";
+import { formatTMB } from "@/components/utils/utils";
+import { SkeletonLoading } from "@/components/SkeletonLoading/SkeletonLoading";
+import { lqdTokenAddress } from "liquidops";
 
 const Earn: React.FC = () => {
+  const { data: LQDBalance } = useUserBalance(lqdTokenAddress);
+
   return (
     <div className={styles.page}>
       <BetaDisclaimer />
@@ -31,7 +37,16 @@ const Earn: React.FC = () => {
             <div className={styles.loBalanceContainer}>
               <p className={styles.loBalance}>
                 <Image src="/tokens/LQD.svg" alt="LQD" width={20} height={20} />
-                <span>1,323,300.00</span>
+                <span>
+                  {" "}
+                  {!LQDBalance ? (
+                    <SkeletonLoading
+                      style={{ width: "120px", height: "30px" }}
+                    />
+                  ) : (
+                    <span>{formatTMB(LQDBalance)}</span>
+                  )}
+                </span>
               </p>
               <p className={styles.loTitle}>Your LQD balance</p>
             </div>

@@ -4,10 +4,11 @@ import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
 import { WrappedQuantity } from "@/utils/caches/cacheUtils";
 import { getDenomination } from "@/utils/caches/cacheUtils";
 import { Quantity } from "ao-tokens-lite";
+import { lqdTokenAddress } from "liquidops";
 
 export type UserBalanceCache = WrappedQuantity;
 
-export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
+export function useUserBalance(tokenAddress: string) {
   const { data: walletAddress } = useWalletAddress();
 
   return useQuery({
@@ -19,6 +20,10 @@ export function useUserBalance(tokenAddress: string, overrideCache?: boolean) {
         tokenAddress,
         walletAddress,
       });
+
+      if (tokenAddress === lqdTokenAddress) {
+        return new Quantity(balance.raw, 18n);
+      }
 
       const denomination = getDenomination(tokenAddress);
       if (denomination === undefined) {

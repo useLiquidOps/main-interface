@@ -1,8 +1,13 @@
+
 .assetRowWrapper {
   position: relative;
   overflow: hidden;
   border-radius: 10px;
   overflow: visible;
+}
+
+.assetRowWrapper.modal-open .tooltip {
+  display: none !important;
 }
 
 .assetRow {
@@ -171,7 +176,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  z-index: 10000;
+  z-index: 100;
 }
 
 .infoIcon {
@@ -196,12 +201,11 @@
   line-height: 1.4;
   width: 280px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
+  z-index: 50;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
   margin-top: 8px;
-  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -224,4 +228,12 @@
 .tooltipContainer:hover .tooltip {
   opacity: 1;
   pointer-events: auto;
+}
+
+body.modal-open .tooltip {
+  display: none !important;
+}
+
+body.modal-open .tooltip {
+  z-index: 1 !important;
 }

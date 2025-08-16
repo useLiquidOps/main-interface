@@ -30,7 +30,7 @@ const Earn: React.FC = () => {
                 target="_blank"
                 href="https://www.youtube.com/watch?v=PrZpgAP4qNo"
               >
-                Learn more
+                Learn more about delegations
               </a>
             </div>
 
@@ -152,7 +152,7 @@ const Earn: React.FC = () => {
               </div>
             </div>
             <div className={styles.depositAssetPanelContainer}>
-              <ActionPanel ticker="wAR" mode="delegate" />
+              <ActionPanel ticker="wAR" />
             </div>
           </div>
         </div>

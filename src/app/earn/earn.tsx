@@ -24,9 +24,6 @@ const Earn: React.FC = () => {
         <div className={styles.bodyContainer}>
           <div className={styles.topSection}>
             <div className={styles.titleContainer}>
-              <p className={styles.totalDeposits}>
-                Total fair launch deposits $1,343,310.33
-              </p>
               <h2 className={styles.title}>Choose token to delegate</h2>
               <a
                 className={styles.learnMore}

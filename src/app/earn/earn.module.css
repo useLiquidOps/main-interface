@@ -45,12 +45,6 @@
   color: var(--primary-ultramarine);
 }
 
-.totalDeposits {
-  font-weight: 500;
-  font-size: 1rem;
-  color: var(--primary-palatinate-blue);
-}
-
 .learnMore {
   font-size: 0.7rem;
   font-weight: 500;

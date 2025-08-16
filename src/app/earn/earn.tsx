@@ -85,9 +85,10 @@ const Earn: React.FC = () => {
                           <span>{formatTMB(lqdPerAO)}</span>
                         )}
                       </span>
-                      <span>LQD per AO daily</span>
+                      <span>LQD per AO</span>
                     </div>
                   </p>
+                  <p className={styles.assetDetails}>Distributed daily</p>
                 </div>
               </div>
 

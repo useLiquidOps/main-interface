@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useValueLimit } from "@/hooks/data/useValueLimit";
 import { useTokenPrice } from "@/hooks/data/useTokenPrice";
+import { formatTMB } from "@/components/utils/utils";
 
 interface ActionPanelProps {
   ticker: string;
@@ -24,9 +25,9 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ ticker }) => {
   const [mode, setMode] = useState<"delegate" | "withdraw">("delegate");
 
   const { price: tokenPrice } = useTokenPrice(ticker.toUpperCase());
-  const { tokenAddress } = tokenInput(ticker.toUpperCase());
-  const { data: walletBalance, isLoading: isLoadingBalance } =
-    useUserBalance(tokenAddress);
+  const walletBalance = new Quantity(1, 1n);
+  const isLoadingBalance = false;
+  const delegatedBalance = new Quantity(1, 1n);
 
   //   const { lend, isLending, lendError } = useLend({
   //     onSuccess: onClose,

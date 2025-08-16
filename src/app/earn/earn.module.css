@@ -49,6 +49,7 @@
   font-size: 0.7rem;
   font-weight: 500;
   width: fit-content;
+  color: var(--secondary-slate-blue);
 }
 
 .loBalanceContainer {
@@ -125,6 +126,7 @@
 .assetName {
   font-weight: 600;
   font-size: 20px;
+  color: var(--primary-ultramarine);
 }
 
 .assetDetails {
@@ -132,7 +134,7 @@
   font-weight: 500;
   font-size: 10px;
   gap: 2.5px;
-  color: var(--primary-ultramarine);
+  color: var(--secondary-slate-blue);
 }
 
 .lqdPerAOContainer {

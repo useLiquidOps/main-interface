@@ -30,7 +30,7 @@ const Earn: React.FC = () => {
                 target="_blank"
                 href="https://www.youtube.com/watch?v=PrZpgAP4qNo"
               >
-                Learn more about delegations
+                Learn more about the LQD fair launch
               </a>
             </div>
 
@@ -154,7 +154,7 @@ const Earn: React.FC = () => {
               </div>
             </div>
             <div className={styles.depositAssetPanelContainer}>
-              <ActionPanel ticker="wAR" />
+              <ActionPanel ticker="AR" />
             </div>
           </div>
         </div>

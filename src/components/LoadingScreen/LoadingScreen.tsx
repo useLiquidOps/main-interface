@@ -12,7 +12,8 @@ type Action =
   | "unLending"
   | "borrowing"
   | "liquidating"
-  | "repaying";
+  | "repaying"
+  | "delegating";
 
 interface LoadingScreenProps {
   loadingState: LoadingState;
@@ -35,6 +36,14 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
   onClose,
   error,
 }) => {
+  const isDelegating = action === "delegating";
+  const shouldShowTxLink =
+    !isDelegating &&
+    txId &&
+    loadingState !== "loading" &&
+    loadingState !== "signing" &&
+    loadingState !== "failed";
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -92,7 +101,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
               ) : (
                 loadingState !== "success" && (
                   <p className={styles.stateMessage}>
-                    {formatStateMessage(loadingState)}
+                    {isDelegating && loadingState === "loading"
+                      ? "Updating delegation preferences"
+                      : formatStateMessage(loadingState)}
                   </p>
                 )
               )}
@@ -107,18 +118,17 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                   alt={tokenTicker}
                 />
               </div>
-              {loadingState !== "loading" &&
-                loadingState !== "signing" &&
-                loadingState !== "failed" && (
-                  <a
-                    className={styles.viewLink}
-                    href={`https://www.ao.link/#/message/${txId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View on ao.link
-                  </a>
-                )}
+
+              {shouldShowTxLink && (
+                <a
+                  className={styles.viewLink}
+                  href={`https://www.ao.link/#/message/${txId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View on ao.link
+                </a>
+              )}
             </div>
           </motion.div>
         </motion.div>
@@ -136,6 +146,7 @@ const formatAction = (action: Action): string => {
     borrowing: "Borrowing",
     liquidating: "Liquidating",
     repaying: "Repaying",
+    delegating: "Setting delegation to:",
   };
   return actionMap[action];
 };

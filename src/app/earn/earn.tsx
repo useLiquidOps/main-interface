@@ -30,7 +30,7 @@ const Earn: React.FC = () => {
                   target="_blank"
                   href="https://www.youtube.com/watch?v=PrZpgAP4qNo"
                 >
-                  Learn more about the LQD fair launch
+                  What is this? Learn more about the LQD fair launch
                 </a>
               </div>
 

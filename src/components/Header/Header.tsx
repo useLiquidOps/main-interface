@@ -31,7 +31,10 @@ const Header: React.FC<HeaderProps> = ({
   const [isClient, setIsClient] = useState(false);
   const connectRef = useRef<ConnectRef>(null);
 
-  const bridgeItems = [{ label: "AOX", href: "https://aox.xyz/#/bridge" }];
+  const bridgeItems = [
+    { label: "Vento", href: "https://ventoswap.com/?tab=bridge" },
+    { label: "AOX", href: "https://aox.xyz/#/bridge" },
+  ];
 
   const moreMenuItems = [
     {

@@ -37,8 +37,8 @@ const MoreDropdown: React.FC<MoreDropdownProps> = ({ items, label }) => {
             >
               {label === "Bridge" && (
                 <Image
-                  src={"/partners/aox.svg"}
-                  alt={`AOX`}
+                  src={`/partners/${item.label.toLowerCase()}.svg`}
+                  alt={item.label}
                   width={25}
                   height={25}
                 />

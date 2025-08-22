@@ -158,7 +158,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                 loadingState !== "success" && (
                   <p className={styles.stateMessage}>
                     {isDelegating && loadingState === "loading"
-                      ? "Updating delegation preferences"
+                      ? ""
                       : formatStateMessage(loadingState)}
                   </p>
                 )

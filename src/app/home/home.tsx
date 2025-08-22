@@ -15,6 +15,7 @@ import BetaDisclaimer from "@/components/BetaDisclaimer/BetaDisclaimer";
 import { useAccountTab } from "@/components/Connect/accountTabContext";
 import ConnectWalletWall from "@/components/ConnectWalletWall/ConnectWalletWall";
 
+
 function HomeContent() {
   const { modalType, assetData, closeModal } = useModal();
   const { setAccountTab } = useAccountTab();

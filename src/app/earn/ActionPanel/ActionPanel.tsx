@@ -186,7 +186,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ ticker }) => {
       <div className={styles.infoContainer}>
         <div className={styles.infoDetails}>
           <div className={styles.infoRow}>
-            <span className={styles.infoLabel}>Current AO delegation:</span>
+            <span className={styles.infoLabel}>Current LQD AO delegation:</span>
             {isDelegationLoading ? (
               <SkeletonLoading style={{ width: "50px", height: "10px" }} />
             ) : (

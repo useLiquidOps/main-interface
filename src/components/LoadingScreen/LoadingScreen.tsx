@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import styles from "./LoadingScreen.module.css";
 import Spinner from "../Spinner/Spinner";
@@ -24,6 +24,7 @@ interface LoadingScreenProps {
   isOpen: boolean;
   onClose: () => void;
   error?: Error | null;
+  enableSounds?: boolean;
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
@@ -35,7 +36,62 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
   isOpen,
   onClose,
   error,
+  enableSounds = true,
 }) => {
+  const previousLoadingStateRef = useRef<LoadingState | null>(null);
+  const successAudioRef = useRef<HTMLAudioElement | null>(null);
+  const failAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize audio elements
+  useEffect(() => {
+    if (enableSounds && typeof window !== "undefined") {
+      successAudioRef.current = new Audio("/sound-effects/success.mp3");
+      failAudioRef.current = new Audio("/sound-effects/fail.mp3");
+
+      // Preload audio files
+      successAudioRef.current.preload = "auto";
+      failAudioRef.current.preload = "auto";
+
+      // Set volume (optional - adjust as needed)
+      successAudioRef.current.volume = 0.5;
+      failAudioRef.current.volume = 0.5;
+    }
+
+    // Cleanup
+    return () => {
+      if (successAudioRef.current) {
+        successAudioRef.current.pause();
+        successAudioRef.current = null;
+      }
+      if (failAudioRef.current) {
+        failAudioRef.current.pause();
+        failAudioRef.current = null;
+      }
+    };
+  }, [enableSounds]);
+
+  // Play sound when state changes to success or failed
+  useEffect(() => {
+    const previousState = previousLoadingStateRef.current;
+
+    if (enableSounds && previousState && previousState !== loadingState) {
+      if (loadingState === "success" && successAudioRef.current) {
+        successAudioRef.current.currentTime = 0; // Reset to beginning
+        successAudioRef.current.play().catch((error) => {
+          console.warn("Could not play success sound:", error);
+        });
+      } else if (loadingState === "failed" && failAudioRef.current) {
+        failAudioRef.current.currentTime = 0; // Reset to beginning
+        failAudioRef.current.play().catch((error) => {
+          console.warn("Could not play fail sound:", error);
+        });
+      }
+    }
+
+    // Update the previous state
+    previousLoadingStateRef.current = loadingState;
+  }, [loadingState, enableSounds]);
+
   const isDelegating = action === "delegating";
   const shouldShowTxLink =
     !isDelegating &&

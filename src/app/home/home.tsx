@@ -34,6 +34,20 @@ function HomeContent() {
       <ConnectWalletWall customMessage="Please connect your wallet to start lending and borrowing">
         <div className={styles.body}>
           <div className={styles.bodyContainer}>
+            <div className={styles.widgetContainer}>
+              <div className={styles.widgetLeftContainer}></div>
+
+              <div className={styles.widgetRightContainer}>
+                <div></div>
+                <button
+                  className={styles.viewTxns}
+                  onClick={handleOpenAccountTab}
+                >
+                  View transactions
+                </button>
+              </div>
+            </div>
+
             <div className={styles.grid}>
               <AssetDisplay mode="lend" />
               <AssetDisplay mode="borrow" />

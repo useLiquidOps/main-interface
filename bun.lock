@@ -21,7 +21,7 @@
         "dotenv": "^16.5.0",
         "framer-motion": "^11.15.0",
         "idb-keyval": "^6.2.2",
-        "liquidops": "^1.2.18",
+        "liquidops": "^1.2.19",
         "lucide-react": "^0.483.0",
         "next": "14.2.15",
         "next-sitemap": "^4.2.3",
@@ -757,7 +757,7 @@
 
     "lightningcss-win32-x64-msvc": ["lightningcss-win32-x64-msvc@1.30.1", "", { "os": "win32", "cpu": "x64" }, "sha512-PVqXh48wh4T53F/1CCu8PIPCxLzWyCnn/9T5W1Jpmdy5h9Cwd+0YQS6/LwhHXSafuc61/xg9Lv5OrCby6a++jg=="],
 
-    "liquidops": ["liquidops@1.2.18", "", { "dependencies": { "ar-gql": "^2.0.2", "arbundles": "^0.11.2" }, "peerDependencies": { "@permaweb/aoconnect": ">= 0.0.85 < 1", "ao-tokens": ">= 0.0.6", "warp-arbundles": ">= 1.0.4" } }, "sha512-k7K0JB8Q3coA2rBnIv89gzsiKY/YeEcAcOiiKJoquq5ok3R1CtolWafQa1ozjsP/1qdu50HrREH06n+SVuxWgw=="],
+    "liquidops": ["liquidops@1.2.19", "", { "dependencies": { "ar-gql": "^2.0.2", "arbundles": "^0.11.2" }, "peerDependencies": { "@permaweb/aoconnect": ">= 0.0.85 < 1", "ao-tokens": ">= 0.0.6", "warp-arbundles": ">= 1.0.4" } }, "sha512-RI/TW7xvauEplmlSDoabio/MxBaroBT+TgHnpcgs3hfVEHCLq7PooCnRSHBF0UY4KxGLiBWasm4EpGz+m9xZng=="],
 
     "locate-path": ["locate-path@5.0.0", "", { "dependencies": { "p-locate": "^4.1.0" } }, "sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g=="],
 

@@ -76,13 +76,9 @@ const Header: React.FC<HeaderProps> = ({
           <div className={styles.bannerContent}>
             <span className={styles.bannerText}>
               🚀 The LQD fair launch is now live! Delegate AR tokens{" "}
-              <a
-                style={{ textDecoration: "underline" }}
-                target="_blank"
-                href="https://ao.arweave.net/#/delegate/"
-              >
+              <Link href="/earn" style={{ textDecoration: "underline" }}>
                 here
-              </a>
+              </Link>
             </span>
             <button
               className={styles.bannerCloseButton}

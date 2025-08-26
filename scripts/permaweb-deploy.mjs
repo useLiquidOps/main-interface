@@ -78,13 +78,14 @@ async function deploy() {
       // general
       "404": manifest.paths["404.html"],
       "markets": manifest.paths["markets.html"],
-      "strategies": manifest.paths["strategies.html"],
+      "earn": manifest.paths["earn.html"],
       // tokens
       "qAR": manifest.paths["qAR.html"],
       "wAR": manifest.paths["wAR.html"],
       "wUSDC": manifest.paths["wUSDC.html"],
       "wUSDT": manifest.paths["wUSDT.html"],
       "wETH": manifest.paths["wETH.html"],
+      "USDA": manifest.paths["USDA.html"],
     } 
     
     const tags = [

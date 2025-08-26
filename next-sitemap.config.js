@@ -28,6 +28,7 @@ module.exports = {
       { ticker: "wAR", name: "Wrapped Arweave" },
       { ticker: "wUSDT", name: "Wrapped USD Tether" },
       { ticker: "wETH", name: "Wrapped Ethereum" },
+      { ticker: "USDA", name: "Astro USD" },
     ];
 
     // Generate paths for all supported tokens

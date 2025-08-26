@@ -1,5 +1,3 @@
-// check marketStats.tsx for another data item
-
 export const defiLlamaIds: Record<string, string> = {
   qAR: "cd2164c7-66f3-455c-a690-e4fc778f8a72",
   wUSDC: "55e444cd-dae7-4ad6-8a3b-1ca4d1d44bae",
@@ -13,6 +11,7 @@ export const tickerToGeckoMap: Record<string, string> = {
   WAR: "arweave",
   WUSDT: "tether",
   WETH: "ethereum",
+  USDA: "usd-coin",
   // other data
   AR: "arweave",
   AO: "ao-computer",
@@ -21,16 +20,15 @@ export const tickerToGeckoMap: Record<string, string> = {
 };
 
 export const SUPPORTED_TOKENS = [
-  { ticker: "wAR", name: "Wrapped Arweave", assetDisplayOrder: 1 },
-  { ticker: "wUSDC", name: "Wrapped USD Circle", assetDisplayOrder: 2 },
-  { ticker: "wUSDT", name: "Wrapped USD Tether", assetDisplayOrder: 3 },
-  { ticker: "wETH", name: "Wrapped Ethereum", assetDisplayOrder: 4 },
-  { ticker: "qAR", name: "Quantum Arweave", assetDisplayOrder: 5 },
+  { ticker: "USDA", name: "Astro USD", assetDisplayOrder: 1 },
+  { ticker: "wAR", name: "Wrapped Arweave", assetDisplayOrder: 2 },
+  { ticker: "wUSDC", name: "Wrapped USD Circle", assetDisplayOrder: 3 },
+  { ticker: "wUSDT", name: "Wrapped USD Tether", assetDisplayOrder: 4 },
+  { ticker: "wETH", name: "Wrapped Ethereum", assetDisplayOrder: 5 },
+  { ticker: "qAR", name: "Quantum Arweave", assetDisplayOrder: 6 },
 ];
 
 export const DEPRECATED_TOKENS = ["qAR"];
-
-// NOTE: there is also a SUPPORTED_TOKENS in next-sitemap-config.js
 
 // Token hex color mapping for visualization
 export const TOKEN_COLORS: Record<string, string> = {
@@ -39,9 +37,8 @@ export const TOKEN_COLORS: Record<string, string> = {
   QAR: "#5f80fe",
   WUSDT: "#26A17B",
   WETH: "#2d2a28",
+  USDA: "#104124",
 };
-
-// NOTE: we need to update the permaweb-deploy file after every new page
 
 export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
   QAR: 3,
@@ -49,4 +46,5 @@ export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
   WUSDC: 2,
   WUSDT: 2,
   WETH: 6,
+  USDA: 2,
 };

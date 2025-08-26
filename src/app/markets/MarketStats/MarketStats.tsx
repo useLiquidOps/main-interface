@@ -53,6 +53,8 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
   const wethStats = useProtocolStats("WETH");
   const qarStats = useProtocolStats("QAR");
   const usdaStats = useProtocolStats("USDA");
+  const varStats = useProtocolStats("VAR");
+  const vusdcStats = useProtocolStats("VUSDC");
 
   // Map the stats to the tokens
   const statsMap = {
@@ -62,6 +64,8 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
     WETH: wethStats,
     QAR: qarStats,
     USDA: usdaStats,
+    VAR: varStats,
+    VUSDC: vusdcStats,
   };
 
   // Calculate the totals and token stats

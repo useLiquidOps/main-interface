@@ -12,6 +12,8 @@ export const tickerToGeckoMap: Record<string, string> = {
   WUSDT: "tether",
   WETH: "ethereum",
   USDA: "usd-coin",
+  VAR: "arweave",
+  VUSDC: "usd-coin",
   // other data
   AR: "arweave",
   AO: "ao-computer",
@@ -23,9 +25,11 @@ export const SUPPORTED_TOKENS = [
   { ticker: "USDA", name: "Astro USD", assetDisplayOrder: 1 },
   { ticker: "wAR", name: "Wrapped Arweave", assetDisplayOrder: 2 },
   { ticker: "wUSDC", name: "Wrapped USD Circle", assetDisplayOrder: 3 },
-  { ticker: "wUSDT", name: "Wrapped USD Tether", assetDisplayOrder: 4 },
-  { ticker: "wETH", name: "Wrapped Ethereum", assetDisplayOrder: 5 },
-  { ticker: "qAR", name: "Quantum Arweave", assetDisplayOrder: 6 },
+  { ticker: "vAR", name: "Vento Arweave", assetDisplayOrder: 4 },
+  { ticker: "vUSDC", name: "Vento USD Circle", assetDisplayOrder: 5 },
+  { ticker: "wUSDT", name: "Wrapped USD Tether", assetDisplayOrder: 6 },
+  { ticker: "wETH", name: "Wrapped Ethereum", assetDisplayOrder: 7 },
+  { ticker: "qAR", name: "Quantum Arweave", assetDisplayOrder: 8 },
 ];
 
 export const DEPRECATED_TOKENS = ["qAR"];
@@ -38,6 +42,8 @@ export const TOKEN_COLORS: Record<string, string> = {
   WUSDT: "#26A17B",
   WETH: "#2d2a28",
   USDA: "#104124",
+  VAR: "#232226",
+  VUSDC: "#2775ca",
 };
 
 export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
@@ -47,4 +53,6 @@ export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
   WUSDT: 2,
   WETH: 6,
   USDA: 2,
+  VAR: 3,
+  VUSDC: 2,
 };

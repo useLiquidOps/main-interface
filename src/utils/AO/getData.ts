@@ -1,7 +1,6 @@
 import { dryrun } from "@permaweb/aoconnect";
 import { DryRunResult } from "node_modules/@permaweb/aoconnect/dist/lib/dryrun";
 
-
 interface MessageTags {
   Target: string;
   Action: string;

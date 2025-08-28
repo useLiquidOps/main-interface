@@ -20,24 +20,23 @@ module.exports = {
         priority: 0.8,
         lastmod: new Date().toISOString(),
       },
-      // the tickers are 0.5
+      // the tickers are 0.7
     ];
-    const SUPPORTED_TOKENS = [
-      { ticker: "qAR", name: "Quantum Arweave" },
-      { ticker: "wUSDC", name: "Wrapped USD Circle" },
+    const TOKENS_TO_SHOW_ON_GOOGLE = [
+      { ticker: "USDA", name: "Astro USD" },
       { ticker: "wAR", name: "Wrapped Arweave" },
+      { ticker: "wUSDC", name: "Wrapped USD Circle" },
       { ticker: "wUSDT", name: "Wrapped USD Tether" },
       { ticker: "wETH", name: "Wrapped Ethereum" },
-      { ticker: "USDA", name: "Astro USD" },
       { ticker: "vAR", name: "Vento Arweave" },
       { ticker: "vUSDC", name: "Vento USD Circle" },
     ];
 
     // Generate paths for all supported tokens
-    const tokenPaths = SUPPORTED_TOKENS.map((token) => ({
+    const tokenPaths = TOKENS_TO_SHOW_ON_GOOGLE.map((token) => ({
       loc: `/${token.ticker}`,
       changefreq: "daily",
-      priority: 0.5,
+      priority: 0.7,
       lastmod: new Date().toISOString(),
     }));
 

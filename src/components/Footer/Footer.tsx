@@ -3,13 +3,10 @@ import styles from "./Footer.module.css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { GoogleAnalytics } from "../GoogleAnalytics/GoogleAnalytics";
-import packageInfo from "../../../package.json";
 
 const Footer = () => {
   // Use the environment variable set at build time from next.config.mjs
   const gitHash = process.env.NEXT_PUBLIC_GIT_HASH || "unknown";
-  // get UI version from package.json
-  const version = packageInfo.version;
   // State to control the analytics visibility
   const [showAnalytics, setShowAnalytics] = useState(false);
 
@@ -54,6 +51,13 @@ const Footer = () => {
           >
             Feedback
           </a>
+          <a
+            href="https://liquidops.arweave.net"
+            className={styles.support}
+            target="_blank"
+          >
+            Permasite
+          </a>
           <p
             className={styles.manageAnalytics}
             onClick={handleManageAnalytics}
@@ -62,16 +66,13 @@ const Footer = () => {
             Analytics
           </p>
 
-          <a
-            href="https://liquidops.arweave.net"
-            className={styles.support}
-            target="_blank"
-          >
-            Permasite
-          </a>
-
           <div className={styles.version}>
-            <p>v{version}</p>
+            <a href="/legal/ToS.pdf" className={styles.support} target="_blank">
+              Terms
+            </a>
+            <a href="/legal/PP.pdf" className={styles.support} target="_blank">
+              Privacy
+            </a>
             <a
               href={`https://github.com/useLiquidOps/main-interface/commit/${gitHash}`}
               target="_blank"

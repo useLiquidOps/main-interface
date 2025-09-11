@@ -51,18 +51,17 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
   const wusdcStats = useProtocolStats("WUSDC");
   const wusdtStats = useProtocolStats("WUSDT");
   const wethStats = useProtocolStats("WETH");
-  const qarStats = useProtocolStats("QAR");
   const usdaStats = useProtocolStats("USDA");
   const varStats = useProtocolStats("VAR");
   const vusdcStats = useProtocolStats("VUSDC");
 
   // Map the stats to the tokens
+  // Note: remember to also update the variable at the bottom of the page
   const statsMap = {
     WAR: warStats,
     WUSDC: wusdcStats,
     WUSDT: wusdtStats,
     WETH: wethStats,
-    QAR: qarStats,
     USDA: usdaStats,
     VAR: varStats,
     VUSDC: vusdcStats,
@@ -137,7 +136,9 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
       wusdcStats,
       wusdtStats,
       wethStats,
-      qarStats,
+      usdaStats,
+      varStats,
+      vusdcStats,
     ]);
 
   // Filter token stats for pie charts based on showDeprecated flag

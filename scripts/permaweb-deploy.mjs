@@ -80,7 +80,6 @@ async function deploy() {
       "markets": manifest.paths["markets.html"],
       "earn": manifest.paths["earn.html"],
       // tokens
-      "qAR": manifest.paths["qAR.html"],
       "wAR": manifest.paths["wAR.html"],
       "wUSDC": manifest.paths["wUSDC.html"],
       "wUSDT": manifest.paths["wUSDT.html"],

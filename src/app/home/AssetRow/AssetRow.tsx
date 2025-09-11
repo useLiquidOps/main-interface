@@ -80,7 +80,18 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   return (
     <div className={wrapperClasses}>
       {hasSpecialStyling && (
-        <div className={styles.aoLabel}>Continues earning AO while lent</div>
+        <div className={styles.aoLabel}>
+          <span>Continues earning</span>
+
+          <Image
+            src={"/partners/AO.svg"}
+            alt={asset.name}
+            width={11}
+            height={11}
+          />
+
+          <span>if supplied</span>
+        </div>
       )}
       <Link href={`/${asset.cleanTicker}`} className={styles.assetRow}>
         <div className={styles.assetInfo}>

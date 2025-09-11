@@ -255,9 +255,13 @@ body.modal-open .tooltip {
   background-color: var(--primary-palatinate-blue);
   color: #ffffff;
   padding: 2px 6px;
-  font-size: 7px;
+  font-size: 8px;
   font-weight: bold;
   border-radius: 4px;
   z-index: 10;
   pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
 }

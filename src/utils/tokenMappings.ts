@@ -12,7 +12,7 @@ export const tickerToGeckoMap: Record<string, string> = {
   USDA: "usd-coin",
   VAR: "arweave",
   VUSDC: "usd-coin",
-  VDAI: "DAI",
+  VDAI: "dai",
   VETH: "ethereum",
   // other data
   AR: "arweave",

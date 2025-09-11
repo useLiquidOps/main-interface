@@ -89,8 +89,6 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
             width={11}
             height={11}
           />
-
-          <span>if supplied</span>
         </div>
       )}
       <Link href={`/${asset.cleanTicker}`} className={styles.assetRow}>

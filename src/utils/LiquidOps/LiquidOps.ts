@@ -5,6 +5,4 @@ import { createDataItemSigner } from "@permaweb/aoconnect";
 const arweaveWallet = window.arweaveWallet;
 const signer = createDataItemSigner(arweaveWallet);
 
-export const LiquidOpsClient = new LiquidOps(signer, {
-  CU_URL: "https://cu.liquidops.io/",
-});
+export const LiquidOpsClient = new LiquidOps(signer);

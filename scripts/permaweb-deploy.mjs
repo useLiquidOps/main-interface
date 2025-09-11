@@ -87,6 +87,8 @@ async function deploy() {
       "USDA": manifest.paths["USDA.html"],
       "vAR": manifest.paths["vAR.html"],
       "vUSDC": manifest.paths["vUSDC.html"],
+      "vDAI": manifest.paths["vDAI.html"],
+      "vETH": manifest.paths["vETH.html"],
     } 
     
     const tags = [

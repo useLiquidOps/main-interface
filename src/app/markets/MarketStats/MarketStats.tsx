@@ -54,6 +54,8 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
   const usdaStats = useProtocolStats("USDA");
   const varStats = useProtocolStats("VAR");
   const vusdcStats = useProtocolStats("VUSDC");
+  const vdaiStats = useProtocolStats("VDAI");
+  const vethStats = useProtocolStats("VETH");
 
   // Map the stats to the tokens
   // Note: remember to also update the variable at the bottom of the page
@@ -65,6 +67,8 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
     USDA: usdaStats,
     VAR: varStats,
     VUSDC: vusdcStats,
+    VDAI: vdaiStats,
+    VETH: vethStats,
   };
 
   // Calculate the totals and token stats
@@ -139,6 +143,8 @@ export const MarketStats: React.FC<MarketStatsProps> = ({
       usdaStats,
       varStats,
       vusdcStats,
+      vdaiStats,
+      vethStats,
     ]);
 
   // Filter token stats for pie charts based on showDeprecated flag

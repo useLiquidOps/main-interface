@@ -12,6 +12,8 @@ export const tickerToGeckoMap: Record<string, string> = {
   USDA: "usd-coin",
   VAR: "arweave",
   VUSDC: "usd-coin",
+  VDAI: "DAI",
+  VETH: "ethereum",
   // other data
   AR: "arweave",
   AO: "ao-computer",
@@ -20,13 +22,15 @@ export const tickerToGeckoMap: Record<string, string> = {
 };
 
 export const SUPPORTED_TOKENS = [
-  { ticker: "USDA", name: "Astro USD", assetDisplayOrder: 1 },
-  { ticker: "wAR", name: "Wrapped Arweave", assetDisplayOrder: 2 },
-  { ticker: "wUSDC", name: "Wrapped USD Circle", assetDisplayOrder: 3 },
-  { ticker: "vAR", name: "Vento Arweave", assetDisplayOrder: 4 },
-  { ticker: "vUSDC", name: "Vento USD Circle", assetDisplayOrder: 5 },
-  { ticker: "wUSDT", name: "Wrapped USD Tether", assetDisplayOrder: 6 },
-  { ticker: "wETH", name: "Wrapped Ethereum", assetDisplayOrder: 7 },
+  { ticker: "wAR", name: "Wrapped Arweave", assetDisplayOrder: 1 },
+  { ticker: "wUSDC", name: "Wrapped USD Circle", assetDisplayOrder: 2 },
+  { ticker: "USDA", name: "Astro USD", assetDisplayOrder: 3 },
+  { ticker: "vDAI", name: "Vento DAI", assetDisplayOrder: 4 },
+  { ticker: "wUSDT", name: "Wrapped USD Tether", assetDisplayOrder: 5 },
+  { ticker: "vETH", name: "Vento Ethereum", assetDisplayOrder: 6 },
+  { ticker: "vAR", name: "Vento Arweave", assetDisplayOrder: 7 },
+  { ticker: "vUSDC", name: "Vento USD Circle", assetDisplayOrder: 8 },
+  { ticker: "wETH", name: "Wrapped Ethereum", assetDisplayOrder: 9 },
 ];
 
 export const DEPRECATED_TOKENS = ["qAR"];
@@ -40,6 +44,8 @@ export const TOKEN_COLORS: Record<string, string> = {
   USDA: "#104124",
   VAR: "#232226",
   VUSDC: "#2775ca",
+  VDAI: "#f5ac37",
+  VETH: "#2d2a28",
 };
 
 export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
@@ -50,4 +56,6 @@ export const TOKEN_DECIMAL_PLACES: { [key: string]: number } = {
   USDA: 2,
   VAR: 3,
   VUSDC: 2,
+  vDAI: 2,
+  VETH: 6,
 };

@@ -236,3 +236,28 @@ body.modal-open .tooltip {
 body.modal-open .tooltip {
   z-index: 1 !important;
 }
+
+/* AO airdrop banner */
+
+.specialStyling {
+  position: relative;
+}
+
+.specialStyling .assetRow {
+  border: 3px solid var(--primary-palatinate-blue);
+  padding: 9px 13px;
+}
+
+.aoLabel {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: var(--primary-palatinate-blue);
+  color: #ffffff;
+  padding: 2px 6px;
+  font-size: 7px;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 10;
+  pointer-events: none;
+}

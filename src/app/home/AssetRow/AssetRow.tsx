@@ -34,6 +34,10 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   // Check if the token is deprecated
   const isDeprecated = DEPRECATED_TOKENS.includes(asset.cleanTicker);
 
+  // Check if this should have special styling (WAR in lend mode)
+  const hasSpecialStyling =
+    asset.ticker.toUpperCase() === "WAR" && mode === "lend";
+
   const actionDo = mode === "lend" ? "Supply" : "Borrow";
   const actionReverse = mode === "lend" ? "Withdraw" : "Repay";
 
@@ -71,10 +75,13 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
   }, [asset, currentBalance]);
 
   // Add class to hide tooltips when modal is open
-  const wrapperClasses = `${styles.assetRowWrapper} ${modal.modalType ? "modal-open" : ""}`;
+  const wrapperClasses = `${styles.assetRowWrapper} ${modal.modalType ? "modal-open" : ""} ${hasSpecialStyling ? styles.specialStyling : ""}`;
 
   return (
     <div className={wrapperClasses}>
+      {hasSpecialStyling && (
+        <div className={styles.aoLabel}>Continues earning AO while lent</div>
+      )}
       <Link href={`/${asset.cleanTicker}`} className={styles.assetRow}>
         <div className={styles.assetInfo}>
           <div className={styles.iconWrapper}>

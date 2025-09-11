@@ -29,7 +29,7 @@ export const SUPPORTED_TOKENS = [
   { ticker: "wETH", name: "Wrapped Ethereum", assetDisplayOrder: 7 },
 ];
 
-export const DEPRECATED_TOKENS = [];
+export const DEPRECATED_TOKENS = ['qAR'];
 
 // Token hex color mapping for visualization
 export const TOKEN_COLORS: Record<string, string> = {

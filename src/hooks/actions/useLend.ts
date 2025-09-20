@@ -1,11 +1,12 @@
+"use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { tokenData, tokenInput } from "liquidops";
+import LiquidOps, { tokenData, tokenInput } from "liquidops";
 import { Quantity } from "ao-tokens-lite";
 import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
 import { useContext } from "react";
 import { NotificationContext } from "@/components/notifications/NotificationProvider";
 import { formatQty } from "@/utils/LiquidOps/tokenFormat";
+import { createDataItemSigner } from "@permaweb/aoconnect";
 
 interface LendParams {
   token: string;
@@ -26,6 +27,9 @@ export function useLend({ onSuccess }: Params = {}) {
   const lendMutation = useMutation({
     mutationFn: async ({ token, quantity }: LendParams) => {
       try {
+        const LiquidOpsClient = new LiquidOps(
+          createDataItemSigner(window.arweaveWallet),
+        );
         const walletAddress = await window.arweaveWallet.getActiveAddress();
         const transferId = await LiquidOpsClient.lend({
           token,
@@ -129,6 +133,9 @@ export function useLend({ onSuccess }: Params = {}) {
   const unlendMutation = useMutation({
     mutationFn: async ({ token, quantity }: UnlendParams) => {
       try {
+        const LiquidOpsClient = new LiquidOps(
+          createDataItemSigner(window.arweaveWallet),
+        );
         const walletAddress = await window.arweaveWallet.getActiveAddress();
         const messageId = await LiquidOpsClient.unLend({
           token,

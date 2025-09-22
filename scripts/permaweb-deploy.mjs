@@ -109,6 +109,8 @@ async function deploy() {
 
     console.log("📜 LOG > ANT INFO:", info);
 
+    console.log('ARNS needed ID: ', manifestReceipt.id)
+
     const { id: txId } = await ant.setRecord(
       {
         undername: "@",

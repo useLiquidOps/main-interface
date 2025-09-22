@@ -1,11 +1,12 @@
+"use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LiquidOpsClient } from "@/utils/LiquidOps/LiquidOps";
-import { tokenInput, tokenData } from "liquidops";
+import LiquidOps, { tokenInput, tokenData } from "liquidops";
 import { PendingTxContext } from "@/components/PendingTransactions/PendingTransactions";
 import { useContext } from "react";
 import { Quantity } from "ao-tokens-lite";
 import { NotificationContext } from "@/components/notifications/NotificationProvider";
 import { formatQty } from "@/utils/LiquidOps/tokenFormat";
+import { createDataItemSigner } from "@permaweb/aoconnect";
 
 interface BorrowParams {
   token: string;
@@ -26,6 +27,9 @@ export function useBorrow({ onSuccess }: Params = {}) {
   const borrowMutation = useMutation({
     mutationFn: async ({ token, quantity }: BorrowParams) => {
       try {
+        const LiquidOpsClient = new LiquidOps(
+          createDataItemSigner(window.arweaveWallet),
+        );
         const walletAddress = await window.arweaveWallet.getActiveAddress();
         const messageId = await LiquidOpsClient.borrow({
           token,
@@ -126,6 +130,9 @@ export function useBorrow({ onSuccess }: Params = {}) {
   const repayMutation = useMutation({
     mutationFn: async ({ token, quantity }: RepayParams) => {
       try {
+        const LiquidOpsClient = new LiquidOps(
+          createDataItemSigner(window.arweaveWallet),
+        );
         const walletAddress = await window.arweaveWallet.getActiveAddress();
         const transferId = await LiquidOpsClient.repay({
           token,

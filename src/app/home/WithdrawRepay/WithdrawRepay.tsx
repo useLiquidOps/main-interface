@@ -62,9 +62,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
-    null,
-  );
   const [notLoadedBalance, setNotLoadedBalance] = useState<string | boolean>(
     false,
   );
@@ -92,7 +89,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   // Reset input callback
   const resetInput = useCallback(() => {
     setInputValue("");
-    setSelectedPercentage(null);
   }, []);
 
   // Initialize loading screen hook
@@ -133,30 +129,32 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
       new Quantity(0n, 12n).fromNumber(100),
     );
     setInputValue(amount.toString());
-    setSelectedPercentage(percentage);
   };
 
-  const getCurrentPercentage = () => {
-    // Return 0 if data is still loading or no input
-    if (
-      !currentBalance ||
-      !inputValue ||
-      Quantity.eq(currentBalance, new Quantity(0n, 12n))
-    ) {
-      return 0;
-    }
+  const currentPercentage = useMemo(
+    () => {
+      // no data
+      if (
+        !currentBalance ||
+        !inputValue ||
+        Quantity.eq(currentBalance, new Quantity(0n, 12n))
+      ) {
+        return 0;
+      }
 
-    if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
+      if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
 
-    const percentage = Quantity.__div(
-      Quantity.__mul(
-        new Quantity(0n, currentBalance.denomination).fromString(inputValue),
-        new Quantity(0n, currentBalance.denomination).fromNumber(100),
-      ),
-      currentBalance,
-    );
-    return Math.min(100, Math.max(0, percentage.toNumber()));
-  };
+      const percentage = Quantity.__div(
+        Quantity.__mul(
+          new Quantity(0n, currentBalance.denomination).fromString(inputValue),
+          new Quantity(0n, currentBalance.denomination).fromNumber(100),
+        ),
+        currentBalance,
+      );
+      return Math.min(100, Math.max(0, percentage.toNumber()));
+    },
+    [currentBalance, inputValue]
+  );
 
   const handleSubmit = () => {
     setHasUserInteracted(true);
@@ -226,8 +224,7 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
       <PercentagePicker
         mode={mode}
-        selectedPercentage={selectedPercentage}
-        currentPercentage={getCurrentPercentage()}
+        currentPercentage={currentPercentage}
         onPercentageClick={handlePercentageClick}
         // @ts-ignore, logic relies on undefined to disable percentage picker
         walletBalance={currentBalance}

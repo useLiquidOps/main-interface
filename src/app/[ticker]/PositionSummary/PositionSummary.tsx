@@ -54,6 +54,25 @@ const PositionSummary: React.FC<{
     return `${Number(formatPercent).toFixed(3)}%`;
   }, [maxBorrow, globalPosition]);
 
+  const handleMouseMoveCollateral = (ticker: string, e: React.MouseEvent) => {
+    const pos = globalPosition?.tokenPositions?.[ticker];
+    if (!pos) return;
+
+    if (Quantity.le(new Quantity(0, pos.collateralization.denomination).fromNumber(0.0001), pos.collateralization)) {
+      let maximumFractionDigits = Quantity.le(Quantity.__one(), pos.collateralization) ? 2 : 4;
+      setTooltipContent(
+        // @ts-expect-error
+        pos.collateralization.toLocaleString(undefined, { maximumFractionDigits })
+        + " " + ticker
+      );
+    } else {
+      setTooltipContent(">0.0001 " + ticker);
+    }
+
+    setTooltipPosition({ x: e.clientX, y: e.clientY });
+    setShowTooltip(true);
+  };
+
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -169,15 +188,17 @@ const PositionSummary: React.FC<{
             <div className={styles.tokens}>
               {!isLoadingPosition &&
                 globalPosition &&
-                globalPosition.collateralLogos.map((logo, i) => (
+                globalPosition.collateralLogos.map((collateral, i) => (
                   <img
                     key={i}
-                    src={`https://arweave.net/${logo}`}
+                    src={`https://arweave.net/${collateral.logo}`}
                     alt="collateral logo"
                     className={styles.token}
                     style={{
                       zIndex: globalPosition.collateralLogos.length - i,
                     }}
+                    onMouseMove={(e) => handleMouseMoveCollateral(collateral.ticker, e)}
+                    onMouseLeave={handleMouseLeave}
                   />
                 ))}
               {isLoadingPosition && (

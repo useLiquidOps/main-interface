@@ -25,7 +25,10 @@ export interface TokenPositionCache {
 }
 
 export interface GlobalPositionCache {
-  collateralLogos: string[];
+  collateralLogos: {
+    ticker: string;
+    logo: string;
+  }[];
   collateralValueUSD: WrappedQuantity;
   borrowCapacityUSD: WrappedQuantity;
   borrowBalanceUSD: WrappedQuantity;
@@ -45,7 +48,10 @@ export interface TokenPositionResult {
 }
 
 export interface GlobalPositionResult {
-  collateralLogos: string[];
+  collateralLogos: {
+    ticker: string;
+    logo: string;
+  }[];
   collateralValueUSD: Quantity;
   borrowCapacityUSD: Quantity;
   borrowBalanceUSD: Quantity;
@@ -84,9 +90,9 @@ export function useGlobalPosition(overrideCache?: boolean) {
               info.ticker.toUpperCase() === ticker.toUpperCase() ||
               info.cleanTicker.toUpperCase() === ticker.toUpperCase(),
           );
-          return foundToken?.icon;
+          return { ticker, logo: foundToken?.icon };
         })
-        .filter((icon): icon is string => !!icon);
+        .filter((collateral) => !!collateral.logo) as GlobalPositionResult["collateralLogos"];
 
       // turn Bigints to Quantities
       const formattedTokenResult: { [token: string]: TokenPositionResult } = {};

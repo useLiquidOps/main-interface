@@ -171,18 +171,27 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
     // If unlending (withdrawing), multiply by the oToken rate to send correct oToken amount to protocol
     if (mode === "withdraw") {
-      if (isLoadingTokenInfo || !tokenInfo) return;
-      // x _underlying_ = x * totalSupply / totalPooled _oToken_
-      const { collateralDenomination, denomination } = tokenInfo;
-      const totalPooled = new Quantity(
-        BigInt(tokenInfo.cash) + BigInt(tokenInfo.totalBorrows) - BigInt(tokenInfo.totalReserves),
-        BigInt(collateralDenomination)
-      );
-      const totalSupply = new Quantity(tokenInfo.totalSupply, BigInt(denomination));
-      quantity = Quantity.__convert(
-        Quantity.__div(Quantity.__mul(quantity, totalSupply), totalPooled),
-        BigInt(denomination)
-      );
+      if (lentBalance && oTokenBalance && Quantity.le(lentBalance, quantity)) {
+        quantity = oTokenBalance;
+      } else {
+        if (isLoadingTokenInfo || !tokenInfo) return;
+
+        // x _underlying_ = x * totalSupply / totalPooled _oToken_
+        const { collateralDenomination, denomination } = tokenInfo;
+        const totalPooled = new Quantity(
+          BigInt(tokenInfo.cash) + BigInt(tokenInfo.totalBorrows) - BigInt(tokenInfo.totalReserves),
+          BigInt(collateralDenomination)
+        );
+        const totalSupply = new Quantity(tokenInfo.totalSupply, BigInt(denomination));
+        quantity = Quantity.__convert(
+          Quantity.__div(Quantity.__mul(quantity, totalSupply), totalPooled),
+          BigInt(denomination)
+        );
+
+        if (oTokenBalance) {
+          quantity = Quantity.min(quantity, oTokenBalance)!;
+        }
+      }
     }
 
     const params = {

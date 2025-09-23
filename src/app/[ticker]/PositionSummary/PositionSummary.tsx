@@ -24,13 +24,10 @@ const PositionSummary: React.FC<{
 
   const denomination = 12n; // USD denomination
   const maxBorrow = useMemo(
-    () =>
-      !globalPosition
-        ? new Quantity(0n, 12n)
-        : new Quantity(
-            globalPosition.borrowCapacityUSD || 0,
-            denomination,
-          ).fromNumber(4),
+    () => new Quantity(
+      globalPosition?.borrowCapacityUSD || 0,
+      denomination,
+    ),
     [globalPosition],
   );
 

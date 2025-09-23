@@ -23,20 +23,29 @@ export interface ProtocolStats {
 
 export type ProtocolStatsCache = GetInfoRes;
 
+export function useInfo(token: string) {
+  return useQuery({
+    queryKey: ["token-info", token],
+    queryFn: async () => {
+      return await LiquidOpsClient.getInfo({ token });
+    },
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
+  });
+}
+
 export function useProtocolStats(token: string, overrideCache?: boolean) {
   const { data: historicalAPR } = useHistoricalAPR(token);
+  const { data: info } = useInfo(token);
 
   return useQuery({
     queryKey: ["protocol-stats", token],
     queryFn: async (): Promise<ProtocolStats> => {
       const safeHistoricalAPR = historicalAPR ?? [];
-      const [getInfoRes] = await Promise.all([
-        LiquidOpsClient.getInfo({ token }),
-      ]);
 
-      return await getProtocolStatsData(getInfoRes, safeHistoricalAPR, token);
+      return await getProtocolStatsData(info!, safeHistoricalAPR, token);
     },
-    enabled: !!historicalAPR,
+    enabled: !!historicalAPR && !!info,
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,
   });

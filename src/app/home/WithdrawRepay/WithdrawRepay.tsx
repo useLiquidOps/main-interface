@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import styles from "./WithdrawRepay.module.css";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
@@ -14,7 +14,7 @@ import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 import { useValueLimit } from "@/hooks/data/useValueLimit";
-import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
+import { useInfo, useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { AnimatePresence, motion } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useCooldown } from "@/hooks/data/useCooldown";
@@ -42,9 +42,14 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { data: oTokenBalance, isLoading: isLoadingOTokenBalance } =
     useUserBalance(oTokenAddress);
 
-  const currentBalance = mode === "withdraw" ? lentBalance : positionBalance;
-  const isLoadingCurrentBalance =
-    mode === "withdraw" ? isLoadingBalance : isLoadingPosition;
+  const currentBalance = useMemo(
+    () => mode === "withdraw" ? lentBalance : positionBalance,
+    [mode, lentBalance, positionBalance]
+  );
+  const isLoadingCurrentBalance = useMemo(
+    () => mode === "withdraw" ? isLoadingBalance : isLoadingPosition,
+    [mode, isLoadingBalance, isLoadingPosition]
+  );
 
   const { unlend, isUnlending, unlendError } = useLend({
     onSuccess: onClose,
@@ -57,9 +62,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
-    null,
-  );
   const [notLoadedBalance, setNotLoadedBalance] = useState<string | boolean>(
     false,
   );
@@ -87,7 +89,6 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   // Reset input callback
   const resetInput = useCallback(() => {
     setInputValue("");
-    setSelectedPercentage(null);
   }, []);
 
   // Initialize loading screen hook
@@ -105,64 +106,57 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     protocolStats,
   );
 
-  const calculateMaxAmount = () => {
-    if (mode === "withdraw") {
-      return isLoadingOTokenBalance ? null : oTokenBalance;
-    }
-    return isLoadingCurrentBalance ? null : currentBalance;
-  };
-
   const handleMaxClick = () => {
     setHasUserInteracted(true);
-    const maxAmount = calculateMaxAmount();
-    if (!maxAmount) {
+    if (!currentBalance) {
       // Set loading state only in event handlers, not during render
       setNotLoadedBalance(mode === "withdraw" ? "oToken" : "token");
       return;
     }
-    setInputValue(maxAmount.toString());
+    setInputValue(currentBalance.toString());
   };
 
   const handlePercentageClick = (percentage: number) => {
     setHasUserInteracted(true);
-    const maxAmount = calculateMaxAmount();
-    if (!maxAmount) {
+    if (!currentBalance) {
       // Set loading state only in event handlers, not during render
       setNotLoadedBalance(mode === "withdraw" ? "oToken" : "token");
       return;
     }
 
     const amount = Quantity.__div(
-      Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),
+      Quantity.__mul(currentBalance, new Quantity(0n, 12n).fromNumber(percentage)),
       new Quantity(0n, 12n).fromNumber(100),
     );
     setInputValue(amount.toString());
-    setSelectedPercentage(percentage);
   };
 
-  const getCurrentPercentage = () => {
-    const maxAmount = calculateMaxAmount();
+  const currentPercentage = useMemo(
+    () => {
+      // no data
+      if (
+        !currentBalance ||
+        !inputValue ||
+        Quantity.eq(currentBalance, new Quantity(0n, 12n))
+      ) {
+        return 0;
+      }
 
-    // Return 0 if data is still loading or no input
-    if (
-      !maxAmount ||
-      !inputValue ||
-      Quantity.eq(maxAmount, new Quantity(0n, 12n))
-    ) {
-      return 0;
-    }
+      if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
 
-    if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
+      const percentage = Quantity.__div(
+        Quantity.__mul(
+          new Quantity(0n, currentBalance.denomination).fromString(inputValue),
+          new Quantity(0n, currentBalance.denomination).fromNumber(100),
+        ),
+        currentBalance,
+      );
+      return Math.min(100, Math.max(0, percentage.toNumber()));
+    },
+    [currentBalance, inputValue]
+  );
 
-    const percentage = Quantity.__div(
-      Quantity.__mul(
-        new Quantity(0n, maxAmount.denomination).fromString(inputValue),
-        new Quantity(0n, maxAmount.denomination).fromNumber(100),
-      ),
-      maxAmount,
-    );
-    return Math.min(100, Math.max(0, percentage.toNumber()));
-  };
+  const { data: tokenInfo, isLoading: isLoadingTokenInfo } = useInfo(ticker.toUpperCase());
 
   const handleSubmit = () => {
     setHasUserInteracted(true);
@@ -177,16 +171,27 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
     // If unlending (withdrawing), multiply by the oToken rate to send correct oToken amount to protocol
     if (mode === "withdraw") {
-      if (isLoadingOTokenBalance) {
-        setNotLoadedBalance("oToken");
-        return;
-      }
+      if (lentBalance && oTokenBalance && Quantity.le(lentBalance, quantity)) {
+        quantity = oTokenBalance;
+      } else {
+        if (isLoadingTokenInfo || !tokenInfo) return;
 
-      const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
-      const oTokenAmount = Number(quantity) * userOTokenRate;
-      quantity = new Quantity(0n, currentBalance?.denomination).fromNumber(
-        oTokenAmount,
-      );
+        // x _underlying_ = x * totalSupply / totalPooled _oToken_
+        const { collateralDenomination, denomination } = tokenInfo;
+        const totalPooled = new Quantity(
+          BigInt(tokenInfo.cash) + BigInt(tokenInfo.totalBorrows) - BigInt(tokenInfo.totalReserves),
+          BigInt(collateralDenomination)
+        );
+        const totalSupply = new Quantity(tokenInfo.totalSupply, BigInt(denomination));
+        quantity = Quantity.__convert(
+          Quantity.__div(Quantity.__mul(quantity, totalSupply), totalPooled),
+          BigInt(denomination)
+        );
+
+        if (oTokenBalance) {
+          quantity = Quantity.min(quantity, oTokenBalance)!;
+        }
+      }
     }
 
     const params = {
@@ -225,16 +230,14 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         ticker={ticker}
         tokenPrice={tokenPrice}
         // @ts-ignore, logic relies on undefined to show skeleton loading
-        walletBalance={mode === "withdraw" ? oTokenBalance : currentBalance}
+        walletBalance={currentBalance}
         onMaxClick={handleMaxClick}
         denomination={currentBalance?.denomination || 12n}
-        oToken={mode === "withdraw" ? true : false}
       />
 
       <PercentagePicker
         mode={mode}
-        selectedPercentage={selectedPercentage}
-        currentPercentage={getCurrentPercentage()}
+        currentPercentage={currentPercentage}
         onPercentageClick={handlePercentageClick}
         // @ts-ignore, logic relies on undefined to disable percentage picker
         walletBalance={currentBalance}
@@ -343,7 +346,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
           parseFloat(inputValue) <= 0 ||
           loadingScreenState.submitStatus === "loading" ||
           (mode === "withdraw" && valueLimitReached) ||
-          cooldownData?.onCooldown
+          cooldownData?.onCooldown ||
+          (!tokenInfo && mode === "withdraw")
         }
         loading={isRepaying || isUnlending}
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}

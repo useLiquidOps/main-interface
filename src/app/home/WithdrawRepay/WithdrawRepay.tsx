@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import styles from "./WithdrawRepay.module.css";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import PercentagePicker from "@/components/PercentagePicker/PercentagePicker";
@@ -42,9 +42,14 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { data: oTokenBalance, isLoading: isLoadingOTokenBalance } =
     useUserBalance(oTokenAddress);
 
-  const currentBalance = mode === "withdraw" ? lentBalance : positionBalance;
-  const isLoadingCurrentBalance =
-    mode === "withdraw" ? isLoadingBalance : isLoadingPosition;
+  const currentBalance = useMemo(
+    () => mode === "withdraw" ? lentBalance : positionBalance,
+    [mode, lentBalance, positionBalance]
+  );
+  const isLoadingCurrentBalance = useMemo(
+    () => mode === "withdraw" ? isLoadingBalance : isLoadingPosition,
+    [mode, isLoadingBalance, isLoadingPosition]
+  );
 
   const { unlend, isUnlending, unlendError } = useLend({
     onSuccess: onClose,
@@ -105,35 +110,26 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     protocolStats,
   );
 
-  const calculateMaxAmount = () => {
-    if (mode === "withdraw") {
-      return isLoadingOTokenBalance ? null : oTokenBalance;
-    }
-    return isLoadingCurrentBalance ? null : currentBalance;
-  };
-
   const handleMaxClick = () => {
     setHasUserInteracted(true);
-    const maxAmount = calculateMaxAmount();
-    if (!maxAmount) {
+    if (!currentBalance) {
       // Set loading state only in event handlers, not during render
       setNotLoadedBalance(mode === "withdraw" ? "oToken" : "token");
       return;
     }
-    setInputValue(maxAmount.toString());
+    setInputValue(currentBalance.toString());
   };
 
   const handlePercentageClick = (percentage: number) => {
     setHasUserInteracted(true);
-    const maxAmount = calculateMaxAmount();
-    if (!maxAmount) {
+    if (!currentBalance) {
       // Set loading state only in event handlers, not during render
       setNotLoadedBalance(mode === "withdraw" ? "oToken" : "token");
       return;
     }
 
     const amount = Quantity.__div(
-      Quantity.__mul(maxAmount, new Quantity(0n, 12n).fromNumber(percentage)),
+      Quantity.__mul(currentBalance, new Quantity(0n, 12n).fromNumber(percentage)),
       new Quantity(0n, 12n).fromNumber(100),
     );
     setInputValue(amount.toString());
@@ -141,13 +137,11 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   };
 
   const getCurrentPercentage = () => {
-    const maxAmount = calculateMaxAmount();
-
     // Return 0 if data is still loading or no input
     if (
-      !maxAmount ||
+      !currentBalance ||
       !inputValue ||
-      Quantity.eq(maxAmount, new Quantity(0n, 12n))
+      Quantity.eq(currentBalance, new Quantity(0n, 12n))
     ) {
       return 0;
     }
@@ -156,10 +150,10 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
     const percentage = Quantity.__div(
       Quantity.__mul(
-        new Quantity(0n, maxAmount.denomination).fromString(inputValue),
-        new Quantity(0n, maxAmount.denomination).fromNumber(100),
+        new Quantity(0n, currentBalance.denomination).fromString(inputValue),
+        new Quantity(0n, currentBalance.denomination).fromNumber(100),
       ),
-      maxAmount,
+      currentBalance,
     );
     return Math.min(100, Math.max(0, percentage.toNumber()));
   };
@@ -225,10 +219,9 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         ticker={ticker}
         tokenPrice={tokenPrice}
         // @ts-ignore, logic relies on undefined to show skeleton loading
-        walletBalance={mode === "withdraw" ? oTokenBalance : currentBalance}
+        walletBalance={currentBalance}
         onMaxClick={handleMaxClick}
         denomination={currentBalance?.denomination || 12n}
-        oToken={mode === "withdraw" ? true : false}
       />
 
       <PercentagePicker

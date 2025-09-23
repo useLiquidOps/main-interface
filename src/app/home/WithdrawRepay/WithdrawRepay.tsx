@@ -14,7 +14,7 @@ import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 import { useValueLimit } from "@/hooks/data/useValueLimit";
-import { useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
+import { useInfo, useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
 import { AnimatePresence, motion } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useCooldown } from "@/hooks/data/useCooldown";
@@ -156,6 +156,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     [currentBalance, inputValue]
   );
 
+  const { data: tokenInfo, isLoading: isLoadingTokenInfo } = useInfo(ticker.toUpperCase());
+
   const handleSubmit = () => {
     setHasUserInteracted(true);
     if (!inputValue) {
@@ -169,15 +171,17 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
     // If unlending (withdrawing), multiply by the oToken rate to send correct oToken amount to protocol
     if (mode === "withdraw") {
-      if (isLoadingOTokenBalance) {
-        setNotLoadedBalance("oToken");
-        return;
-      }
-
-      const userOTokenRate = Number(oTokenBalance) / Number(lentBalance);
-      const oTokenAmount = Number(quantity) * userOTokenRate;
-      quantity = new Quantity(0n, currentBalance?.denomination).fromNumber(
-        oTokenAmount,
+      if (isLoadingTokenInfo || !tokenInfo) return;
+      // x _underlying_ = x * totalSupply / totalPooled _oToken_
+      const { collateralDenomination, denomination } = tokenInfo;
+      const totalPooled = new Quantity(
+        BigInt(tokenInfo.cash) + BigInt(tokenInfo.totalBorrows) - BigInt(tokenInfo.totalReserves),
+        BigInt(collateralDenomination)
+      );
+      const totalSupply = new Quantity(tokenInfo.totalSupply, BigInt(denomination));
+      quantity = Quantity.__convert(
+        Quantity.__div(Quantity.__mul(quantity, totalSupply), totalPooled),
+        BigInt(denomination)
       );
     }
 
@@ -333,7 +337,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
           parseFloat(inputValue) <= 0 ||
           loadingScreenState.submitStatus === "loading" ||
           (mode === "withdraw" && valueLimitReached) ||
-          cooldownData?.onCooldown
+          cooldownData?.onCooldown ||
+          (!tokenInfo && mode === "withdraw")
         }
         loading={isRepaying || isUnlending}
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}

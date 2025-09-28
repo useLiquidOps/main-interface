@@ -45,7 +45,9 @@ const PercentagePicker: React.FC<PercentagePickerProps> = ({
           <button
             key={percentage}
             className={`${styles.percentageButton} ${
-              Math.round(currentPercentage * 100) / 100 === percentage ? styles.selected : ""
+              Math.round(currentPercentage * 100) / 100 === percentage
+                ? styles.selected
+                : ""
             }`}
             onClick={() => onPercentageClick(percentage)}
             disabled={!walletBalance}

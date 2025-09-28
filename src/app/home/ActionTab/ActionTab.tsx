@@ -34,6 +34,18 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
   const { data: walletBalance, isLoading: isLoadingBalance } =
     useUserBalance(tokenAddress);
 
+  const { data: aoBalance, isLoading: isLoadingAoBalance } = useUserBalance("0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc");
+  const hasAoForAction = useMemo(
+    () => {
+      if (isLoadingAoBalance) return true;
+      return Quantity.lt(
+        new Quantity(1n, 2n),
+        new Quantity(aoBalance, 12n)
+      );
+    },
+    [aoBalance, isLoadingAoBalance]
+  );
+
   const { lend, isLending, lendError } = useLend({
     onSuccess: onClose,
   });
@@ -219,6 +231,21 @@ const ActionTab: React.FC<ActionTabProps> = ({ ticker, mode, onClose }) => {
               Network fee: {networkFee} AO
             </span>
           </div>
+          <AnimatePresence>
+            {!hasAoForAction && (
+              <motion.div
+                className={styles.infoRow}
+                variants={warningVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                <span className={styles.aoNotice}>
+                  You will need a minimal amount of AO for this message to be executed.
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
         {/* <Image
           src="/icons/customise.svg"

@@ -104,7 +104,7 @@
   .assetRow {
     display: grid;
     grid-template-columns: auto auto;
-    gap: 1rem 0;
+    gap: .85rem 0;
   }
 
   .actionButtons {

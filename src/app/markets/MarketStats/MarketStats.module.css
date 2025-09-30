@@ -15,6 +15,21 @@
   border-radius: 24px;
 }
 
+@media screen and (max-width: 600px) {
+  .marketStats {
+    flex-direction: column;
+    width: 90vw;
+    gap: 1rem;
+  }
+
+  .marketContainer {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 30px;
+    padding: 24px 30px;
+  }
+}
+
 .pieChart {
   display: flex;
   justify-content: center;

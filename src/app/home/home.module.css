@@ -81,6 +81,10 @@
     width: 90vw;
     grid-template-columns: 1fr;
   }
+
+  .widgetContainer {
+    width: 90vw;
+  }
 }
 
 .modalOverlay {

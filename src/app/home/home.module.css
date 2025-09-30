@@ -76,6 +76,13 @@
   width: 100%;
 }
 
+@media screen and (max-width: 600px) {
+  .grid {
+    width: 90vw;
+    grid-template-columns: 1fr;
+  }
+}
+
 .modalOverlay {
   position: fixed;
   top: 0;

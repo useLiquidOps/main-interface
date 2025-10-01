@@ -92,7 +92,9 @@ export function useGlobalPosition(overrideCache?: boolean) {
           );
           return { ticker, logo: foundToken?.icon };
         })
-        .filter((collateral) => !!collateral.logo) as GlobalPositionResult["collateralLogos"];
+        .filter(
+          (collateral) => !!collateral.logo,
+        ) as GlobalPositionResult["collateralLogos"];
 
       // turn Bigints to Quantities
       const formattedTokenResult: { [token: string]: TokenPositionResult } = {};

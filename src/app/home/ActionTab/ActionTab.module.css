@@ -76,3 +76,8 @@
   gap: 0.8rem;
   font-weight: 500;
 }
+
+.aoNotice {
+  color: var(--failed-red-text);
+  font-weight: 700;
+}

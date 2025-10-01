@@ -94,6 +94,7 @@
 .infoRow {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   font-size: 10px;
   margin-bottom: 24px;
 }
@@ -113,4 +114,9 @@
   align-items: center;
   gap: 0.8rem;
   font-weight: 500;
+}
+
+.aoNotice {
+  color: var(--failed-red-text);
+  font-weight: 700;
 }

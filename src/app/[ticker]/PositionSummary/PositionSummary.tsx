@@ -65,8 +65,8 @@ const PositionSummary: React.FC<{
         ? 2
         : 4;
       setTooltipContent(
-        // @ts-expect-error
         pos.collateralization.toLocaleString(undefined, {
+          // @ts-expect-error
           maximumFractionDigits,
         }) +
           " " +

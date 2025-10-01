@@ -45,6 +45,18 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { data: oTokenBalance, isLoading: isLoadingOTokenBalance } =
     useUserBalance(oTokenAddress);
 
+  const { data: aoBalance, isLoading: isLoadingAoBalance } = useUserBalance("0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc");
+  const hasAoForAction = useMemo(
+    () => {
+      if (isLoadingAoBalance) return true;
+      return Quantity.lt(
+        new Quantity(1n, 2n),
+        new Quantity(aoBalance, 12n)
+      );
+    },
+    [aoBalance, isLoadingAoBalance]
+  );
+
   const currentBalance = useMemo(
     () => (mode === "withdraw" ? lentBalance : positionBalance),
     [mode, lentBalance, positionBalance],
@@ -255,6 +267,20 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
 
       <div className={styles.infoRow}>
         <span className={styles.infoLabel}>Network fee: {networkFee} AO</span>
+
+        <AnimatePresence>
+          {!hasAoForAction && (
+            <motion.span
+              variants={warningVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className={styles.aoNotice}
+            >
+              You will need a minimal amount of AO for this message to be executed.
+            </motion.span>
+          )}
+        </AnimatePresence>
       </div>
 
       <AnimatePresence>
@@ -357,7 +383,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
           loadingScreenState.submitStatus === "loading" ||
           (mode === "withdraw" && valueLimitReached) ||
           cooldownData?.onCooldown ||
-          (!tokenInfo && mode === "withdraw")
+          (!tokenInfo && mode === "withdraw") ||
+          hasAoForAction
         }
         loading={isRepaying || isUnlending}
         submitText={mode === "withdraw" ? "Withdraw" : "Repay"}

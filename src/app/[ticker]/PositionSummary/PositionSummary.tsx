@@ -24,10 +24,7 @@ const PositionSummary: React.FC<{
 
   const denomination = 12n; // USD denomination
   const maxBorrow = useMemo(
-    () => new Quantity(
-      globalPosition?.borrowCapacityUSD || 0,
-      denomination,
-    ),
+    () => new Quantity(globalPosition?.borrowCapacityUSD || 0, denomination),
     [globalPosition],
   );
 
@@ -55,12 +52,25 @@ const PositionSummary: React.FC<{
     const pos = globalPosition?.tokenPositions?.[ticker];
     if (!pos) return;
 
-    if (Quantity.le(new Quantity(0, pos.collateralization.denomination).fromNumber(0.0001), pos.collateralization)) {
-      let maximumFractionDigits = Quantity.le(Quantity.__one(), pos.collateralization) ? 2 : 4;
+    if (
+      Quantity.le(
+        new Quantity(0, pos.collateralization.denomination).fromNumber(0.0001),
+        pos.collateralization,
+      )
+    ) {
+      let maximumFractionDigits = Quantity.le(
+        Quantity.__one(),
+        pos.collateralization,
+      )
+        ? 2
+        : 4;
       setTooltipContent(
         // @ts-expect-error
-        pos.collateralization.toLocaleString(undefined, { maximumFractionDigits })
-        + " " + ticker
+        pos.collateralization.toLocaleString(undefined, {
+          maximumFractionDigits,
+        }) +
+          " " +
+          ticker,
       );
     } else {
       setTooltipContent(">0.0001 " + ticker);
@@ -194,7 +204,9 @@ const PositionSummary: React.FC<{
                     style={{
                       zIndex: globalPosition.collateralLogos.length - i,
                     }}
-                    onMouseMove={(e) => handleMouseMoveCollateral(collateral.ticker, e)}
+                    onMouseMove={(e) =>
+                      handleMouseMoveCollateral(collateral.ticker, e)
+                    }
                     onMouseLeave={handleMouseLeave}
                   />
                 ))}

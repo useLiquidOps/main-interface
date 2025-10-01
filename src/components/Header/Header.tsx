@@ -105,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({
       </AnimatePresence>
 
       <header className={styles.header}>
-        <div className={styles.leftSection}>
+        <div className={styles.topSection}>
           <div className={styles.titleAndDropdown}>
             <Link href="/" className={styles.pageTitleContainer}>
               <Image
@@ -119,30 +119,31 @@ const Header: React.FC<HeaderProps> = ({
             </Link>
           </div>
 
-          <nav className={styles.navLinks}>
-            <Link
-              href="/"
-              className={isLinkActive("/") ? styles.activeLink : ""}
-            >
-              <p>Home</p>
-            </Link>
-            <Link
-              href="/markets"
-              className={isLinkActive("/markets") ? styles.activeLink : ""}
-            >
-              <p>Markets</p>
-            </Link>
-            <Link
-              href="/earn"
-              className={isLinkActive("/earn") ? styles.activeLink : ""}
-            >
-              <p>Earn</p>
-            </Link>
-            <MoreDropdown label="Bridge" items={bridgeItems} />
-            <MoreDropdown label="More" items={moreMenuItems} />
-          </nav>
+          <Connect ref={connectRef} onWalletConnected={onWalletConnected} />
         </div>
-        <Connect ref={connectRef} onWalletConnected={onWalletConnected} />
+
+        <nav className={styles.navLinks}>
+          <Link
+            href="/"
+            className={isLinkActive("/") ? styles.activeLink : ""}
+          >
+            <p>Home</p>
+          </Link>
+          <Link
+            href="/markets"
+            className={isLinkActive("/markets") ? styles.activeLink : ""}
+          >
+            <p>Markets</p>
+          </Link>
+          <Link
+            href="/earn"
+            className={isLinkActive("/earn") ? styles.activeLink : ""}
+          >
+            <p>Earn</p>
+          </Link>
+          <MoreDropdown label="Bridge" items={bridgeItems} />
+          <MoreDropdown label="More" items={moreMenuItems} />
+        </nav>
       </header>
     </>
   );

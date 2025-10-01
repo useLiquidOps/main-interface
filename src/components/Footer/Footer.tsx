@@ -66,20 +66,19 @@ const Footer = () => {
             Analytics
           </p>
 
-          <div className={styles.version}>
-            <a href="/legal/ToS.pdf" className={styles.support} target="_blank">
-              Terms
-            </a>
-            <a href="/legal/PP.pdf" className={styles.support} target="_blank">
-              Privacy
-            </a>
-            <a
-              href={`https://github.com/useLiquidOps/main-interface/commit/${gitHash}`}
-              target="_blank"
-            >
-              {gitHash}
-            </a>
-          </div>
+          <a href="/legal/ToS.pdf" className={styles.support} target="_blank">
+            Terms
+          </a>
+          <a href="/legal/PP.pdf" className={styles.support} target="_blank">
+            Privacy
+          </a>
+          <a
+            href={`https://github.com/useLiquidOps/main-interface/commit/${gitHash}`}
+            target="_blank"
+            className={styles.support}
+          >
+            {gitHash}
+          </a>
         </div>
         <div className={styles.right}>
           <div className={styles.socials}>

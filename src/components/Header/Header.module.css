@@ -58,17 +58,33 @@
   background-color: white;
 }
 
-@media screen and (max-width: 600px) {
-  .header {
-    padding: 1.6rem 1.8rem;
-  }
-}
-
 .topSection {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+}
+
+.connectAndMobileMenu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menuIcon {
+  display: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    padding: 1.6rem 1.8rem;
+  }
+
+  .connectAndMobileMenu .menuIcon {
+    display: block;
+  }
 }
 
 .titleAndDropdown {

@@ -119,7 +119,17 @@ const Header: React.FC<HeaderProps> = ({
             </Link>
           </div>
 
-          <Connect ref={connectRef} onWalletConnected={onWalletConnected} />
+          <div className={styles.connectAndMobileMenu}>
+            <Connect ref={connectRef} onWalletConnected={onWalletConnected} />
+
+            <Image
+              src="/icons/menu.svg"
+              alt="Menu"
+              width={30}
+              height={30}
+              className={styles.menuIcon}
+            />
+          </div>
         </div>
 
         <nav className={styles.navLinks}>

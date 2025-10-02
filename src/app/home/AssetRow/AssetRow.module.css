@@ -100,6 +100,20 @@
   gap: 5px;
 }
 
+@media screen and (max-width: 600px) {
+  .assetRow {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.85rem 0;
+  }
+
+  .actionButtons {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    padding-left: 52px;
+  }
+}
+
 .supplyBorrowButton {
   padding: 9px;
   border-radius: 50px;

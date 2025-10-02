@@ -29,6 +29,18 @@
   flex-shrink: 0;
 }
 
+@media screen and (max-width: 600px) {
+  .marketRow {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 1rem;
+  }
+
+  .assetInfo {
+    grid-column: 1 / 4;
+  }
+}
+
 .iconWrapper {
   width: 40px;
   height: 40px;

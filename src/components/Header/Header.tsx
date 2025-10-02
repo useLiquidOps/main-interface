@@ -69,6 +69,8 @@ const Header: React.FC<HeaderProps> = ({
     }
   }, [triggerConnect]);
 
+  const [showNavMobile, setShowNavMobile] = useState(false);
+
   return (
     <>
       {isClient && isBannerVisible && (
@@ -105,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({
       </AnimatePresence>
 
       <header className={styles.header}>
-        <div className={styles.leftSection}>
+        <div className={styles.topSection}>
           <div className={styles.titleAndDropdown}>
             <Link href="/" className={styles.pageTitleContainer}>
               <Image
@@ -119,30 +121,52 @@ const Header: React.FC<HeaderProps> = ({
             </Link>
           </div>
 
-          <nav className={styles.navLinks}>
-            <Link
-              href="/"
-              className={isLinkActive("/") ? styles.activeLink : ""}
-            >
-              <p>Home</p>
-            </Link>
-            <Link
-              href="/markets"
-              className={isLinkActive("/markets") ? styles.activeLink : ""}
-            >
-              <p>Markets</p>
-            </Link>
-            <Link
-              href="/earn"
-              className={isLinkActive("/earn") ? styles.activeLink : ""}
-            >
-              <p>Earn</p>
-            </Link>
-            <MoreDropdown label="Bridge" items={bridgeItems} />
-            <MoreDropdown label="More" items={moreMenuItems} />
-          </nav>
+          <div className={styles.connectAndMobileMenu}>
+            <Connect ref={connectRef} onWalletConnected={onWalletConnected} />
+
+            <Image
+              src="/icons/menu.svg"
+              alt="Menu"
+              width={30}
+              height={30}
+              className={styles.menuIcon}
+              onClick={() => setShowNavMobile((val) => !val)}
+            />
+          </div>
         </div>
-        <Connect ref={connectRef} onWalletConnected={onWalletConnected} />
+
+        <nav
+          className={[
+            styles.navLinks,
+            showNavMobile ? styles.showNavMobile : "",
+          ].join(" ")}
+        >
+          <Image
+            src="/icons/close-icon.svg"
+            alt="Close"
+            width={30}
+            height={30}
+            className={styles.menuIcon}
+            onClick={() => setShowNavMobile((val) => !val)}
+          />
+          <Link href="/" className={isLinkActive("/") ? styles.activeLink : ""}>
+            <p>Home</p>
+          </Link>
+          <Link
+            href="/markets"
+            className={isLinkActive("/markets") ? styles.activeLink : ""}
+          >
+            <p>Markets</p>
+          </Link>
+          <Link
+            href="/earn"
+            className={isLinkActive("/earn") ? styles.activeLink : ""}
+          >
+            <p>Earn</p>
+          </Link>
+          <MoreDropdown label="Bridge" items={bridgeItems} />
+          <MoreDropdown label="More" items={moreMenuItems} />
+        </nav>
       </header>
     </>
   );

@@ -88,6 +88,37 @@
   gap: 25px;
 }
 
+@media screen and (max-width: 600px) {
+  .bodyContainer {
+    width: 90vw;
+    padding: 2rem 0;
+  }
+
+  .topSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .titleContainer {
+    gap: 0;
+  }
+
+  .loBalanceContainer {
+    flex-direction: column-reverse;
+  }
+
+  .loTitle {
+    text-align: left;
+  }
+
+  .depositSection {
+    flex-direction: column;
+    justify-content: unset;
+    gap: 1rem;
+  }
+}
+
 .assetSquareContainer {
   position: relative;
   display: flex;

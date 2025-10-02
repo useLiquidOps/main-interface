@@ -14,7 +14,10 @@ import { tokenInput } from "liquidops";
 import { useGetPosition } from "@/hooks/LiquidOpsData/useGetPosition";
 import { useLoadingScreen } from "@/components/LoadingScreen/useLoadingScreen";
 import { useValueLimit } from "@/hooks/data/useValueLimit";
-import { useInfo, useProtocolStats } from "@/hooks/LiquidOpsData/useProtocolStats";
+import {
+  useInfo,
+  useProtocolStats,
+} from "@/hooks/LiquidOpsData/useProtocolStats";
 import { AnimatePresence, motion } from "framer-motion";
 import { warningVariants } from "@/components/DropDown/FramerMotion";
 import { useCooldown } from "@/hooks/data/useCooldown";
@@ -42,25 +45,21 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { data: oTokenBalance, isLoading: isLoadingOTokenBalance } =
     useUserBalance(oTokenAddress);
 
-  const { data: aoBalance, isLoading: isLoadingAoBalance } = useUserBalance("0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc");
-  const hasAoForAction = useMemo(
-    () => {
-      if (isLoadingAoBalance) return true;
-      return Quantity.lt(
-        new Quantity(1n, 2n),
-        new Quantity(aoBalance, 12n)
-      );
-    },
-    [aoBalance, isLoadingAoBalance]
+  const { data: aoBalance, isLoading: isLoadingAoBalance } = useUserBalance(
+    "0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc",
   );
+  const hasAoForAction = useMemo(() => {
+    if (isLoadingAoBalance) return true;
+    return Quantity.lt(new Quantity(1n, 2n), new Quantity(aoBalance, 12n));
+  }, [aoBalance, isLoadingAoBalance]);
 
   const currentBalance = useMemo(
-    () => mode === "withdraw" ? lentBalance : positionBalance,
-    [mode, lentBalance, positionBalance]
+    () => (mode === "withdraw" ? lentBalance : positionBalance),
+    [mode, lentBalance, positionBalance],
   );
   const isLoadingCurrentBalance = useMemo(
-    () => mode === "withdraw" ? isLoadingBalance : isLoadingPosition,
-    [mode, isLoadingBalance, isLoadingPosition]
+    () => (mode === "withdraw" ? isLoadingBalance : isLoadingPosition),
+    [mode, isLoadingBalance, isLoadingPosition],
   );
 
   const { unlend, isUnlending, unlendError } = useLend({
@@ -137,38 +136,40 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
     }
 
     const amount = Quantity.__div(
-      Quantity.__mul(currentBalance, new Quantity(0n, 12n).fromNumber(percentage)),
+      Quantity.__mul(
+        currentBalance,
+        new Quantity(0n, 12n).fromNumber(percentage),
+      ),
       new Quantity(0n, 12n).fromNumber(100),
     );
     setInputValue(amount.toString());
   };
 
-  const currentPercentage = useMemo(
-    () => {
-      // no data
-      if (
-        !currentBalance ||
-        !inputValue ||
-        Quantity.eq(currentBalance, new Quantity(0n, 12n))
-      ) {
-        return 0;
-      }
+  const currentPercentage = useMemo(() => {
+    // no data
+    if (
+      !currentBalance ||
+      !inputValue ||
+      Quantity.eq(currentBalance, new Quantity(0n, 12n))
+    ) {
+      return 0;
+    }
 
-      if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
+    if (isNaN(Number(inputValue.replace(/,/g, "")))) return 0;
 
-      const percentage = Quantity.__div(
-        Quantity.__mul(
-          new Quantity(0n, currentBalance.denomination).fromString(inputValue),
-          new Quantity(0n, currentBalance.denomination).fromNumber(100),
-        ),
-        currentBalance,
-      );
-      return Math.min(100, Math.max(0, percentage.toNumber()));
-    },
-    [currentBalance, inputValue]
+    const percentage = Quantity.__div(
+      Quantity.__mul(
+        new Quantity(0n, currentBalance.denomination).fromString(inputValue),
+        new Quantity(0n, currentBalance.denomination).fromNumber(100),
+      ),
+      currentBalance,
+    );
+    return Math.min(100, Math.max(0, percentage.toNumber()));
+  }, [currentBalance, inputValue]);
+
+  const { data: tokenInfo, isLoading: isLoadingTokenInfo } = useInfo(
+    ticker.toUpperCase(),
   );
-
-  const { data: tokenInfo, isLoading: isLoadingTokenInfo } = useInfo(ticker.toUpperCase());
 
   const handleSubmit = () => {
     setHasUserInteracted(true);
@@ -191,13 +192,18 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
         // x _underlying_ = x * totalSupply / totalPooled _oToken_
         const { collateralDenomination, denomination } = tokenInfo;
         const totalPooled = new Quantity(
-          BigInt(tokenInfo.cash) + BigInt(tokenInfo.totalBorrows) - BigInt(tokenInfo.totalReserves),
-          BigInt(collateralDenomination)
+          BigInt(tokenInfo.cash) +
+            BigInt(tokenInfo.totalBorrows) -
+            BigInt(tokenInfo.totalReserves),
+          BigInt(collateralDenomination),
         );
-        const totalSupply = new Quantity(tokenInfo.totalSupply, BigInt(denomination));
+        const totalSupply = new Quantity(
+          tokenInfo.totalSupply,
+          BigInt(denomination),
+        );
         quantity = Quantity.__convert(
           Quantity.__div(Quantity.__mul(quantity, totalSupply), totalPooled),
-          BigInt(denomination)
+          BigInt(denomination),
         );
 
         if (oTokenBalance) {
@@ -267,7 +273,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
               exit="hidden"
               className={styles.aoNotice}
             >
-              You will need a minimal amount of AO for this message to be executed.
+              You will need a minimal amount of AO for this message to be
+              executed.
             </motion.span>
           )}
         </AnimatePresence>

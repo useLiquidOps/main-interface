@@ -174,7 +174,10 @@
     width: 100%;
   }
 
-  .supplyButton, .borrowButton, .withdrawButton, .repayButton {
+  .supplyButton,
+  .borrowButton,
+  .withdrawButton,
+  .repayButton {
     min-width: unset;
   }
 }

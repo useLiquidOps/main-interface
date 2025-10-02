@@ -33,6 +33,14 @@
   gap: 5px;
 }
 
+@media screen and (max-width: 600px) {
+  .moreDropdownContent {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+}
+
 .moreDropdownItem {
   color: var(--primary-palatinate-blue);
   padding: 10px 15px;

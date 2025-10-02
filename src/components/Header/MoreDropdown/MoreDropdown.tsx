@@ -20,6 +20,7 @@ const MoreDropdown: React.FC<MoreDropdownProps> = ({ items, label }) => {
       className={styles.moreDropDown}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
+      onClick={() => setIsOpen((v) => !v)}
       ref={dropdownRef}
     >
       <p>{label}</p>

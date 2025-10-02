@@ -45,17 +45,13 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
   const { data: oTokenBalance, isLoading: isLoadingOTokenBalance } =
     useUserBalance(oTokenAddress);
 
-  const { data: aoBalance, isLoading: isLoadingAoBalance } = useUserBalance("0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc");
-  const hasAoForAction = useMemo(
-    () => {
-      if (isLoadingAoBalance) return true;
-      return Quantity.lt(
-        new Quantity(1n, 2n),
-        new Quantity(aoBalance, 12n)
-      );
-    },
-    [aoBalance, isLoadingAoBalance]
+  const { data: aoBalance, isLoading: isLoadingAoBalance } = useUserBalance(
+    "0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc",
   );
+  const hasAoForAction = useMemo(() => {
+    if (isLoadingAoBalance) return true;
+    return Quantity.lt(new Quantity(1n, 2n), new Quantity(aoBalance, 12n));
+  }, [aoBalance, isLoadingAoBalance]);
 
   const currentBalance = useMemo(
     () => (mode === "withdraw" ? lentBalance : positionBalance),
@@ -277,7 +273,8 @@ const WithdrawRepay: React.FC<WithdrawRepayProps> = ({
               exit="hidden"
               className={styles.aoNotice}
             >
-              You will need a minimal amount of AO for this message to be executed.
+              You will need a minimal amount of AO for this message to be
+              executed.
             </motion.span>
           )}
         </AnimatePresence>

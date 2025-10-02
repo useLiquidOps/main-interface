@@ -69,6 +69,8 @@ const Header: React.FC<HeaderProps> = ({
     }
   }, [triggerConnect]);
 
+  const [showNavMobile, setShowNavMobile] = useState(false);
+
   return (
     <>
       {isClient && isBannerVisible && (
@@ -128,15 +130,26 @@ const Header: React.FC<HeaderProps> = ({
               width={30}
               height={30}
               className={styles.menuIcon}
+              onClick={() => setShowNavMobile((val) => !val)}
             />
           </div>
         </div>
 
-        <nav className={styles.navLinks}>
-          <Link
-            href="/"
-            className={isLinkActive("/") ? styles.activeLink : ""}
-          >
+        <nav
+          className={[
+            styles.navLinks,
+            showNavMobile ? styles.showNavMobile : "",
+          ].join(" ")}
+        >
+          <Image
+            src="/icons/close-icon.svg"
+            alt="Close"
+            width={30}
+            height={30}
+            className={styles.menuIcon}
+            onClick={() => setShowNavMobile((val) => !val)}
+          />
+          <Link href="/" className={isLinkActive("/") ? styles.activeLink : ""}>
             <p>Home</p>
           </Link>
           <Link

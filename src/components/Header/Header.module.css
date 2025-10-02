@@ -77,16 +77,6 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 600px) {
-  .header {
-    padding: 1.6rem 1.8rem;
-  }
-
-  .connectAndMobileMenu .menuIcon {
-    display: block;
-  }
-}
-
 .titleAndDropdown {
   display: flex;
   align-items: center;
@@ -112,6 +102,44 @@
 .navLinks {
   display: flex;
   gap: 1.5rem;
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    padding: 1.6rem 1.8rem;
+  }
+
+  .menuIcon {
+    display: block;
+  }
+
+  .navLinks {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    background-color: #fff;
+    flex-direction: column;
+    padding: 4rem;
+  }
+
+  .navLinks:not(.showNavMobile) {
+    display: none;
+  }
+
+  .navLinks a {
+    text-align: center;
+  }
+
+  .navLinks .menuIcon {
+    margin-left: auto;
+    width: 1.3rem;
+    height: 1.3rem;
+  }
 }
 
 .navLinks a:hover {

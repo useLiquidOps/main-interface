@@ -131,6 +131,7 @@ const TickerInfo: React.FC<{
                 className={styles.supplyButton}
                 onClick={handleSupply}
                 type="button"
+                disabled
               >
                 Supply
               </button>
@@ -138,6 +139,7 @@ const TickerInfo: React.FC<{
                 className={styles.borrowButton}
                 onClick={handleBorrow}
                 type="button"
+                disabled
               >
                 Borrow
               </button>

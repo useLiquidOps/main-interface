@@ -197,6 +197,7 @@ const AssetRow: React.FC<AssetRowProps> = ({ asset, mode }) => {
               className={styles.supplyBorrowButton}
               onClick={handleDoAction}
               type="button"
+              disabled
             >
               {actionDo}
             </button>

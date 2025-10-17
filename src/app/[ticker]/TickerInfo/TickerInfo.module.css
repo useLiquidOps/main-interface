@@ -106,6 +106,12 @@
   background-color: #322ece;
 }
 
+.supplyButton:disabled,
+.borrowButton:disabled {
+  opacity: .75;
+  cursor: not-allowed;
+}
+
 .withdrawButton,
 .repayButton {
   padding: 9px;

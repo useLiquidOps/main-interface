@@ -48,13 +48,14 @@ const Header: React.FC<HeaderProps> = ({
   // Handle client-side mounting and localStorage
   useEffect(() => {
     setIsClient(true);
-    const bannerDismissed = localStorage.getItem("bannerDismissed") === "true";
+    const bannerDismissed =
+      localStorage.getItem("bannerDismissed_maintenance") === "true";
     setIsBannerVisible(!bannerDismissed);
   }, []);
 
   const handleBannerDismiss = () => {
     setIsBannerVisible(false);
-    localStorage.setItem("bannerDismissed", "true");
+    localStorage.setItem("bannerDismissed_maintenance", "true");
   };
 
   const isLinkActive = (path: string) => {
@@ -75,10 +76,9 @@ const Header: React.FC<HeaderProps> = ({
         <div className={styles.banner}>
           <div className={styles.bannerContent}>
             <span className={styles.bannerText}>
-              🚀 The LQD fair launch is now live! Delegate AR tokens{" "}
-              <Link href="/earn" style={{ textDecoration: "underline" }}>
-                here
-              </Link>
+              {"⚠️ "}
+              The protocol is in maintenance mode, due to the ongoing Hyperbeam
+              migration. Lending and borrowing is disabled.
             </span>
             <button
               className={styles.bannerCloseButton}

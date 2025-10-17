@@ -116,8 +116,13 @@
   color: white;
 }
 
-.supplyBorrowButton:hover {
+.supplyBorrowButton:hover:not(:disabled) {
   background-color: #322ece;
+}
+
+.supplyBorrowButton:disabled {
+  cursor: not-allowed;
+  opacity: .75;
 }
 
 .withdrawRepayButton {

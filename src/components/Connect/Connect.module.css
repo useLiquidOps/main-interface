@@ -41,6 +41,12 @@
   color: var(--primary-palatinate-blue);
 }
 
+@media screen and (max-width: 600px) {
+  .profileName {
+    display: none;
+  }
+}
+
 .connectImage {
   height: 32px;
   width: 32px;

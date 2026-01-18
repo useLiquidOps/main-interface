@@ -91,6 +91,33 @@
   width: 100%;
 }
 
+@media screen and (max-width: 600px) {
+  .titleWrapper {
+    width: 90vw;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .backIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .topContainer {
+    width: 90vw;
+    flex-direction: column;
+    justify-content: unset;
+    gap: 1.6rem;
+  }
+
+  .grid {
+    grid-template-columns: auto;
+    width: 90vw;
+  }
+}
+
 .modalOverlay {
   position: fixed;
   top: 0;

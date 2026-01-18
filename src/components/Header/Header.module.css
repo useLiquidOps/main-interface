@@ -48,9 +48,9 @@
 /* Existing header styles */
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  height: 150px;
+  flex-direction: column;
+  gap: 1.5rem;
   padding: 2rem 3rem;
   box-sizing: border-box;
   width: 100%;
@@ -58,12 +58,23 @@
   background-color: white;
 }
 
-.leftSection {
+.topSection {
   display: flex;
-  height: 100%;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
+  width: 100%;
+}
+
+.connectAndMobileMenu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menuIcon {
+  display: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
 
 .titleAndDropdown {
@@ -91,6 +102,44 @@
 .navLinks {
   display: flex;
   gap: 1.5rem;
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    padding: 1.6rem 1.8rem;
+  }
+
+  .menuIcon {
+    display: block;
+  }
+
+  .navLinks {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    background-color: #fff;
+    flex-direction: column;
+    padding: 4rem;
+  }
+
+  .navLinks:not(.showNavMobile) {
+    display: none;
+  }
+
+  .navLinks a {
+    text-align: center;
+  }
+
+  .navLinks .menuIcon {
+    margin-left: auto;
+    width: 1.3rem;
+    height: 1.3rem;
+  }
 }
 
 .navLinks a:hover {
